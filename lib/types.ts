@@ -1,4 +1,14 @@
-export type TabId = "chat" | "prompts" | "checklist";
+export type TabId = "chat" | "prompts" | "checklist" | "rascunho";
+
+export interface ProjectDTO {
+  id: string;
+  title: string;
+  answers: Answers;
+  checklist: Record<number, boolean>;
+  draft: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export type MissionId = "vender" | "educar" | "inspirar" | "autoridade";
 export type FormatId = "opiniao" | "guia" | "estudo" | "narrativa";

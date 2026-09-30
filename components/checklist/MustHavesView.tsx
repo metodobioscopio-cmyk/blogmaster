@@ -1,36 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { MUST_HAVES } from "@/lib/musthaves";
 import cls from "@/lib/cls";
 
-const KEY = "blogmaster-checks-v1";
+interface Props {
+  checked: Record<number, boolean>;
+  onToggle: (id: number) => void;
+  onOpenPrompts: () => void;
+}
 
-export default function MustHavesView({ onOpenPrompts }: { onOpenPrompts: () => void }) {
-  const [checked, setChecked] = useState<Record<number, boolean>>({});
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(KEY);
-      if (raw) setChecked(JSON.parse(raw) as Record<number, boolean>);
-    } catch {
-      /* estado limpo */
-    }
-    setReady(true);
-  }, []);
-
-  useEffect(() => {
-    if (!ready) return;
-    try {
-      window.localStorage.setItem(KEY, JSON.stringify(checked));
-    } catch {
-      /* sem storage */
-    }
-  }, [checked, ready]);
-
+export default function MustHavesView({ checked, onToggle, onOpenPrompts }: Props) {
   const count = MUST_HAVES.filter((m) => checked[m.id]).length;
-  const toggle = (id: number) => setChecked((c) => ({ ...c, [id]: !c[id] }));
 
   return (
     <div className="space-y-6">
@@ -43,7 +23,8 @@ export default function MustHavesView({ onOpenPrompts }: { onOpenPrompts: () => 
         </h1>
         <p className="max-w-3xl text-sm leading-relaxed text-slate-300">
           Nenhum texto sai do rascunho sem passar por aqui. O Prompt 3 da Etapa 4 já usa este
-          checklist como critério de revisão — aqui você faz a conferência final, card a card.
+          checklist como critério de revisão — aqui você faz a conferência final, card a card. O
+          progresso fica salvo no projeto.
         </p>
         <div className="flex flex-wrap items-center gap-3 pt-1">
           <div className="h-2 w-44 overflow-hidden rounded-full bg-white/10">
@@ -107,7 +88,7 @@ export default function MustHavesView({ onOpenPrompts }: { onOpenPrompts: () => 
               </ul>
               <button
                 type="button"
-                onClick={() => toggle(m.id)}
+                onClick={() => onToggle(m.id)}
                 className={cls(
                   "mt-4 rounded-xl border px-3 py-2 text-xs font-bold transition",
                   on

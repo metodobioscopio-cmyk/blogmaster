@@ -7,6 +7,7 @@ const TABS: { id: TabId; emoji: string; label: string }[] = [
   { id: "chat", emoji: "💬", label: "Processo guiado" },
   { id: "prompts", emoji: "✍️", label: "Etapa 4 · Prompts" },
   { id: "checklist", emoji: "✅", label: "5 Must-Haves" },
+  { id: "rascunho", emoji: "📝", label: "Rascunho" },
 ];
 
 export default function TopTabs({

@@ -141,6 +141,16 @@ export function answerLabel(step: Step, answers: Answers): string {
   return v && v.trim() ? `“${v.trim()}”` : `“${step.fallback}”`;
 }
 
+export function isAnswered(step: Step, answers: Answers): boolean {
+  if (step.kind === "decision") return answers[step.id] !== null;
+  const v = answers[step.id];
+  return Boolean(v && v.trim());
+}
+
+export function answeredCount(answers: Answers): number {
+  return STEPS.filter((s) => isAnswered(s, answers)).length;
+}
+
 export function isComplete(a: Answers): boolean {
   return Boolean(
     a.tema.trim() && a.promessa.trim() && a.missao && a.formato && a.tom && a.canal && a.ancoras
