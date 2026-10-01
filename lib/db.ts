@@ -1,4 +1,4 @@
-import Database from "better-sqlite3";
+import { DatabaseSync } from "node:sqlite";
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -17,14 +17,14 @@ CREATE TABLE IF NOT EXISTS projects (
 );
 `;
 
-let dbInstance: Database.Database | null = null;
+let dbInstance: DatabaseSync | null = null;
 
-export function getDb(): Database.Database {
+export function getDb(): DatabaseSync {
   if (dbInstance) return dbInstance;
   const dir = path.join(process.cwd(), "data");
   fs.mkdirSync(dir, { recursive: true });
-  const db = new Database(path.join(dir, "blogmaster.db"));
-  db.pragma("journal_mode = WAL");
+  const db = new DatabaseSync(path.join(dir, "blogmaster.db"));
+  db.exec("PRAGMA journal_mode = WAL;");
   db.exec(SCHEMA);
   dbInstance = db;
   return db;
@@ -71,7 +71,7 @@ function rowToDto(row: ProjectRow): ProjectDTO {
 export function listProjects(): ProjectDTO[] {
   const rows = getDb()
     .prepare("SELECT * FROM projects ORDER BY updated_at DESC")
-    .all() as ProjectRow[];
+    .all() as unknown as ProjectRow[];
   return rows.map(rowToDto);
 }
 
@@ -133,5 +133,6 @@ export function updateProject(id: string, patch: ProjectPatch): ProjectDTO | nul
 }
 
 export function deleteProject(id: string): boolean {
-  return getDb().prepare("DELETE FROM projects WHERE id = ?").run(id).changes > 0;
+  const res = getDb().prepare("DELETE FROM projects WHERE id = ?").run(id);
+  return Number(res.changes) > 0;
 }

@@ -41,7 +41,7 @@ escrita da API.
 └───────────────┬──────────────────────────────────────────────────┘
                 │
 ┌───────────────▼──────────────────────────────────────────────────┐
-│  better-sqlite3 (WAL) — data/blogmaster.db                       │
+│  node:sqlite (SQLite embutido no Node, WAL) — data/blogmaster.db │
 │  projects: id, title, answers_json, checklist_json, draft,       │
 │            created_at, updated_at                                │
 └──────────────────────────────────────────────────────────────────┘
@@ -124,7 +124,7 @@ blogmaster/
 │   ├── draft/DraftView.tsx                    # Autosave na API
 │   └── ui/{CopyButton,ToastHost}.tsx
 ├── lib/
-│   ├── db.ts            # better-sqlite3: schema + CRUD
+│   ├── db.ts            # node:sqlite: schema + CRUD
 │   ├── schemas.ts       # validação Zod da API
 │   ├── api.ts           # client fetch helper com ApiError
 │   ├── toast.ts         # bus de notificações
@@ -155,5 +155,5 @@ Nenhum componente precisa ser alterado para mudar o conteúdo editorial.
 ## Stack
 
 - Next.js 15 (App Router + Route Handlers) · React 19 · TypeScript strict
-- Tailwind CSS v4 · Zod (validação da API) · better-sqlite3 (WAL)
+- Tailwind CSS v4 · Zod (validação da API) · SQLite nativo do Node (node:sqlite, WAL)
 - UI 100% client-side sobre API REST do próprio Next (sem backend externo)
