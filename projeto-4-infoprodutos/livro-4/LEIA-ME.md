@@ -13,15 +13,17 @@
 - PDF de bônus: **22 páginas** (roteiros de áudio, rastreador, checklist, desintoxicação digital, 12 rituais, protocolo de emergência)
 - EPUB 3.0: **19 capítulos**, validado (0 XML mal formado, 0 links quebrados)
 - `fontes-editaveis/`: os 19 arquivos `.md`
-- `audios/`: **3 faixas de áudio guiado já geradas** (voz sintetizada, pt-BR):
-  - `01-respiracao-guiada.mp3` — 3 min 07 s
-  - `02-soltar-o-dia.mp3` — 2 min 34 s
-  - `03-foco-para-comecar.mp3` — 2 min 31 s
+- `audios/`: **4 faixas de áudio guiado já geradas** (voz sintetizada, pt-BR), **com as pausas longas dentro**:
+  - `01-respiracao-guiada.mp3` — 5 min 12 s (para deitar)
+  - `02-soltar-o-dia.mp3` — 7 min 04 s (quando a cabeça liga na cama)
+  - `03-foco-para-comecar.mp3` — 7 min 56 s (antes do bloco de tarefa difícil)
+  - `04-sol-da-manha.mp3` — 10 min 11 s (**nova**: acompanha os 10 minutos de luz natural)
 
 Conferência automática: 19 blocos "Hoje você faz só isso" no PDF, 0 caracteres descartados na tipografia, todos os blocos coloridos renderizados.
 
-> 📌 **NOTA sobre os áudios** — a versão gerada é **narração contínua** (com 3,5 s de silêncio entre os blocos), sem as pausas longas que um guiado ao vivo costuma ter. A duração final depende dessas pausas. Duas opções antes de publicar: (a) publicar assim mesmo — funciona bem para ouvir de fone na cama; (b) regravar com a sua voz, usando os roteiros do `bonus-audios-guiados.md`, respeitando as pausas de 3 a 5 s indicadas (o resultado fica entre 5 e 10 minutos por faixa e soa mais pessoal).
-> Os roteiros e o aviso de segurança em áudio estão no bônus; o **aviso já está gravado no início de cada faixa**.
+> 📌 **NOTA sobre os áudios** — as faixas foram montadas com **pausas longas reais** (a faixa 4 tem 14 pausas acima de 8 s, a maior de 39 s, acompanhando os 10 minutos de luz; a faixa 3 pausa até 80 s na escolha do dia). São guiados de verdade, feitos para ouvir de fone com o celular longe da mão.
+> O que **não** existe neles: música de fundo, voz humana e variação de entonação longa. Se quiser o efeito "voz do produtor", regrave com os roteiros do `bonus-audios-guiados.md` (as marcas `[pausa 30-60 s]` mostram onde respirar no meio da narração).
+> O aviso de segurança está **gravado no início de cada faixa** — a faixa 4 inclui também o aviso de não olhar diretamente para o sol.
 
 
 ---
@@ -58,7 +60,7 @@ Este é o volume com risco de compliance mais alto da coleção, porque o tema �
 | `10-cap10-plano-90-dias.md` | Manutenção: revisão mensal, reconstrução em 3 dias, metas trimestrais | ✅ escrito |
 | `11-cap11-historias-e-faq.md` | 5 perfis ilustrativos (rotulados), FAQ e onde pedir ajuda | ✅ escrito |
 | `12-cap12-rastreador-final.md` | O rastreador de 21 dias, como medir sua energia e o seu plano pessoal | ✅ escrito |
-| `bonus-audios-guiados.md` | 3 roteiros de áudio guiado (5, 7 e 10 min) palavra por palavra, prontos para gravar | ✅ escrito |
+| `bonus-audios-guiados.md` | **4 roteiros** de áudio guiado (5, 7, 8 e 10 min) palavra por palavra, prontos para gravar | ✅ escrito |
 | `bonus-rastreador-21-dias.md` | Rastreador imprimível + versão planilha | ✅ escrito |
 | `bonus-checklist-geladeira.md` | Checklist de 21 dias para a geladeira | ✅ escrito |
 | `bonus-desintox-digital-7-dias.md` | 7 noites de redução de tela, sem radicalismo | ✅ escrito |
@@ -81,7 +83,8 @@ Este é o volume com risco de compliance mais alto da coleção, porque o tema �
 ## ⚖️ Antes de vender — pendências do volume
 
 - [ ] Revisar o texto caçando as palavras proibidas da seção de aviso (inclusive nos arquivos de bônus e no nome dos arquivos)
-- [ ] Gravar os 3 áudios do `bonus-audios-guiados.md` (ou usar voz sintetizada) e testar no celular: volume baixo, pausas longas, sem música agitada
+- [x] Gerar as **4 faixas** de áudio (feito, em `audios/`) — falta ouvir cada uma inteira no celular, de fone, antes de publicar
+- [ ] Se quiser voz humana, regravar com os roteiros do `bonus-audios-guiados.md`
 - [ ] Testar o protocolo com 5 a 10 pessoas por 21 dias e recolher relatos **com autorização por escrito** antes de usar qualquer depoimento
 - [ ] Conferir as fontes da seção acima e a data de publicação
 - [ ] Escrever a página de vendas **sem** palavra de saúde: foco em rotina, hábito e organização (ver `../08-paginas-de-vendas-e-copy.md`)

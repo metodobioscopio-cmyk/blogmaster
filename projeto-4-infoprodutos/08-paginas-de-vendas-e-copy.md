@@ -1,5 +1,8 @@
 # 💰 08 — PÁGINAS DE VENDA E COPY PRONTA (4 páginas + checkout + upsell)
 
+> ✅ **Já construído:** as 5 páginas estão em `../paginas/` (`index.html` + `livro-1..4.html`), geradas por `tools/gerar_paginas.py`, usando exatamente a copy deste arquivo. Antes de publicar, troque os marcadores `SUBSTITUIR-...` (links de checkout, e-mail de suporte, razão social).
+
+
 **Estrutura padrão que converte e passa pela revisão do Meta/Google:**
 `Topo (promessa) → identificação com a dor → por que outras soluções falham → mecanismo único → o que tem dentro → bônus → prova → preço/ancoragem → garantia → FAQ → CTA final + P.S.`
 
