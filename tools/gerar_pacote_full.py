@@ -31,11 +31,15 @@ Este ZIP contem ABSOLUTAMENTE TUDO deste projeto, organizado em pastas.
 2-Livro-2-Saia-do-Vermelho-em-60-Dias/ ... PDF 86 pag + bonus 16 pag + EPUB + fontes
 3-Livro-3-Airfryer-Sem-Mimimi/ ........... PDF 115 pag + bonus 25 pag + EPUB + fontes
 4-Livro-4-Energia-em-21-Dias/ ............ PDF 74 pag + bonus 24 pag + 4 AUDIOS GUIADOS
-Kit-Completo-4-Livros/ ................... os 4 volumes juntos (o que o cliente recebe)
 5-Marketing/ ............................. 4 capas 1600x2560 + 17 mockups + 12 anuncios
 6-Paginas-de-Venda/ ...................... 5 paginas HTML autocontidas prontas para publicar
 7-Documentacao-do-Projeto/ ............... os 13 arquivos de estrategia (00 a 12) + painel.html
 _fontes-e-geradores/ ..................... o texto dos livros em markdown + os scripts que geram tudo
+                                           (os audios ficam só na pasta do Vol. 4, para não pesar duas vezes)
+
+OBS.: este pacote NAO repete os livros. Cada volume aparece uma única vez, na pasta dele.
+      Se você quiser a pasta pronta para entregar ao cliente (os 4 juntos), use o
+      arquivo Kit-Completo-4-Livros.zip, que é separado.
 
 CADA LIVRO TEM UM ARQUIVO 00-COMECE-AQUI.txt COM O PASSO A PASSO DE USO.
 O Volume 4, na pasta audios/, traz: respiracao guiada (5 min), soltar o dia (7 min),
@@ -87,8 +91,6 @@ def main():
                            ("Livro-4-Energia-em-21-Dias", "4-Livro-4-Energia-em-21-Dias")]:
         n = copiar(os.path.join(PROJ, "entregaveis", pasta), os.path.join(TMP, apelido))
         print(f"  {apelido:44s} {n:3d} arquivos"); total += n
-    n = copiar(os.path.join(PROJ, "entregaveis"), os.path.join(TMP, "Kit-Completo-4-Livros"))
-    print(f"  {'Kit-Completo-4-Livros':44s} {n:3d} arquivos"); total += n
     n = copiar(os.path.join(PROJ, "marketing"), os.path.join(TMP, "5-Marketing"))
     print(f"  {'5-Marketing':44s} {n:3d} arquivos"); total += n
     n = copiar(os.path.join(PROJ, "paginas"), os.path.join(TMP, "6-Paginas-de-Venda"))
@@ -97,7 +99,8 @@ def main():
                filtro=lambda f, r: (f.endswith(".md") or f in ("painel.html", "entregas.html"))
                                    and os.path.abspath(r) == os.path.abspath(PROJ))
     print(f"  {'7-Documentacao-do-Projeto':44s} {n:3d} arquivos"); total += n
-    nf = copiar(os.path.join(PROJ, "livro-4"), os.path.join(TMP, "_fontes-e-geradores", "livros-md", "livro-4"))
+    nf = copiar(os.path.join(PROJ, "livro-4"), os.path.join(TMP, "_fontes-e-geradores", "livros-md", "livro-4"),
+                filtro=lambda f, r: os.path.basename(r) != "audios")
     for i in (1, 2, 3):
         nf += copiar(os.path.join(PROJ, f"livro-{i}"), os.path.join(TMP, "_fontes-e-geradores", "livros-md", f"livro-{i}"))
     nf += copiar(os.path.join(RAIZ, "tools"), os.path.join(TMP, "_fontes-e-geradores", "tools"))

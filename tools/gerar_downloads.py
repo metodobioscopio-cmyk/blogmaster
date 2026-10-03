@@ -151,7 +151,7 @@ PACOTE COMPLETO
   Kit-Completo-4-Livros.zip .................... os 4 livros + todos os bônus + os 4 áudios
 
 MATERIAL DE PRODUÇÃO (não é o que o cliente recebe)
-  5-Pacote-Marketing-Capas-Mockups-Anuncios.zip . capas 1600x2560, 20 mockups, 13 anúncios
+  5-Pacote-Marketing-Capas-Mockups-Anuncios.zip . capas 1600x2560, 17 mockups, 12 anúncios
   6-Paginas-de-Venda-HTML.zip ................... 5 páginas prontas (HTML autocontido)
 
 O QUE VEM DENTRO DE CADA LIVRO
@@ -159,7 +159,7 @@ O QUE VEM DENTRO DE CADA LIVRO
   + 00-COMECE-AQUI.txt com o passo a passo de uso
 
 OBSERVAÇÕES
-  - Os arquivos são de 20 a 21 MB por livro por causa dos áudios do Volume 4.
+  - O Volume 4 é o único pesado (8 MB) por causa dos 4 áudios guiados.
   - O material de marketing e as páginas de venda ainda têm marcadores
     "SUBSTITUIR-..." (links de checkout, e-mail de suporte, razão social).
     Procure por esse texto antes de publicar.

@@ -138,6 +138,8 @@ h2 em{{font-style:normal;color:#5A6478;font-weight:500;font-size:14px;display:bl
  box-shadow:0 2px 10px rgba(20,24,33,.05)}}
 .card:hover{{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,24,33,.12)}}
 .card.destaque{{background:linear-gradient(170deg,#1B2A4A,#0E1730);color:#fff;border-color:#1B2A4A}}
+.card.destaque.full{{border:2px solid #E8B65A;box-shadow:0 10px 30px rgba(232,182,90,.25)}}
+.card.destaque.full h3{{color:#E8B65A}}
 .card.full{{grid-column:1/-1;background:linear-gradient(120deg,#E8B65A,#F2C97C 55%,#E8B65A);color:#141821;border-color:#C99B3A}}
 .card.full p{{color:#4A3A12}}
 .card.full .meta{{background:rgba(20,24,33,.12);color:#3A2C08}}
