@@ -1,0 +1,31 @@
+COLEÇÃO VIDA EM ORDEM — Pacote de produção
+Gerado em 03/10/2026
+
+O QUE TEM AQUI
+
+  Livro-1-IA-que-Trabalha-por-Voce/
+      Livro-1-....pdf ......... livro completo (corpo), pronto para ler no celular
+      Livro-1-...-BONUS.pdf ... todos os bônus juntos (200 prompts, 12 automações,
+                                tabela de preços, scripts e ferramentas)
+      Livro-1-....epub ........ versão para Kindle, Kobo e Apple Books
+      fontes-editaveis/ ....... os arquivos .md originais, para você editar
+
+  Livro-2-Saia-do-Vermelho-em-60-Dias/
+      (mesma estrutura: PDF do corpo, PDF de bônus, EPUB e fontes)
+
+  _material-interno-do-produtor/
+      Painéis de produção (não entregar ao cliente)
+
+ANTES DE VENDER — 6 PASSOS
+  1. Leia o PDF inteiro e ajuste o que não estiver com a sua voz.
+  2. Crie as capas (um designer ou o Canva resolvem) — o PDF já sai com capa
+     tipográfica, mas uma capa desenhada vende mais.
+  3. Confira os avisos legais do Livro 2 e, se puder, faça revisão jurídica.
+  4. Substitua os casos do capítulo 11 do Livro 2 por histórias reais autorizadas,
+     ou mantenha a etiqueta de "caso ilustrativo".
+  5. Suba na Kiwify/Cakto (venda direta) e na Hotmart (afiliados).
+  6. Use a copy e os anúncios dos arquivos 08 e 09 do projeto.
+
+OBSERVAÇÃO TÉCNICA
+  Os PDFs estão em formato A5 (148 x 210 mm), ideais para leitura no celular.
+  Para imprimir, use "tamanho real" ou "ajustar à página" — não "múltiplas páginas".
