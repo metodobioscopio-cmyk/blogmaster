@@ -67,6 +67,7 @@ Cada imagem foi feita para um gancho específico. Regra: **o gancho do criativo 
 ## 5. O que as imagens NÃO fazem (e como resolver)
 
 - **Não são fotos de comida reais.** As cenas (mesa, airfryer, quarto, pilha de livros) são geradas por IA e servem como **fundo**; a capa e todo o texto são desenhados por código. Quando você tiver as fotos dos pratos do Volume 3, troque os arquivos `marketing/_cenas/cena-airfryer.jpg` e rode o gerador de novo.
+- **A 5ª pose do arquivo 07 (capa na mão) não foi gerada**: ela fica muito melhor com foto real sua segurando o celular do que com mão sintética. Tire 2 fotos e use as capas prontas.
 - **Não há foto de pessoa.** É proposital: evita "antes e depois", evita insinuar condição pessoal e evita direito de imagem.
 - **Não há depoimento com nome** (o arquivo 08 pede 3 provas com nome e número). Isso só entra depois de venda real, com autorização — está na lista de pendências.
 
@@ -97,7 +98,20 @@ Cada imagem foi feita para um gancho específico. Regra: **o gancho do criativo 
 
 O script mostra cada pausa usada e reescreve os arquivos finais. O **roteiro** (com as marcas `[pausa 30-60 s]`) está no bônus do livro, para quem quiser regravar com voz humana.
 
-## 8. Regenerar / editar
+## 8. Central de entregas (hub de downloads)
+
+`projeto-4-infoprodutos/entregas.html` · gerador: `tools/gerar_hub_entregas.py`
+
+Reúne **todos os ZIPs com link clicável** + galerias de capas, mockups, anúncios e páginas de venda.
+Para os downloads funcionarem, sirva a pasta do projeto:
+
+```bash
+cd projeto-4-infoprodutos && python3 -m http.server 8099 --bind 0.0.0.0
+```
+
+Depois abra `/entregas.html`. As miniaturas ficam em `marketing/_thumbs/` (não entram nos ZIPs).
+
+## 9. Regenerar / editar
 
 ```bash
 python3 tools/gerar_marketing.py                # tudo

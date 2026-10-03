@@ -123,6 +123,8 @@ def zipar(origem, nome_zip, prefixo, extra_txt=None, extra_nome="00-COMECE-AQUI.
     n = 0
     with zipfile.ZipFile(caminho, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for raiz, _, files in os.walk(origem):
+            if "_thumbs" in raiz.split(os.sep):     # miniaturas do hub, não vão para o ZIP
+                continue
             for f in sorted(files):
                 full = os.path.join(raiz, f)
                 if full.endswith(".zip"): continue
