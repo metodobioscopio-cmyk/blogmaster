@@ -21,6 +21,7 @@ DL   = os.path.join(PROJ, "downloads")
 TH   = os.path.join(PROJ, "marketing", "_thumbs")
 
 LIVRO_TXT = {
+ "0-Pacote-FULL-Tudo.zip": ("★ PACOTE COMPLETO — tudo em um ZIP", "os 4 livros + áudios + marketing + páginas + documentação + fontes/geradores"),
  "1-Livro-1-IA-que-Trabalha-por-Voce.zip": ("Vol. 1 · IA que Trabalha por Você", "63 pág. + bônus de 60 pág. · PDF + EPUB + fontes"),
  "2-Livro-2-Saia-do-Vermelho-em-60-Dias.zip": ("Vol. 2 · Saia do Vermelho em 60 Dias", "86 pág. + bônus de 16 pág. · PDF + EPUB + fontes"),
  "3-Livro-3-Airfryer-Sem-Mimimi.zip": ("Vol. 3 · Airfryer Sem Mimimi", "115 pág. + bônus de 25 pág. · 120 receitas"),
@@ -68,7 +69,7 @@ def cartao_zip(nome, itens_n=0):
     titulo, desc = LIVRO_TXT.get(nome, (nome, ""))
     caminho = os.path.join(DL, nome)
     tam = os.path.getsize(caminho) if os.path.exists(caminho) else 0
-    destaque = " destaque" if nome.startswith("Kit") else ""
+    destaque = " destaque full" if nome.startswith("0-") else (" destaque" if nome.startswith("Kit") else "")
     extra = f"{itens_n} itens" if itens_n else ""
     return f"""      <a class="card{destaque}" href="downloads/{html.escape(nome)}" download>
         <div class="ic">⬇</div>
@@ -92,7 +93,7 @@ def galeria(arquivos, pasta, subtitulo=""):
 
 def main():
     zips = [f for f in sorted(os.listdir(DL)) if f.endswith(".zip")] if os.path.isdir(DL) else []
-    ordem = ["1-", "2-", "3-", "4-", "Kit", "5-", "6-"]
+    ordem = ["0-", "1-", "2-", "3-", "4-", "Kit", "5-", "6-"]
     zips.sort(key=lambda z: next((i for i, p in enumerate(ordem) if z.startswith(p)), 99))
     cards = "\n".join(cartao_zip(z, itens(os.path.join(DL, z))) for z in zips)
 
@@ -137,6 +138,10 @@ h2 em{{font-style:normal;color:#5A6478;font-weight:500;font-size:14px;display:bl
  box-shadow:0 2px 10px rgba(20,24,33,.05)}}
 .card:hover{{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,24,33,.12)}}
 .card.destaque{{background:linear-gradient(170deg,#1B2A4A,#0E1730);color:#fff;border-color:#1B2A4A}}
+.card.full{{grid-column:1/-1;background:linear-gradient(120deg,#E8B65A,#F2C97C 55%,#E8B65A);color:#141821;border-color:#C99B3A}}
+.card.full p{{color:#4A3A12}}
+.card.full .meta{{background:rgba(20,24,33,.12);color:#3A2C08}}
+.card.full h3{{font-size:21px}}
 .card.destaque p{{color:rgba(255,255,255,.78)}}
 .card.destaque .meta{{background:rgba(232,182,90,.18);color:#E8B65A}}
 .card h3{{font-size:17px;margin-bottom:4px}}

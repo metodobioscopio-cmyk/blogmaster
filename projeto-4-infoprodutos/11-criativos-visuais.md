@@ -102,6 +102,8 @@ O script mostra cada pausa usada e reescreve os arquivos finais. O **roteiro** (
 
 `projeto-4-infoprodutos/entregas.html` · gerador: `tools/gerar_hub_entregas.py`
 
+O primeiro card é o **`0-Pacote-FULL-Tudo.zip`** (44 MB, 335 arquivos): um ZIP único com os 4 livros, os 4 áudios, o kit, o marketing, as páginas de venda, a documentação do projeto e os fontes + scripts que regeram tudo. Ele é versionado no Git (ao contrário dos outros, que são regeneráveis), para o link não depender de rodar script nenhum.
+
 Reúne **todos os ZIPs com link clicável** + galerias de capas, mockups, anúncios e páginas de venda.
 Para os downloads funcionarem, sirva a pasta do projeto:
 

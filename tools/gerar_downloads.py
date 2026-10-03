@@ -145,6 +145,9 @@ CADA LIVRO SEPARADO (para baixar só o que quiser)
   4-Livro-4-Energia-em-21-Dias.zip ............. 74 pág. + bônus de 24 pág. + 4 ÁUDIOS
 
 PACOTE COMPLETO
+  0-Pacote-FULL-Tudo.zip ....................... TUDO (334 arquivos, 44 MB): livros, áudios,
+                                                 marketing, páginas de venda, documentação e
+                                                 os fontes + scripts que geram o material
   Kit-Completo-4-Livros.zip .................... os 4 livros + todos os bônus + os 4 áudios
 
 MATERIAL DE PRODUÇÃO (não é o que o cliente recebe)
@@ -166,6 +169,8 @@ OBSERVAÇÕES
 def main():
     os.makedirs(DEST, exist_ok=True)
     for velho in os.listdir(DEST):
+        if velho == "0-Pacote-FULL-Tudo.zip":     # gerado por gerar_pacote_full.py
+            continue
         if velho.endswith(".zip") or velho.endswith(".txt"):
             os.remove(os.path.join(DEST, velho))
 
