@@ -13,17 +13,23 @@ Duas entregas que funcionam juntas: o **método** (a Bíblia, em 16 capítulos) 
 
 ## ⚡ Começar agora (2 minutos)
 
-```bash
-# opção 1 — servidor local
-node scripts/servir.js 8080
-# abra http://localhost:8080
+**Opção 1 — arquivo único (a mais simples):** dê duplo-clique em
+[`PinMind-app-completo.html`](PinMind-app-completo.html). É o app inteiro (interface + 16 capítulos da
+Bíblia) dentro de um só arquivo. Funciona offline, sem instalar nada, em qualquer navegador.
 
-# opção 2 — nem precisa de servidor
-# dê duplo-clique em app/index.html
+**Opção 2 — abrir a pasta do app:** duplo-clique em `app/index.html`.
+
+**Opção 3 — servidor local:**
+```bash
+node scripts/servir.js 8080      # abra http://localhost:8080
 ```
 
-O app funciona 100% offline, sem instalar nada, sem chave de API, sem cadastro.
-Seus projetos ficam salvos no próprio navegador (`localStorage`) e podem ser exportados em JSON.
+O app funciona 100% offline, sem chave de API e sem cadastro. Seus projetos ficam salvos no
+navegador (`localStorage`) e podem ser exportados em JSON / CSV / Markdown.
+
+> ℹ️ Em alguns navegadores, abrir o arquivo direto do disco (`file://`) **bloqueia o salvamento
+> automático**. Nesse caso o app avisa e entra em *modo sessão*: continua funcionando, mas use o
+> botão **Exportar** para guardar. Isso vale também para janela anônima.
 
 ---
 
@@ -72,25 +78,39 @@ templates/           planilhas prontas (calendário, pack, métricas, compliance
 
 ---
 
+## 📦 Gerar o arquivo único e o ZIP para download
+
+```bash
+npm run build         # regenera a Bíblia embutida + o PinMind-app-completo.html
+npm run zip           # gera ../pinterest-ia-custo-zero.zip pronto para distribuir
+```
+
+O ZIP sai **fora** do repositório (binário não é versionado) e traz, na raiz, um
+`LEIA-ME-PRIMEIRO.txt` explicando o que fazer no primeiro dia.
+
+---
+
 ## 🧪 Testes
 
 ```bash
-npm run testar        # 60+ asserções no núcleo (roda sem dependências)
-npm run testar:ui     # fluxo completo em DOM real (precisa de jsdom instalado)
-npm run testar:tudo   # rebuild da Bíblia + os dois testes
+npm run testar              # 60+ asserções no núcleo (roda sem dependências)
+npm run testar:ui           # fluxo completo em DOM real (precisa de jsdom)
+npm run testar:standalone   # valida o arquivo único abrindo via file:// (precisa de jsdom)
+npm run testar:tudo         # rebuild + os três testes
 ```
 
 ---
 
 ## 🔁 Manutenção
 
-Editou algum capítulo? Regenere a Bíblia embutida:
+Editou algum capítulo da Bíblia? Regenere os artefatos:
 
 ```bash
-npm run biblia        # node scripts/build-biblia.js
+npm run build         # = node scripts/build-biblia.js && node scripts/gerar-standalone.js
 ```
 
-Nunca edite `app/assets/js/biblia.js` à mão — ele é gerado a partir dos `.md` em `BIBLIA/`.
+Nunca edite à mão `app/assets/js/biblia.js` nem `PinMind-app-completo.html` — os dois são
+gerados a partir dos `.md` em `BIBLIA/` e do código em `app/`.
 
 ---
 

@@ -2,15 +2,24 @@
   "name": "blogmaster-pinmind",
   "version": "1.0.0",
   "private": true,
-  "description": "Bíblia + app de producao para ganhar dinheiro no Pinterest usando IA gratis",
+  "description": "Biblia + app de producao para ganhar dinheiro no Pinterest usando IA gratis",
   "scripts": {
     "biblia": "node scripts/build-biblia.js",
+    "standalone": "node scripts/gerar-standalone.js",
     "testar": "node scripts/testar-motor.js",
     "testar:ui": "node scripts/testar-ui.js",
-    "testar:tudo": "node scripts/build-biblia.js && node scripts/testar-motor.js && node scripts/testar-ui.js",
-    "servir": "python3 -m http.server 8080 --bind 0.0.0.0 --directory app",
-    "servir:node": "node scripts/servir.js"
+    "testar:standalone": "node scripts/testar-standalone.js",
+    "testar:tudo": "node scripts/build-biblia.js && node scripts/gerar-standalone.js && node scripts/testar-motor.js && node scripts/testar-ui.js && node scripts/testar-standalone.js",
+    "build": "node scripts/build-biblia.js && node scripts/gerar-standalone.js",
+    "zip": "node scripts/empacotar.js",
+    "servir": "node scripts/servir.js"
   },
-  "keywords": ["pinterest", "ia", "afiliados", "pins", "marketing-digital"],
+  "keywords": [
+    "pinterest",
+    "ia",
+    "afiliados",
+    "pins",
+    "marketing-digital"
+  ],
   "license": "MIT"
 }

@@ -7,22 +7,55 @@
 const PM_MOTOR = (() => {
   const KEY = 'pinmind.projetos.v1';
   const KEYATIVO = 'pinmind.ativo.v1';
+  const CONFIGKEY = 'pinmind.config.v1';
 
-  /* ---------------- armazenamento ---------------- */
+  /* ---------------- armazenamento seguro ----------------
+     Ao abrir o app como ARQUIVO ÚNICO (protocolo file://), alguns navegadores
+     (Safari, modo privado, políticas restritas) BLOQUEIAM o localStorage e ele
+     lança exceção. Sem este wrapper, a tela ficaria em branco. Aqui caímos para
+     memória: o app funciona na sessão e avisamos o usuário. */
+  const armazenamento = (() => {
+    const memoria = {};
+    let disponivel = false;
+    try {
+      const t = '__pinmind_teste__';
+      window.localStorage.setItem(t, '1');
+      window.localStorage.removeItem(t);
+      disponivel = true;
+    } catch (e) { disponivel = false; }
+
+    return {
+      disponivel,
+      get(k) {
+        try { return disponivel ? window.localStorage.getItem(k) : (k in memoria ? memoria[k] : null); }
+        catch (e) { return k in memoria ? memoria[k] : null; }
+      },
+      set(k, v) {
+        try { if (disponivel) window.localStorage.setItem(k, v); else memoria[k] = String(v); }
+        catch (e) { memoria[k] = String(v); }
+      },
+      remove(k) {
+        try { if (disponivel) window.localStorage.removeItem(k); else delete memoria[k]; }
+        catch (e) { delete memoria[k]; }
+      }
+    };
+  })();
+
+  /* ---------------- armazenamento (API pública) ---------------- */
   function carregarTodos() {
-    try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { return {}; }
+    try { return JSON.parse(armazenamento.get(KEY) || '{}'); } catch (e) { return {}; }
   }
-  function salvarTodos(obj) { localStorage.setItem(KEY, JSON.stringify(obj)); }
+  function salvarTodos(obj) { armazenamento.set(KEY, JSON.stringify(obj)); }
   function salvar(p) {
     const todos = carregarTodos();
     p.atualizadoEm = new Date().toISOString();
     todos[p.id] = p;
     salvarTodos(todos);
-    localStorage.setItem(KEYATIVO, p.id);
+    armazenamento.set(KEYATIVO, p.id);
     return p;
   }
   function abrir(id) { return carregarTodos()[id] || null; }
-  function ativo() { const id = localStorage.getItem(KEYATIVO); return id ? abrir(id) : null; }
+  function ativo() { const id = armazenamento.get(KEYATIVO); return id ? abrir(id) : null; }
   function excluir(id) { const t = carregarTodos(); delete t[id]; salvarTodos(t); }
 
   function novoProjeto(nome, lang) {
@@ -283,9 +316,8 @@ const PM_MOTOR = (() => {
   }
 
   /* ---------------- integrações OPCIONAIS ---------------- */
-  const CONFIGKEY = 'pinmind.config.v1';
-  function config() { try { return JSON.parse(localStorage.getItem(CONFIGKEY) || '{}'); } catch (e) { return {}; } }
-  function salvarConfig(c) { localStorage.setItem(CONFIGKEY, JSON.stringify(c)); }
+  function config() { try { return JSON.parse(armazenamento.get(CONFIGKEY) || '{}'); } catch (e) { return {}; } }
+  function salvarConfig(c) { armazenamento.set(CONFIGKEY, JSON.stringify(c)); }
 
   // Geração real de texto via endpoint compatível com OpenAI (opcional).
   async function chamarIA(prompt, cfg) {
@@ -325,6 +357,7 @@ const PM_MOTOR = (() => {
   }
 
   return {
+    armazenamentoDisponivel: () => armazenamento.disponivel,
     carregarTodos, salvar, salvarTodos, abrir, ativo, excluir, novoProjeto, registrar,
     calcularScore, calcularScoreProjeto, estimativa,
     gerarAngulos, gerarPackPins,

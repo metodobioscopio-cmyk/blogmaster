@@ -882,12 +882,43 @@ As an [Amazon/other] Associate I earn from qualifying purchases.</div>
   /* =====================================================================
      INICIALIZAÇÃO
      ===================================================================== */
-  function init() {
-    proj = carregarOuCriar();
-    atualizarSeletor();
-    ligarEventos();
-    renderConteudo();
-    atualizarLateral();
+  function avisoSemPersistencia() {
+    if (M.armazenamentoDisponivel()) return;
+    const faixa = document.createElement('div');
+    faixa.className = 'aviso-caixa';
+    faixa.style.cssText = 'margin:1rem 1.6rem 0;font-size:.85rem';
+    faixa.innerHTML = '<b>⚠️ Modo sessão (sem salvar no navegador).</b> Este navegador bloqueou o armazenamento local ' +
+      '— comum ao abrir o arquivo direto do disco (file://) ou em janela privada. ' +
+      'O app funciona normalmente, mas os projetos <b>não são salvos</b> ao fechar. ' +
+      'Para guardar seu trabalho, use o botão <b>⬇ Exportar</b> ou abra o app por um servidor local ' +
+      '(<code>node scripts/servir.js</code>).';
+    const cont = document.getElementById('conteudo');
+    if (cont && cont.parentNode) cont.parentNode.insertBefore(faixa, cont);
   }
-  document.addEventListener('DOMContentLoaded', init);
+
+  function init() {
+    try {
+      proj = carregarOuCriar();
+    } catch (e) {
+      proj = M.novoProjeto('Projeto', 'both');
+    }
+    try {
+      atualizarSeletor();
+      ligarEventos();
+      renderConteudo();
+      atualizarLateral();
+      avisoSemPersistencia();
+    } catch (e) {
+      const cont = document.getElementById('conteudo');
+      if (cont) cont.innerHTML = '<div class="perigo-caixa"><b>Erro ao iniciar o app:</b> ' +
+        esc(e && e.message ? e.message : e) + '</div>';
+    }
+  }
+  // Robusto nos dois cenários: documento ainda carregando (script no <head>,
+  // arquivo único, injeção dinâmica) ou já carregado (script no fim do body).
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
