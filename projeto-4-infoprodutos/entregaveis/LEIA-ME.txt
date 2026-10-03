@@ -4,14 +4,22 @@ Gerado em 03/10/2026
 O QUE TEM AQUI
 
   Livro-1-IA-que-Trabalha-por-Voce/
-      Livro-1-....pdf ......... livro completo (corpo), pronto para ler no celular
-      Livro-1-...-BONUS.pdf ... todos os bônus juntos (200 prompts, 12 automações,
-                                tabela de preços, scripts e ferramentas)
-      Livro-1-....epub ........ versão para Kindle, Kobo e Apple Books
+      Livro-1-IA-que-Trabalha-por-Voce.pdf ......... livro completo (corpo), pronto para ler no celular
+      Livro-1-IA-que-Trabalha-por-Voce-BONUS.pdf ... 200 prompts, 12 automações, tabela de preços e ferramentas
+      Livro-1-IA-que-Trabalha-por-Voce.epub ........ versão para Kindle, Kobo e Apple Books
       fontes-editaveis/ ....... os arquivos .md originais, para você editar
 
   Livro-2-Saia-do-Vermelho-em-60-Dias/
-      (mesma estrutura: PDF do corpo, PDF de bônus, EPUB e fontes)
+      Livro-2-Saia-do-Vermelho-em-60-Dias.pdf ......... livro completo (corpo), pronto para ler no celular
+      Livro-2-Saia-do-Vermelho-em-60-Dias-BONUS.pdf ... 15 scripts, ferramentas de negociação e planilhas
+      Livro-2-Saia-do-Vermelho-em-60-Dias.epub ........ versão para Kindle, Kobo e Apple Books
+      fontes-editaveis/ ....... os arquivos .md originais, para você editar
+
+  Livro-3-Airfryer-Sem-Mimimi/
+      Livro-3-Airfryer-Sem-Mimimi.pdf ......... livro completo (corpo), pronto para ler no celular
+      Livro-3-Airfryer-Sem-Mimimi-BONUS.pdf ... tabela mestra, guia de congelamento, custo por porção, listas de compra, cardápio de 30 dias, 20 temperos e o cronograma de 90 minutos
+      Livro-3-Airfryer-Sem-Mimimi.epub ........ versão para Kindle, Kobo e Apple Books
+      fontes-editaveis/ ....... os arquivos .md originais, para você editar
 
   _material-interno-do-produtor/
       Painéis de produção (não entregar ao cliente)
@@ -23,8 +31,10 @@ ANTES DE VENDER — 6 PASSOS
   3. Confira os avisos legais do Livro 2 e, se puder, faça revisão jurídica.
   4. Substitua os casos do capítulo 11 do Livro 2 por histórias reais autorizadas,
      ou mantenha a etiqueta de "caso ilustrativo".
-  5. Suba na Kiwify/Cakto (venda direta) e na Hotmart (afiliados).
-  6. Use a copy e os anúncios dos arquivos 08 e 09 do projeto.
+  5. Livro 3: teste as receitas na SUA airfryer (30 delas bastam), confirme os
+     custos com o preço da sua cidade e fotografe os 30 pratos principais.
+  6. Suba na Kiwify/Cakto (venda direta) e na Hotmart (afiliados).
+     Use a copy e os anúncios dos arquivos 08 e 09 do projeto.
 
 OBSERVAÇÃO TÉCNICA
   Os PDFs estão em formato A5 (148 x 210 mm), ideais para leitura no celular.

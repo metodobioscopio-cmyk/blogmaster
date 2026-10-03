@@ -9,7 +9,7 @@ Uso:
 Saída: projeto-4-infoprodutos/entregaveis/
   Livro-1-.../  Livro-1.pdf, Livro-1-BONUS.pdf, Livro-1.epub, fonte-markdown/
   Livro-2-.../  ...
-  Kit-Livros-1-e-2.zip
+  Kit-Livros-1-2-3.zip
 """
 
 import os
@@ -46,6 +46,7 @@ LIVROS = [
         subtitulo="200 prompts e 12 automações prontas para recuperar 10 horas por semana",
         promessa="Método 5D — Diagnóstico · Delegação · Direção · Documentação · Dinheiro",
         colecao="COLEÇÃO VIDA EM ORDEM · VOLUME 1",
+        bonus_desc="200 prompts, 12 automações, tabela de preços e ferramentas",
         primaria="#1B2A4A",
         acento="#00A98A",
         claro="#E8F7F3",
@@ -79,6 +80,7 @@ LIVROS = [
         subtitulo="O método de negociação que cabe no seu bolso — 15 scripts prontos para usar",
         promessa="Método R.E.A.L. — Raio-X · Enxugamento · Acordo · Liquidação",
         colecao="COLEÇÃO VIDA EM ORDEM · VOLUME 2",
+        bonus_desc="15 scripts, ferramentas de negociação e planilhas",
         primaria="#0E3B2E",
         acento="#B58A0F",
         claro="#FBF4E2",
@@ -102,6 +104,40 @@ LIVROS = [
             "bonus-ferramentas.md",
         ],
     ),
+    dict(
+        slug="Livro-3-Airfryer-Sem-Mimimi",
+        fonte="livro-3",
+        titulo="AIRFRYER SEM MIMIMI",
+        subtitulo="120 receitas com tempo, custo, temperatura e litragem — e 7 dias de comida em 90 minutos",
+        promessa="Sistema 20-5-7 — 20 minutos · 5 ingredientes · 7 dias",
+        colecao="COLEÇÃO VIDA EM ORDEM · VOLUME 3",
+        primaria="#5A1F0E",
+        acento="#F2A93B",
+        claro="#FDF3E4",
+        bonus_desc="tabela mestra, guia de congelamento, custo por porção, listas de compra, cardápio de 30 dias, 20 temperos e o cronograma de 90 minutos",
+        corpo=[
+            "00-abertura.md",
+            "01-cap1-os-6-segredos.md",
+            "02-cap2-despensa-de-guerra.md",
+            "03-cap3-as-8-tecnicas-base.md",
+            "04-cap4-jantares-em-20-minutos.md",
+            "05-cap5-almocos-classicos.md",
+            "06-cap6-as-7-marmitas-do-domingo.md",
+            "07-cap7-lanches-e-petiscos.md",
+            "08-cap8-doces-sem-estourar.md",
+            "09-cap9-cafe-da-manha.md",
+            "10-cap10-molhos-e-temperos.md",
+            "11-cap11-vegetarianas.md",
+            "12-cap12-feira-de-domingo.md",
+        ],
+        bonus=[
+            "bonus-tabela-mestra.md",
+            "bonus-custo-por-porcao.md",
+            "bonus-lista-de-compras-e-cardapio.md",
+            "bonus-temperos-e-molhos.md",
+            "bonus-domingo-90-minutos.md",
+        ],
+    ),
 ]
 
 # ------------------------------------------------------------ limpeza de glifos
@@ -119,7 +155,7 @@ REPL = {
     "⚙": "", "✦": "", "✨": "", "🥇": "", "🏆": "", "🆕": "", "💥": "", "🙂": "",
     "🄰": "", "\ufe0f": "", "\u200b": "", "🟧": "", "🅐": "",
     "□": "[ ]", "☐": "[ ]", "☑": "[x]", "−": "-", "↓": "v", "↑": "^",
-    "•": "-", "▫": "-", "◻": "[ ]", "■": "*", "＝": "=", "≠": "!=",
+    "•": "-", "▫": "-", "◻": "[ ]", "■": "*", "＝": "=", "≠": "!=", "≈": "~", "🔵": "", "⚪": "",
 }
 
 DESCARTADOS = {}
@@ -908,41 +944,40 @@ def main():
 
     # leia-me do pacote
     with open(os.path.join(SAIDA, "LEIA-ME.txt"), "w", encoding="utf-8") as fh:
-        fh.write("""COLEÇÃO VIDA EM ORDEM — Pacote de produção
-Gerado em %s
-
-O QUE TEM AQUI
-
-  Livro-1-IA-que-Trabalha-por-Voce/
-      Livro-1-....pdf ......... livro completo (corpo), pronto para ler no celular
-      Livro-1-...-BONUS.pdf ... todos os bônus juntos (200 prompts, 12 automações,
-                                tabela de preços, scripts e ferramentas)
-      Livro-1-....epub ........ versão para Kindle, Kobo e Apple Books
-      fontes-editaveis/ ....... os arquivos .md originais, para você editar
-
-  Livro-2-Saia-do-Vermelho-em-60-Dias/
-      (mesma estrutura: PDF do corpo, PDF de bônus, EPUB e fontes)
-
-  _material-interno-do-produtor/
-      Painéis de produção (não entregar ao cliente)
-
-ANTES DE VENDER — 6 PASSOS
-  1. Leia o PDF inteiro e ajuste o que não estiver com a sua voz.
-  2. Crie as capas (um designer ou o Canva resolvem) — o PDF já sai com capa
-     tipográfica, mas uma capa desenhada vende mais.
-  3. Confira os avisos legais do Livro 2 e, se puder, faça revisão jurídica.
-  4. Substitua os casos do capítulo 11 do Livro 2 por histórias reais autorizadas,
-     ou mantenha a etiqueta de "caso ilustrativo".
-  5. Suba na Kiwify/Cakto (venda direta) e na Hotmart (afiliados).
-  6. Use a copy e os anúncios dos arquivos 08 e 09 do projeto.
-
-OBSERVAÇÃO TÉCNICA
-  Os PDFs estão em formato A5 (148 x 210 mm), ideais para leitura no celular.
-  Para imprimir, use "tamanho real" ou "ajustar à página" — não "múltiplas páginas".
-""" % DATA)
+        linhas_leia = ["COLEÇÃO VIDA EM ORDEM — Pacote de produção",
+                       "Gerado em %s" % DATA, "", "O QUE TEM AQUI", ""]
+        for cfg in LIVROS:
+            linhas_leia.append("  %s/" % cfg["slug"])
+            linhas_leia.append("      %s.pdf ......... livro completo (corpo), pronto para ler no celular" % cfg["slug"])
+            linhas_leia.append("      %s-BONUS.pdf ... %s" % (cfg["slug"], cfg.get("bonus_desc", "todos os bônus")))
+            linhas_leia.append("      %s.epub ........ versão para Kindle, Kobo e Apple Books" % cfg["slug"])
+            linhas_leia.append("      fontes-editaveis/ ....... os arquivos .md originais, para você editar")
+            linhas_leia.append("")
+        linhas_leia += [
+            "  _material-interno-do-produtor/",
+            "      Painéis de produção (não entregar ao cliente)",
+            "",
+            "ANTES DE VENDER — 6 PASSOS",
+            "  1. Leia o PDF inteiro e ajuste o que não estiver com a sua voz.",
+            "  2. Crie as capas (um designer ou o Canva resolvem) — o PDF já sai com capa",
+            "     tipográfica, mas uma capa desenhada vende mais.",
+            "  3. Confira os avisos legais do Livro 2 e, se puder, faça revisão jurídica.",
+            "  4. Substitua os casos do capítulo 11 do Livro 2 por histórias reais autorizadas,",
+            "     ou mantenha a etiqueta de \"caso ilustrativo\".",
+            "  5. Livro 3: teste as receitas na SUA airfryer (30 delas bastam), confirme os",
+            "     custos com o preço da sua cidade e fotografe os 30 pratos principais.",
+            "  6. Suba na Kiwify/Cakto (venda direta) e na Hotmart (afiliados).",
+            "     Use a copy e os anúncios dos arquivos 08 e 09 do projeto.",
+            "",
+            "OBSERVAÇÃO TÉCNICA",
+            "  Os PDFs estão em formato A5 (148 x 210 mm), ideais para leitura no celular.",
+            "  Para imprimir, use \"tamanho real\" ou \"ajustar à página\" — não \"múltiplas páginas\".",
+        ]
+        fh.write("\n".join(linhas_leia) + "\n")
 
     # zip
-    zip_path = os.path.join(BASE, "Kit-Livros-1-e-2.zip")
+    numeros = "-".join(str(i + 1) for i in range(len(LIVROS)))
+    zip_path = os.path.join(BASE, "Kit-Livros-%s.zip" % numeros)
     if os.path.exists(zip_path):
         os.remove(zip_path)
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
