@@ -6,6 +6,20 @@
 **Extensão-alvo:** 14.000-18.000 palavras (≈140 páginas A5) + bônus.
 **Última atualização:** 03/10/2026
 
+**Total escrito: ~23.200 palavras em 20 arquivos** — acima da meta de 14.000-18.000, porque cada dia do protocolo ficou em página própria e o rastreador ganhou as três semanas completas.
+
+**Pacote já gerado** (`../entregaveis/Livro-4-Energia-em-21-Dias/`):
+- PDF do corpo: **74 páginas A5**
+- PDF de bônus: **22 páginas** (roteiros de áudio, rastreador, checklist, desintoxicação digital, 12 rituais, protocolo de emergência)
+- EPUB 3.0: **19 capítulos**, validado (0 XML mal formado, 0 links quebrados)
+- `fontes-editaveis/`: os 19 arquivos `.md`
+- `audios/`: entra automaticamente aqui quando as 3 faixas forem geradas/gravadas
+
+Conferência automática: 19 blocos "Hoje você faz só isso" no PDF, 0 caracteres descartados na tipografia, todos os blocos coloridos renderizados.
+
+**Faltando gerar:** os **3 áudios** do `bonus-audios-guiados.md` (os roteiros estão prontos palavra por palavra). Grave com a sua voz ou use voz sintetizada — o gerador já copia os arquivos de `livro-4/audios/` para o pacote final.
+
+
 ---
 
 ## 🚨 AVISO CENTRAL DESTE VOLUME (mais rígido que os outros três)

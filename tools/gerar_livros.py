@@ -1000,6 +1000,9 @@ def main():
             linhas_leia.append("      %s-BONUS.pdf ... %s" % (cfg["slug"], cfg.get("bonus_desc", "todos os bônus")))
             linhas_leia.append("      %s.epub ........ versão para Kindle, Kobo e Apple Books" % cfg["slug"])
             linhas_leia.append("      fontes-editaveis/ ....... os arquivos .md originais, para você editar")
+            if os.path.isdir(os.path.join(SAIDA, cfg["slug"], "audios")):
+                n_mp3 = len([a for a in os.listdir(os.path.join(SAIDA, cfg["slug"], "audios")) if a.endswith(".mp3")])
+                linhas_leia.append("      audios/ ................ %d faixas de áudio guiado (mp3)" % n_mp3)
             linhas_leia.append("")
         linhas_leia += [
             "  _material-interno-do-produtor/",

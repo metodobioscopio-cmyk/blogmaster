@@ -13,11 +13,15 @@
 - PDF de bônus: **22 páginas** (roteiros de áudio, rastreador, checklist, desintoxicação digital, 12 rituais, protocolo de emergência)
 - EPUB 3.0: **19 capítulos**, validado (0 XML mal formado, 0 links quebrados)
 - `fontes-editaveis/`: os 19 arquivos `.md`
-- `audios/`: entra automaticamente aqui quando as 3 faixas forem geradas/gravadas
+- `audios/`: **3 faixas de áudio guiado já geradas** (voz sintetizada, pt-BR):
+  - `01-respiracao-guiada.mp3` — 3 min 07 s
+  - `02-soltar-o-dia.mp3` — 2 min 34 s
+  - `03-foco-para-comecar.mp3` — 2 min 31 s
 
 Conferência automática: 19 blocos "Hoje você faz só isso" no PDF, 0 caracteres descartados na tipografia, todos os blocos coloridos renderizados.
 
-**Faltando gerar:** os **3 áudios** do `bonus-audios-guiados.md` (os roteiros estão prontos palavra por palavra). Grave com a sua voz ou use voz sintetizada — o gerador já copia os arquivos de `livro-4/audios/` para o pacote final.
+> 📌 **NOTA sobre os áudios** — a versão gerada é **narração contínua** (com 3,5 s de silêncio entre os blocos), sem as pausas longas que um guiado ao vivo costuma ter. A duração final depende dessas pausas. Duas opções antes de publicar: (a) publicar assim mesmo — funciona bem para ouvir de fone na cama; (b) regravar com a sua voz, usando os roteiros do `bonus-audios-guiados.md`, respeitando as pausas de 3 a 5 s indicadas (o resultado fica entre 5 e 10 minutos por faixa e soa mais pessoal).
+> Os roteiros e o aviso de segurança em áudio estão no bônus; o **aviso já está gravado no início de cada faixa**.
 
 
 ---
