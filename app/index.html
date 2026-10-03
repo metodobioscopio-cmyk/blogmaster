@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PinMind — Produção Pinterest com IA (grátis)</title>
+<meta name="description" content="App de produção para Pinterest com IA gratuita: valida nicho e produto, gera os prompts, valida o visual e monta o pack de pins. Você só cola o link.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topo">
+    <div class="marca">
+      <span class="bolinha">📌</span>
+      <span>PinMind <small class="mini" style="font-weight:500">· produção Pinterest com IA</small></span>
+    </div>
+    <div class="topo-acoes">
+      <select id="seletorProjeto" class="btn" title="Projetos salvos" style="max-width:220px"></select>
+      <button class="btn mini" id="btnNovo">+ Novo</button>
+      <button class="btn mini" id="btnExportar">⬇ Exportar</button>
+      <button class="btn mini" id="btnConfig">⚙ Integrações</button>
+    </div>
+  </header>
+
+  <nav class="lateral" id="lateral"></nav>
+
+  <main class="conteudo" id="conteudo"></main>
+
+</div>
+
+<script src="dados/dados.js"></script>
+<script src="assets/js/prompts.js"></script>
+<script src="assets/js/motor.js"></script>
+<script src="assets/js/biblia.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

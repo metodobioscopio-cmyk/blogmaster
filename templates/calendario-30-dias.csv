@@ -1,0 +1,31 @@
+Dia,Fase,Tarefa,Tempo estimado,Feito?
+1,Fundacao,Converter conta em business + escrever bio com keyword + foto/capa,40 min,NAO
+2,Fundacao,Criar 5 boards tematicos (titulo + descricao com keyword),40 min,NAO
+3,Pesquisa,Rodar Prompt 1 (Maquina de Nichos) e listar 3 candidatos,30 min,NAO
+4,Pesquisa,Validar demanda dos 3 na busca guiada + Pinterest Trends,30 min,NAO
+5,Pesquisa,Levantar 5-10 ofertas do nicho (Prompt 2),40 min,NAO
+6,Validacao,Rodar a validacao dos 12 criterios em cada oferta,40 min,NAO
+7,Validacao,Cadastrar nos programas de afiliado e gerar os links,30 min,NAO
+8,Angulos,Rodar Prompt 3 (1 keyword -> 10 angulos),30 min,NAO
+9,Angulos,Mar-car 5 angulos e definir destino de cada um,30 min,NAO
+10,Visual,Rodar Prompt 5 (Validador de Visual) e escolher 1-2 estilos,40 min,NAO
+11,Producao,Rodar Prompt 15: gerar as 10 primeiras imagens gratis,45 min,NAO
+12,Producao,Canva: criar o template mestre 1000x1500,45 min,NAO
+13,Publicacao,Montar os 5 primeiros pins completos e publicar,50 min,NAO
+14,Producao,Rodar Prompt 7 (pagina de destino) e publicar a pagina,60 min,NAO
+15,Publicacao,Publicar 5 pins apontando para a pagina + testar todos os links,40 min,NAO
+16,Metricas,Primeira leitura de analytics (apenas observar e anotar baseline),15 min,NAO
+17,Producao,Rodar Prompt 6 (20 titulos) e escolher o top 5,30 min,NAO
+18,Publicacao,Publicar 5 pins com as novas headlines,40 min,NAO
+19,Producao,Rodar Prompt 8 (roteiro de video) e publicar 1 video pin,50 min,NAO
+20,Publicacao,Publicar 5 pins + fixar o melhor no topo do board principal,40 min,NAO
+21,Producao,DIA DE MANUTENCAO: gerar 20 imagens de uma vez,60 min,NAO
+22,Producao,Montar 5 pins usando o banco de imagens,45 min,NAO
+23,Publicacao,Publicar 5 pins + agendar 5 no agendador nativo,40 min,NAO
+24,Producao,Rodar Prompt 9 (carrossel) e montar 1 carrossel,45 min,NAO
+25,Publicacao,Publicar 5 pins,30 min,NAO
+26,Metricas,Rodar Prompt 12 (diagnostico) com os dados disponiveis,30 min,NAO
+27,Otimizacao,Corrigir o que o diagnostico apontou,45 min,NAO
+28,Producao,DIA DE MANUTENCAO: 20 imagens + 20 titulos em lote,60 min,NAO
+29,Publicacao,Publicar 6 pins,40 min,NAO
+30,Decisao,Relatorio da fase: pins publicados + impressoes + cliques + saves,45 min,NAO
