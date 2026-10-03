@@ -22,6 +22,11 @@
 | `10-onde-vender-canais-plataformas.md` | Onde vender (BR + global), taxas reais, checkout, afiliados, KDP, Etsy, planejamento de canal |
 | `11-estrategia-marketing-multimodal.md` | Funil completo, esteira, orgânico, pago, e-mail, WhatsApp, afiliados, calendário 30 dias, KPIs e projeção |
 | `12-validacao-e-compliance.md` | Validação em 7 dias antes de escrever, testes, CDC art. 49, LGPD, claims proibidos, impostos |
+| `11-criativos-visuais.md` | Guia das capas, mockups e anúncios gerados por script + páginas de venda + áudios |
+| `13-trafego-organico-estrutura.md` | **Tráfego orgânico validado**: 12 canais com mecânica, cadência, KPI e critério de corte; matriz de 48 áreas; funil e isca; protocolo de validação |
+| `14-conteudos-por-area.md` | **Banco de conteúdo pronto**: 40 ganchos de vídeo, 20 pautas de YouTube, 24 artigos, 24 pins, 20 respostas de comunidade, 12 newsletters, 12 carrosséis, 12 parcerias |
+| `marketing/organico/painel-organico.html` | Painel visual do plano de 90 dias (abra no navegador) |
+| `marketing/organico/calendario-editorial-90-dias.csv` | 630 peças agendadas com canal, área, tema, CTA e UTM (importa no Sheets) |
 | `painel.html` | Painel visual do projeto (abra no navegador) |
 
 ---
@@ -83,8 +88,9 @@ Critérios usados: (1) volume de busca/demanda atual, (2) tendência (subindo ou
 3. `03` a `06` — escreva/peça a escrita seguindo o esqueleto (capítulo por capítulo, com entregável por capítulo).
 4. `07` — faça o "lindo" acontecer (capa, miolo, mockup).
 5. `08` + `09` — copie e cole as páginas e os anúncios.
-6. `10` + `11` — escolha canais e ligue a máquina.
+6. `10` + `11` — escolha canais e ligue a máquina (pago e multimodal).
 7. `12` — valide e blinde juridicamente antes de escalar.
+8. `13` + `14` — ligue o **orgânico**: escolha 2 áreas por livro, siga o calendário de 90 dias e leia os números no dia 14.
 
 ---
 

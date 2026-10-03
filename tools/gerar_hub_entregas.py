@@ -102,6 +102,15 @@ def main():
     hero = "kit-completo-5-hero.jpg"
     anuncios = lista("anuncios")
 
+    organico = f'''      <a class="card mini" href="marketing/organico/painel-organico.html" target="_blank" rel="noopener">
+        <div class="ic">📅</div><h3>Painel orgânico · 90 dias</h3><p>12 canais, KPIs e critérios de corte</p></a>
+      <a class="card mini" href="marketing/organico/calendario-editorial-90-dias.csv" download>
+        <div class="ic">📊</div><h3>Calendário 90 dias</h3><p>630 peças com canal, área, tema e UTM</p></a>
+      <a class="card mini" href="13-trafego-organico-estrutura.md" target="_blank" rel="noopener">
+        <div class="ic">🌐</div><h3>13 · Estrutura de tráfego</h3><p>mecânica de cada canal e matriz de áreas</p></a>
+      <a class="card mini" href="14-conteudos-por-area.md" target="_blank" rel="noopener">
+        <div class="ic">🎬</div><h3>14 · Banco de conteúdo</h3><p>ganchos, artigos, pins, newsletters prontos</p></a>'''
+
     paginas = ["index.html", "livro-1.html", "livro-2.html", "livro-3.html", "livro-4.html"]
     paginas_html = "\n".join(
         f'      <a class="card mini" href="paginas/{p}" target="_blank" rel="noopener">'
@@ -206,7 +215,14 @@ code{{background:rgba(20,24,33,.07);padding:2px 6px;border-radius:6px;font-size:
 </div></section>
 
 <section><div class="wrap">
-  <h2>5. Páginas de venda <em>abrem em nova aba; são arquivos únicos e autocontidos</em></h2>
+  <h2>5. Tráfego orgânico <em>plano de 90 dias, canais, KPIs e banco de conteúdo pronto</em></h2>
+  <div class="grid zips">
+{organico}
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>6. Páginas de venda <em>abrem em nova aba; são arquivos únicos e autocontidos</em></h2>
   <div class="grid zips">
 {paginas_html}
   </div>
