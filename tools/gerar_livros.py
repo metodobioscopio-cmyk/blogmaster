@@ -138,6 +138,41 @@ LIVROS = [
             "bonus-domingo-90-minutos.md",
         ],
     ),
+    dict(
+        slug="Livro-4-Energia-em-21-Dias",
+        fonte="livro-4",
+        titulo="ENERGIA EM 21 DIAS",
+        subtitulo="O protocolo S.O.N.O. — 15 minutos por dia para organizar suas noites e suas manhãs",
+        promessa="Protocolo S.O.N.O. — Sol · Ordem · Nada de cafeína depois do X · Otimize o quarto",
+        colecao="COLEÇÃO VIDA EM ORDEM · VOLUME 4",
+        primaria="#1E2A5A",
+        acento="#E8B65A",
+        claro="#F0F3FA",
+        bonus_desc="3 roteiros de áudio guiado, rastreador de 21 dias, checklist de geladeira, desintoxicação digital de 7 noites, 12 rituais de manhã e protocolo de emergência",
+        corpo=[
+            "00-abertura.md",
+            "01-cap1-relogio-desalinhado.md",
+            "02-cap2-protocolo-sono.md",
+            "03-cap3-semana1-ancorar.md",
+            "04-cap4-semana2-ajustar.md",
+            "05-cap5-semana3-automatizar.md",
+            "06-cap6-os-3-blocos.md",
+            "07-cap7-alimentacao-sem-dieta.md",
+            "08-cap8-movimento-minimo.md",
+            "09-cap9-mente-que-nao-desliga.md",
+            "10-cap10-plano-90-dias.md",
+            "11-cap11-historias-e-faq.md",
+            "12-cap12-rastreador-final.md",
+        ],
+        bonus=[
+            "bonus-audios-guiados.md",
+            "bonus-rastreador-21-dias.md",
+            "bonus-checklist-geladeira.md",
+            "bonus-desintox-digital-7-dias.md",
+            "bonus-12-rituais-de-manha.md",
+            "bonus-protocolo-de-emergencia.md",
+        ],
+    ),
 ]
 
 # ------------------------------------------------------------ limpeza de glifos
@@ -155,7 +190,7 @@ REPL = {
     "⚙": "", "✦": "", "✨": "", "🥇": "", "🏆": "", "🆕": "", "💥": "", "🙂": "",
     "🄰": "", "\ufe0f": "", "\u200b": "", "🟧": "", "🅐": "",
     "□": "[ ]", "☐": "[ ]", "☑": "[x]", "−": "-", "↓": "v", "↑": "^",
-    "•": "-", "▫": "-", "◻": "[ ]", "■": "*", "＝": "=", "≠": "!=", "≈": "~", "🔵": "", "⚪": "",
+    "•": "-", "▫": "-", "◻": "[ ]", "■": "*", "＝": "=", "≠": "!=", "≈": "~", "🔵": "", "⚪": "", "😴": "", "🌞": "", "☀": "", "☀️": "", "🌙": "", "🧘": "",
 }
 
 DESCARTADOS = {}
@@ -924,6 +959,19 @@ def main():
         p3 = os.path.join(pasta, "%s.epub" % cfg["slug"])
         n3 = gerar_epub(cfg, cfg["corpo"] + cfg["bonus"], p3)
         print("   EPUB ............. %d capítulos" % n3)
+
+        # áudios (se gravados/gerados)
+        adir_src = os.path.join(BASE, cfg["fonte"], "audios")
+        if os.path.isdir(adir_src):
+            adir = os.path.join(pasta, "audios")
+            os.makedirs(adir, exist_ok=True)
+            n_aud = 0
+            for a in sorted(os.listdir(adir_src)):
+                if a.lower().endswith((".mp3", ".m4a", ".wav")):
+                    shutil.copy2(os.path.join(adir_src, a), adir)
+                    n_aud += 1
+            if n_aud:
+                print("   ÁUDIOS ........... %d faixas" % n_aud)
 
         # fontes editáveis
         fdir = os.path.join(pasta, "fontes-editaveis")

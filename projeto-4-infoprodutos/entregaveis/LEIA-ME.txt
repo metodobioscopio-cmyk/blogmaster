@@ -21,6 +21,12 @@ O QUE TEM AQUI
       Livro-3-Airfryer-Sem-Mimimi.epub ........ versão para Kindle, Kobo e Apple Books
       fontes-editaveis/ ....... os arquivos .md originais, para você editar
 
+  Livro-4-Energia-em-21-Dias/
+      Livro-4-Energia-em-21-Dias.pdf ......... livro completo (corpo), pronto para ler no celular
+      Livro-4-Energia-em-21-Dias-BONUS.pdf ... 3 roteiros de áudio guiado, rastreador de 21 dias, checklist de geladeira, desintoxicação digital de 7 noites, 12 rituais de manhã e protocolo de emergência
+      Livro-4-Energia-em-21-Dias.epub ........ versão para Kindle, Kobo e Apple Books
+      fontes-editaveis/ ....... os arquivos .md originais, para você editar
+
   _material-interno-do-produtor/
       Painéis de produção (não entregar ao cliente)
 
