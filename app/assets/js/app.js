@@ -180,9 +180,10 @@
       validacao: passoValidacao, pack: passoPack, publicar: passoPublicar,
       prompts: passoPrompts, biblia: passoBiblia, config: passoConfig
     };
+    const rotulo = p.n <= 10 ? `Etapa ${p.n} de 10` : 'Referência';
     $('#conteudo').innerHTML = `
       <div class="cabecalho-passo">
-        <div class="etapa">Etapa ${p.n} de 10</div>
+        <div class="etapa">${rotulo}</div>
         <h1>${esc(p.titulo)}</h1>
         <div class="cinza">${esc(p.sub)}</div>
       </div>
