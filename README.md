@@ -68,10 +68,13 @@ app/
   dados/             base de conhecimento: nichos, ofertas, benchmarks, estilos
 
 scripts/
-  servir.js          servidor estático local (Node, sem dependências)
-  build-biblia.js    converte BIBLIA/*.md → app/assets/js/biblia.js
-  testar-motor.js    testes do núcleo (prompts, score, geração, exportação)
-  testar-ui.js       testes da interface em DOM real (requer jsdom)
+  servir.js            servidor estático local (Node, sem dependências)
+  build-biblia.js      converte BIBLIA/*.md → app/assets/js/biblia.js
+  gerar-standalone.js  gera o arquivo único PinMind-app-completo.html
+  empacotar.js         gera o ZIP para download
+  testar-motor.js      testes do núcleo (prompts, score, geração, exportação)
+  testar-ui.js         testes da interface em DOM real (requer jsdom)
+  testar-standalone.js valida o arquivo único abrindo via file:// (requer jsdom)
 
 templates/           planilhas prontas (calendário, pack, métricas, compliance)
 ```
