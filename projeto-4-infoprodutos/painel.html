@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel · Projeto Quatro Ativos — 4 e-books de R$47</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#080c16; --bg2:#0d1425; --card:#121a2e; --line:#1e2a45;
+    --txt:#e8eefc; --mut:#8fa0c0; --ia:#00e0b8; --div:#ffc93c;
+    --air:#ff6b4a; --ene:#a78bfa; --ok:#38d39f;
+  }
+  body{background:radial-gradient(1200px 600px at 15% -10%, #16264a 0%, var(--bg) 55%) no-repeat, var(--bg);
+    color:var(--txt);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;padding:0 0 80px}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+  header{padding:64px 0 34px;border-bottom:1px solid var(--line)}
+  .kicker{font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--mut);font-weight:700}
+  h1{font-size:clamp(30px,5vw,52px);line-height:1.06;margin:14px 0 14px;letter-spacing:-.02em}
+  h1 span{background:linear-gradient(100deg,var(--ia),var(--ene) 55%,var(--div));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--mut);max-width:760px;font-size:17px}
+  h2{font-size:clamp(21px,2.6vw,28px);margin:0 0 6px;letter-spacing:-.01em}
+  .sec{padding:52px 0 8px}
+  .sec .lead{color:var(--mut);margin-bottom:26px;max-width:820px}
+  .grid{display:grid;gap:16px}
+  .k4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+  .k2{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))}
+  .card{background:linear-gradient(180deg,var(--card),#0f1729);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .stat b{display:block;font-size:29px;letter-spacing:-.02em;line-height:1.15}
+  .stat small{color:var(--mut);font-size:12.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+  .stat p{color:var(--mut);font-size:13.5px;margin-top:7px}
+  .prod{border-radius:18px;padding:24px;border:1px solid var(--line);background:linear-gradient(180deg,#131c31,#0e1626);position:relative;overflow:hidden}
+  .prod:before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--c)}
+  .prod .vol{font-size:11.5px;letter-spacing:.2em;color:var(--c);font-weight:800;text-transform:uppercase}
+  .prod h3{font-size:22px;margin:9px 0 8px;letter-spacing:-.01em}
+  .prod .pr{color:var(--mut);font-size:14.5px;min-height:66px}
+  .tag{display:inline-block;font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;
+    background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--mut);margin:8px 6px 0 0}
+  .met{margin-top:14px;padding-top:13px;border-top:1px dashed var(--line);font-size:14px;color:#cfdcf5}
+  .met b{color:var(--c)}
+  .price{margin-top:14px;display:flex;align-items:baseline;gap:9px}
+  .price b{font-size:26px}
+  .price s{color:var(--mut);font-size:14px}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;overflow:hidden;border-radius:14px}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+  th{background:#101a2e;color:var(--mut);font-size:12.5px;text-transform:uppercase;letter-spacing:.08em}
+  tr:last-child td{border-bottom:0}
+  td b{color:#fff}
+  .funil{display:grid;gap:10px}
+  .step{display:flex;gap:14px;align-items:flex-start;background:#101a2e;border:1px solid var(--line);
+    border-radius:14px;padding:16px 18px}
+  .step .n{flex:0 0 34px;height:34px;border-radius:10px;display:grid;place-items:center;font-weight:800;
+    background:rgba(0,224,184,.12);color:var(--ia);border:1px solid rgba(0,224,184,.32)}
+  .step h4{font-size:16px;margin-bottom:3px}
+  .step p{color:var(--mut);font-size:14px}
+  .tl{position:relative;padding-left:26px}
+  .tl:before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--ia),var(--ene),var(--div))}
+  .tl .i{position:relative;margin-bottom:18px}
+  .tl .i:before{content:"";position:absolute;left:-25px;top:6px;width:12px;height:12px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--ia)}
+  .tl b{display:block;font-size:15.5px}
+  .tl span{color:var(--mut);font-size:14px}
+  .pill{font-size:12px;font-weight:800;color:#06121a;background:var(--ok);padding:3px 9px;border-radius:999px}
+  .warn{border-left:3px solid var(--div);background:rgba(255,201,60,.07);padding:14px 16px;border-radius:0 12px 12px 0;color:#e6eeff;font-size:14.5px}
+  a{color:var(--ia);text-decoration:none;border-bottom:1px solid rgba(0,224,184,.35)}
+  .files{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+  .files div{background:#0f1729;border:1px solid var(--line);border-radius:11px;padding:11px 14px;font-size:14px;color:#cfe0ff}
+  .files span{color:var(--mut);display:block;font-size:12.5px}
+  footer{color:var(--mut);font-size:13px;padding-top:40px;margin-top:40px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Projeto Quatro Ativos · pesquisa de 03/10/2026</div>
+  <h1>4 e-books de <span>R$ 47</span> desenhados por dados,<br>não por achismo.</h1>
+  <p class="sub">Uma persona, quatro dores, uma esteira. Pesquisa em Hotmart, Kiwify, Eduzz, Monetizze, Cakto, Braip, Amazon KDP, Etsy, Gumroad, Payhip, ClickBank e Digistore24 — com escopo, esqueleto, copy, anúncios e canais prontos.</p>
+</header>
+
+<section class="sec">
+  <div class="grid k4">
+    <div class="card stat"><small>Mercado BR</small><b>R$ 8,8 bi</b><p>por ano em infoprodutos, crescendo ~18% ao ano (FGV/Hotmart) · 25 mi de brasileiros já compraram</p></div>
+    <div class="card stat"><small>IA na Hotmart</small><b>R$ 142,8 mi</b><p>movimentados em 2025, com <b style="color:#fff">+700%</b> em dois anos — o nicho que mais cresceu</p></div>
+    <div class="card stat"><small>Dor financeira</small><b>78,8 mi</b><p>de brasileiros inadimplentes: 48,31% da população adulta (Serasa, ago/2025)</p></div>
+    <div class="card stat"><small>Cozinha &amp; sono</small><b>64% · 71%</b><p>dos lares têm airfryer · e 71% dormiram menos de 6h em 2 semanas</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>Os quatro produtos</h2>
+  <p class="lead">Todos a R$ 47, todos com ferramenta operacional inclusa, todos com mecanismo próprio nomeado — é isso que faz o seu ser melhor que o que já está à venda.</p>
+  <div class="grid k2">
+
+    <div class="prod" style="--c:var(--ia)">
+      <div class="vol">Vol. 1 · IA</div>
+      <h3>IA que Trabalha por Você</h3>
+      <p class="pr">200 prompts em português + 12 automações sem código para recuperar 10 horas por semana e transformar isso em renda extra.</p>
+      <span class="tag">Método 5D</span><span class="tag">200 prompts</span><span class="tag">12 automações</span><span class="tag">Tabela de preços</span>
+      <div class="met"><b>Diferencial:</b> prompts por profissão + a ponte “IA → dinheiro” com precificação e scripts de primeiro cliente.</div>
+      <div class="price"><b>R$ 47</b><s>R$ 97</s><span class="tag">bump R$ 27 · upsell R$ 97</span></div>
+    </div>
+
+    <div class="prod" style="--c:var(--div)">
+      <div class="vol">Vol. 2 · DINHEIRO</div>
+      <h3>Saia do Vermelho em 60 Dias</h3>
+      <p class="pr">Método R.E.A.L. (Raio-X, Enxugar, Acordar, Liquidar) com 15 scripts de negociação palavra por palavra e calculadora de parcela.</p>
+      <span class="tag">15 scripts</span><span class="tag">Planilha bola de neve</span><span class="tag">Lei do superendividamento</span>
+      <div class="met"><b>Diferencial:</b> o único que entrega ordem de ataque + quanto oferecer + o que nunca dizer ao credor.</div>
+      <div class="price"><b>R$ 47</b><s>R$ 97</s><span class="tag">bump R$ 27 · upsell R$ 97</span></div>
+    </div>
+
+    <div class="prod" style="--c:var(--air)">
+      <div class="vol">Vol. 3 · COMIDA</div>
+      <h3>Airfryer Sem Mimimi</h3>
+      <p class="pr">120 receitas testadas com 4 números em cada: tempo ativo, custo por porção, temperatura e litragem (2L / 4L / 5L).</p>
+      <span class="tag">Sistema 20-5-7</span><span class="tag">Custo por porção</span><span class="tag">Cardápio 30 dias</span>
+      <div class="met"><b>Diferencial:</b> economia medida + adaptação por litragem — ninguém entrega isso em receita genérica.</div>
+      <div class="price"><b>R$ 47</b><s>R$ 97</s><span class="tag">bump R$ 27 · upsell R$ 97</span></div>
+    </div>
+
+    <div class="prod" style="--c:var(--ene)">
+      <div class="vol">Vol. 4 · ENERGIA</div>
+      <h3>Energia em 21 Dias</h3>
+      <p class="pr">Protocolo S.O.N.O. (Sol, Ordem, Nada de cafeína depois do horário, Otimize o quarto) com rastreador, áudios e plano B para noites ruins.</p>
+      <span class="tag">21 dias · 15 min</span><span class="tag">Áudios guiados</span><span class="tag">Trilha p/ trabalho noturno</span>
+      <div class="met"><b>Diferencial:</b> protocolo com tarefa diária + protocolo de emergência — nem clínico demais, nem motivacional demais.</div>
+      <div class="price"><b>R$ 47</b><s>R$ 97</s><span class="tag">bump R$ 27 · upsell R$ 97</span></div>
+    </div>
+
+  </div>
+</section>
+
+<section class="sec">
+  <h2>A esteira (onde o lucro realmente aparece)</h2>
+  <p class="lead">Sem order bump e upsell, um e-book de R$ 47 não fecha a conta do tráfego pago. Com eles, fecha — e o combo dos 4 multiplica o valor de cada cliente.</p>
+  <div class="funil">
+    <div class="step"><div class="n">1</div><div><h4>Isca gratuita por produto</h4><p>20 prompts · planilha Raio-X · 7 receitas com custo · checklist de 7 dias → captura e-mail e WhatsApp com consentimento.</p></div></div>
+    <div class="step"><div class="n">2</div><div><h4>E-book R$ 47 — acesso imediato, garantia de 7 dias</h4><p>Preço abaixo do gatilho de decisão familiar, com ferramenta editável inclusa.</p></div></div>
+    <div class="step"><div class="n">3</div><div><h4>Order bump R$ 27 no checkout</h4><p>Kit complementar de 2 linhas de copy — adesão típica de 20 a 30% sem esforço de venda.</p></div></div>
+    <div class="step"><div class="n">4</div><div><h4>Upsell R$ 97 pós-compra</h4><p>Pacote avançado (áudios, automações, comunidade). É o que paga o anúncio.</p></div></div>
+    <div class="step"><div class="n">5</div><div><h4>Combo R$ 127 + Clube R$ 19,90/mês</h4><p>No dia 7 o cliente descobre que tem outras 3 dores — e você tem os outros 3 livros.</p></div></div>
+  </div>
+  <div class="grid k4" style="margin-top:18px">
+    <div class="card stat"><small>AOV projetado</small><b>R$ 60-78</b><p>contra R$ 47 do produto puro</p></div>
+    <div class="card stat"><small>CPA saudável</small><b>≤ R$ 28</b><p>abaixo de 35-40% do AOV</p></div>
+    <div class="card stat"><small>Conversão-alvo</small><b>2,0-2,5%</b><p>página de venda própria</p></div>
+    <div class="card stat"><small>Reembolso</small><b>&lt; 5%</b><p>acima de 8% = promessa maior que a entrega</p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>Onde vender</h2>
+  <p class="lead">Venda direta com taxa baixa + Hotmart para afiliados e internacional + KDP/Etsy/Gumroad para descobrir público global.</p>
+  <table>
+    <tr><th>Canal</th><th>Papel</th><th>Custo reportado</th><th>Meta em 90 dias</th></tr>
+    <tr><td><b>Kiwify / Cakto</b></td><td>Canal principal no Brasil (Pix barato, checkout rápido)</td><td>~5% a 9% + R$ 0,50-2,49 · Pix 0% + R$ 2,49 na Cakto</td><td>60% das vendas BR</td></tr>
+    <tr><td><b>Hotmart</b></td><td>Afiliados (cookie de 365 dias) e vendas internacionais</td><td>9,9% + R$ 1 (5,9% no plano pago)</td><td>10 afiliados ativos</td></tr>
+    <tr><td><b>Página própria</b></td><td>Destino de todo tráfego (SEO, pixel, remarketing)</td><td>R$ 0-60/mês</td><td>conversão ≥ 2,5%</td></tr>
+    <tr><td><b>Meta + TikTok Ads</b></td><td>Volume previsível</td><td>CPA R$ 20-35 (repasse de impostos elevou o custo em ~12%)</td><td>100+ vendas/mês</td></tr>
+    <tr><td><b>Google Search</b></td><td>Captura de intenção (“como negociar dívida”, “receita airfryer 2L”)</td><td>R$ 15-25/dia</td><td>15% das vendas</td></tr>
+    <tr><td><b>Pinterest + Blog/YouTube</b></td><td>Orgânico evergreen — derruba o CPA no tempo</td><td>R$ 0 (tempo)</td><td>5.000 visitas/mês</td></tr>
+    <tr><td><b>Amazon KDP</b></td><td>Descoberta global (70% de royalty entre US$ 2,99-12,99)</td><td>35-70% de royalty, sem custo de publicação</td><td>30 leitores + 10 reviews</td></tr>
+    <tr><td><b>Etsy / Gumroad / Payhip</b></td><td>Versões em inglês (Airfryer e Energia primeiro)</td><td>Gumroad 10% + US$ 0,30 · Payhip 5%</td><td>US$ 300-800/mês</td></tr>
+  </table>
+  <div class="warn" style="margin-top:18px">Taxas e políticas mudam com frequência. Sempre confirme na tabela oficial vigente antes de fixar preço e orçamento.</div>
+</section>
+
+<section class="sec">
+  <h2>Plano de 30 dias</h2>
+  <div class="tl">
+    <div class="i"><b>Dias 1-7 · Validar</b><span>4 páginas de espera + R$ 240 de teste de anúncio + 10 conversas de 10 min. Corte: CPL abaixo de R$ 3,50. Não escreva o que não passou.</span></div>
+    <div class="i"><b>Dias 8-14 · Produzir Vol. 1 e 2</b><span>IA e Dívidas escritos e diagramados, capas, planilhas e scripts editáveis.</span></div>
+    <div class="i"><b>Dias 15-21 · Produzir Vol. 3 e 4 + ativos</b><span>Receitas testadas, áudios gravados, 4 páginas de venda, 20 criativos, 7 e-mails.</span></div>
+    <div class="i"><b>Dias 22-30 · Lançar</b><span>Publicar (Kiwify/Cakto + Hotmart + KDP), ativar afiliados, ligar Meta/TikTok/Google, abrir bump e upsell. Meta: 50-150 vendas.</span></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2>Projeção honesta (premissas explícitas)</h2>
+  <p class="lead">Conversão 2%, AOV R$ 65, reembolso 5%, R$ 3.000 de mídia, CPC R$ 1,20. No mês 1 o tráfego pago empata — o lucro vem de combo, clube, orgânico, afiliados e recompra.</p>
+  <table>
+    <tr><th>Fase</th><th>Mês</th><th>Vendas/mês</th><th>Receita</th><th>Como</th></tr>
+    <tr><td>Validação</td><td>1</td><td>20-50</td><td>R$ 1.000-3.000</td><td>Isca + orgânico + R$ 900 de ads</td></tr>
+    <tr><td>Tração</td><td>2-3</td><td>80-150</td><td>R$ 5.000-10.000</td><td>1 criativo vencedor + bump + afiliados</td></tr>
+    <tr><td>Escala</td><td>4-6</td><td>250-500</td><td>R$ 16.000-33.000</td><td>2 canais pagos + combo + clube + e-mail</td></tr>
+    <tr><td>Marca</td><td>7-12</td><td>600-1.200</td><td>R$ 40.000-80.000</td><td>KDP internacional + afiliados + autoridade</td></tr>
+  </table>
+</section>
+
+<section class="sec">
+  <h2>As regras que nunca se quebram</h2>
+  <div class="grid k2">
+    <div class="card">
+      <h4 style="margin-bottom:8px">✅ Pode</h4>
+      <p style="color:var(--mut);font-size:14.5px">Método nomeado, número verificável, ferramenta editável, garantia de 7 dias (CDC art. 49), prova real com autorização, escassez verdadeira, público 18+ em finanças e saúde.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-bottom:8px">⛔ Nunca</h4>
+      <p style="color:var(--mut);font-size:14.5px">“Limpe o nome em 5 dias”, “ganhe R$ 5.000 garantido”, “cura insônia”, “emagreça X kg”, antes-e-depois de corpo, depoimento inventado, contador falso, imagem de famoso ou marca de terceiros.</p>
+    </div>
+  </div>
+  <div class="warn" style="margin-top:16px">O produto é educacional. Não substitui consultoria jurídica, contábil, médica ou de investimentos. Resultados variam conforme o uso e o contexto de cada pessoa.</div>
+</section>
+
+<section class="sec">
+  <h2>Arquivos do projeto</h2>
+  <div class="files">
+    <div>00 — Leia primeiro<span>Índice, cronograma de 30 dias e resumo executivo</span></div>
+    <div>01 — Pesquisa de mercado global<span>Dados, fontes, taxas e matriz de decisão</span></div>
+    <div>02 — Escopo e posicionamento<span>Canvas, promessa e diferencial dos 4</span></div>
+    <div>03 — Livro 1 · IA<span>Esqueleto completo + bônus</span></div>
+    <div>04 — Livro 2 · Dívidas<span>Esqueleto completo + 15 scripts</span></div>
+    <div>05 — Livro 3 · Airfryer<span>Esqueleto completo + 120 receitas</span></div>
+    <div>06 — Livro 4 · Energia<span>Esqueleto completo + protocolo</span></div>
+    <div>07 — Design e produção<span>Capa, miolo, KDP, QA “lindo”</span></div>
+    <div>08 — Páginas de venda<span>Copy completa + bump, upsell e VSL</span></div>
+    <div>09 — Anúncios e criativos<span>Meta, TikTok, Google, Pinterest, 30 hooks</span></div>
+    <div>10 — Onde vender<span>Plataformas, taxas, afiliados, KDP</span></div>
+    <div>11 — Marketing multimodal<span>Funil, conteúdo, e-mail, KPIs, projeção</span></div>
+    <div>12 — Validação e compliance<span>Teste de 7 dias, CDC, LGPD, claims</span></div>
+  </div>
+</section>
+
+<footer>
+  Painel do Projeto Quatro Ativos · dados de mercado coletados em 03/10/2026 com fontes citadas em <b>01-pesquisa-de-mercado-global.md</b> · projeções são estimativas com premissas explícitas, não promessas de resultado.
+</footer>
+
+</div>
+</body>
+</html>
