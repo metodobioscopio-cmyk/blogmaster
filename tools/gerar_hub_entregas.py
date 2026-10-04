@@ -27,7 +27,8 @@ LIVRO_TXT = {
  "3-Livro-3-Airfryer-Sem-Mimimi.zip": ("Vol. 3 · Airfryer Sem Mimimi", "115 pág. + bônus de 25 pág. · 120 receitas"),
  "4-Livro-4-Energia-em-21-Dias.zip": ("Vol. 4 · Energia em 21 Dias", "74 pág. + bônus de 24 pág. + 4 áudios guiados"),
  "Kit-Completo-4-Livros.zip": ("Kit completo — os 4 livros", "tudo: livros, bônus, planilhas e os 4 áudios"),
- "5-Pacote-Marketing-Capas-Mockups-Anuncios.zip": ("Pacote de marketing", "4 capas 1600×2560 · 20 mockups · 13 anúncios"),
+ "5-Pacote-Marketing-Capas-Mockups-Anuncios.zip": ("Pacote de marketing", "4 capas 1600×2560 · 17 mockups · 12 anúncios · 12 pins · orgânico"),
+ "7-Iscas-Capitulo-0.zip": ("Iscas (capítulo 0)", "4 PDFs A5 de captação: capítulo 0 + folha de uso por volume"),
  "6-Paginas-de-Venda-HTML.zip": ("Páginas de venda (HTML)", "index + 4 páginas autocontidas, prontas para publicar"),
 }
 
@@ -93,7 +94,7 @@ def galeria(arquivos, pasta, subtitulo=""):
 
 def main():
     zips = [f for f in sorted(os.listdir(DL)) if f.endswith(".zip")] if os.path.isdir(DL) else []
-    ordem = ["0-", "1-", "2-", "3-", "4-", "Kit", "5-", "6-"]
+    ordem = ["0-", "1-", "2-", "3-", "4-", "Kit", "5-", "6-", "7-"]
     zips.sort(key=lambda z: next((i for i, p in enumerate(ordem) if z.startswith(p)), 99))
     cards = "\n".join(cartao_zip(z, itens(os.path.join(DL, z))) for z in zips)
 
@@ -101,6 +102,7 @@ def main():
     mockups = [m for m in lista("mockups") if m.startswith("vol")]
     hero = "kit-completo-5-hero.jpg"
     anuncios = lista("anuncios")
+    pins = lista("pins")
 
     organico = f'''      <a class="card mini" href="marketing/organico/painel-organico.html" target="_blank" rel="noopener">
         <div class="ic">📅</div><h3>Painel orgânico · 90 dias</h3><p>12 canais, KPIs e critérios de corte</p></a>
@@ -222,7 +224,14 @@ code{{background:rgba(20,24,33,.07);padding:2px 6px;border-radius:6px;font-size:
 </div></section>
 
 <section><div class="wrap">
-  <h2>6. Páginas de venda <em>abrem em nova aba; são arquivos únicos e autocontidos</em></h2>
+  <h2>6. Pins do Pinterest <em>1000×1500 · 12 capas prontas para publicar (3 por volume)</em></h2>
+  <div class="grid galeria">
+{galeria(pins, "pins")}
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>7. Páginas de venda <em>abrem em nova aba; são arquivos únicos e autocontidos</em></h2>
   <div class="grid zips">
 {paginas_html}
   </div>
@@ -239,7 +248,8 @@ code{{background:rgba(20,24,33,.07);padding:2px 6px;border-radius:6px;font-size:
     with open(destino, "w", encoding="utf-8") as f:
         f.write(doc)
     print("gerado:", destino, f"({len(doc)/1024:.0f} KB)")
-    print("zips:", len(zips), "· capas:", len(capas), "· mockups:", len(mockups) + 1, "· anuncios:", len(anuncios))
+    print("zips:", len(zips), "· capas:", len(capas), "· mockups:", len(mockups) + 1,
+          "· anuncios:", len(anuncios), "· pins:", len(pins))
 
 if __name__ == "__main__":
     main()

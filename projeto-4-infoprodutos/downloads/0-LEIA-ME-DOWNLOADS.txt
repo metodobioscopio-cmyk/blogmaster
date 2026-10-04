@@ -8,14 +8,18 @@ CADA LIVRO SEPARADO (para baixar só o que quiser)
   4-Livro-4-Energia-em-21-Dias.zip ............. 74 pág. + bônus de 24 pág. + 4 ÁUDIOS
 
 PACOTE COMPLETO
-  0-Pacote-FULL-Tudo.zip ....................... TUDO (334 arquivos, 44 MB): livros, áudios,
-                                                 marketing, páginas de venda, documentação e
-                                                 os fontes + scripts que geram o material
+  0-Pacote-FULL-Tudo.zip ....................... TUDO: os 4 livros + áudios, marketing (capas,
+                                                 mockups, anúncios, pins, orgânico), iscas,
+                                                 páginas de venda, documentação 00–15 e os
+                                                 fontes em markdown + scripts que geram tudo
   Kit-Completo-4-Livros.zip .................... os 4 livros + todos os bônus + os 4 áudios
 
 MATERIAL DE PRODUÇÃO (não é o que o cliente recebe)
-  5-Pacote-Marketing-Capas-Mockups-Anuncios.zip . capas 1600x2560, 17 mockups, 12 anúncios
+  5-Pacote-Marketing-Capas-Mockups-Anuncios.zip . capas 1600x2560, 17 mockups, 12 anúncios,
+                                                 12 pins do Pinterest (1000x1500), organico/
   6-Paginas-de-Venda-HTML.zip ................... 5 páginas prontas (HTML autocontido)
+  7-Iscas-Capitulo-0.zip ........................ 4 iscas em PDF (capítulo 0 + folha de uso)
+                                                 para atrair inscritos no orgânico
 
 O QUE VEM DENTRO DE CADA LIVRO
   PDF principal · PDF de bônus · EPUB (Kindle/Kobo) · fontes editáveis em Markdown

@@ -145,14 +145,18 @@ CADA LIVRO SEPARADO (para baixar só o que quiser)
   4-Livro-4-Energia-em-21-Dias.zip ............. 74 pág. + bônus de 24 pág. + 4 ÁUDIOS
 
 PACOTE COMPLETO
-  0-Pacote-FULL-Tudo.zip ....................... TUDO (334 arquivos, 44 MB): livros, áudios,
-                                                 marketing, páginas de venda, documentação e
-                                                 os fontes + scripts que geram o material
+  0-Pacote-FULL-Tudo.zip ....................... TUDO: os 4 livros + áudios, marketing (capas,
+                                                 mockups, anúncios, pins, orgânico), iscas,
+                                                 páginas de venda, documentação 00–15 e os
+                                                 fontes em markdown + scripts que geram tudo
   Kit-Completo-4-Livros.zip .................... os 4 livros + todos os bônus + os 4 áudios
 
 MATERIAL DE PRODUÇÃO (não é o que o cliente recebe)
-  5-Pacote-Marketing-Capas-Mockups-Anuncios.zip . capas 1600x2560, 17 mockups, 12 anúncios
+  5-Pacote-Marketing-Capas-Mockups-Anuncios.zip . capas 1600x2560, 17 mockups, 12 anúncios,
+                                                 12 pins do Pinterest (1000x1500), organico/
   6-Paginas-de-Venda-HTML.zip ................... 5 páginas prontas (HTML autocontido)
+  7-Iscas-Capitulo-0.zip ........................ 4 iscas em PDF (capítulo 0 + folha de uso)
+                                                 para atrair inscritos no orgânico
 
 O QUE VEM DENTRO DE CADA LIVRO
   PDF principal · PDF de bônus · EPUB (Kindle/Kobo) · fontes editáveis em Markdown
@@ -197,6 +201,8 @@ def main():
                            "PACOTE DE MARKETING — COLEÇÃO VIDA EM ORDEM\n"
                            "capas/ (1600x2560) · mockups/ (5 poses por volume + hero do kit)\n"
                            "anuncios/ (feed 1080x1350, story 1080x1920, pinterest 1000x1500)\n"
+                           "pins/ (12 capas de Pinterest 1000x1500, 3 por volume)\n"
+                           "organico/ (painel + calendário editorial de 90 dias)\n"
                            "Detalhes de uso em ../11-criativos-visuais.md\n", "LEIA-ME.txt")
         linhas.append(("5-Pacote-Marketing-Capas-Mockups-Anuncios.zip", n, os.path.getsize(caminho)))
 
@@ -216,6 +222,24 @@ def main():
                            "As páginas NÃO têm depoimentos: só entram depois de venda real, com\n"
                            "autorização por escrito. Há um bloco comentado no HTML mostrando onde colar.\n", "LEIA-ME.txt")
         linhas.append(("6-Paginas-de-Venda-HTML.zip", n, os.path.getsize(caminho)))
+
+    isc = os.path.join(PROJ, "iscas")
+    if os.path.isdir(isc):
+        caminho, n = zipar(isc, "7-Iscas-Capitulo-0.zip", "Iscas-Capitulo-0",
+                           "ISCAS (MATERIAL GRATUITO) — COLECAO VIDA EM ORDEM\n"
+                           "4 PDFs A5 com o capitulo 0 + a folha de uso do livro.\n"
+                           "isca-1-ia-capitulo-0.pdf      -> Vol. 1 (10 prompts + formula P.O.C.F.R.)\n"
+                           "isca-2-dividas-capitulo-0.pdf -> Vol. 2 (roteiro da 1a ligacao + checklist)\n"
+                           "isca-3-airfryer-capitulo-0.pdf-> Vol. 3 (tabela mestra + ajuste por litragem)\n"
+                           "isca-4-energia-capitulo-0.pdf -> Vol. 4 (protocolo S.O.N.O. + rastreador)\n\n"
+                           "COMO USAR\n"
+                           "  1. Suba o PDF em um link de captura ou na propria pagina do volume (paginas/).\n"
+                           "  2. Divulgue com as UTMs do calendario: utm_source=canal&utm_medium=organico\n"
+                           "     &utm_campaign=volN&utm_content=isca\n"
+                           "  3. A isca e um recorte do livro: nada de promessa de resultado.\n"
+                           "     A do Vol. 4 traz o telefone 188 (CVV) e aviso de material educacional.\n",
+                           "LEIA-ME.txt")
+        linhas.append(("7-Iscas-Capitulo-0.zip", n, os.path.getsize(caminho)))
 
     with open(os.path.join(DEST, "0-LEIA-ME-DOWNLOADS.txt"), "w", encoding="utf-8") as f:
         f.write(LEIA_DOWNLOADS)

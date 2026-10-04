@@ -31,9 +31,10 @@ Este ZIP contem ABSOLUTAMENTE TUDO deste projeto, organizado em pastas.
 2-Livro-2-Saia-do-Vermelho-em-60-Dias/ ... PDF 86 pag + bonus 16 pag + EPUB + fontes
 3-Livro-3-Airfryer-Sem-Mimimi/ ........... PDF 115 pag + bonus 25 pag + EPUB + fontes
 4-Livro-4-Energia-em-21-Dias/ ............ PDF 74 pag + bonus 24 pag + 4 AUDIOS GUIADOS
-5-Marketing/ ............................. 4 capas 1600x2560 + 17 mockups + 12 anuncios
+5-Marketing/ ............................. 4 capas 1600x2560 + 17 mockups + 12 anuncios + 12 pins
 6-Paginas-de-Venda/ ...................... 5 paginas HTML autocontidas prontas para publicar
-7-Documentacao-do-Projeto/ ............... os 13 arquivos de estrategia (00 a 12) + painel.html
+7-Documentacao-do-Projeto/ ............... os 16 arquivos de estrategia (00 a 15) + 2 paineis
+8-Iscas-Capitulo-0/ ...................... os 4 PDFs de isca (material gratuito) + fontes em markdown
 _fontes-e-geradores/ ..................... o texto dos livros em markdown + os scripts que geram tudo
                                            (os audios ficam só na pasta do Vol. 4, para não pesar duas vezes)
 
@@ -93,6 +94,8 @@ def main():
         print(f"  {apelido:44s} {n:3d} arquivos"); total += n
     n = copiar(os.path.join(PROJ, "marketing"), os.path.join(TMP, "5-Marketing"))
     print(f"  {'5-Marketing':44s} {n:3d} arquivos"); total += n
+    n = copiar(os.path.join(PROJ, "iscas"), os.path.join(TMP, "8-Iscas-Capitulo-0"))
+    print(f"  {'8-Iscas-Capitulo-0':44s} {n:3d} arquivos"); total += n
     n = copiar(os.path.join(PROJ, "paginas"), os.path.join(TMP, "6-Paginas-de-Venda"))
     print(f"  {'6-Paginas-de-Venda':44s} {n:3d} arquivos"); total += n
     n = copiar(PROJ, os.path.join(TMP, "7-Documentacao-do-Projeto"),

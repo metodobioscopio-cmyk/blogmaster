@@ -27,6 +27,10 @@
 | `14-conteudos-por-area.md` | **Banco de conteúdo pronto**: 40 ganchos de vídeo, 20 pautas de YouTube, 24 artigos, 24 pins, 20 respostas de comunidade, 12 newsletters, 12 carrosséis, 12 parcerias |
 | `marketing/organico/painel-organico.html` | Painel visual do plano de 90 dias (abra no navegador) |
 | `marketing/organico/calendario-editorial-90-dias.csv` | 630 peças agendadas com canal, área, tema, CTA e UTM (importa no Sheets) |
+| `15-conteudos-14-dias.md` | **Primeiros 14 dias escritos**: 12 roteiros de vídeo palavra por palavra, 6 respostas de fórum, 3 newsletters e a estrutura dos 2 vídeos longos |
+| `iscas/` | **4 iscas em PDF** (capítulo 0 + folha de uso, formato A5) para captar inscritos — uma por volume, com as fontes `.md` em `iscas/fontes/` |
+| `marketing/pins/` | **12 capas de Pinterest** 1000×1500 (3 por volume) prontas para publicar, feitas com a paleta de cada livro |
+| `tools/gerar_iscas.py` · `tools/gerar_pins.py` | Geradores das iscas e dos pins (edite o texto/paleta e rode de novo) |
 | `painel.html` | Painel visual do projeto (abra no navegador) |
 
 ---
@@ -91,6 +95,7 @@ Critérios usados: (1) volume de busca/demanda atual, (2) tendência (subindo ou
 6. `10` + `11` — escolha canais e ligue a máquina (pago e multimodal).
 7. `12` — valide e blinde juridicamente antes de escalar.
 8. `13` + `14` — ligue o **orgânico**: escolha 2 áreas por livro, siga o calendário de 90 dias e leia os números no dia 14.
+9. `15` + `iscas/` + `marketing/pins/` — **grave e publique**: os 14 primeiros dias já estão roteirizados, as iscas em PDF já estão prontas para captar e-mail e os 12 pins já podem subir no Pinterest.
 
 ---
 
