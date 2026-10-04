@@ -102,7 +102,7 @@ def main():
     mockups = [m for m in lista("mockups") if m.startswith("vol")]
     hero = "kit-completo-5-hero.jpg"
     anuncios = lista("anuncios")
-    pins = lista("pins")
+    pins = [p for p in lista("pins") if not p.startswith("folha-de-contato")]
 
     organico = f'''      <a class="card mini" href="marketing/organico/painel-organico.html" target="_blank" rel="noopener">
         <div class="ic">📅</div><h3>Painel orgânico · 90 dias</h3><p>12 canais, KPIs e critérios de corte</p></a>
