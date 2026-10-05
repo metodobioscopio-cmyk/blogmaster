@@ -19,12 +19,14 @@ Este repositório é o produto inteiro, pronto para publicar: site estático bil
 | `site/index.html` · `site/en/index.html` | Página de vendas bilíngue | pronto |
 | `site/kit/` · `site/en/kit/` | Página pública do kit de ferramentas | gerado |
 | `site/ebook/` · `site/en/ebook/` | Página pública do e-book | gerado |
-| `site/area/` | Área de membros (6 módulos, 28 aulas, biblioteca de downloads) | pronto |
+| `site/area/` | Área de membros PT (6 módulos, 28 aulas, biblioteca de downloads) | pronto |
+| `site/en/area/` | Área de membros EN (gerada a partir das aulas da página de vendas) | gerado |
 | `site/area/materiais/` | Kit + e-book publicados para o aluno baixar | gerado |
 | `site/legal/` | 5 páginas legais (termos, privacidade, licença — PT e EN) | gerado |
 | `kit/` | Prompts, checklists, planilhas, código, integrações e templates | pronto |
 | `ebook/` | Growth Design Playbook: manuscrito em Markdown + edição HTML (PT + EN) | pronto |
 | `design-system/` | Documentação do sistema Editorial Premium (tokens, tipografia, regras) | pronto |
+| `curso/` | Roteiros de gravação das 28 aulas + padrão técnico | pronto |
 | `vendas/` | Página de vendas, anúncios, sequência de e-mails, plano de lançamento | pronto |
 | `tools/` | Geradores e verificador (a fonte de verdade do que é gerado) | pronto |
 
@@ -39,6 +41,7 @@ O site é estático: nenhum build, nenhuma dependência de runtime.
 python3 tools/gerar_legal.py            # páginas legais
 python3 tools/gerar_ebook.py            # e-book HTML + cópias da área de membros
 python3 tools/gerar_paginas_kit.py      # páginas públicas do kit e do e-book
+python3 tools/gerar_area_en.py          # área de membros em inglês
 python3 tools/publicar_site.py          # copia kit/ para dentro de site/area/materiais/
 
 # 2. verifique antes de subir (bloqueia se algo estiver quebrado)

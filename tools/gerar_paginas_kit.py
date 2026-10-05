@@ -107,7 +107,7 @@ def chrome_head(lang: str, assets: str, titulo: str, descricao: str, alt_href: s
 <meta property="og:type" content="website">
 <meta property="og:title" content="{titulo}">
 <meta property="og:description" content="{descricao}">
-<meta property="og:image" content="https://growthdesignpro.com.br/site/assets/img/og.jpg">
+<meta property="og:image" content="https://growthdesignpro.com.br/assets/img/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>

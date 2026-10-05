@@ -364,7 +364,7 @@ def verificar_contraste() -> None:
 
 ESPERADOS = [
     "site/index.html", "site/en/index.html", "site/area/index.html",
-    "site/kit/index.html", "site/en/kit/index.html",
+    "site/en/area/index.html", "site/kit/index.html", "site/en/kit/index.html",
     "site/ebook/index.html", "site/en/ebook/index.html",
     "site/area/materiais/index.html", "site/area/materiais/playbook-pt.html",
     "site/area/materiais/playbook-en.html",
@@ -382,7 +382,8 @@ ESPERADOS = [
     "kit/integracoes/n8n/funil-growth-stack.json",
     "kit/codigo/js/growth-stack.js", "kit/codigo/python/growth_stack.py",
     "ebook/pt/index.html", "ebook/en/index.html", "ebook/pt/playbook.md", "ebook/en/playbook.md",
-    "tools/gerar_ebook.py", "tools/gerar_paginas_kit.py", "tools/publicar_site.py", "tools/verificar.py",
+    "tools/gerar_ebook.py", "tools/gerar_paginas_kit.py", "tools/gerar_area_en.py",
+    "tools/publicar_site.py", "tools/verificar.py", "README.md",
     "curso/README.md", "curso/roteiros-m1-m2.md", "curso/roteiros-m3-m6.md",
     "vendas/plano-de-lancamento.md", "vendas/anuncios.md", "vendas/emails.md", "design-system/README.md",
     "vendas/pagina-de-vendas.md", "vendas/anuncios.md", "vendas/emails.md",

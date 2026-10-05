@@ -414,6 +414,7 @@ python3 tools/gerar_planilhas.py         # 4 planilhas .xlsx            (precisa
 python3 tools/gerar_design_systems.py    # 10 design systems + preview
 python3 tools/gerar_ebook.py             # e-book HTML (PT + EN) + cópias da área de membros
 python3 tools/gerar_paginas_kit.py       # site/kit/ e site/ebook/ (PT + EN)
+python3 tools/gerar_area_en.py           # site/en/area/ a partir das aulas da página de vendas
 python3 tools/publicar_site.py           # copia kit/ para site/area/materiais/
 ```
 
@@ -421,8 +422,8 @@ Ordem, quando mexer em conteúdo compartilhado:
 
 ```bash
 python3 tools/gerar_legal.py && python3 tools/gerar_ebook.py && \
-python3 tools/gerar_paginas_kit.py && python3 tools/publicar_site.py && \
-python3 tools/verificar.py
+python3 tools/gerar_paginas_kit.py && python3 tools/gerar_area_en.py && \
+python3 tools/publicar_site.py && python3 tools/verificar.py
 ```
 
 ### Pré-visualização local
