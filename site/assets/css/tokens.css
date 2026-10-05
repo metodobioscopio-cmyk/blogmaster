@@ -1,0 +1,251 @@
+/* ============================================================================
+   GROWTH DESIGN PRO — DESIGN SYSTEM / CAMADA 1: TOKENS
+   Identidade: "Editorial Premium"
+   Referência estética: revista impressa de alto padrão + precisão de engenharia.
+   ----------------------------------------------------------------------------
+   Regra do sistema: nenhum valor de cor, tipografia, espaçamento ou movimento
+   deve ser escrito "na mão" nos componentes. Tudo vem daqui.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------------
+   1. TIPOGRAFIA — arquivos auto-hospedados (sem dependência de CDN externo)
+   Fraunces ....... display / editorial (serifada de alto contraste)
+   Inter .......... texto, interface, legendas
+   JetBrains Mono . código, prompts, endpoints, dados
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/fraunces-300.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/fraunces-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/fraunces-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/fraunces-300-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('../fonts/inter-300.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/inter-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/inter-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/inter-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/jetbrains-mono-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/jetbrains-mono-500.woff2') format('woff2');
+}
+
+:root {
+  /* -------------------------------------------------------------------------
+     2. COR — paleta "papel & tinta & ouro"
+     Contraste verificado (WCAG AA) para todos os pares texto/fundo usados.
+     ------------------------------------------------------------------------ */
+  --paper:          #F7F4ED;  /* papel morno — fundo padrão           */
+  --paper-2:        #EFEADF;  /* papel sombreado — seções alternadas  */
+  --paper-3:        #E5DFD1;  /* papel fundo — bordas e poços          */
+  --paper-card:     #FCFAF5;  /* papel claro — cartões elevados        */
+
+  --ink:            #121110;  /* tinta — texto principal    (16.8:1)   */
+  --ink-2:          #3A3733;  /* tinta secundária           (9.4:1)    */
+  --ink-3:          #6B655C;  /* tinta suave / legendas     (4.9:1)    */
+
+  --night:          #0F0F0D;  /* fundo escuro — seções de impacto      */
+  --night-2:        #1A1916;  /* fundo escuro elevado                  */
+  --night-line:     rgba(247, 244, 237, 0.14);
+  --on-night:       #F2EEE4;  /* texto sobre escuro         (15.1:1)   */
+  --on-night-2:     #A9A296;  /* texto suave sobre escuro    (7.6:1)   */
+  --on-night-3:     #857F74;  /* rodapé sobre escuro         (4.8:1)   */
+  --on-night-4:     #918A7E;  /* texto legal sobre escuro    (5.6:1)   */
+
+  --gold:           #8F6F2E;  /* ouro profundo — acento principal, AA sobre papel */
+  --gold-bright:    #C9A44C;  /* ouro claro — acento sobre fundo escuro           */
+  --gold-soft:      rgba(143, 111, 46, 0.12);
+  --gold-line:      rgba(143, 111, 46, 0.32);
+
+  /* Texto sobre o acento (contraste verificado contra --gold e --gold-bright) */
+  --on-gold:        #FFFDF7;  /* sobre --gold          */
+  --on-gold-night:  #17150F;  /* sobre --gold-bright   */
+
+  /* Código: cores de realce de sintaxe, usadas em .gdp-code */
+  --code-fg:        #E8E3D8;
+  --code-key:       #C9A44C;
+  --code-str:       #A9C7A0;
+  --code-com:       #7C766B;
+  --code-fn:        #9DBCE0;
+  --code-num:       #E0B98F;
+
+  /* Impressão: papel e tinta absolutos, independentes do tema */
+  --print-paper:    #FFFFFF;
+  --print-ink:      #000000;
+
+  --rule:           rgba(18, 17, 16, 0.13);
+  --rule-strong:    rgba(18, 17, 16, 0.28);
+
+  --positive:       #3D6B4A;
+  --negative:       #8C3A2E;
+  --attention:      #8A5A18;
+
+  /* Cores funcionais do kit (usadas nos gráficos das planilhas e no site) */
+  --api-1: #2F5D8C;  /* extração    */
+  --api-2: #3D6B4A;  /* SEO         */
+  --api-3: #8C3A2E;  /* conversão   */
+  --api-4: #8F6F2E;  /* copy        */
+  --api-5: #5B4A7A;  /* landing     */
+  --api-6: #1F6E6B;  /* social      */
+
+  /* -------------------------------------------------------------------------
+     3. ESCALA TIPOGRÁFICA — fluida (clamp), razão ~1.25 em telas grandes
+     ------------------------------------------------------------------------ */
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-text:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --fs-display:  clamp(2.75rem, 1.6rem + 5.2vw, 6.5rem);   /* hero            */
+  --fs-h1:       clamp(2.25rem, 1.5rem + 3.1vw, 4rem);     /* título de seção */
+  --fs-h2:       clamp(1.75rem, 1.3rem + 1.9vw, 2.75rem);
+  --fs-h3:       clamp(1.25rem, 1.05rem + 0.85vw, 1.625rem);
+  --fs-h4:       1.125rem;
+  --fs-lead:     clamp(1.0625rem, 1rem + 0.45vw, 1.375rem);
+  --fs-body:     1.0625rem;
+  --fs-small:    0.9375rem;
+  --fs-caption:  0.8125rem;
+  --fs-eyebrow:  0.6875rem;
+  --fs-mono:     0.875rem;
+
+  --lh-display: 0.98;
+  --lh-heading: 1.08;
+  --lh-snug:    1.3;
+  --lh-body:    1.62;
+
+  --tr-display: -0.028em;  /* tracking negativo em corpos grandes */
+  --tr-heading: -0.018em;
+  --tr-body:     0;
+  --tr-eyebrow:  0.18em;
+
+  /* -------------------------------------------------------------------------
+     4. ESPAÇAMENTO — escala de 4pt com primos maiores nos extremos
+     ------------------------------------------------------------------------ */
+  --s-1:  0.25rem;
+  --s-2:  0.5rem;
+  --s-3:  0.75rem;
+  --s-4:  1rem;
+  --s-5:  1.5rem;
+  --s-6:  2rem;
+  --s-7:  2.5rem;
+  --s-8:  3rem;
+  --s-9:  4rem;
+  --s-10: 5rem;
+  --s-11: 6.5rem;
+  --s-12: 8rem;
+
+  --section-y:      clamp(3.5rem, 2rem + 7vw, 8rem);
+  --section-y-tight: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  --gutter:         clamp(1.25rem, 0.6rem + 2.6vw, 3rem);
+  --maxw:           78rem;   /* largura máxima do conteúdo  */
+  --maxw-narrow:    46rem;   /* coluna de leitura longa     */
+  --maxw-wide:      90rem;   /* faixas full-bleed controladas */
+
+  /* -------------------------------------------------------------------------
+     5. FORMA, PROFUNDIDADE, MOVIMENTO
+     ------------------------------------------------------------------------ */
+  --r-none: 0;
+  --r-xs:   2px;
+  --r-sm:   4px;
+  --r-md:   8px;
+  --r-lg:   14px;
+  --r-pill: 999px;
+
+  --shadow-sm:  0 1px 2px rgba(18, 17, 16, 0.05);
+  --shadow-md:  0 2px 4px rgba(18, 17, 16, 0.04), 0 12px 28px -12px rgba(18, 17, 16, 0.16);
+  --shadow-lg:  0 4px 8px rgba(18, 17, 16, 0.04), 0 32px 64px -28px rgba(18, 17, 16, 0.28);
+  --ring:       0 0 0 3px rgba(143, 111, 46, 0.28);
+
+  --ease:      cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:  140ms;
+  --dur:       260ms;
+  --dur-slow:  620ms;
+
+  /* -------------------------------------------------------------------------
+     6. ESTRUTURA
+     ------------------------------------------------------------------------ */
+  --nav-h: 4.5rem;
+  --border-hairline: 1px solid var(--rule);
+
+  /* Textura sutil de papel (ruído SVG inline — zero requisição extra) */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------------------------------
+   7. TEMA ESCURO DAS SEÇÕES DE IMPACTO
+   Aplicado por classe, não por preferência do sistema: a marca decide onde
+   o contraste inverte. O bloqueio de cor evita vazamento de tokens.
+   -------------------------------------------------------------------------- */
+.theme-night {
+  --paper:        var(--night);
+  --paper-2:      var(--night-2);
+  --paper-3:      #26241F;
+  --paper-card:   var(--night-2);
+  --ink:          var(--on-night);
+  --ink-2:        #D6D0C4;
+  --ink-3:        var(--on-night-2);
+  --rule:         var(--night-line);
+  --rule-strong:  rgba(247, 244, 237, 0.3);
+  --gold:         var(--gold-bright);
+  --gold-soft:    rgba(201, 164, 76, 0.14);
+  --gold-line:    rgba(201, 164, 76, 0.34);
+  --shadow-md:    0 2px 4px rgba(0, 0, 0, 0.3), 0 18px 40px -16px rgba(0, 0, 0, 0.6);
+  --shadow-lg:    0 4px 12px rgba(0, 0, 0, 0.35), 0 40px 80px -30px rgba(0, 0, 0, 0.75);
+
+  background-color: var(--night);
+  color: var(--on-night);
+}

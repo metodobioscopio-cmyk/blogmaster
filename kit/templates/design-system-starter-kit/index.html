@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System Starter Kit — 10 sistemas originais</title>
+<style>
+  body { margin:0; background:#F7F4ED; color:#121110;
+         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+         line-height:1.6; padding:clamp(1.5rem,4vw,4rem) clamp(1.25rem,4vw,3rem); }
+  h1 { font-family:Georgia,serif; font-weight:400; font-size:clamp(2rem,1.5rem+2.5vw,3.25rem);
+        letter-spacing:-.02em; margin:0 0 1rem; max-width:24ch; }
+  .lead { max-width:60ch; color:#3A3733; }
+  .grade { display:grid; gap:1.5rem; grid-template-columns:repeat(auto-fill,minmax(20rem,1fr));
+           margin-top:3rem; }
+  .nota { margin-top:3rem; padding:1.25rem 1.5rem; border:1px solid rgba(138,90,24,.4);
+           background:rgba(138,90,24,.07); border-radius:8px; max-width:70ch; font-size:.9375rem; }
+</style>
+</head>
+<body>
+  <h1>Dez sistemas de design, prontos para recombinar.</h1>
+  <p class="lead">Cada sistema é um conjunto de decisões declaradas — não uma paleta solta.
+  Abra o arquivo <code>.css</code> correspondente e comece trocando as variáveis que fazem sentido
+  para a marca do cliente.</p>
+
+  <div class="grade">
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">01-editorial-papel</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Editorial Papel</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Revista impressa de alto padrão: papel morno, tinta, um único acento metálico. Muito respiro, hierarquia por tipografia e filete, não por cor.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#F7F4ED;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#EFEADF;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#121110;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#8F6F2E;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#3D6B4A;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#8C3A2E;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">sóbrio</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">culto</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">atemporal</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">calmo</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">caro</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: arejado</span>
+        <span>escala: 1.25×</span>
+        <span>base: 8px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">02-saas-claro</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">SaaS Claro</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Produto digital de uso diário: fundo claro, azul de confiança, cantos suaves, cards com sombra leve. Prioriza legibilidade de interface e densidade média.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#FFFFFF;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#F5F7FA;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#0E1726;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#1E4FA3;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#1F6B43;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#A32B21;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">confiável</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">funcional</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">claro</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">moderno</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">neutro</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: médio</span>
+        <span>escala: 1.2×</span>
+        <span>base: 4px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">03-noite-dourada</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Noite Dourada</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Fundo escuro com acento quente. Alto contraste e percepção de exclusividade. Exige disciplina: o acento é raro, e o texto claro nunca é cinza sobre cinza.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#0F0F0D;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#1A1916;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#F2EEE4;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#C9A44C;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#7FB08C;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#E0938A;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">dramático</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">premium</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">noturno</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">direto</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">intenso</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: arejado</span>
+        <span>escala: 1.28×</span>
+        <span>base: 8px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">04-tecnico-mono</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Técnico Mono</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Feito para documentação e ferramenta de desenvolvedor: denso, monoespaçado nos dados, hierarquia por peso e por linha, cor reservada para estado.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#FBFBF9;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#F0F0EC;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#111311;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#1F6E6B;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#2F6B3C;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#9C2F22;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">preciso</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">seco</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">útil</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">rápido</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">impessoal</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: denso</span>
+        <span>escala: 1.15×</span>
+        <span>base: 4px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">05-terroso-artesanal</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Terroso Artesanal</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Marca de produção artesanal: barro, oliva e papel cru. Tipografia serifada com tracking levemente aberto, formas orgânicas e nenhuma pressa.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#FAF6EF;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#F1EADD;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#241E17;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#8A4B22;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#4C6B34;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#9C3B22;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">quente</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">humano</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">manual</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">honesto</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">local</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: médio</span>
+        <span>escala: 1.22×</span>
+        <span>base: 8px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">06-corporativo-solido</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Corporativo Sólido</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Institucional que precisa transmitir estabilidade: azul-petróleo, grade firme, hierarquia previsível, zero experimentalismo.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#FFFFFF;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#F2F4F6;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#101C24;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#12556E;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#1F6B43;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#9C2F22;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">estável</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">formal</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">seguro</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">amplo</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">institucional</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: médio</span>
+        <span>escala: 1.2×</span>
+        <span>base: 8px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">07-neon-controlado</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Neon Controlado</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Energia de produto de tecnologia sem cair no clichê do gradiente: fundo escuro, acento ciano usado em no máximo 5% da tela, tipografia sem serifa bem pesada.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#0B0F14;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#121821;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#EAF2F7;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#2FA8B8;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#5FBF8A;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#E58A8A;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">energético</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">jovem</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">técnico</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">ousado</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">contido</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: denso</span>
+        <span>escala: 1.22×</span>
+        <span>base: 4px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">08-minimal-suico</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Minimal Suíço</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Grade rigorosa, muito branco, tipografia sem serifa em poucos pesos e hierarquia obtida por escala e alinhamento. Nada decorativo, tudo funcional.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#FFFFFF;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#F4F4F2;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#111111;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#C0392B;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#2F6B3C;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#A32B21;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">preciso</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">neutro</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">limpo</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">objetivo</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">econômico</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: arejado</span>
+        <span>escala: 1.33×</span>
+        <span>base: 8px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">09-servico-local</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Serviço Local</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Negócio de bairro que precisa ser encontrado e contatado rápido: contraste alto, texto grande, botão de telefone sempre visível, zero sutileza.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#FFFFFF;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#EFF4F8;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#0D1A22;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#0B6BB5;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#15703F;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#B3261E;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">direto</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">acessível</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">próximo</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">prático</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">confiável</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: denso</span>
+        <span>escala: 1.25×</span>
+        <span>base: 8px</span>
+      </div>
+    </article>
+    <article style="border:1px solid rgba(18,17,16,.14);border-radius:8px;overflow:hidden;background:#fff">
+      <div style="padding:1.5rem 1.5rem 1rem">
+        <div style="font-family:ui-monospace,monospace;font-size:.6875rem;letter-spacing:.12em;
+                    text-transform:uppercase;color:#6B655C">10-publicacao-cultural</div>
+        <h2 style="font-family:Georgia,serif;font-weight:400;font-size:1.5rem;margin:.5rem 0 .75rem">Publicação Cultural</h2>
+        <p style="margin:0 0 1rem;font-size:.875rem;line-height:1.55;color:#3A3733">Site de conteúdo e cultura: serifada grande para leitura longa, papel levemente esverdeado, links sublinhados, foco absoluto no texto.</p>
+        <div style="display:flex;gap:.375rem;margin-bottom:1rem"><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#FAFAF5;border:1px solid rgba(0,0,0,.12)" title="paper"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#F0F1E8;border:1px solid rgba(0,0,0,.12)" title="paper2"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#16180F;border:1px solid rgba(0,0,0,.12)" title="ink"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#6B4E2E;border:1px solid rgba(0,0,0,.12)" title="accent"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#3D6B4A;border:1px solid rgba(0,0,0,.12)" title="ok"></span><span style="display:inline-block;width:1.75rem;height:1.75rem;border-radius:3px;background:#8C3A2E;border:1px solid rgba(0,0,0,.12)" title="erro"></span></div>
+        <div style="display:flex;flex-wrap:wrap;gap:.375rem">
+          <span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">literário</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">calmo</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">denso</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">atemporal</span><span style="font-size:.6875rem;border:1px solid rgba(18,17,16,.16);border-radius:999px;padding:.2rem .6rem;color:#3A3733">generoso</span>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;border-top:1px solid rgba(18,17,16,.1);background:#FAFAF7;
+                  font-family:ui-monospace,monospace;font-size:.75rem;color:#6B655C;
+                  display:flex;justify-content:space-between;gap:1rem">
+        <span>densidade: arejado</span>
+        <span>escala: 1.28×</span>
+        <span>base: 8px</span>
+      </div>
+    </article></div>
+
+  <div class="nota">
+    <strong>Como usar sem quebrar o sistema:</strong> troque valores, não a estrutura. Se você mudar
+    os nomes dos tokens, cada sistema deixa de ser comparável com os outros — e você perde justamente
+    o que torna a recombinação possível.
+    <br><br>
+    <strong>Antes de publicar um sistema derivado:</strong> verifique o contraste de todo par novo com
+    um medidor de contraste. Um sistema bonito que reprova em AA é um problema de acessibilidade
+    entregue ao cliente.
+  </div>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Growth Design Playbook — O sistema completo para projetar sites exponenciais com IA</title>
+<meta name="description" content="O sistema completo para projetar sites exponenciais com IA">
+<meta name="author" content="Growth Design Pro">
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{
+  --paper:#F7F4ED; --paper-2:#EFEADF; --card:#FCFAF5;
+  --ink:#121110; --ink-2:#3A3733; --ink-3:#6B655C;
+  --accent:#8F6F2E; --accent-soft:rgba(143,111,46,.12);
+  --rule:rgba(18,17,16,.13);
+  --serif:'Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:1.0625rem;line-height:1.68;
+  -webkit-font-smoothing:antialiased;
+}
+.pagina{max-width:52rem;margin-inline:auto;padding:clamp(1.5rem,4vw,4rem) clamp(1.25rem,5vw,3.5rem) 6rem}
+
+/* --- Capa --- */
+.capa{border-bottom:1px solid var(--rule);padding-bottom:3rem;margin-bottom:3rem}
+.capa__selo{
+  display:inline-block;border:1px solid var(--accent);color:var(--accent);
+  padding:.35rem .8rem;font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600
+}
+.capa h1{font-family:var(--serif);font-weight:400;font-size:clamp(2.25rem,1.6rem+3vw,3.75rem);
+         letter-spacing:-.025em;line-height:1.05;margin:1.5rem 0 1rem}
+.capa p.sub{font-size:clamp(1.0625rem,1rem+.4vw,1.25rem);color:var(--ink-2);max-width:38ch;margin:0}
+.capa__meta{margin-top:2rem;font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;
+            text-transform:uppercase;color:var(--ink-3)}
+.capa__meta a{color:var(--accent);text-decoration:none}
+
+/* --- Sumário --- */
+.sumario{border:1px solid var(--rule);background:var(--card);padding:1.75rem;margin-bottom:3.5rem}
+.sumario h2{font-family:var(--mono);font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;
+            color:var(--accent);margin:0 0 1.25rem;font-weight:600}
+.sumario ol{margin:0;padding:0;list-style:none;counter-reset:s}
+.sumario li{counter-increment:s;display:flex;gap:1rem;padding:.4rem 0;border-bottom:1px dotted var(--rule);
+            font-size:.9375rem;align-items:baseline}
+.sumario li:last-child{border-bottom:0}
+.sumario li::before{content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:.75rem;
+                    color:var(--accent);flex:none}
+.sumario a{color:var(--ink);text-decoration:none}
+
+/* --- Tipografia --- */
+h2.capitulo{
+  font-family:var(--serif);font-weight:400;font-size:clamp(1.875rem,1.4rem+2.2vw,2.75rem);
+  letter-spacing:-.02em;line-height:1.1;margin:5rem 0 2rem;padding-top:2rem;
+  border-top:1px solid var(--rule);position:relative;page-break-before:always
+}
+.capitulo:first-of-type{page-break-before:auto}
+.capitulo__numero{display:block;font-family:var(--mono);font-size:.75rem;letter-spacing:.18em;
+                  color:var(--accent);margin-bottom:.75rem}
+h2{font-family:var(--serif);font-weight:400;font-size:1.5rem;line-height:1.2;letter-spacing:-.01em;
+   margin:3rem 0 1rem}
+h3{font-family:var(--sans);font-weight:600;font-size:1.0625rem;margin:2rem 0 .75rem}
+p{margin:0;color:var(--ink-2)}
+p+p{margin-top:1rem}
+p.lead{font-size:1.125rem;color:var(--ink-2);border-left:2px solid var(--accent);padding-left:1.25rem}
+strong{color:var(--ink);font-weight:600}
+em{font-style:italic}
+a{color:var(--accent);text-underline-offset:.2em}
+hr.divisor{border:0;border-top:1px solid var(--rule);margin:3rem 0}
+
+ul,ol{margin:1rem 0;padding-left:1.25rem;color:var(--ink-2)}
+li{margin:.4rem 0}
+li::marker{color:var(--accent)}
+ol li::marker{font-family:var(--mono);font-size:.875rem}
+
+blockquote{
+  margin:1.75rem 0;padding:1.25rem 1.5rem;background:var(--accent-soft);
+  border-left:3px solid var(--accent);border-radius:0 4px 4px 0
+}
+blockquote p{margin:0;color:var(--ink);font-size:.9375rem}
+
+code{font-family:var(--mono);font-size:.875em;background:var(--paper-2);
+     padding:.1em .35em;border-radius:3px;color:var(--ink)}
+pre.codigo{
+  background:#16150F;color:#E8E3D8;padding:1.25rem 1.5rem;border-radius:4px;overflow-x:auto;
+  font-family:var(--mono);font-size:.8125rem;line-height:1.7;margin:1.5rem 0;page-break-inside:avoid
+}
+pre.codigo code{background:none;color:inherit;padding:0;font-size:inherit}
+
+.tabela-wrap{overflow-x:auto;margin:1.75rem 0;page-break-inside:avoid}
+table{width:100%;border-collapse:collapse;font-size:.875rem}
+th{background:var(--ink);color:var(--paper);text-align:left;padding:.7rem .85rem;
+   font-weight:600;font-size:.75rem;letter-spacing:.04em;text-transform:uppercase}
+td{padding:.7rem .85rem;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+tr:nth-child(even) td{background:rgba(239,234,223,.5)}
+
+.rodape{margin-top:5rem;padding-top:2rem;border-top:1px solid var(--rule);
+        font-size:.8125rem;color:var(--ink-3)}
+.rodape a{color:var(--ink-3)}
+
+/* --- Voltar ao topo --- */
+.topo{position:fixed;right:1.25rem;bottom:1.25rem;background:var(--ink);color:var(--paper);
+      text-decoration:none;padding:.6rem .9rem;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase}
+
+/* --- Impressão: aqui o HTML se torna o PDF do e-book --- */
+@media print{
+  @page{size:A5;margin:14mm 15mm 16mm}
+  body{background:#fff;font-size:9.6pt;line-height:1.55}
+  .pagina{max-width:none;padding:0}
+  .topo{display:none}
+  .capa{page-break-after:always}
+  h2.capitulo{margin-top:0;page-break-before:always}
+  h2,h3{page-break-after:avoid}
+  p,li,blockquote{orphans:3;widows:3}
+  pre.codigo{background:#F4F2EC;color:#121110;border:1px solid #D8D2C4}
+  th{background:#121110 !important;color:#fff !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  tr:nth-child(even) td{background:#F4F2EC !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  blockquote{background:#F4F2EC !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  a{color:#121110;text-decoration:none}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:.8em;color:#666}
+}
+</style>
+</head>
+<body>
+<a class="topo" href="#topo">↑ topo</a>
+<div class="pagina" id="topo">
+
+  <header class="capa">
+    <span class="capa__selo">Growth Design Pro · Playbook</span>
+    <h1>Growth Design Playbook</h1>
+    <p class="sub">O sistema completo para projetar sites exponenciais com IA</p>
+    <div class="capa__meta">
+      13 capítulos &nbsp;·&nbsp; edição pt-BR &nbsp;·&nbsp; v1.0<br>
+      <a href="../en/">Read in English</a> &nbsp;·&nbsp;
+      <a href="../../site/index.html">site</a>
+    </div>
+  </header>
+
+  <nav class="sumario" aria-label="Sumário">
+    <h2>Sumário</h2>
+    <ol>
+      <li><a href="#c1">O fim do design linear</a></li>
+      <li><a href="#c2">O ecossistema AI Growth Stack</a></li>
+      <li><a href="#c3">Vibe Design: extrair</a></li>
+      <li><a href="#c4">Vibe Design: recombinar e construir</a></li>
+      <li><a href="#c5">O funil de crescimento</a></li>
+      <li><a href="#c6">Diagnóstico: lendo o score de SEO</a></li>
+      <li><a href="#c7">Conversão: onde o visitante desiste</a></li>
+      <li><a href="#c8">Copy: o que a IA não faz por você</a></li>
+      <li><a href="#c9">Landing page: o refino</a></li>
+      <li><a href="#c10">Amplificação social</a></li>
+      <li><a href="#c11">Configuração técnica, custo e risco</a></li>
+      <li><a href="#c12">Do serviço à receita</a></li>
+      <li><a href="#c13">Apêndice — Conformidade e ética</a></li>
+    </ol>
+  </nav>
+
+  <main>
+<h2 id="o-sistema-completo-para-projetar-sites-e">O sistema completo para projetar sites exponenciais com IA</h2>
+<hr class="divisor">
+<p class="lead"><strong>Nota de leitura.</strong> Este playbook é o curso em texto. Ele não substitui os vídeos — substitui a necessidade de reassistir uma aula para lembrar de um detalhe. Cada capítulo termina com o que fazer e como saber se você fez certo.</p>
+<p><strong>Aviso.</strong> Material educacional. O produto ensina um método e o uso de ferramentas de terceiros. Não há garantia de tráfego, posicionamento em buscadores, vendas ou renda: resultados dependem da execução, do mercado e do comportamento de plataformas que não controlamos. As APIs apresentadas são serviços de terceiros, contratados diretamente pelo aluno — não estão inclusas na compra.</p>
+<hr class="divisor">
+<h2 id="sumario">Sumário</h2>
+<ol><li>O fim do design linear</li><li>O ecossistema AI Growth Stack</li><li>Vibe Design — extrair</li><li>Vibe Design — recombinar e construir</li><li>O funil de crescimento</li><li>Diagnóstico: lendo o score de SEO</li><li>Conversão: onde o visitante desiste</li><li>Copy: o que a IA não faz por você</li><li>Landing page: o refino</li><li>Amplificação social</li><li>Configuração técnica, custo e risco</li><li>Do serviço à receita</li></ol>
+<hr class="divisor">
+<h2 id="c1" class="capitulo"><span class="capitulo__numero">01</span>O fim do design linear</h2>
+<h3 id="c1-o-problema-nao-e-o-layout">O problema não é o layout</h3>
+<p>Imagine dois sites idênticos em aparência. Um foi entregue e abandonado. O outro recebe, a cada mês, uma rodada de diagnóstico e correção. Um ano depois, o primeiro está exatamente como no dia da entrega — apenas mais velho. O segundo acumulou trinta ciclos de melhoria.</p>
+<p>O primeiro é <strong>linear</strong>. O segundo é <strong>exponencial</strong>. A diferença nunca esteve no design; está no que acontece <strong>depois</strong> da publicação.</p>
+<p>Design linear tem três características reconhecíveis:</p>
+<ol><li>Ele é medido uma vez — no dia da entrega, e por opinião ("gostei", "achei moderno").</li><li>Ele não sabe responder à pergunta "o que mudou desde então?".</li><li>Cada correção começa do zero, porque não há registro de decisão.</li></ol>
+<h3 id="c1-por-que-isso-ficou-insustentavel">Por que isso ficou insustentável</h3>
+<p>A consultoria tradicional resolve o problema com especialistas: um analista de SEO, um redator, um especialista em conversão. Cada um olha uma dimensão. O trabalho é bom, mas caro e lento — e a maioria dos negócios fora de um certo porte simplesmente não contrata.</p>
+<p>O que mudou na última década: <strong>as três leituras que sustentavam esse trabalho viraram APIs.</strong> Uma API consegue ler meta tags, estrutura, sinais de conteúdo e devolver um score com recomendações específicas. Outra avalia formulários, CTAs e sinais de confiança. Uma terceira escreve a copy. Há uma quarta que otimiza a página, uma quinta que amplifica nas redes.</p>
+<p>Cada uma dessas capacidades existia antes, dispersa em consultorias. O que a tecnologia fez foi torná-las <strong>acessíveis, repetíveis e mensuráveis</strong>.</p>
+<h3 id="c1-o-que-voce-passa-a-vender">O que você passa a vender</h3>
+<p>A mudança de valor não é "usar IA". É que o seu trabalho deixa de ser um <strong>evento</strong> (a entrega do site) e passa a ser um <strong>sistema</strong> (o site como organismo que é medido e corrigido). Isso muda três coisas na relação comercial:</p>
+<ul><li>o escopo, que deixa de ter fim;</li><li>o preço, que deixa de ser pago uma vez;</li><li>a prova, que deixa de ser estética e passa a ser numérica.</li></ul>
+<blockquote><p><strong>Erro comum.</strong> Começar pelo design. A ordem correta é: medir (o que está errado?), produzir (o que dizer?), refinar (como apresentar?), amplificar (quem mais vê?). Quem começa pelo design desenha uma solução para um problema que ainda não foi diagnosticado.</p></blockquote>
+<h3 id="c1-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Escolha um site seu ou de um cliente. Responda por escrito, sem consultar ninguém:</p>
+<ol><li>Qual era o objetivo desse site em números? (leads/mês, vendas/mês, cadastros/mês)</li><li>Qual é o número hoje — e de quando é esse dado?</li><li>O que mudou no site nos últimos 12 meses, e por quê?</li></ol>
+<p>Se você não conseguiu responder à pergunta 3, o site é linear. Esse é o seu ponto de partida.</p>
+<hr class="divisor">
+<h2 id="c2" class="capitulo"><span class="capitulo__numero">02</span>O ecossistema AI Growth Stack</h2>
+<h3 id="c2-seis-capacidades-nao-seis-ferramentas">Seis capacidades, não seis ferramentas</h3>
+<p>O stack é composto por seis serviços que cobrem o ciclo completo do crescimento. A descrição abaixo usa nomes de categoria — os nomes comerciais, endpoints e planos mudam com o tempo e estão no painel do fornecedor, onde você deve conferi-los <strong>na data em que for usar</strong>.</p>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>#</th>
+<th>Capacidade</th>
+<th>O que entra</th>
+<th>O que sai</th>
+<th>Fase</th>
+</tr></thead><tbody>
+<tr><td>1</td><td>Extração de dados de site</td><td>URL</td><td>meta tags, contatos, links, imagens, dados de SEO estruturados</td><td>Inteligência</td></tr>
+<tr><td>2</td><td>Análise de SEO</td><td>URL</td><td>score de 1 a 100 + recomendações + plano de melhoria</td><td>Diagnóstico</td></tr>
+<tr><td>3</td><td>Otimização de conversão</td><td>URL</td><td>score + análise de formulários, CTAs, estrutura e sinais de confiança</td><td>Atrito</td></tr>
+<tr><td>4</td><td>Copywriting de site</td><td>briefing/contexto</td><td>títulos, meta descrições, headings, CTAs, página completa</td><td>Produção</td></tr>
+<tr><td>5</td><td>Otimização de landing page</td><td>URL</td><td>análise de headline, CTA, layout e caminho de conversão</td><td>Refino</td></tr>
+<tr><td>6</td><td>Geração de conteúdo social</td><td>conteúdo do site</td><td>posts por plataforma + hashtags</td><td>Amplificação</td></tr>
+</tbody></table></div>
+<h3 id="c2-a-regra-da-cadeia">A regra da cadeia</h3>
+<p>São seis serviços independentes que produziriam valor pequeno isolados. O valor está na <strong>cadeia</strong>: a saída de um alimenta a entrada do seguinte.</p>
+<pre class="codigo" data-linguagem="texto"><code>EXTRAIR → ANALISAR → ESCREVER → OTIMIZAR → CONVERTER → AMPLIFICAR</code></pre>
+<p>Ler o concorrente (1) revela o que ele prioriza. Comparar o score de SEO (2) transforma isso em lacuna concreta. A lacuna vira pauta de conteúdo (4). A página produzida passa pelo refino (5) e pela auditoria de atrito (3). E o resultado é distribuído (6), o que traz dado novo para a rodada seguinte.</p>
+<h3 id="c2-como-isso-vira-um-funil-de-verdade">Como isso vira um funil de verdade</h3>
+<p>A palavra "funil" é usada demais como metáfora. Aqui ela é literal: cada etapa reduz incerteza e produz um artefato que a próxima etapa consome.</p>
+<ul><li><strong>Etapa 1 produz</strong> um dossiê: o que o concorrente promete, como ele estrutura, quais palavras usa.</li><li><strong>Etapa 2 produz</strong> um diagnóstico numérico: onde a sua página perde pontos, e por quê.</li><li><strong>Etapa 4 produz</strong> o texto: alimentado por 1 e 2, não por intuição.</li><li><strong>Etapa 5 produz</strong> o refino de apresentação: hierarquia, clareza, caminho.</li><li><strong>Etapa 3 produz</strong> a remoção de atrito: o que faz o visitante desistir.</li><li><strong>Etapa 6 produz</strong> a distribuição: quem ainda não viu.</li></ul>
+<h3 id="c2-o-que-o-stack-nao-faz">O que o stack não faz</h3>
+<p>Seja explícito sobre isso com o cliente — e com você mesmo:</p>
+<ul><li><strong>Não substitui estratégia.</strong> Se a oferta é ruim, nenhuma otimização salva.</li><li><strong>Não garante posição em buscadores.</strong> Ninguém controla o algoritmo.</li><li><strong>Não conhece o seu negócio.</strong> A API mede a página; ela não sabe sua margem, seu ciclo de venda</li></ul>
+<p>nem o que o seu cliente valoriza.</p>
+<ul><li><strong>Não corrige a página sozinha.</strong> Ela aponta; quem edita é você.</li></ul>
+<h3 id="c2-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Desenhe, em uma folha, o funil de seis etapas para um projeto real. Ao lado de cada etapa, escreva: (a) qual artefato ela produz e (b) quem é o responsável por ele no seu processo. Se você não consegue nomear (b), você tem um gargalo — e é ali que o próximo projeto vai travar.</p>
+<hr class="divisor">
+<h2 id="c3" class="capitulo"><span class="capitulo__numero">03</span>Vibe Design: extrair</h2>
+<h3 id="c3-o-que-significa-extrair">O que significa extrair</h3>
+<p>Extrair é ler um site de referência e capturar <strong>decisões</strong>, não pixels. A diferença é a diferença entre aprender e copiar.</p>
+<p>Um bom extrato responde a nove perguntas:</p>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Dimensão</th>
+<th>Pergunta</th>
+<th>Exemplo de resposta útil</th>
+</tr></thead><tbody>
+<tr><td>Conceito</td><td>Que ideia central o site persegue?</td><td>"Autoridade técnica sem arrogância"</td></tr>
+<tr><td>Paleta</td><td>Quantas cores, com que função?</td><td>6 cores: papel, tinta, secundária, acento, linha, estado</td></tr>
+<tr><td>Tipografia</td><td>Que escala e que contraste?</td><td>Serifada de alto contraste no título, sem serifa no corpo, razão ~1.25</td></tr>
+<tr><td>Espaçamento</td><td>Qual unidade-base e qual ritmo?</td><td>Base 8, densidade arejada, seções de 6rem</td></tr>
+<tr><td>Forma</td><td>Que raio e que sombra?</td><td>Raio zero, sombra apenas em elemento flutuante</td></tr>
+<tr><td>Movimento</td><td>O que se move e com que propósito?</td><td>Fade de revelação ao rolar; nada rebate</td></tr>
+<tr><td>Layout</td><td>Qual largura e quantas colunas?</td><td>Conteúdo em 72rem, duas colunas assimétricas</td></tr>
+<tr><td>Voz</td><td>Que tom e com que evidência?</td><td>Direto, técnico, sem superlativo — evidência: os títulos</td></tr>
+<tr><td>Limite</td><td>O que funciona só ali?</td><td>Fundo escuro funcionaria mal em página de leitura longa</td></tr>
+</tbody></table></div>
+<h3 id="c3-a-ferramenta-a-extracao-de-dados">A ferramenta: a Extração de Dados</h3>
+<p>A API de extração (etapa 1 do stack) devolve o estrato bruto: meta tags, títulos, contatos, links, imagens e dados de SEO. Ela não devolve estética — devolve <strong>estrutura e linguagem</strong>. A leitura estética é sua.</p>
+<p>O uso mais forte da API não é em um site de referência bonito: é no <strong>concorrente do seu cliente</strong>. Onde ele está perdendo pontos de SEO, quais páginas existem, como ele escreve a chamada. É inteligência competitiva — e é a etapa que quase ninguém faz antes de desenhar.</p>
+<h3 id="c3-o-prompt-de-mil-dolares">O Prompt de Mil Dólares</h3>
+<p>O prompt que faz o trabalho pesado está na biblioteca do kit (§1, prompt 01). Ele força o modelo a devolver tokens em vez de adjetivos. Três regras ao usá-lo:</p>
+<ol><li><strong>Cole o dado real.</strong> Sem o retorno da API, o modelo descreve o que imagina.</li><li><strong>Exija a coluna "não inferível".</strong> Ela impede a invenção de valor que não existe.</li><li><strong>Peça o que NÃO copiar.</strong> Um sistema bom em um contexto pode ser péssimo em outro.</li></ol>
+<h3 id="c3-a-linha-que-nao-se-cruza">A linha que não se cruza</h3>
+<p>Extrair proporção, ritmo, contraste e temperatura é aprendizado legítimo — como um músico tirar uma harmonia de ouvido. Copiar logotipo, ilustração, fotografia, código-fonte ou texto literal é violação de direito autoral.</p>
+<p>A distinção prática é simples: <strong>sistema é aprendizado, ativo é propriedade.</strong> Escreva isso em algum lugar visível do seu processo. Você vai precisar justificar essa diferença para um cliente um dia.</p>
+<h3 id="c3-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Escolha três sites de referência de segmentos diferentes. Para cada um, preencha a tabela das nove dimensões — com "não inferível" onde não houver evidência. Depois, responda: qual das três decisões você levaria para um projeto de outra área, e por quê?</p>
+<hr class="divisor">
+<h2 id="c4" class="capitulo"><span class="capitulo__numero">04</span>Vibe Design: recombinar e construir</h2>
+<h3 id="c4-recombinar-e-o-passo-que-quase-ninguem-f">Recombinar é o passo que quase ninguém faz</h3>
+<p>A maioria dos profissionais extrai de <strong>uma</strong> referência e reproduz. Isso é derivativo — e o resultado lembra a origem. Recombinar é trocar variáveis entre fontes diferentes até o resultado não lembrar nenhuma delas.</p>
+<p>A matriz de recombinação tem quatro eixos:</p>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Eixo</th>
+<th>Fontes</th>
+<th>Cuidado</th>
+</tr></thead><tbody>
+<tr><td>Tipografia</td><td>A, B, C</td><td>duas famílias de display competem entre si</td></tr>
+<tr><td>Paleta</td><td>A, B</td><td>o acento tem que vir de uma única fonte</td></tr>
+<tr><td>Ritmo e espaçamento</td><td>A</td><td>misturar base 4 e base 8 cria buracos visuais</td></tr>
+<tr><td>Movimento</td><td>o mais contido</td><td>duas linguagens de animação viram ruído</td></tr>
+</tbody></table></div>
+<p><strong>Regra da rastreabilidade.</strong> Mantenha um registro: de qual referência veio cada variável. Isso não é burocracia — é a prova da sua originalidade, e é o que você mostra se alguém perguntar por que o resultado ficou como ficou.</p>
+<h3 id="c4-construir-como-codigo">Construir como código</h3>
+<p>A ordem de construção não é negociável:</p>
+<pre class="codigo" data-linguagem="texto"><code>tokens → primitivas de layout → componentes → páginas</code></pre>
+<p><strong>Tokens</strong> são as decisões: cor com função, escala tipográfica, espaçamento, raio, movimento. Ficam em um bloco <code>:root</code>. Nada mais no projeto tem permissão de definir um valor.</p>
+<p><strong>Primitivas</strong> são o esqueleto: container, grade, seção, pilha. Elas organizam o espaço.</p>
+<p><strong>Componentes</strong> são as peças reutilizáveis: botão, cartão, acordeão, campo de formulário.</p>
+<p><strong>Páginas</strong> são a montagem. E, se as três camadas anteriores estiverem certas, montar uma página nova passa a ser trabalho de uma tarde.</p>
+<h3 id="c4-por-que-comecar-por-uma-pagina-da-errado">Por que começar por uma página dá errado</h3>
+<p>Quem desenha página por página toma, a cada nova tela, uma decisão de cor, de tamanho e de espaçamento. Depois de cinco páginas existem quarenta valores diferentes no projeto e nenhum sistema — só uma coleção de decisões isoladas que não conversam. O sexto cliente começa a perceber que os seus sites "têm a mesma cara" — ou pior, que cada um tem a cara de um template diferente.</p>
+<h3 id="c4-um-exemplo-concreto">Um exemplo concreto</h3>
+<p>Este produto que você está lendo é construído assim:</p>
+<ul><li><code>tokens.css</code> — 3 cores de papel, 3 de tinta, 1 acento, 3 estados, escala de 8 tamanhos, 12 espaçamentos,</li></ul>
+<p>3 raios, 3 durações de movimento. Nada mais.</p>
+<ul><li><code>base.css</code> — reset, container, seção, grade, tipografia editorial.</li><li><code>components.css</code> — botão, navegação, cartão, acordeão, formulário, rodapé.</li><li>páginas — montagem.</li></ul>
+<p>Qualquer alteração de identidade inteira acontece editando um arquivo. É essa a diferença entre ter um sistema e ter um site.</p>
+<h3 id="c4-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Pegue as três referências do capítulo anterior. Monte uma matriz 4×3 e escolha uma variável de cada eixo. Escreva os tokens resultantes em um bloco <code>:root</code>. Depois, aplique em <strong>uma</strong> página simples e verifique o contraste de todo par texto/fundo: mínimo 4.5:1 no corpo.</p>
+<hr class="divisor">
+<h2 id="c5" class="capitulo"><span class="capitulo__numero">05</span>O funil de crescimento</h2>
+<h3 id="c5-a-sequencia-e-por-que-ela-e-essa">A sequência, e por que ela é essa</h3>
+<pre class="codigo" data-linguagem="texto"><code>1 EXTRAIR ──▶ 2 ANALISAR ──▶ 3 ESCREVER ──▶ 4 OTIMIZAR ──▶ 5 CONVERTER ──▶ 6 AMPLIFICAR</code></pre>
+<p>Três princípios governam a ordem:</p>
+<p><strong>Primeiro medir, depois produzir.</strong> Escrever copy antes do diagnóstico é produzir texto para um problema que você não sabe qual é.</p>
+<p><strong>Produzir antes de otimizar.</strong> Otimizar uma página com proposta confusa é polir o lugar errado.</p>
+<p><strong>Amplificar por último.</strong> Distribuir conteúdo ruim multiplica a ruína. Distribuir conteúdo bom multiplica o resultado.</p>
+<h3 id="c5-fase-1-pesquisa-extrair-analisar">Fase 1 — Pesquisa (extrair + analisar)</h3>
+<p>Objetivo: saber contra quem você está competindo e onde está a lacuna.</p>
+<ul><li>Rode a extração em 3 concorrentes diretos.</li><li>Rode a análise de SEO na sua página e nas deles.</li><li>Produza um dossiê de uma página: as três lacunas exploráveis e as três vantagens que você já tem.</li></ul>
+<p><strong>Critério de conclusão:</strong> você consegue dizer, em uma frase, por que alguém escolheria a sua página e não a do concorrente.</p>
+<h3 id="c5-fase-2-conteudo-escrever">Fase 2 — Conteúdo (escrever)</h3>
+<p>Objetivo: preencher a lacuna com texto que atende à intenção de busca e conduz à ação.</p>
+<ul><li>Defina a intenção dominante da página (informacional, comparativa, transacional).</li><li>Gere o texto com o contexto do diagnóstico, não com o contexto genérico.</li><li>Revise por: verdade, verificação e voz. As três, nessa ordem.</li></ul>
+<p><strong>Critério de conclusão:</strong> um estranho que escaneia os títulos entende a página sem ler o corpo.</p>
+<h3 id="c5-fase-3-otimizacao-refinar">Fase 3 — Otimização (refinar)</h3>
+<ul><li>Passe a página pelo otimizador de landing page.</li><li>Compare a lista de recomendações com a do seu checklist de conversão.</li><li>Corrija o que aparece nos dois.</li></ul>
+<p><strong>Critério de conclusão:</strong> a primeira dobra responde sozinha às quatro perguntas — o que é, para quem, o que ganha, o que fazer.</p>
+<h3 id="c5-fase-4-amplificacao">Fase 4 — Amplificação</h3>
+<ul><li>Gere o conteúdo social a partir da página já otimizada.</li><li>Monte um calendário de 30 dias com distribuição 70/20/10 (útil / prova / oferta).</li><li>Registre o que gerou clique, não só o que gerou alcance.</li></ul>
+<p><strong>Critério de conclusão:</strong> existe tráfego novo chegando à página, e ele está registrado.</p>
+<h3 id="c5-o-ciclo-nao-a-linha">O ciclo, não a linha</h3>
+<p>O passo 6 alimenta o passo 1: o dado social mostra o que interessa ao público, e isso muda a sua próxima pauta. É essa realimentação que transforma a entrega em sistema.</p>
+<h3 id="c5-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Rode o funil completo em uma página sua. Cronometre cada fase e registre os scores inicial e final. O tempo que cada fase levou é a sua estimativa real para a próxima proposta comercial — não o tempo que você acha que leva.</p>
+<hr class="divisor">
+<h2 id="c6" class="capitulo"><span class="capitulo__numero">06</span>Diagnóstico: lendo o score de SEO</h2>
+<h3 id="c6-o-que-o-numero-significa-e-o-que-nao">O que o número significa (e o que não)</h3>
+<p>A análise de SEO devolve um score de 1 a 100 com recomendações. Três leituras erradas, em ordem de frequência:</p>
+<ol><li><strong>Perseguir o 100.</strong> O score é uma média de fatores, não uma medida de resultado.</li><li><strong>Otimizar para a API.</strong> A página existe para o visitante. O score é um meio.</li><li><strong>Ignorar a intenção.</strong> Uma página tecnicamente perfeita que responde à pergunta errada não ranqueia.</li></ol>
+<h3 id="c6-como-transformar-nota-em-trabalho">Como transformar nota em trabalho</h3>
+<p>O caminho é sempre o mesmo: achado → impacto → esforço → responsável → prazo → critério de conclusão.</p>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Achado</th>
+<th>Impacto</th>
+<th>Esforço</th>
+<th>Critério de conclusão</th>
+</tr></thead><tbody>
+<tr><td>Meta descrição ausente em 12 páginas</td><td>Médio</td><td>3 h</td><td>12 metas reescritas, com a palavra-chave no início</td></tr>
+<tr><td>H1 ausente na página de serviço</td><td>Alto</td><td>20 min</td><td>H1 único, com a promessa principal</td></tr>
+<tr><td>Imagem de preço sem texto equivalente</td><td>Alto</td><td>1 h</td><td>Preço em texto, verificado no celular</td></tr>
+<tr><td>Conteúdo raso na página que ranqueia</td><td>Alto</td><td>6 h</td><td>Seção nova respondendo à pergunta principal</td></tr>
+</tbody></table></div>
+<p>Note a diferença entre "melhorar SEO" (não é tarefa) e "reescrever as metas das 12 páginas com a palavra-chave no início" (é tarefa, e você consegue dizer se terminou).</p>
+<h3 id="c6-o-plano-de-30-dias">O plano de 30 dias</h3>
+<p>Quatro semanas, no máximo quatro itens por semana:</p>
+<ul><li><strong>Semana 1 — fundação.</strong> Indexação, títulos, metas, estrutura de headings, links internos quebrados.</li><li><strong>Semana 2 — conteúdo prioritário.</strong> As duas páginas com maior potencial e menor nota.</li><li><strong>Semana 3 — experiência.</strong> Peso de imagem, legibilidade no celular, contraste, formulários.</li><li><strong>Semana 4 — reanálise.</strong> Rodar a API de novo, comparar e escolher a pauta do mês seguinte.</li></ul>
+<h3 id="c6-como-medir-de-novo-e-nao-se-enganar">Como medir de novo (e não se enganar)</h3>
+<p>Compare <strong>a mesma página</strong>, com a <strong>mesma palavra-chave</strong>, em um intervalo de 30 dias. Score sem comparação não diz nada. E registre a rodada no dashboard — daqui a três meses você não vai lembrar qual foi o score inicial, e é exatamente ele que o cliente vai pedir na reunião.</p>
+<h3 id="c6-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Rode a análise em uma página sua. Escolha as três recomendações de maior impacto e menor esforço. Implemente-as hoje. Rode a análise novamente em 7 dias e compare.</p>
+<hr class="divisor">
+<h2 id="c7" class="capitulo"><span class="capitulo__numero">07</span>Conversão: onde o visitante desiste</h2>
+<h3 id="c7-a-ordem-de-diagnostico-importa">A ordem de diagnóstico importa</h3>
+<p>Nove em cada dez páginas que "não convertem" têm um problema nos três primeiros itens desta lista — e o profissional costuma começar a mexer no sétimo.</p>
+<ol><li><strong>Clareza da proposta.</strong> Em 5 segundos, entendeu o que é, para quem é, o que ganha e o que fazer?</li><li><strong>Adequação ao público.</strong> A promessa bate com o que o visitante clicou para chegar aqui?</li><li><strong>Sinais de confiança.</strong> Existe prova real de que você existe e entrega?</li><li><strong>Chamada para ação.</strong> Uma ação principal, clara, com microtexto que reduz o medo do clique.</li><li><strong>Formulário.</strong> Só os campos necessários, com rótulo visível e erro que diz o que fazer.</li><li><strong>Estrutura e leitura.</strong> Parágrafos curtos, títulos que funcionam fora de contexto.</li><li><strong>Preço e prazo.</strong> Dito antes do botão final, não escondido atrás de "fale conosco".</li><li><strong>Técnica.</strong> Velocidade, contraste, funcionamento no celular.</li></ol>
+<h3 id="c7-a-assimetria-entre-seo-e-conversao">A assimetria entre SEO e conversão</h3>
+<p>SEO traz gente. Conversão transforma gente em cliente. Um erro elementar: investir em tráfego para uma página que não converte. Você paga mais caro por cada lead — e a plataforma de anúncio interpreta o resultado ruim como público ruim, encarecendo tudo.</p>
+<p>Se a página tem problema de clareza, <strong>corrija antes de comprar tráfego</strong>. É a ordem que economiza dinheiro.</p>
+<h3 id="c7-sinais-de-confianca-o-que-e-forte-e-o-qu">Sinais de confiança: o que é forte e o que é decorativo</h3>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Sinal</th>
+<th>Força real</th>
+<th>Observação</th>
+</tr></thead><tbody>
+<tr><td>Depoimento com nome, contexto e número</td><td>Forte</td><td>precisa de autorização por escrito</td></tr>
+<tr><td>Endereço, CNPJ, telefone visíveis</td><td>Forte</td><td>prova de existência</td></tr>
+<tr><td>Foto real da equipe ou do espaço</td><td>Forte</td><td>verificável</td></tr>
+<tr><td>Selo comprado sem verificação</td><td>Decorativo (e arriscado)</td><td>passivo jurídico, não confiança</td></tr>
+<tr><td>"Mais de 10.000 clientes" sem fonte</td><td>Decorativo</td><td>destrói confiança quando o visitante duvida</td></tr>
+<tr><td>Contador de escassez que reinicia</td><td>Negativo</td><td>quebra a relação no primeiro detalhe observado</td></tr>
+</tbody></table></div>
+<h3 id="c7-sobre-teste-a-b">Sobre teste A/B</h3>
+<p>Teste A/B precisa de volume. Abaixo de algumas centenas de conversões no período, a diferença que você enxerga costuma ser ruído. Se o volume não permite conclusão em quatro semanas, use auditoria heurística, teste de 5 segundos ou entrevista. Declarar vitória sem amostra é o jeito mais caro de aprender errado.</p>
+<h3 id="c7-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Percorra os oito itens na sua página principal e marque o que está resolvido. Depois, mostre a página a alguém que não conhece o negócio, por 5 segundos, e peça que diga o que entendeu. Compare com o que você achava que estava escrito.</p>
+<hr class="divisor">
+<h2 id="c8" class="capitulo"><span class="capitulo__numero">08</span>Copy: o que a IA não faz por você</h2>
+<h3 id="c8-a-ia-escreve-rapido-voce-decide-o-que-e-">A IA escreve rápido. Você decide o que é verdade</h3>
+<p>A quarta API do stack gera títulos, meta descrições, headings, CTAs e páginas inteiras. Ela resolve o gargalo de produção. Ela <strong>não</strong> resolve:</p>
+<ul><li>o que é verdade sobre o seu produto;</li><li>o que o seu público valoriza;</li><li>o que a sua marca não pode dizer;</li><li>o que você está disposto a prometer.</li></ul>
+<p>Essas quatro coisas são decisões humanas e continuam sendo o trabalho.</p>
+<h3 id="c8-as-tres-perguntas-antes-de-publicar">As três perguntas antes de publicar</h3>
+<ol><li><strong>Isto é verdade?</strong> Cada afirmação sobre o produto precisa ser verificável.</li><li><strong>Isto é específico?</strong> Frases que serviriam para qualquer empresa do setor são ruído.</li><li><strong>Isto soa como a marca?</strong> Se o cliente desconfia do tom, ele não vai publicar.</li></ol>
+<h3 id="c8-o-fluxo-de-producao-de-copy">O fluxo de produção de copy</h3>
+<pre class="codigo" data-linguagem="texto"><code>diagnóstico → pauta por intenção → geração → revisão de verdade → revisão de voz → publicação</code></pre>
+<p>Cada seta é uma etapa que consome tempo. Profissionais que "geram e publicam" produzem volume com qualidade média — e o volume de texto genérico na internet já é suficientemente grande.</p>
+<h3 id="c8-estrutura-que-funciona-na-maioria-dos-ca">Estrutura que funciona na maioria dos casos</h3>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Bloco</th>
+<th>Função</th>
+<th>Erro comum</th>
+</tr></thead><tbody>
+<tr><td>Eyebrow</td><td>contextualiza em 3-5 palavras</td><td>repetir o título</td></tr>
+<tr><td>Título</td><td>promessa concreta</td><td>descrever o produto</td></tr>
+<tr><td>Sub</td><td>como e para quem</td><td>adjetivo sem número</td></tr>
+<tr><td>Corpo</td><td>objeção → resposta, em blocos</td><td>história longa sobre a empresa</td></tr>
+<tr><td>FAQ</td><td>tira a dúvida que trava a compra</td><td>pergunta decorativa</td></tr>
+<tr><td>CTA</td><td>ação e próximo passo</td><td>"clique aqui"</td></tr>
+</tbody></table></div>
+<h3 id="c8-escrever-para-busca-sem-virar-robo">Escrever para busca sem virar robô</h3>
+<p>A palavra-chave entra onde faz sentido — quase sempre no título e no primeiro parágrafo. Densidade forçada aparece para o leitor como estranheza, e estranheza é o oposto de conversão. A regra prática: leia em voz alta. Se você não diria aquela frase a um cliente, corte.</p>
+<h3 id="c8-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Pegue um texto gerado por IA para uma página sua. Marque em vermelho toda afirmação que você não consegue comprovar e em amarelo toda frase que serviria para qualquer concorrente. Reescreva tudo o que estiver marcado.</p>
+<hr class="divisor">
+<h2 id="c9" class="capitulo"><span class="capitulo__numero">09</span>Landing page: o refino</h2>
+<h3 id="c9-a-primeira-dobra-decide">A primeira dobra decide</h3>
+<p>Antes de qualquer teste, existe uma verdade desconfortável: a maioria dos visitantes não vai rolar a página. A primeira dobra precisa funcionar sozinha.</p>
+<p>Quatro perguntas, respondidas em 5 segundos:</p>
+<ol><li><strong>O que é?</strong></li><li><strong>Para quem é?</strong></li><li><strong>O que eu ganho?</strong></li><li><strong>O que eu faço agora?</strong></li></ol>
+<p>Se qualquer uma dessas respostas exigir esforço, a página perde antes do segundo parágrafo.</p>
+<h3 id="c9-ordem-dos-blocos">Ordem dos blocos</h3>
+<p>A ordem que funciona na maioria dos casos — com a razão, para você poder adaptar em vez de decorar:</p>
+<ol><li><strong>Promessa</strong> — a decisão de continuar acontece aqui.</li><li><strong>Problema</strong> — quem tem a dor se reconhece e continua.</li><li><strong>Mecanismo</strong> — por que a sua solução funciona. Reduz a percepção de risco.</li><li><strong>Prova</strong> — aquilo que reduz a desconfiança.</li><li><strong>Oferta</strong> — o que está incluído, o que não está, o preço.</li><li><strong>Objeções</strong> — as perguntas que travam a decisão, respondidas antes de serem feitas.</li><li><strong>Ação</strong> — o pedido, repetido.</li></ol>
+<h3 id="c9-escopo-negativo-e-sinal-de-competencia">Escopo negativo é sinal de competência</h3>
+<p>Diga o que <strong>não</strong> está incluído. Isso parece vender menos e vende mais: reduz a expectativa errada, evita o atrito pós-venda e sinaliza que você sabe exatamente o que faz.</p>
+<h3 id="c9-caminho-de-conversao">Caminho de conversão</h3>
+<p>O caminho é o percurso entre chegar e converter. Cada passo extra é uma queda. Três princípios:</p>
+<ul><li><strong>Menos campos, mais conversões</strong> — desde que os campos restantes sejam realmente usados.</li><li><strong>Um destino.</strong> Todos os CTAs da página levam ao mesmo lugar.</li><li><strong>Redução de medo no microtexto.</strong> "Resposta em 1 dia útil" vale mais que "sem compromisso".</li></ul>
+<h3 id="c9-o-que-fazer-quando-nao-ha-trafego">O que fazer quando não há tráfego</h3>
+<p>Otimizar conversão com pouco tráfego é ajustar um instrumento que você não consegue ler. Nesse caso: trabalhe a clareza (que é objetiva), colete objeções em conversas reais e use os primeiros leads como fonte de dado qualitativo.</p>
+<h3 id="c9-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Reescreva a primeira dobra de uma página sua respondendo às quatro perguntas, na ordem. Depois mostre para alguém por 5 segundos e peça que repita o que entendeu. Corrija e repita — três rodadas.</p>
+<hr class="divisor">
+<h2 id="c10" class="capitulo"><span class="capitulo__numero">10</span>Amplificação social</h2>
+<h3 id="c10-uma-fonte-quatro-formatos">Uma fonte, quatro formatos</h3>
+<p>O gerador de conteúdo social transforma o conteúdo do site em posts por plataforma. O erro clássico é publicar o mesmo texto em todas elas. Cada rede tem um comportamento:</p>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Plataforma</th>
+<th>O que funciona</th>
+<th>O que não funciona</th>
+</tr></thead><tbody>
+<tr><td>X / Twitter</td><td>uma ideia, corte cirúrgico, conversa</td><td>texto institucional longo</td></tr>
+<tr><td>LinkedIn</td><td>contexto profissional, primeira linha forte</td><td>hashtag decorativa, emoji em excesso</td></tr>
+<tr><td>Instagram</td><td>visual primeiro, legenda que sustenta a arte</td><td>"link na bio" quando o objetivo é outro</td></tr>
+<tr><td>Facebook</td><td>tom explicativo, link clicável</td><td>jargão técnico</td></tr>
+</tbody></table></div>
+<h3 id="c10-a-distribuicao-70-20-10">A distribuição 70/20/10</h3>
+<p>Em um mês de conteúdo:</p>
+<ul><li><strong>70% útil</strong> — ensina, resolve, mostra;</li><li><strong>20% prova e autoridade</strong> — resultado, bastidor, aprendizado com dado real;</li><li><strong>10% oferta</strong> — o convite direto.</li></ul>
+<p>Quem inverte essa proporção transforma a audiência em público cansado. Três convites por mês em um calendário de trinta peças é suficiente.</p>
+<h3 id="c10-o-que-medir-e-o-que-e-vaidade">O que medir (e o que é vaidade)</h3>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Métrica</th>
+<th>Serve para</th>
+<th>Cuidado</th>
+</tr></thead><tbody>
+<tr><td>Alcance</td><td>distribuição do canal</td><td>alto alcance com zero ação é diagnóstico ruim</td></tr>
+<tr><td>Cliques</td><td>intenção</td><td>é a métrica que importa para tráfego</td></tr>
+<tr><td>Salvamentos</td><td>valor percebido</td><td>forte no Instagram, indica conteúdo útil</td></tr>
+<tr><td>Conversões</td><td>resultado de negócio</td><td>a única que paga a conta</td></tr>
+</tbody></table></div>
+<p>Alcance é a métrica mais olhada e a que menos decide. Se um post teve 50 mil visualizações e nenhum clique, o que você aprendeu é que ele era interessante — não que ele funcionou.</p>
+<h3 id="c10-o-ciclo">O ciclo</h3>
+<p>O conteúdo social fecha o funil: traz visitante novo para a página otimizada. E traz informação de volta — o que o público comenta indica o que ele quer, e isso muda a próxima pauta de conteúdo. É a realimentação que torna o sistema exponencial em vez de linear.</p>
+<h3 id="c10-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Pegue a sua página de melhor resultado. Gere doze peças a partir dela e monte o calendário de 30 dias com a distribuição 70/20/10. Registre o desempenho no dashboard e, ao fim do mês, abandone as três peças de pior desempenho e repita o formato das três melhores.</p>
+<hr class="divisor">
+<h2 id="c11" class="capitulo"><span class="capitulo__numero">11</span>Configuração técnica, custo e risco</h2>
+<h3 id="c11-o-que-voce-precisa-saber-antes-de-comeca">O que você precisa saber antes de começar</h3>
+<p>As seis APIs são serviços de terceiros hospedados em um marketplace (RapidAPI). Você assina cada uma no seu nome. Antes de confirmar qualquer plano, responda:</p>
+<ul><li>Quantas requisições o plano inclui?</li><li>Qual é o limite de requisições por segundo ou minuto?</li><li>O que acontece quando a cota termina: para ou cobra excesso?</li><li>Qual o custo por mil requisições acima do plano?</li></ul>
+<p>Sem essas quatro respostas, você não sabe o custo do seu serviço — e vai descobrir na fatura.</p>
+<h3 id="c11-estimativa-de-custo-por-projeto">Estimativa de custo por projeto</h3>
+<p>O funil completo em uma página consome entre 6 e 12 chamadas, dependendo de quantas APIs você usa. Para cinco páginas e três rodadas: 90 a 180 chamadas. Coloque o custo dessas chamadas na proposta antes de fechar o preço.</p>
+<h3 id="c11-cache-o-detalhe-que-separa-o-amador-do-p">Cache: o detalhe que separa o amador do profissional</h3>
+<p>Sem cache, cada vez que você roda o mesmo diagnóstico você paga de novo. Com cache por URL + etapa + data (validade de 24 h), o custo cai e a resposta fica instantânea na segunda consulta. Os clientes de código do kit já implementam isso.</p>
+<h3 id="c11-tratamento-de-erro">Tratamento de erro</h3>
+<p>A regra mais importante: <strong>quando uma API falha, o fluxo para.</strong> Nunca "continuar mesmo assim". Um fluxo que segue com resposta vazia produz um relatório bonito e falso — e o cliente descobre na reunião, na frente do decisor.</p>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Status</th>
+<th>Significado</th>
+<th>Ação</th>
+</tr></thead><tbody>
+<tr><td>429</td><td>Cota estourada</td><td>verificar limite; esperar ou fazer upgrade</td></tr>
+<tr><td>403</td><td>Plano sem acesso ao endpoint</td><td>conferir a assinatura</td></tr>
+<tr><td>404</td><td>Endpoint mudou</td><td>ler a documentação atual</td></tr>
+<tr><td>200 com corpo vazio</td><td>Site bloqueou robô</td><td>trocar a URL de teste; documentar</td></tr>
+</tbody></table></div>
+<h3 id="c11-risco-de-dependencia">Risco de dependência</h3>
+<p>Serviços de terceiros mudam de preço, de limite e — eventualmente — saem do ar. Você não controla isso, e deve dizer isso ao cliente quando ele perguntar. A proteção não é escolher o fornecedor eterno: é que o <strong>método</strong> sobrevive à ferramenta. O funil de seis etapas continua válido quando um fornecedor específico é substituído.</p>
+<h3 id="c11-seguranca-da-chave">Segurança da chave</h3>
+<p>A chave de API é uma credencial de fatura. Ela não vai para o front-end, não entra em print, não aparece em vídeo e não é colada em prompt de IA. Navegador fala com o seu servidor; o seu servidor fala com a API.</p>
+<h3 id="c11-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Monte a planilha de custo: para cada uma das seis APIs, plano, limite, custo unitário e custo estimado no seu projeto típico. Calcule o custo por página analisada. Esse número entra na sua proposta.</p>
+<hr class="divisor">
+<h2 id="c12" class="capitulo"><span class="capitulo__numero">12</span>Do serviço à receita</h2>
+<h3 id="c12-o-pacote-site-exponencial">O pacote "Site Exponencial"</h3>
+<p>A forma mais direta de transformar a habilidade em receita é empacotar em três níveis. A lógica de cada nível é reduzir uma objeção diferente do cliente.</p>
+<div class="tabela-wrap"><table>
+<thead><tr>
+<th>Nível</th>
+<th>Escopo</th>
+<th>Objeção que resolve</th>
+</tr></thead><tbody>
+<tr><td><strong>Diagnóstico</strong></td><td>auditoria com as APIs de extração, SEO e conversão; relatório e plano de 30 dias</td><td>"não sei se vale a pena mexer nisso"</td></tr>
+<tr><td><strong>Site Exponencial</strong></td><td>diagnóstico + reescrita + otimização de página + 30 dias de conteúdo social</td><td>"não tenho quem execute"</td></tr>
+<tr><td><strong>Crescimento Contínuo</strong></td><td>mensal: novas páginas, otimização contínua, relatório de evolução</td><td>"quero que alguém cuide disso"</td></tr>
+</tbody></table></div>
+<h3 id="c12-precificar-por-valor-nao-por-hora">Precificar por valor, não por hora</h3>
+<p>Precificação por hora pune exatamente quem ficou bom. Se você resolve em duas horas o que o concorrente resolve em dez, por hora você ganha cinco vezes menos.</p>
+<p>O caminho é ancorar no valor: qual é o custo do problema para o cliente? Quanto ele perde por mês enquanto a página não converte? O preço do seu trabalho é uma fração do custo do problema, não uma fração do seu tempo.</p>
+<p><strong>Ancoragem prática:</strong> apresente três faixas (essencial, recomendada, completa) com escopo diferente. A faixa do meio é escolhida com mais frequência — construa a sua proposta sabendo disso.</p>
+<h3 id="c12-o-que-nunca-prometer">O que nunca prometer</h3>
+<ul><li>posição em buscador;</li><li>volume de tráfego;</li><li>faturamento;</li><li>prazo de ranking;</li><li>"primeiro lugar no Google".</li></ul>
+<p>Prometer qualquer um desses itens é vender o que você não controla. O que você controla: medir, diagnosticar, corrigir, registrar e reportar. Prometa isso.</p>
+<h3 id="c12-recorrencia-por-que-ela-e-a-decisao-mais">Recorrência: por que ela é a decisão mais importante</h3>
+<p>Um projeto pago uma vez termina e você volta à estaca zero na prospecção. Um contrato recorrente financia a próxima melhoria e reduz a pressão comercial. O que sustenta a recorrência não é a mensalidade: é a percepção de valor <strong>todos os meses</strong>. Entregue algo visível por mês — um relatório, uma página nova, uma melhoria medida.</p>
+<h3 id="c12-escala-sem-multiplicar-a-equipe">Escala sem multiplicar a equipe</h3>
+<p>O caminho da escala tem três alavancas, nesta ordem:</p>
+<ol><li><strong>Padronizar</strong> — o mesmo fluxo de seis etapas para todo projeto.</li><li><strong>Automatizar</strong> — as chamadas de API dentro do fluxo; o julgamento fica com você.</li><li><strong>Delegar</strong> — só depois de 1 e 2 estarem documentados. Sem processo, delegar multiplica o erro.</li></ol>
+<p>A revisão humana permanece obrigatória em três pontos: a leitura do diagnóstico, a decisão de escopo e a aprovação final do texto publicado.</p>
+<h3 id="c12-proposta-comercial-em-uma-pagina">Proposta comercial em uma página</h3>
+<ol><li>Situação atual em 5 linhas, com número.</li><li>O que vamos fazer, em 3 fases, com entregável verificável.</li><li>O que <strong>não</strong> está incluído.</li><li>Cronograma e o que depende do cliente.</li><li>Investimento em três opções.</li><li>Como medimos o sucesso e quando lemos o resultado.</li><li>Próximos passos com data.</li></ol>
+<h3 id="c12-exercicio-do-capitulo">Exercício do capítulo</h3>
+<p>Escreva a sua tabela de preços em três faixas. Para cada uma, defina: escopo, prazo, entregável, critério de sucesso e o que não está incluído. Mostre para um cliente de confiança e peça a reação — não para aprovar o preço, mas para você ouvir a pergunta que ele faz primeiro.</p>
+<hr class="divisor">
+<h2 id="c13" class="capitulo"><span class="capitulo__numero">13</span>Apêndice — Conformidade e ética</h2>
+<p>Este apêndice não é letra miúda. É o que mantém o seu negócio de pé.</p>
+<h3 id="c13-1-nada-de-depoimento-fabricado">1. Nada de depoimento fabricado</h3>
+<p>Depoimento inventado é publicidade enganosa. Depoimento real precisa de autorização por escrito — inclusive para o uso de nome e imagem. Se você ainda não tem aluno ou cliente com resultado, mostre o espaço vazio ou remova a seção. Não preencha.</p>
+<h3 id="c13-2-nada-de-resultado-fabricado">2. Nada de resultado fabricado</h3>
+<p>Nenhum número de tráfego, receita ou prazo que não tenha sido medido. Toda afirmação com número precisa de fonte e contexto. "Em 6 semanas, os orçamentos pedidos pelo site passaram de 4 para 11 por mês, no setor X, no período Y" é verificável. "Multiplique seus resultados por 10" não é.</p>
+<h3 id="c13-3-garantia">3. Garantia</h3>
+<p>No Brasil, o direito de arrependimento em compra fora do estabelecimento comercial é de 7 dias (art. 49 do Código de Defesa do Consumidor). Declare e cumpra, sem burocracia.</p>
+<h3 id="c13-4-transparencia-do-que-nao-esta-incluido">4. Transparência do que não está incluído</h3>
+<p>As assinaturas das APIs são do aluno, não do curso. Isso precisa estar na página de vendas, no FAQ e na primeira aula do módulo técnico. A reclamação mais previsível de um produto como este é o aluno que comprou achando que a assinatura estava inclusa.</p>
+<h3 id="c13-5-direito-autoral-em-vibe-design">5. Direito autoral em Vibe Design</h3>
+<p>Extrair sistema é aprendizado. Copiar ativo é violação. A distinção está detalhada no Capítulo 3. Materialize-a no seu processo: mantenha registro de origem das variáveis e não carregue para o projeto do cliente nenhum arquivo de terceiro.</p>
+<h3 id="c13-6-independencia">6. Independência</h3>
+<p>Este produto não é afiliado, patrocinado nem endossado pelo marketplace das APIs, pelos fornecedores dos serviços ou pelas plataformas de pagamento citadas. Marcas pertencem aos seus titulares e são mencionadas apenas para identificar os serviços.</p>
+<h3 id="c13-7-privacidade">7. Privacidade</h3>
+<p>Se você coleta dado pessoal (formulário, lista, analytics), você é controlador desses dados: precisa de finalidade declarada, base legal, prazo de retenção e caminho para o titular pedir exclusão. Em qualquer página que colete dado, a política de privacidade precisa estar a um clique.</p>
+<hr class="divisor">
+<h2 id="c13-encerramento">Encerramento</h2>
+<p>Você terminou o playbook. O que separa este material de mais um curso assistido é o que acontece nas próximas 48 horas.</p>
+<p><strong>Faça isto, hoje:</strong> escolha uma página real e rode o funil completo — as seis etapas, na ordem. Registre os scores inicial e final, o que você mudou e o que aprendeu. Depois, repita com um cliente.</p>
+<p>O método só vale quando vira hábito. E hábito é o que faz um site deixar de ser uma entrega e passar a ser um sistema.</p>
+<hr class="divisor">
+<p><em>Growth Design Playbook · Growth Design Pro · v1.0 · identidade Editorial Premium</em> <em>Suporte: suporte@growthdesignpro.com.br · Licença de uso do kit em site/legal/licenca.html</em></p>
+  </main>
+
+  <footer class="rodape">
+    <p><strong>Growth Design Pro</strong> — Growth Design Pro · Playbook · edição em português</p>
+    <p style="margin-top:.5rem">Material educacional. Não há garantia de tráfego, posicionamento em
+    buscadores, vendas ou renda: resultados dependem da execução, do mercado e de plataformas de
+    terceiros. As assinaturas das APIs não estão inclusas.</p>
+    <p style="margin-top:.5rem">Licença de uso do kit: <code>site/legal/licenca.html</code></p>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+# Growth Design Pro — redirecionamentos
+
+# Área de membros: aceita as duas grafias e manda para a versão em português.
+/area            /area/            301
+/membros         /area/            301
+/en/members      /en/area/         301
+
+# Atalhos de material liberado
+/kit             /kit/             301
+/ebook           /ebook/           301
+/en/kit          /en/kit/          301
+/en/ebook        /en/ebook/        301
+
+# Legais: um nome só para cada idioma
+/licenca         /legal/licenca.html       301
+/termos          /legal/termos.html        301
+/privacidade     /legal/privacidade.html   301
+/terms           /legal/terms.html         301
+/privacy         /legal/privacy.html       301
+
+# 404 próprio (crie a página antes de publicar ou remova esta linha)

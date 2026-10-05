@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Área de Membros — Growth Design Pro</title>
+<meta name="description" content="Área de membros do Growth Design Pro: 6 módulos, 28 aulas, materiais para download e o kit de ferramentas completo.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0F0F0D">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<style>
+  /* Estilos específicos da área de membros (não pertencem ao design system público) */
+  .area-head { border-bottom: 1px solid var(--rule); padding-block: var(--s-8) var(--s-7); }
+  .area-progress {
+    height: 6px; background: var(--paper-3); position: relative; overflow: hidden; margin-top: var(--s-5);
+  }
+  .area-progress__fill { position: absolute; inset: 0 auto 0 0; width: 0%; background: var(--gold); }
+  .area-lesson {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0,1fr) auto;
+    gap: var(--s-5);
+    align-items: center;
+    padding: var(--s-4) 0;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .area-lesson:last-child { border-bottom: 0; }
+  .area-lesson__id { font-family: var(--font-mono); font-size: var(--fs-caption); color: var(--gold); }
+  .area-lesson__title { font-weight: 500; font-size: var(--fs-small); }
+  .area-lesson__desc { font-size: var(--fs-caption); color: var(--ink-3); margin-top: 2px; max-width: 70ch; }
+  .area-lesson__actions { display: flex; gap: var(--s-2); flex: none; }
+  .area-chip {
+    font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid var(--rule-strong); padding: 0.375rem 0.625rem; text-decoration: none; color: var(--ink-2);
+    white-space: nowrap; transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .area-chip:hover { border-color: var(--gold); color: var(--gold); }
+  .area-chip--soon { opacity: .55; cursor: not-allowed; }
+  @media (max-width: 760px) {
+    .area-lesson { grid-template-columns: 2.5rem minmax(0,1fr); }
+    .area-lesson__actions { grid-column: 2; margin-top: var(--s-2); }
+  }
+  .area-note {
+    border: 1px solid var(--attention); border-left-width: 3px;
+    background: rgba(138,90,24,.07); padding: var(--s-6);
+  }
+  .area-note h3 { font-size: var(--fs-h4); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="gdp-progress" data-progress aria-hidden="true"></div>
+
+<header class="gdp-nav" data-nav>
+  <div class="shell gdp-nav__inner">
+    <a class="gdp-brand" href="../" aria-label="Growth Design Pro">
+      <span class="gdp-brand__mark" aria-hidden="true">G</span>
+      <span class="gdp-brand__text">
+        <span class="gdp-brand__name">Growth Design Pro</span>
+        <span class="gdp-brand__sub">Área de membros</span>
+      </span>
+    </a>
+    <div class="gdp-nav__right">
+      <a class="gdp-nav__link" href="#materiais" style="text-transform:uppercase">Materiais</a>
+      <a class="gdp-lang" href="../" hreflang="pt-BR">Site</a>
+      <a class="gdp-btn gdp-btn--sm gdp-btn--ghost" href="#materiais">Baixar kit</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="area-head">
+  <div class="shell">
+    <span class="eyebrow">Turma 01 · acesso vitalício</span>
+    <h1 class="h1 mt-5">Bem-vindo ao<br>Growth Design Pro.</h1>
+    <p class="lead mt-6">Comece pelo Módulo 1 e siga na ordem. Cada aula tem um artefato baixável —
+    o curso só funciona se o material sair do vídeo e virar arquivo no seu computador.</p>
+
+    <div class="mt-7" style="max-width:36rem">
+      <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:var(--fs-eyebrow);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)">
+        <span>Seu progresso</span><span>0 de 28 aulas</span>
+      </div>
+      <div class="area-progress" role="img" aria-label="Progresso: 0 por cento"><div class="area-progress__fill"></div></div>
+      <p style="font-size:var(--fs-caption);color:var(--ink-3);margin-top:var(--s-3)">
+        O progresso é salvo quando você marca a aula como concluída (botão ao lado de cada aula).
+        <!-- Integração: ligar os botões ao backend da Hotmart/Kiwify ou a um localStorage simples. -->
+      </p>
+    </div>
+  </div>
+</div>
+
+<section class="section section--tight">
+  <div class="shell">
+    <div class="area-note reveal">
+      <h3>Aviso sobre a produção das aulas</h3>
+      <p class="prose mt-4" style="font-size:var(--fs-small)">Esta área de membros é o <strong>molde pronto</strong>
+      do curso: a estrutura dos 6 módulos, as 28 aulas e os pontos de download estão definidos. Os vídeos
+      entram no lugar dos marcadores <span style="font-family:var(--font-mono);color:var(--ink-3)">[VÍDEO]</span>
+      durante a gravação. Nenhuma aula deve ser publicada sem antes rodar de novo as chamadas de API
+      demonstradas — endpoints, parâmetros e limites mudam sem aviso.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 1 -->
+<section class="section section--tight section--ruled">
+  <div class="shell">
+    <div class="filete reveal">
+      <span class="filete__num">MÓDULO 01</span>
+      <span class="filete__label">Fundamentos do Design Exponencial</span>
+      <span class="filete__rule" aria-hidden="true"></span>
+      <span class="filete__num">32 min</span>
+    </div>
+    <ul>
+      <li class="area-lesson"><span class="area-lesson__id">1.1</span>
+        <div><div class="area-lesson__title">O que é Design Exponencial</div>
+        <div class="area-lesson__desc">Design linear versus exponencial. A IA como multiplicador, não como atalho.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais" title="Marcador de vídeo">[VÍDEO]</a><a class="area-chip" href="materiais/kit/">Diagrama PDF</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">1.2</span>
+        <div><div class="area-lesson__title">A Metodologia Vibe Design</div>
+        <div class="area-lesson__desc">Extrair → recombinar → construir, com demonstração do Prompt de Mil Dólares.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/prompts/prompts-pt.md">Prompt</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">1.3</span>
+        <div><div class="area-lesson__title">Design Systems como Código</div>
+        <div class="area-lesson__desc">Por que extrair um sistema rende mais que criar do zero — e onde termina a ética.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/#design-system">tokens.css</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">1.4</span>
+        <div><div class="area-lesson__title">O Ecossistema AI Growth Stack</div>
+        <div class="area-lesson__desc">As 6 APIs e o funil completo.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/#checklists">Mapa do funil</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- MÓDULO 2 -->
+<section class="section section--tight section--ruled">
+  <div class="shell">
+    <div class="filete reveal">
+      <span class="filete__num">MÓDULO 02</span>
+      <span class="filete__label">Dominando as 6 APIs do Growth Stack</span>
+      <span class="filete__rule" aria-hidden="true"></span>
+      <span class="filete__num">58 min</span>
+    </div>
+    <ul>
+      <li class="area-lesson"><span class="area-lesson__id">2.1</span>
+        <div><div class="area-lesson__title">Website Data Extraction — inteligência competitiva</div>
+        <div class="area-lesson__desc">Meta tags, contatos, links e dados de SEO de qualquer site. O que fazer quando o site bloqueia robôs.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/prompts/prompts-pt.md">Prompt 3</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">2.2</span>
+        <div><div class="area-lesson__title">AI SEO Analysis — o score de 1 a 100</div>
+        <div class="area-lesson__desc">Ler por dimensão, virar tarefa, comparar com o concorrente.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/planilhas/analise-seo.xlsx">Planilha</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">2.3</span>
+        <div><div class="area-lesson__title">AI Conversion Optimization — onde o visitante desiste</div>
+        <div class="area-lesson__desc">Formulários, CTAs, estrutura, sinais de confiança.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/checklists/checklist-conversao.md">Checklist</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">2.4</span>
+        <div><div class="area-lesson__title">AI Website Copywriter — texto que ranqueia e vende</div>
+        <div class="area-lesson__desc">Títulos, metas, headings, CTAs e página completa.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/prompts/prompts-pt.md">Prompt 14</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">2.5</span>
+        <div><div class="area-lesson__title">AI Landing Page Optimizer — refinando o que existe</div>
+        <div class="area-lesson__desc">Headline, CTA, layout e caminho de conversão.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/templates/landing-page-template/index.html">Template</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">2.6</span>
+        <div><div class="area-lesson__title">AI Social Media Generator — amplificação</div>
+        <div class="area-lesson__desc">Um conteúdo, quatro plataformas, quatro formatos.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/planilhas/calendario-social.xlsx">Calendário</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- MÓDULO 3 -->
+<section class="section section--tight section--ruled">
+  <div class="shell">
+    <div class="filete reveal">
+      <span class="filete__num">MÓDULO 03</span>
+      <span class="filete__label">Workflow Prático: o Funil de Crescimento</span>
+      <span class="filete__rule" aria-hidden="true"></span>
+      <span class="filete__num">66 min</span>
+    </div>
+    <ul>
+      <li class="area-lesson"><span class="area-lesson__id">3.1</span>
+        <div><div class="area-lesson__title">Fase de Pesquisa</div>
+        <div class="area-lesson__desc">Extração + SEO Analysis para mapear concorrentes e achar as lacunas.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/planilhas/growth-dashboard.xlsx">Dashboard</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">3.2</span>
+        <div><div class="area-lesson__title">Fase de Conteúdo</div>
+        <div class="area-lesson__desc">Copywriter alimentado pelo diagnóstico; como dirigir o tom de voz.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/prompts/prompts-pt.md">Prompt 21</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">3.3</span>
+        <div><div class="area-lesson__title">Fase de Otimização</div>
+        <div class="area-lesson__desc">Landing Page Optimizer + Conversion API na mesma página.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/checklists/checklist-seo-onpage.md">Checklist SEO</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">3.4</span>
+        <div><div class="area-lesson__title">Fase de Amplificação</div>
+        <div class="area-lesson__desc">Calendário de 30 dias que retorna tráfego para a página.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/planilhas/calendario-social.xlsx">Calendário</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">3.5</span>
+        <div><div class="area-lesson__title">Estudo de Caso Completo</div>
+        <div class="area-lesson__desc">Do briefing ao site publicado, com números antes e depois.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/">Relatório modelo</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- MÓDULO 4 -->
+<section class="section section--tight section--ruled">
+  <div class="shell">
+    <div class="filete reveal">
+      <span class="filete__num">MÓDULO 04</span>
+      <span class="filete__label">Configuração Técnica e Integração</span>
+      <span class="filete__rule" aria-hidden="true"></span>
+      <span class="filete__num">52 min</span>
+    </div>
+    <ul>
+      <li class="area-lesson"><span class="area-lesson__id">4.1</span>
+        <div><div class="area-lesson__title">Configurando o RapidAPI</div>
+        <div class="area-lesson__desc">Conta, assinatura das 6 APIs, planos, limites e custo.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/checklists/checklist-configuracao-rapidapi.md">Checklist</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">4.2</span>
+        <div><div class="area-lesson__title">Integração No-Code</div>
+        <div class="area-lesson__desc">Make, n8n e Zapier com os blueprints do kit.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/#integracoes">Blueprints</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">4.3</span>
+        <div><div class="area-lesson__title">Integração via Código</div>
+        <div class="area-lesson__desc">Cliente JavaScript e Python com as 6 chamadas e tratamento de erro.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/#codigo">Código</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">4.4</span>
+        <div><div class="area-lesson__title">Automação com Agentes de IA</div>
+        <div class="area-lesson__desc">Orquestrar o funil com Claude Code ou Cursor usando o arquivo de projeto.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/prompts/prompts-pt.md">Prompts de agente</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">4.5</span>
+        <div><div class="area-lesson__title">Monitoramento e Iteração</div>
+        <div class="area-lesson__desc">Growth Stack Dashboard: registrar score e decidir a próxima rodada.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/planilhas/growth-dashboard.xlsx">Dashboard</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- MÓDULO 5 -->
+<section class="section section--tight section--ruled">
+  <div class="shell">
+    <div class="filete reveal">
+      <span class="filete__num">MÓDULO 05</span>
+      <span class="filete__label">Escalando e Monetizando</span>
+      <span class="filete__rule" aria-hidden="true"></span>
+      <span class="filete__num">41 min</span>
+    </div>
+    <ul>
+      <li class="area-lesson"><span class="area-lesson__id">5.1</span>
+        <div><div class="area-lesson__title">Produtizando o Serviço</div>
+        <div class="area-lesson__desc">O pacote "Site Exponencial" em três níveis.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/">Modelo de proposta</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">5.2</span>
+        <div><div class="area-lesson__title">Templates como Produto</div>
+        <div class="area-lesson__desc">Empacotar design systems originais e vender separadamente.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/templates/design-system-starter-kit/index.html">Starter Kit</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">5.3</span>
+        <div><div class="area-lesson__title">Precificação e Proposta Comercial</div>
+        <div class="area-lesson__desc">Cobrar por valor, não por hora. O que nunca prometer.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/kit/planilhas/calculadora-roi.xlsx">Calculadora ROI</a></div>
+      </li>
+      <li class="area-lesson"><span class="area-lesson__id">5.4</span>
+        <div><div class="area-lesson__title">Escala com Agentes</div>
+        <div class="area-lesson__desc">Rodar o funil para vários clientes sem multiplicar a equipe.</div></div>
+        <div class="area-lesson__actions"><a class="area-chip area-chip--soon" href="#materiais">[VÍDEO]</a><a class="area-chip" href="materiais/#biblioteca">Arquivo de projeto</a></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- MATERIAIS -->
+<section class="section theme-night" id="materiais">
+  <div class="shell">
+    <div class="filete reveal">
+      <span class="filete__num">MÓDULO 06</span>
+      <span class="filete__label">Biblioteca de Recursos</span>
+      <span class="filete__rule" aria-hidden="true"></span>
+      <span class="filete__num">Downloads</span>
+    </div>
+
+    <h2 class="h2 mt-6 reveal" style="color:var(--ink)">Tudo o que você baixa hoje.</h2>
+
+    <div class="gdp-kit mt-9">
+      <article class="gdp-kit__item reveal" style="background:var(--night-2);border-color:var(--night-line)">
+        <h3 class="gdp-kit__name">Golden Prompt Library</h3>
+        <p class="gdp-kit__desc">52 prompts em português e inglês: extração de design system, diagnóstico, copy, social, agentes e auditoria de honestidade.</p>
+        <div class="gdp-kit__fmt"><a href="materiais/kit/prompts/prompts-pt.md" class="gdp-link">baixar .md (PT-BR)</a></div>
+      </article>
+      <article class="gdp-kit__item reveal" data-reveal-delay="40" style="background:var(--night-2);border-color:var(--night-line)">
+        <h3 class="gdp-kit__name">Planilhas de trabalho</h3>
+        <p class="gdp-kit__desc">Análise de SEO, Calendário Social, Calculadora de ROI e Growth Stack Dashboard — fórmulas prontas.</p>
+        <div class="gdp-kit__fmt"><a href="materiais/#planilhas" class="gdp-link">abrir pasta</a></div>
+      </article>
+      <article class="gdp-kit__item reveal" data-reveal-delay="80" style="background:var(--night-2);border-color:var(--night-line)">
+        <h3 class="gdp-kit__name">E-book Growth Design Playbook</h3>
+        <p class="gdp-kit__desc">O método completo em texto, em português e inglês.</p>
+        <div class="gdp-kit__fmt"><a href="materiais/playbook-pt.html" class="gdp-link">ler online / baixar</a></div>
+      </article>
+      <article class="gdp-kit__item reveal" data-reveal-delay="120" style="background:var(--night-2);border-color:var(--night-line)">
+        <h3 class="gdp-kit__name">Templates e integrações</h3>
+        <p class="gdp-kit__desc">Template de landing page, blueprints de automação e o cliente JS/Python das 6 APIs.</p>
+        <div class="gdp-kit__fmt"><a href="materiais/#templates" class="gdp-link">abrir pasta</a></div>
+      </article>
+      <article class="gdp-kit__item reveal" data-reveal-delay="160" style="background:var(--night-2);border-color:var(--night-line)">
+        <h3 class="gdp-kit__name">Design System Starter Kit</h3>
+        <p class="gdp-kit__desc">10 sistemas originais em tokens CSS, com documentação de origem das variáveis.</p>
+        <div class="gdp-kit__fmt"><a href="materiais/kit/templates/design-system-starter-kit/index.html" class="gdp-link">abrir pasta</a></div>
+      </article>
+      <article class="gdp-kit__item reveal" data-reveal-delay="200" style="background:var(--night-2);border-color:var(--night-line)">
+        <h3 class="gdp-kit__name">Checklists</h3>
+        <p class="gdp-kit__desc">Conversão, SEO on-page, configuração do RapidAPI e publicação.</p>
+        <div class="gdp-kit__fmt"><a href="materiais/#checklists" class="gdp-link">abrir pasta</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell shell--narrow">
+    <h2 class="h3">Suporte</h2>
+    <p class="prose mt-4">Dúvida sobre uma aula, um prompt ou um resultado estranho de API? Escreva para
+    <a href="mailto:suporte@growthdesignpro.com.br" style="color:var(--gold)">suporte@growthdesignpro.com.br</a>
+    com o número da aula no assunto. Respondemos em até um dia útil e, quando a dúvida se repete, ela vira
+    uma aula de atualização.</p>
+    <p class="prose mt-6" style="font-size:var(--fs-caption);color:var(--ink-3)">
+      <a href="../">← Voltar ao site</a> &nbsp;·&nbsp; <a href="../legal/licenca.html">Licença de uso do material</a>
+    </p>
+  </div>
+</section>
+</main>
+
+<footer class="gdp-footer" style="padding-block:var(--s-8)">
+  <div class="shell">
+    <div class="gdp-footer__bottom" style="margin-top:0;border-top:0;padding-top:0">
+      <span>© <span data-year>2026</span> Growth Design Pro · Área de membros · Turma 01</span>
+      <span>Acesso pessoal e intransferível</span>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

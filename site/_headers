@@ -1,0 +1,32 @@
+# Growth Design Pro — cabeçalhos de segurança e cache (Netlify / Cloudflare Pages)
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; form-action 'self' https:; base-uri 'self'; frame-ancestors 'self'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/css/*
+  Cache-Control: public, max-age=604800
+
+/assets/js/*
+  Cache-Control: public, max-age=604800
+
+/assets/img/*
+  Cache-Control: public, max-age=604800
+
+/legal/*
+  Cache-Control: public, max-age=86400
+
+# Área de membros: não indexar e não cachear (conteúdo de aluno)
+/area/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: private, no-store
+
+/en/area/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: private, no-store

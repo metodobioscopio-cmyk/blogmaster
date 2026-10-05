@@ -1,0 +1,135 @@
+/* ============================================================================
+   MINIMAL SUÍÇO
+   ----------------------------------------------------------------------------
+   IDEIA CENTRAL
+   Grade rigorosa, muito branco, tipografia sem serifa em poucos pesos e hierarquia obtida por escala e alinhamento. Nada decorativo, tudo funcional.
+
+   PERSONALIDADE    preciso · neutro · limpo · objetivo · econômico
+   REFERÊNCIA       Cartazes suíços, portfólios de design
+   DENSIDADE        arejado
+   ----------------------------------------------------------------------------
+   Sistema ORIGINAL do Design System Starter Kit (Growth Design Pro). Construído a
+   partir de decisões de design — contraste, ritmo, hierarquia, temperatura — sem
+   reproduzir ativo, código ou identidade de terceiros.
+   Uso comercial liberado em projetos próprios e de clientes.
+   Revenda e redistribuição dos arquivos: proibidas (ver licença do kit).
+   ========================================================================== */
+
+:root {
+  /* --- Cor: cada valor tem FUNÇÃO declarada ------------------------------- */
+  --paper: #FFFFFF;                         /* fundo padrão da página */
+  --paper-2: #F4F4F2;                       /* fundo de seção alternada */
+  --paper-card: #FFFFFF;                    /* fundo de cartão elevado */
+  --ink: #111111;                           /* texto principal */
+  --ink-2: #3D3D3D;                         /* texto secundário */
+  --ink-3: #666666;                         /* legenda e metadado (piso de contraste) */
+  --accent: #C0392B;                        /* acento da marca — usar em no máximo 5% da tela */
+  --accent-soft: rgba(192,57,43,.10);       /* acento em baixa opacidade (fundo de destaque) */
+  --state-ok: #2F6B3C;                      /* estado de sucesso */
+  --state-error: #A32B21;                   /* estado de erro */
+  --state-warning: #7A5A12;                 /* estado de atenção */
+
+  /* --- Tipografia --------------------------------------------------------- */
+  --font-display: 'Helvetica Neue', Inter, system-ui, sans-serif;
+  --font-text:    'Helvetica Neue', Inter, system-ui, sans-serif;
+  --font-mono:    ui-monospace, monospace;
+
+  --fs-caption: 0.7989rem;    
+  --fs-small: 1.0625rem;      
+  --fs-body: 1.4131rem;       /* corpo */
+  --fs-h4: 1.8795rem;         
+  --fs-h3: 2.4997rem;         
+  --fs-h2: 3.3246rem;         /* título de seção */
+  --fs-h1: 4.4217rem;         /* título de seção */
+  --fs-display: 5.8808rem;    
+  --lh-heading: 1.10;
+  --lh-body:    1.62;
+  --tr-heading: -0.02em;
+  --tr-eyebrow:  0.16em;
+
+  /* --- Espaçamento e medidas ---------------------------------------------- */
+  --s-1: 0.5rem;    /* base de 8px */
+  --s-2: 1rem;      
+  --s-3: 1.5rem;    
+  --s-4: 2rem;      
+  --s-5: 2.5rem;    
+  --s-6: 3rem;      
+  --s-7: 4rem;      
+  --s-8: 5rem;      
+  --s-9: 6rem;      
+  --s-10: 8rem;     
+  --maxw:        72rem;   /* largura máxima do conteúdo */
+  --maxw-text:   42rem;   /* coluna de leitura longa */
+  --gutter:      clamp(1.25rem, 4vw, 3rem);
+  --section-y:   clamp(3rem, 2rem + 5vw, 6.5rem);
+
+  /* --- Forma, profundidade e movimento ----------------------------------- */
+  --r-sm: 0;
+  --r-md: 0;
+  --r-pill: 999px;
+  --shadow: none;
+  --ease-out: cubic-bezier(.16,1,.3,1);
+  --dur: 240ms;
+}
+
+/* ---------------------------------------------------------------------------
+   REGRAS DE APLICAÇÃO DESTE SISTEMA
+   Não são sugestões: são o que mantém a identidade coerente.
+   --------------------------------------------------------------------------- */
+/*
+   1. Nenhum valor de cor, tamanho ou espaçamento fora dos tokens acima.
+   2. O acento (--accent) cobre no máximo 5% da tela. Se estiver em tudo, não
+      destaca nada.
+   3. Texto de corpo nunca usa --ink-3: ele é o piso de contraste, reservado para
+      legenda e metadado.
+   4. Sombra só em elemento que realmente flutua (cartão em hover, botão em hover).
+   5. Contraste mínimo AA em todo par texto/fundo. Ao criar uma cor nova, verifique.
+   6. Animação apenas com propósito declarado: orientar, confirmar ou revelar.
+*/
+
+/* ---------------------------------------------------------------------------
+   BASE MÍNIMA (remova se já existir reset no seu projeto)
+   --------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); font-weight: 400;
+                 line-height: var(--lh-heading); letter-spacing: var(--tr-heading); }
+p { margin: 0; }
+p + p { margin-top: var(--s-4); }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-underline-offset: .22em; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.wrap { max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.section { padding-block: var(--section-y); }
+
+.eyebrow {
+  font-size: var(--fs-caption); letter-spacing: var(--tr-eyebrow);
+  text-transform: uppercase; color: var(--accent); font-weight: 600;
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  padding: var(--s-4) var(--s-6); border-radius: var(--r-sm);
+  background: var(--accent); color: var(--paper); border: 1px solid var(--accent);
+  font-size: var(--fs-small); font-weight: 600; text-decoration: none; cursor: pointer;
+  transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.card { background: var(--paper-card); border: 1px solid var(--accent-soft);
+        border-radius: var(--r-sm); padding: var(--s-6); }
+
+@media print { .btn { display: none; } }

@@ -1,0 +1,7 @@
+# Growth Design Pro — https://growthdesignpro.com.br
+User-agent: *
+Allow: /
+Disallow: /area/
+Disallow: /en/area/
+
+Sitemap: https://growthdesignpro.com.br/sitemap.xml

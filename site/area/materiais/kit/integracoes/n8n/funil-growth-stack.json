@@ -1,0 +1,223 @@
+{
+  "name": "Growth Design Pro — Funil de Crescimento",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "growth-stack",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "gatilho-webhook",
+      "name": "1. Recebe URL",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 400],
+      "webhookId": "growth-stack-app",
+      "notes": "Cole esta URL no formulário do seu site. O corpo esperado é { \"url\": \"https://...\" }."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "url",
+              "value": "={{ $json.body.url }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "normaliza-entrada",
+      "name": "2. Valida entrada",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [440, 400],
+      "notes": "Valide aqui se a URL é http/https e pertence a um domínio que você controla. Nunca deixe este webhook aceitar qualquer URL sem autenticação."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://COLE-AQUI-O-HOST.rapidapi.com/extract",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $json.url }) }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-RapidAPI-Host", "value": "COLE-AQUI-O-HOST.rapidapi.com" }
+          ]
+        },
+        "options": { "timeout": 30000 }
+      },
+      "id": "api-extracao",
+      "name": "3. Extração de dados",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 400],
+      "notes": "API 1 de 6 — Website Data Extraction. Credencial: header X-RapidAPI-Key via 'HTTP Header Auth'. Confirme o caminho real do endpoint no painel do RapidAPI."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://COLE-AQUI-O-HOST.rapidapi.com/seo/analyze",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $json.url }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "api-seo",
+      "name": "4. Análise de SEO",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [920, 400],
+      "notes": "API 2 de 6 — AI SEO Analysis. Retorna score de 1 a 100 e recomendações."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://COLE-AQUI-O-HOST.rapidapi.com/copy/generate",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $('2. Valida entrada').item.json.url, seo: JSON.stringify($json).slice(0, 3000) }) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "api-copy",
+      "name": "5. Geração de copy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1160, 400],
+      "notes": "API 4 de 6 — Website Copywriter, alimentada pelo diagnóstico. O corte em 3000 caracteres evita estourar o limite de entrada."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://COLE-AQUI-O-HOST.rapidapi.com/landing/optimize",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $('2. Valida entrada').item.json.url, copy: JSON.stringify($json).slice(0, 3000) }) }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "api-landing",
+      "name": "6. Otimização de landing",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1400, 400],
+      "notes": "API 5 de 6 — Landing Page Optimizer."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://COLE-AQUI-O-HOST.rapidapi.com/conversion/analyze",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $('2. Valida entrada').item.json.url }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "api-conversao",
+      "name": "7. Análise de conversão",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1640, 400],
+      "notes": "API 3 de 6 — Conversion Optimization."
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": { "__rl": true, "value": "COLE-O-ID-DA-PLANILHA", "mode": "id" },
+        "sheetName": { "__rl": true, "value": "gid=0", "mode": "list", "cachedResultName": "Rodadas" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Data": "={{ $now.toFormat('dd/MM/yyyy') }}",
+            "URL": "={{ $('2. Valida entrada').item.json.url }}",
+            "Score SEO": "={{ $('4. Análise de SEO').item.json.score }}",
+            "Score Conversão": "={{ $('7. Análise de conversão').item.json.score }}",
+            "Copy gerada": "={{ JSON.stringify($('5. Geração de copy').item.json).slice(0, 4000) }}",
+            "Otimizações": "={{ JSON.stringify($('6. Otimização de landing').item.json).slice(0, 4000) }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "grava-planilha",
+      "name": "8. Grava no dashboard",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1880, 400],
+      "notes": "Grave sempre a rodada no growth-dashboard.xlsx (ou na versão Google Sheets). Sem registro não há comparação."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r1",
+              "name": "status",
+              "value": "processado",
+              "type": "string"
+            },
+            {
+              "id": "r2",
+              "name": "seo",
+              "value": "={{ $('4. Análise de SEO').item.json.score }}",
+              "type": "number"
+            },
+            {
+              "id": "r3",
+              "name": "conversao",
+              "value": "={{ $('7. Análise de conversão').item.json.score }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "resposta",
+      "name": "9. Responde ao formulário",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2120, 400]
+    }
+  ],
+  "connections": {
+    "1. Recebe URL": { "main": [[{ "node": "2. Valida entrada", "type": "main", "index": 0 }]] },
+    "2. Valida entrada": { "main": [[{ "node": "3. Extração de dados", "type": "main", "index": 0 }]] },
+    "3. Extração de dados": { "main": [[{ "node": "4. Análise de SEO", "type": "main", "index": 0 }]] },
+    "4. Análise de SEO": { "main": [[{ "node": "5. Geração de copy", "type": "main", "index": 0 }]] },
+    "5. Geração de copy": { "main": [[{ "node": "6. Otimização de landing", "type": "main", "index": 0 }]] },
+    "6. Otimização de landing": { "main": [[{ "node": "7. Análise de conversão", "type": "main", "index": 0 }]] },
+    "7. Análise de conversão": { "main": [[{ "node": "8. Grava no dashboard", "type": "main", "index": 0 }]] },
+    "8. Grava no dashboard": { "main": [[{ "node": "9. Responde ao formulário", "type": "main", "index": 0 }]] }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "descricao": "Funil de 6 APIs do Growth Design Pro. ANTES DE IMPORTAR: (1) substitua COLE-AQUI-O-HOST pelos hosts reais de cada API; (2) confirme o caminho e o nome dos parâmetros de cada endpoint; (3) crie a credencial 'HTTP Header Auth' com nome X-RapidAPI-Key e valor da sua chave; (4) troque o ID da planilha. As APIs do stack têm hosts e caminhos distintos — este arquivo usa um host genérico para efeito de modelo."
+  },
+  "tags": [{ "name": "growth-design-pro" }]
+}

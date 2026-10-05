@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Growth Design Pro">
+  <rect width="64" height="64" fill="#0F0F0D"/>
+  <rect x="7.5" y="7.5" width="49" height="49" fill="none" stroke="#C9A44C" stroke-width="1"/>
+  <text x="32" y="43" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="30" font-weight="400"
+        fill="#F2EEE4" letter-spacing="-1">G</text>
+  <rect x="22" y="49" width="20" height="1.5" fill="#C9A44C"/>
+</svg>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  ============================================================================
+  TEMPLATE DE LANDING PAGE — Growth Design Pro
+  ----------------------------------------------------------------------------
+  Esta página já sai com as otimizações que o Módulo 3 ensina aplicadas.
+  Tudo o que você precisa substituir está marcado com  [[  ]]  no código,
+  e os campos de prova social estão marcados com  data-placeholder  para
+  nunca irem ao ar sem preenchimento real.
+
+  O QUE JÁ ESTÁ RESOLVIDO AQUI (não desfaça):
+   · uma única ação principal por página
+   · formulário curto, com rótulo visível e erro que diz o que fazer
+   · resposta às 3 objeções mais comuns antes do CTA final
+   · menção de política de privacidade onde há coleta de dado
+   · conteúdo legível sem JavaScript
+   · CTA repetido em quatro pontos do caminho de leitura
+
+  AUTOSSuficiente: nenhum arquivo externo, nenhuma fonte de CDN, nenhum script
+  de terceiro. Você pode abrir o arquivo direto no navegador.
+  ============================================================================
+-->
+<title>[[TÍTULO DA PÁGINA]]</title>
+<meta name="description" content="[[META DESCRIÇÃO — 140 a 158 caracteres, escrita para ser clicada]]">
+<style>
+  :root{
+    --paper:#F7F4ED; --paper-2:#EFEADF; --card:#FCFAF5;
+    --ink:#121110; --ink-2:#3A3733; --ink-3:#6B655C;
+    --accent:#8F6F2E; --accent-dark:#6E5423; --accent-soft:rgba(143,111,46,.12);
+    --rule:rgba(18,17,16,.13); --ok:#3D6B4A; --err:#8C3A2E;
+    --font-display:Georgia,'Times New Roman',serif;
+    --font-text:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --s:1rem; --r:6px;
+    --shadow:0 2px 4px rgba(18,17,16,.04),0 18px 40px -20px rgba(18,17,16,.22);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--font-text);font-size:1.0625rem;line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:70rem;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,3rem)}
+  .narrow{max-width:44rem}
+  h1,h2,h3{font-family:var(--font-display);font-weight:400;line-height:1.12;letter-spacing:-.02em;margin:0}
+  h1{font-size:clamp(2.25rem,1.5rem+3.4vw,4rem)}
+  h2{font-size:clamp(1.75rem,1.3rem+2vw,2.75rem)}
+  h3{font-size:1.25rem;font-weight:600;letter-spacing:-.01em}
+  p{margin:0}
+  p+p{margin-top:1rem}
+  .lead{font-size:clamp(1.0625rem,1rem+.5vw,1.3125rem);color:var(--ink-2);line-height:1.5;max-width:46ch}
+  section{padding-block:clamp(3rem,2rem+6vw,6.5rem)}
+  .alt{background:var(--paper-2);border-block:1px solid var(--rule)}
+  .eyebrow{
+    font-size:.6875rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;display:inline-flex;align-items:center;gap:.75rem
+  }
+  .eyebrow::before{content:'';width:1.75rem;height:1px;background:var(--accent-soft)}
+  .grid{display:grid;gap:2rem}
+  @media(min-width:900px){
+    .split{grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start}
+    .three{grid-template-columns:repeat(3,1fr)}
+  }
+
+  /* --- CTA: uma ação principal, sempre o mesmo destino --- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+    background:var(--accent);color:#fff;border:1px solid var(--accent);
+    padding:1.125rem 2.25rem;border-radius:var(--r);
+    font-size:.9375rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    text-decoration:none;cursor:pointer;transition:transform .25s,background .25s,box-shadow .25s;
+  }
+  .btn:hover{background:var(--accent-dark);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .btn--block{display:flex;width:100%}
+  .micro{font-size:.8125rem;color:var(--ink-3);margin-top:.75rem;text-align:center}
+
+  /* --- Cabeçalho --- */
+  header{
+    background:var(--ink);color:var(--paper);padding:.75rem 1rem;text-align:center;
+    font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;
+  }
+  nav{border-bottom:1px solid var(--rule);background:var(--paper)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:4.25rem;gap:1rem}
+  .brand{font-family:var(--font-display);font-size:1.0625rem;text-decoration:none;color:var(--ink)}
+  .brand span{color:var(--accent)}
+
+  /* --- Formulário: rótulo visível, erro que orienta --- */
+  form{background:var(--card);border:1px solid var(--rule);padding:clamp(1.5rem,3vw,2.25rem);border-radius:var(--r);box-shadow:var(--shadow)}
+  .field{margin-bottom:1.125rem}
+  label{display:block;font-size:.8125rem;font-weight:600;margin-bottom:.375rem}
+  .hint{font-size:.75rem;color:var(--ink-3);margin-bottom:.375rem}
+  input[type=text],input[type=email],input[type=tel],textarea,select{
+    width:100%;padding:.75rem .875rem;border:1px solid var(--rule);border-radius:var(--r);
+    background:#fff;font:inherit;font-size:.9375rem;color:var(--ink);
+  }
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .error{display:none;font-size:.8125rem;color:var(--err);margin-top:.375rem}
+  .field.invalid input,.field.invalid textarea{border-color:var(--err)}
+  .field.invalid .error{display:block}
+  .consent{display:flex;gap:.625rem;align-items:flex-start;font-size:.8125rem;color:var(--ink-2);margin:1rem 0}
+  .consent input{margin-top:.2rem}
+  .ok-msg{display:none;background:rgba(61,107,74,.1);border:1px solid var(--ok);color:var(--ok);
+          padding:1rem;border-radius:var(--r);font-size:.9375rem;margin-bottom:1rem}
+  .ok-msg.show{display:block}
+
+  /* --- Cartões e blocos --- */
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);padding:1.75rem}
+  .check{display:flex;gap:.875rem;align-items:flex-start;font-size:.9375rem;line-height:1.5}
+  .check+.check{margin-top:1rem}
+  .check svg{flex:none;width:1.25rem;height:1.25rem;color:var(--accent);margin-top:.15rem}
+  .steps{counter-reset:s}
+  .step{counter-increment:s;padding-left:3.25rem;position:relative;padding-bottom:1.75rem;border-left:1px solid var(--rule);margin-left:.6rem}
+  .step:last-child{border-left-color:transparent;padding-bottom:0}
+  .step::before{
+    content:counter(s);position:absolute;left:-.6rem;top:0;width:1.75rem;height:1.75rem;
+    display:grid;place-items:center;background:var(--paper);border:1px solid var(--accent);
+    color:var(--accent);font-size:.8125rem;font-weight:600;border-radius:50%
+  }
+  .step h3{margin-bottom:.375rem}
+  .quote{border-left:2px solid var(--accent);padding-left:1.25rem;font-family:var(--font-display);font-size:1.125rem;line-height:1.45;color:var(--ink-2)}
+  .quote cite{display:block;margin-top:.75rem;font-family:var(--font-text);font-size:.8125rem;font-style:normal;color:var(--ink-3)}
+  details{border-bottom:1px solid var(--rule);padding:1rem 0}
+  summary{font-family:var(--font-display);font-size:1.0625rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:1rem}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:'+';color:var(--accent);font-family:var(--font-text)}
+  details[open] summary::after{content:'−'}
+  details p{margin-top:.75rem;font-size:.9375rem;color:var(--ink-2)}
+  footer{background:var(--ink);color:#A9A296;padding:3rem 0;font-size:.8125rem}
+  footer a{color:#A9A296}
+  .legal{margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(247,244,237,.14);font-size:.75rem;line-height:1.7;color:#6E6960}
+  .price{display:flex;align-items:baseline;gap:1rem;justify-content:center;margin:1.5rem 0}
+  .price s{color:var(--ink-3);font-size:1.25rem}
+  .price b{font-family:var(--font-display);font-size:clamp(2.5rem,2rem+2vw,3.5rem);font-weight:400;letter-spacing:-.03em}
+  .badge{display:inline-block;border:1px solid var(--accent);color:var(--accent);border-radius:999px;
+         padding:.375rem .875rem;font-size:.6875rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+</style>
+</head>
+<body>
+
+<header>[[OFERTA COM PRAZO — ex.: CONDIÇÃO DE LANÇAMENTO ENCERRA EM 7 DIAS]]</header>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#">[[MARCA]] <span>·</span> [[DESCRITIVO CURTO]]</a>
+    <a class="btn" href="#formulario" style="padding:.75rem 1.25rem;font-size:.8125rem">[[TEXTO DO CTA]]</a>
+  </div>
+</nav>
+
+<!-- =====================================================================
+     1. PROMESSA — o visitante precisa entender em 5 segundos:
+        o que é, para quem é, o que ganha, o que fazer.
+     ================================================================== -->
+<section>
+  <div class="wrap grid split">
+    <div>
+      <span class="eyebrow">[[PARA QUEM É — ex.: PARA CLÍNICAS ODONTOLÓGICAS EM SÃO PAULO]]</span>
+      <h1 style="margin-top:1.5rem">[[HEADLINE: RESULTADO CONCRETO, NÃO CARACTERÍSTICA]]</h1>
+      <p class="lead" style="margin-top:1.5rem">
+        [[SUBHEADLINE: em duas frases, o que a pessoa ganha e como. Traga um número verificável:
+        prazo, quantidade, condição. Evite adjetivo.]]
+      </p>
+
+      <ul style="margin:2rem 0 0;padding:0;list-style:none">
+        <li class="check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10l5 5L18 4"/></svg><span>[[BENEFÍCIO 1 — específico e verificável]]</span></li>
+        <li class="check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10l5 5L18 4"/></svg><span>[[BENEFÍCIO 2]]</span></li>
+        <li class="check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10l5 5L18 4"/></svg><span>[[BENEFÍCIO 3]]</span></li>
+        <li class="check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10l5 5L18 4"/></svg><span>[[BENEFÍCIO 4 — remova o que não for verdade]]</span></li>
+      </ul>
+
+      <p style="margin-top:2rem">
+        <a class="btn" href="#formulario">[[TEXTO DO CTA]] →</a>
+      </p>
+      <p class="micro" style="text-align:left">[[MICROTEXTO QUE REDUZ O MEDO — ex.: "Resposta em até 1 dia útil. Sem compromisso."]]</p>
+    </div>
+
+    <!-- ==============================================================
+         FORMULÁRIO ACIMA DA DOBRA
+         Só os campos que você realmente usa. Cada campo a mais custa
+         conversão — corte tudo o que não for usado no atendimento.
+         =========================================================== -->
+    <div id="formulario">
+      <form id="lead" novalidate>
+        <h2 style="font-size:1.5rem;margin-bottom:.5rem">[[TÍTULO DO FORMULÁRIO: O QUE A PESSOA RECEBE]]</h2>
+        <p style="font-size:.875rem;color:var(--ink-3);margin-bottom:1.5rem">[[TEXTO DE APOIO: em quanto tempo e o que acontece depois]]</p>
+
+        <div class="ok-msg" id="ok" role="status" aria-live="polite">
+          [[MENSAGEM DE SUCESSO — diga o próximo passo: "Recebemos. Você receberá o diagnóstico em até 1 dia útil no e-mail informado."]]
+        </div>
+
+        <div class="field" data-field>
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" autocomplete="name" required>
+          <p class="error" data-error>Informe seu nome para sabermos com quem falar.</p>
+        </div>
+
+        <div class="field" data-field>
+          <label for="email">E-mail</label>
+          <p class="hint" id="email-hint">É por aqui que enviamos o resultado.</p>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" aria-describedby="email-hint" required>
+          <p class="error" data-error>Confira o e-mail: parece estar faltando algo (exemplo: nome@empresa.com.br).</p>
+        </div>
+
+        <div class="field" data-field>
+          <label for="whatsapp">WhatsApp</label>
+          <input type="tel" id="whatsapp" name="whatsapp" autocomplete="tel" inputmode="tel" required>
+          <p class="error" data-error>Digite o número com DDD, só números. Exemplo: 62999998888.</p>
+        </div>
+
+        <div class="field" data-field>
+          <label for="site">Endereço do site ou perfil</label>
+          <p class="hint" id="site-hint">É o que vamos analisar. Se não tiver site, informe o Instagram.</p>
+          <input type="text" id="site" name="site" aria-describedby="site-hint" required>
+          <p class="error" data-error>Informe o endereço do site (começando com https://) ou o @ do perfil.</p>
+        </div>
+
+        <!-- Consentimento: obrigatório quando há coleta de dado pessoal -->
+        <label class="consent">
+          <input type="checkbox" id="consentimento" name="consentimento" required>
+          <span>Autorizo o contato e o tratamento dos meus dados para responder esta solicitação, conforme a
+          <a href="[[LINK DA POLÍTICA DE PRIVACIDADE]]" target="_blank" rel="noopener">política de privacidade</a>.</span>
+        </label>
+        <p class="error" id="erro-consentimento" style="margin:-.5rem 0 1rem">Para continuar, marque a autorização de contato.</p>
+
+        <button class="btn btn--block" type="submit" id="enviar">[[TEXTO DO BOTÃO — ex.: QUERO MEU DIAGNÓSTICO]]</button>
+        <p class="micro">[[MICROTEXTO — ex.: Sem spam. Você pode pedir para sair a qualquer momento.]]</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     2. PROBLEMA — nomeie a dor com as palavras do cliente, não as suas
+     ================================================================== -->
+<section class="alt">
+  <div class="wrap grid split">
+    <div>
+      <span class="eyebrow">O problema</span>
+      <h2 style="margin-top:1.25rem">[[NOMEIE A SITUAÇÃO INCÔMODA EM 3 A 6 PALAVRAS]]</h2>
+    </div>
+    <div>
+      <p>[[Descreva a situação atual do cliente em 3 ou 4 frases. Use as palavras que ele usaria —
+        se ele diz "não aparece no Google", não escreva "baixa visibilidade orgânica".]]</p>
+      <p>[[A consequência concreta: o que ele perde por mês enquanto isso continua. Número ajuda.]]</p>
+      <p>[[A virada: por que o caminho que ele tentou até agora não resolveu — sem culpar o cliente.]]</p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     3. COMO FUNCIONA — mecanismo em passos: reduz a percepção de risco
+     ================================================================== -->
+<section>
+  <div class="wrap">
+    <span class="eyebrow">Como funciona</span>
+    <h2 style="margin:1.25rem 0 3rem;max-width:24ch">[[QUANTOS PASSOS E QUAL É O RESULTADO DE CADA UM]]</h2>
+    <div class="grid three steps">
+      <div class="step">
+        <h3>[[PASSO 1 — nome curto]]</h3>
+        <p style="font-size:.9375rem;color:var(--ink-2)">[[O que acontece, quem faz e quanto tempo leva.]]</p>
+      </div>
+      <div class="step">
+        <h3>[[PASSO 2]]</h3>
+        <p style="font-size:.9375rem;color:var(--ink-2)">[[...]]</p>
+      </div>
+      <div class="step">
+        <h3>[[PASSO 3 — entregável final]]</h3>
+        <p style="font-size:.9375rem;color:var(--ink-2)">[[...]]</p>
+      </div>
+    </div>
+    <p style="margin-top:2.5rem"><a class="btn" href="#formulario">[[TEXTO DO CTA]] →</a></p>
+  </div>
+</section>
+
+<!-- =====================================================================
+     4. PROVA SOCIAL — SÓ com autorização por escrito.
+        Sem depoimento real, DELETE este bloco inteiro. Não invente.
+     ================================================================== -->
+<section class="alt">
+  <div class="wrap grid split">
+    <div>
+      <span class="eyebrow">Resultados</span>
+      <h2 style="margin-top:1.25rem">[[NOMEIE QUEM JÁ PASSOU POR ISSO]]</h2>
+    </div>
+    <div>
+      <blockquote class="quote" data-placeholder="depoimento-1">
+        [[DEPOIMENTO REAL — com número, prazo e contexto. Ex.: "Em 6 semanas o número de orçamentos
+        pedidos pelo site subiu de 4 para 11 por mês."]]
+        <cite>[[NOME COMPLETO]], [[CARGO]], [[EMPRESA]] — autorização por escrito em [[DATA]]</cite>
+      </blockquote>
+      <blockquote class="quote" data-placeholder="depoimento-2" style="margin-top:2rem">
+        [[SEGUNDO DEPOIMENTO. Antes de publicar, peça print do resultado ao cliente: número sem
+        comprovação não protege ninguém.]]
+        <cite>[[NOME]], [[CARGO]], [[EMPRESA]]</cite>
+      </blockquote>
+      <p style="margin-top:2rem;font-size:.875rem;color:var(--ink-3)">
+        Sem depoimento autorizado até aqui? Remova este bloco. Prova social inventada destrói a confiança
+        no primeiro contato — e gera passivo.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     5. ENTREGA + PREÇO — o que está incluído, dito sem rodeio
+     ================================================================== -->
+<section>
+  <div class="wrap grid split">
+    <div>
+      <span class="eyebrow">O que você recebe</span>
+      <h2 style="margin:1.25rem 0 2rem">[[TÍTULO DIRETO SOBRE A ENTREGA]]</h2>
+      <ul style="margin:0;padding:0;list-style:none">
+        <li class="check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10l5 5L18 4"/></svg><span>[[ITEM INCLUÍDO 1 — com formato e prazo]]</span></li>
+        <li class="check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10l5 5L18 4"/></svg><span>[[ITEM INCLUÍDO 2]]</span></li>
+        <li class="check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10l5 5L18 4"/></svg><span>[[ITEM INCLUÍDO 3]]</span></li>
+        <li class="check"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10l5 5L18 4"/></svg><span>[[ITEM INCLUÍDO 4]]</span></li>
+      </ul>
+      <p style="margin-top:2rem;padding:1rem 1.25rem;background:var(--accent-soft);border-radius:var(--r);font-size:.9375rem">
+        <strong>O que não está incluído:</strong> [[LISTE 2 OU 3 ITENS FORA DO ESCOPO. Escopo negativo
+        explícito evita 90% dos conflitos com o cliente.]]
+      </p>
+    </div>
+    <div class="card">
+      <span class="badge">[[CONDIÇÃO — ex.: CONDIÇÃO DE LANÇAMENTO]]</span>
+      <div class="price">
+        <s>[[PREÇO CHEIO]]</s>
+        <b>[[PREÇO ATUAL]]</b>
+      </div>
+      <p class="micro" style="margin-bottom:1.5rem">[[FORMA DE PAGAMENTO E PRAZO DA CONDIÇÃO — prazo real,
+        não contador que reinicia]]</p>
+      <a class="btn btn--block" href="#formulario">[[TEXTO DO CTA]] →</a>
+      <p class="micro">[[GARANTIA — ex.: 7 dias de garantia incondicional]]</p>
+      <hr style="border:0;border-top:1px solid var(--rule);margin:1.5rem 0">
+      <p style="font-size:.8125rem;color:var(--ink-3);margin:0">
+        [[COMO COMEÇAR — ex.: preencha o formulário e recebemos seu pedido em até 1 dia útil.]]
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     6. OBJEÇÕES — as cinco perguntas que travam a decisão
+     ================================================================== -->
+<section class="alt">
+  <div class="wrap narrow">
+    <span class="eyebrow">Perguntas frequentes</span>
+    <h2 style="margin:1.25rem 0 2.5rem">[[ANTES DE DECIDIR, VOCÊ VAI QUERER SABER]]</h2>
+
+    <details open><summary>[[OBJEÇÃO 1 — preço]]</summary><p>[[Resposta honesta. Se for caro para determinado perfil, diga para quem não é.]]</p></details>
+    <details><summary>[[OBJEÇÃO 2 — tempo / prazo]]</summary><p>[[...]]</p></details>
+    <details><summary>[[OBJEÇÃO 3 — "serve para o meu caso?"]]</summary><p>[[...]]</p></details>
+    <details><summary>[[OBJEÇÃO 4 — comparação com alternativa mais barata]]</summary><p>[[...]]</p></details>
+    <details><summary>[[OBJEÇÃO 5 — o que acontece depois que eu preencher]]</summary><p>[[...]]</p></details>
+  </div>
+</section>
+
+<!-- =====================================================================
+     7. AÇÃO FINAL — última chance de converter quem leu a página toda
+     ================================================================== -->
+<section>
+  <div class="wrap narrow" style="text-align:center">
+    <h2 style="max-width:22ch;margin-inline:auto">[[RECAPITULE A PROMESSA EM UMA FRASE]]</h2>
+    <p class="lead" style="margin:1.5rem auto 2rem;text-align:center">
+      [[REPITA A CONDIÇÃO: preço, prazo, garantia. Quem chegou até aqui precisa do resumo.]]
+    </p>
+    <a class="btn" href="#formulario">[[TEXTO DO CTA]] →</a>
+    <p class="micro">[[MICROTEXTO FINAL]]</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <strong style="color:#F2EEE4">[[MARCA]]</strong>
+    <p style="margin-top:.75rem;max-width:44ch">[[UMA FRASE SOBRE O NEGÓCIO. Sem slogan vazio.]]</p>
+    <p style="margin-top:1.25rem">
+      [[E-MAIL]] · [[TELEFONE]] · [[ENDEREÇO]] · [[CNPJ]]
+    </p>
+    <p style="margin-top:.75rem">
+      <a href="[[POLÍTICA DE PRIVACIDADE]]">Política de privacidade</a> ·
+      <a href="[[TERMOS]]">Termos de uso</a>
+    </p>
+    <div class="legal">
+      <p><strong>Resultados.</strong> Os resultados variam conforme o mercado, a oferta, a execução e o
+      comportamento de plataformas de terceiros. Nada nesta página é promessa de resultado.</p>
+      <p style="margin-top:.5rem"><strong>Depoimentos.</strong> Quando apresentados, são de clientes reais,
+      com autorização por escrito e resultado verificado.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------------------------------------------------------------------------
+   Validação do formulário.
+   Princípio: o erro diz o que fazer para corrigir, nunca culpa quem digitou.
+   O formulário NÃO é enviado se algum campo estiver inválido — e o foco vai
+   para o primeiro campo com problema, para quem usa leitor de tela não se perder.
+   ------------------------------------------------------------------------- */
+(function () {
+  var form = document.getElementById('lead');
+  if (!form) return;
+
+  var regras = {
+    nome: function (v) { return v.trim().length >= 2; },
+    email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); },
+    whatsapp: function (v) { return v.replace(/\D/g, '').length >= 10; },
+    site: function (v) { return v.trim().length >= 4; }
+  };
+
+  function validarCampo(campo) {
+    var regra = regras[campo.name];
+    if (!regra) return true;
+    var ok = regra(campo.value);
+    var bloco = campo.closest('[data-field]');
+    if (bloco) bloco.classList.toggle('invalid', !ok);
+    campo.setAttribute('aria-invalid', ok ? 'false' : 'true');
+    return ok;
+  }
+
+  form.addEventListener('submit', function (evento) {
+    evento.preventDefault();
+    var campos = form.querySelectorAll('input[name]');
+    var primeiroErro = null;
+
+    campos.forEach(function (campo) {
+      if (campo.type === 'checkbox') return;
+      if (!validarCampo(campo) && !primeiroErro) primeiroErro = campo;
+    });
+
+    var consent = document.getElementById('consentimento');
+    var erroConsent = document.getElementById('erro-consentimento');
+    if (!consent.checked) {
+      erroConsent.style.display = 'block';
+      if (!primeiroErro) primeiroErro = consent;
+    } else {
+      erroConsent.style.display = 'none';
+    }
+
+    if (primeiroErro) {
+      primeiroErro.focus();
+      return;
+    }
+
+    /* -------------------------------------------------------------------
+       ENVIO REAL — substitua pelo seu endpoint.
+       Opções: webhook do n8n/Make/Zapier, ou o seu backend.
+       NUNCA coloque a chave do RapidAPI aqui no front-end: ela ficaria
+       visível para qualquer visitante. O fluxo é:
+         navegador → seu endpoint → API do RapidAPI
+       ------------------------------------------------------------------- */
+    var destino = '[[URL DO SEU WEBHOOK OU ENDPOINT]]';
+
+    var dados = new FormData(form);
+
+    /* Demonstração: mostra a mensagem de sucesso sem enviar nada.
+       Ao configurar o destino, descomente o fetch abaixo e remova o alerta. */
+    document.getElementById('ok').classList.add('show');
+    form.querySelectorAll('input,button').forEach(function (el) { el.disabled = true; });
+    document.getElementById('ok').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    /*
+    fetch(destino, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(dados))
+    })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function () {
+        document.getElementById('ok').classList.add('show');
+        form.querySelectorAll('input,button').forEach(function (el) { el.disabled = true; });
+        document.getElementById('ok').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      })
+      .catch(function () {
+        alert('Não conseguimos enviar agora. Tente novamente ou escreva para [[E-MAIL]].');
+      });
+    */
+  });
+
+  // Limpa o erro assim que a pessoa corrige — sem esperar novo submit.
+  form.querySelectorAll('input[name]').forEach(function (campo) {
+    campo.addEventListener('blur', function () { validarCampo(campo); });
+    campo.addEventListener('input', function () {
+      var bloco = campo.closest('[data-field]');
+      if (bloco && bloco.classList.contains('invalid')) validarCampo(campo);
+    });
+  });
+})();
+</script>
+</body>
+</html>

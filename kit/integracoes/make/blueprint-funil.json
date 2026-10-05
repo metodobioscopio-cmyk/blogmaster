@@ -1,0 +1,212 @@
+{
+  "_leia_isto_primeiro": [
+    "O formato de blueprint do Make muda entre versões e alguns módulos não são importáveis fora da conta de origem.",
+    "Por isso este arquivo vem em DOIS blocos: (A) a especificação legível do cenário, que você segue no construtor visual, e (B) um esqueleto de blueprint para tentar o import automático.",
+    "Se o import falhar, siga a especificação do bloco A. Ela é a fonte confiável — o curso usa exatamente esta sequência.",
+    "Antes de montar: substitua os campos marcados com COLE-AQUI pelos valores reais de cada API no painel do RapidAPI."
+  ],
+
+  "A_especificacao_do_cenario": {
+    "nome": "Growth Design Pro — Funil de Crescimento",
+    "agendamento": "Acionado por webhook (não use agendamento por tempo: o funil roda sob demanda, por URL)",
+    "variaveis_de_cenario": [
+      "RAPIDAPI_KEY — sua chave; cadastre como variável de cenário ou conexão, NUNCA como texto no módulo",
+      "SHEET_ID — ID da planilha do dashboard"
+    ],
+    "modulos": [
+      {
+        "ordem": 1,
+        "modulo": "Webhooks → Custom webhook",
+        "nome": "Recebe URL do formulário",
+        "configuracao": "Crie o hook e cole a URL no formulário do site. Corpo esperado: { \"url\": \"https://...\", \"origem\": \"codigo-do-cliente\" }",
+        "observacao": "Exija o campo 'origem' com um valor secreto por cliente e valide no módulo 2."
+      },
+      {
+        "ordem": 2,
+        "modulo": "Router ou Filter",
+        "nome": "Valida entrada",
+        "configuracao": "Continue apenas se url contém 'https://' E origem é igual ao código esperado.",
+        "observacao": "Sem isso, qualquer pessoa que descubra a URL do hook consome a sua cota paga."
+      },
+      {
+        "ordem": 3,
+        "modulo": "HTTP → Make a request",
+        "nome": "API 1 — Extração de dados",
+        "url": "https://COLE-AQUI-O-HOST-1.rapidapi.com/COLE-O-CAMINHO",
+        "metodo": "POST",
+        "tipo_de_corpo": "Raw → JSON",
+        "corpo": "{ \"url\": \"{{1.url}}\" }",
+        "cabecalhos": {
+          "X-RapidAPI-Key": "{{RAPIDAPI_KEY}}",
+          "X-RapidAPI-Host": "COLE-AQUI-O-HOST-1.rapidapi.com"
+        },
+        "tratamento_de_erro": "Retry 3x com intervalo crescente; em caso de falha → Rollback (nunca 'Resume')"
+      },
+      {
+        "ordem": 4,
+        "modulo": "HTTP → Make a request",
+        "nome": "API 2 — Análise de SEO",
+        "url": "https://COLE-AQUI-O-HOST-2.rapidapi.com/COLE-O-CAMINHO",
+        "metodo": "POST",
+        "tipo_de_corpo": "Raw → JSON",
+        "corpo": "{ \"url\": \"{{1.url}}\" }",
+        "mapeamento_de_saida": "Mapeie o campo do score para reutilizar nos módulos 8 e 9"
+      },
+      {
+        "ordem": 5,
+        "modulo": "HTTP → Make a request",
+        "nome": "API 4 — Geração de copy",
+        "url": "https://COLE-AQUI-O-HOST-4.rapidapi.com/COLE-O-CAMINHO",
+        "metodo": "POST",
+        "tipo_de_corpo": "Raw → JSON",
+        "corpo": "{ \"url\": \"{{1.url}}\", \"seo\": \"{{substring(4.data; 0; 3000)}}\" }",
+        "observacao": "OBRIGATÓRIO truncar a resposta anterior em 3000 caracteres. Enviar o JSON inteiro estoura o limite da API."
+      },
+      {
+        "ordem": 6,
+        "modulo": "HTTP → Make a request",
+        "nome": "API 5 — Otimização de landing page",
+        "url": "https://COLE-AQUI-O-HOST-5.rapidapi.com/COLE-O-CAMINHO",
+        "metodo": "POST",
+        "corpo": "{ \"url\": \"{{1.url}}\", \"copy\": \"{{substring(5.data; 0; 3000)}}\" }"
+      },
+      {
+        "ordem": 7,
+        "modulo": "HTTP → Make a request",
+        "nome": "API 3 — Análise de conversão",
+        "url": "https://COLE-AQUI-O-HOST-3.rapidapi.com/COLE-O-CAMINHO",
+        "metodo": "POST",
+        "corpo": "{ \"url\": \"{{1.url}}\" }"
+      },
+      {
+        "ordem": 8,
+        "modulo": "Google Sheets → Add a row",
+        "nome": "Grava a rodada no dashboard",
+        "planilha": "COLE-O-SHEET_ID",
+        "aba": "Rodadas",
+        "colunas": {
+          "Data": "{{formatDate(now; \"DD/MM/YYYY\")}}",
+          "URL": "{{1.url}}",
+          "Score SEO": "{{4.score}}",
+          "Score conversão": "{{7.score}}",
+          "Copy gerada": "{{substring(5.data; 0; 4000)}}",
+          "Otimizações": "{{substring(6.data; 0; 4000)}}"
+        }
+      },
+      {
+        "ordem": 9,
+        "modulo": "E-mail (Gmail / SMTP) → Send an email",
+        "nome": "Responde ao solicitante",
+        "assunto": "Diagnóstico de crescimento — {{1.url}}",
+        "corpo": "Seu diagnóstico está pronto.\n\nScore de SEO: {{4.score}}/100\nScore de conversão: {{7.score}}/100\n\nPróximos passos: [LINK DA REUNIÃO]",
+        "observacao": "Não prometa resultado. O diagnóstico é um retrato, não uma previsão."
+      }
+    ],
+    "tratamento_de_erro_geral": {
+      "politica": "Em qualquer falha de API, o cenário PARA. Nunca use 'Resume' nem 'Ignore' — um fluxo que segue com resposta vazia produz relatório falso.",
+      "retry": "3 tentativas, intervalo crescente (1s, 2s, 4s)",
+      "timeout": "30s para análise, 60s para geração de texto",
+      "notificacao": "Em caso de falha, envie e-mail com a etapa, o status HTTP e o corpo do erro"
+    },
+    "cache": {
+      "objetivo": "Não pagar duas vezes pela mesma URL no mesmo dia",
+      "implementacao": "Antes do módulo 3, um 'Search rows' no Google Sheets procurando a URL com a data de hoje. Se encontrar, use o valor gravado e encerre o cenário."
+    }
+  },
+
+  "B_esqueleto_de_blueprint": {
+    "name": "Growth Design Pro — Funil de Crescimento",
+    "flow": [
+      {
+        "id": 1,
+        "module": "gateway:CustomWebHook",
+        "version": 1,
+        "metadata": { "designer": { "x": 0, "y": 0 }, "restore": {}, "parameters": [] },
+        "parameters": { "hook": "COLE-O-ID-DO-HOOK", "maxResults": 1 }
+      },
+      {
+        "id": 2,
+        "module": "builtin:BasicRouter",
+        "version": 1,
+        "metadata": { "designer": { "x": 300, "y": 0 } },
+        "parameters": {},
+        "filter": {
+          "name": "Valida entrada",
+          "conditions": [
+            [{ "a": "{{1.url}}", "o": "text:containsi", "b": "https://" }]
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "module": "http:ActionSendData",
+        "version": 3,
+        "metadata": { "designer": { "x": 600, "y": 0 } },
+        "parameters": {
+          "handleErrors": false,
+          "useNewZLibDeCompress": true,
+          "url": "https://COLE-AQUI-O-HOST-1.rapidapi.com/COLE-O-CAMINHO",
+          "method": "post",
+          "headers": [
+            { "name": "X-RapidAPI-Key", "value": "{{RAPIDAPI_KEY}}" },
+            { "name": "X-RapidAPI-Host", "value": "COLE-AQUI-O-HOST-1.rapidapi.com" }
+          ],
+          "bodyType": "raw",
+          "contentType": "application/json",
+          "data": "{ \"url\": \"{{1.url}}\" }",
+          "timeout": "30"
+        }
+      },
+      {
+        "id": 4,
+        "module": "http:ActionSendData",
+        "version": 3,
+        "metadata": { "designer": { "x": 900, "y": 0 } },
+        "parameters": {
+          "url": "https://COLE-AQUI-O-HOST-2.rapidapi.com/COLE-O-CAMINHO",
+          "method": "post",
+          "headers": [
+            { "name": "X-RapidAPI-Key", "value": "{{RAPIDAPI_KEY}}" },
+            { "name": "X-RapidAPI-Host", "value": "COLE-AQUI-O-HOST-2.rapidapi.com" }
+          ],
+          "bodyType": "raw",
+          "contentType": "application/json",
+          "data": "{ \"url\": \"{{1.url}}\" }",
+          "timeout": "30"
+        }
+      },
+      {
+        "id": 8,
+        "module": "google-sheets:addRow",
+        "version": 2,
+        "metadata": { "designer": { "x": 2400, "y": 0 } },
+        "parameters": {
+          "spreadsheetId": "COLE-O-SHEET_ID",
+          "sheetName": "Rodadas",
+          "insertUnparsed": true,
+          "values": {
+            "Data": "{{formatDate(now; \"DD/MM/YYYY\")}}",
+            "URL": "{{1.url}}",
+            "Score SEO": "{{4.score}}",
+            "Score conversão": "{{7.score}}"
+          }
+        }
+      }
+    ],
+    "metadata": {
+      "version": 1,
+      "scenario": {
+        "roundtrips": 1,
+        "maxErrors": 0,
+        "autoCommit": true,
+        "autoCommitTriggerLast": true,
+        "sequential": true,
+        "confidential": false,
+        "dataloss": false,
+        "dlq": false
+      },
+      "designer": { "orphans": [] },
+      "zone": "America/Sao_Paulo"
+    }
+  }
+}
