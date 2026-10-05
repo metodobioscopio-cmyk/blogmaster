@@ -383,6 +383,8 @@ ESPERADOS = [
     "kit/codigo/js/growth-stack.js", "kit/codigo/python/growth_stack.py",
     "ebook/pt/index.html", "ebook/en/index.html", "ebook/pt/playbook.md", "ebook/en/playbook.md",
     "tools/gerar_ebook.py", "tools/gerar_paginas_kit.py", "tools/publicar_site.py", "tools/verificar.py",
+    "curso/README.md", "curso/roteiros-m1-m2.md", "curso/roteiros-m3-m6.md",
+    "vendas/plano-de-lancamento.md", "vendas/anuncios.md", "vendas/emails.md", "design-system/README.md",
     "vendas/pagina-de-vendas.md", "vendas/anuncios.md", "vendas/emails.md",
     "00-PROJETO.md",
 ]
