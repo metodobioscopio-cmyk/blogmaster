@@ -1,18 +1,19 @@
-/* BlogMaster CRM — Base de conhecimento MRV / Método Acelera
+/* BlogMaster CRM — Base de conhecimento MRV / Método Acelera 3.0
    Conteúdo fornecido pelo consultor Januário Leal. Preços/prazos
    não informados ficam como "a confirmar" — nunca inventar condição. */
 
 const CONSULTOR_PADRAO = "Januário Leal";
 const ASSINATURA_MRV = "MRV — a maior construtora da América Latina";
 
+/* Funil oficial Acelera 3.0 — 6 etapas (regiao e validada na Etapa 1,
+   pela resposta ao Menu 1-9). Leads antigos "regiao" migram p/ triagem. */
 const ESTAGIOS = [
-  { id: "conexao",    n: 1, nome: "Conexão",            curto: "Novo / 1º contato",  acao: "Apresentação e criação de rapport", gatilho: "Cliente responder confirmando o interesse" },
-  { id: "triagem",    n: 2, nome: "Triagem",            curto: "Em atendimento",     acao: "Coleta de dados financeiros básicos", gatilho: "Obter: renda bruta, valor de entrada e saldo de FGTS" },
-  { id: "regiao",     n: 3, nome: "Validação de Região",curto: "Em qualificação",    acao: "Confirmar preferência de bairro/projeto", gatilho: "Definição do empreendimento principal" },
-  { id: "docs",       n: 4, nome: "Pré-Análise / Docs", curto: "Análise de crédito", acao: "Solicitação de documentos p/ aprovação Caixa", gatilho: "Documentos recebidos e legíveis" },
-  { id: "simulacao",  n: 5, nome: "Apresentação",       curto: "Proposta",           acao: "Apresentar simulação pré-aprovada", gatilho: "Cliente aprovar valores de parcela/entrada" },
-  { id: "visita",     n: 6, nome: "Visita / Estande",   curto: "Agendado",           acao: "Apresentação presencial/virtual do projeto", gatilho: "Comparecer ao estande ou reunião online" },
-  { id: "fechamento", n: 7, nome: "Fechamento",         curto: "Fechamento",         acao: "Assinatura e reserva da unidade", gatilho: "Contrato assinado / sinal pago" },
+  { id: "conexao",    n: 1, nome: "Primeiro Contato",   curto: "Novo / 1º contato",  acao: "Enviar script padronizado com os 9 empreendimentos", gatilho: "Lead responder com o número/região" },
+  { id: "triagem",    n: 2, nome: "Triagem Financeira", curto: "Em atendimento",     acao: "Composição, renda, FGTS e entrada (dupla escolha)", gatilho: "Mapeamento completo dos dados financeiros" },
+  { id: "docs",       n: 3, nome: "Coleta de Documentos", curto: "Análise de crédito", acao: "Enviar lista numerada de documentos p/ Caixa", gatilho: "Recebimento dos documentos legíveis" },
+  { id: "simulacao",  n: 4, nome: "Simulação",          curto: "Proposta",           acao: "Apresentar aprovação destacando subsídio e parcela", gatilho: "Aprovação do cliente sobre os valores" },
+  { id: "visita",     n: 5, nome: "Agendamento / Estande", curto: "Agendado",        acao: "Oferecer 2 opções de horário (fim de semana)", gatilho: "Confirmar data e horário da visita" },
+  { id: "fechamento", n: 6, nome: "Fechamento",         curto: "Fechamento / Venda", acao: "Enviar link de reserva e assinatura digital", gatilho: "Contrato assinado e lead promovido a Venda" },
   { id: "perdido",    n: 0, nome: "Perdido / Opt-out",  curto: "Perdido",            acao: "Arquivar e respeitar opt-out", gatilho: "Pedido de parada ou sem retorno após cadência" },
 ];
 
@@ -52,12 +53,12 @@ const DOCS_CHECKLIST = [
   { id: "doc_fgts", label: "Extrato do FGTS (se for utilizar)" },
 ];
 
-/* ---------- Templates de mensagem (Método Acelera) ----------
+/* ---------- Templates de mensagem (Método Acelera 3.0) ----------
    Variáveis: {primeiroNome} {nome} {corretor} {empreendimento}
    {bairro} {cidade} {parcela} {subsidio} {unidade} {menu9}        */
 const TEMPLATES = [
   {
-    id: "menu9", etapa: 1, titulo: "⭐ Abertura + Menu 9 empreendimentos (padrão 1º contato)",
+    id: "menu9", etapa: 1, titulo: "⭐ Etapa 1 · Primeiro Contato Acelera 3.0 (Menu 1–9)",
     quando: "Lead sem empreendimento definido — ele responde só com o número",
     texto: `Olá, {primeiroNome}, tudo bem?
 
@@ -170,69 +171,76 @@ Vi que você está interessado no {empreendimento} ({bairro}) e quero te ajudar 
 Qual o melhor horário para eu te enviar a simulação dos valores de parcela?`
   },
   {
-    id: "triagem_renda", etapa: 2, titulo: "Etapa 2 · Validação de renda",
-    quando: "Diagnóstico — uma pergunta por vez",
-    texto: `Para montarmos uma proposta perfeita para você: a sua renda mensal é individual ou você pretende compor renda com cônjuge/familiar?`
+    id: "triagem_composicao", etapa: 2, titulo: "Etapa 2.1 · Composição de renda (Acelera 3.0)",
+    quando: "Logo após o lead escolher o número/região no Menu 1–9",
+    texto: `{primeiroNome}, excelente escolha! O {empreendimento} é um dos projetos mais procurados da MRV, a maior construtora da América Latina.
+
+Para eu estruturar uma proposta com o maior subsídio do Governo possível para você: você pretende comprar sozinho(a) ou vai compor renda com cônjuge, irmão ou familiar?`
   },
   {
-    id: "triagem_fgts", etapa: 2, titulo: "Etapa 2 · Validação de FGTS",
-    quando: "Diagnóstico — uma pergunta por vez",
-    texto: `Excelente! Você possui mais de 3 anos de trabalho com carteira assinada (soma de todos os empregos) para usarmos o saldo do FGTS na entrada?`
+    id: "triagem_renda_fgts", etapa: 2, titulo: "Etapa 2.2 · Renda bruta + FGTS (Acelera 3.0)",
+    quando: "Depois da composição — mapear renda e direito ao FGTS",
+    texto: `Perfeito! E qual é a renda bruta familiar aproximada hoje?
+
+(Aproveitando: você possui mais de 3 anos de trabalho somados sob o regime CLT para usarmos o seu FGTS na entrada?)`
   },
   {
-    id: "triagem_entrada", etapa: 2, titulo: "Etapa 2 · Validação de entrada",
-    quando: "Diagnóstico — uma pergunta por vez",
-    texto: `Perfeito, {primeiroNome}. Em relação à entrada, você possui algum valor em dinheiro ou veículo para abater logo no início?`
+    id: "triagem_entrada", etapa: 2, titulo: "Etapa 2.3 · Recurso de entrada (Acelera 3.0)",
+    quando: "Fechar a triagem financeira",
+    texto: `Ótimo! Em relação ao valor inicial de entrada, quanto você teria disponível hoje em recursos próprios (dinheiro, PIX ou veículo) para abater nas parcelas?`
   },
   {
-    id: "validacao_regiao", etapa: 3, titulo: "Etapa 3 · Validação de região",
-    quando: "Depois da triagem — travar o empreendimento principal",
+    id: "validacao_regiao", etapa: 1, titulo: "Complemento Etapa 1 · Desempate de região",
+    quando: "Lead em dúvida entre 2 opções do Menu 1–9 (no Acelera 3.0 a região é validada na Etapa 1)",
     texto: `Analisando seu perfil, temos ótimas opções no Papillon Park e Parque Amazônia. Qual localização fica melhor para a sua rotina?`
   },
   {
-    id: "docs", etapa: 4, titulo: "Etapa 4/3 · Solicitação de documentação",
+    id: "docs", etapa: 3, titulo: "Etapa 3 · Coleta de documentação (Acelera 3.0)",
     quando: "Mover lead da curiosidade para análise de crédito Caixa (sem custo)",
-    texto: `{primeiroNome}, com base nas informações que você me passou, o seu perfil tem excelente potencial de aprovação!
+    texto: `{primeiroNome}, analisando o seu perfil financeiro, você tem *altíssimo potencial de aprovação* com as condições facilitadas da MRV, a maior construtora da América Latina!
 
-Para que a gente garanta as condições especiais de lançamento e a menor taxa de juros do mercado, o próximo passo é aprovar sua ficha na Caixa Econômica sem custo algum.
+O próximo passo sem custo algum para você é rodar a sua análise oficial na Caixa para travar o seu subsídio e garantir a menor taxa de juros do ano.
 
-Preciso apenas das fotos legíveis de:
-• RG ou CNH (frente e verso)
-• Comprovante de endereço atualizado
-• Comprovante de renda (últimos 3 contracheques/extratos)
-• Extrato do FGTS (se for utilizar)
+Para dar entrada na aprovação, preciso que me envie por aqui as fotos (ou PDF) de:
+1. *RG ou CNH* (frente e verso)
+2. *Comprovante de Residência* (atualizado)
+3. *Comprovante de Renda* (últimos 3 contracheques ou extratos)
+4. *Extrato do FGTS* (caso vá utilizar)
 
-Pode me enviar por aqui mesmo para eu dar prioridade no seu processo?`
+Pode me enviar por aqui agora para eu dar prioridade no seu cadastro?`
   },
   {
-    id: "simulacao", etapa: 5, titulo: "Etapa 5/4 · Apresentação da simulação",
+    id: "simulacao", etapa: 4, titulo: "Etapa 4 · Simulação & ancoragem de valor (Acelera 3.0)",
     quando: "Ancorar valor: entrada facilitada + parcela + subsídio",
-    texto: `Tenho ótimas notícias, {primeiroNome}! 🎉
+    texto: `Tenho excelentes notícias, {primeiroNome}! 🎉
 
-Analisei os seus dados e a sua simulação foi pré-aprovada! Conseguimos ajustar as parcelas da entrada exatamente para caberem no seu planejamento financeiro.
+A sua análise foi *pré-aprovada com sucesso* pela MRV! Conseguimos estruturar o seu financiamento com as melhores taxas do mercado.
 
-Ficou assim:
-• Entrada facilitada
-• Parcela do financiamento: {parcela}
-• Subsídio do Governo: {subsidio}
+📊 *Resumo das Suas Condições:*
+• *Empreendimento:* {empreendimento}
+• *Subsídio Liberado pelo Governo:* {subsidio}
+• *Parcela do Financiamento:* {parcela} (menor que o valor de um aluguel!)
+• *Entrada Facilitada MRV:* parcelada em condições especiais.
 
-Para garantirmos essa unidade com essas condições, qual o melhor horário hoje para alinharmos os detalhes finais: à tarde ou à noite?`
+Ficou uma condição super confortável para o seu planejamento! Para alinharmos a escolha da sua unidade (andar/posição do sol), você prefere conversar hoje à tarde ou à noite?`
   },
   {
-    id: "visita", etapa: 6, titulo: "Etapa 6/5 · Agendamento de visita",
+    id: "visita", etapa: 5, titulo: "Etapa 5 · Agendamento VIP no estande (Acelera 3.0)",
     quando: "Levar ao estande — pergunta de dupla escolha",
-    texto: `{primeiroNome}, fotos e simulações ajudam muito, mas nada se compara a ver de perto onde será o seu novo lar.
+    texto: `{primeiroNome}, ver a simulação na tela é ótimo, mas ver de perto onde será a sua nova vida é inesquecível.
 
-Estou separando um horário exclusivo para te receber no nosso espaço de atendimento para tomar um café e conhecer a maquete completa do {empreendimento}.
+Estou separando um atendimento VIP no nosso estande da MRV (a maior construtora da América Latina) para tomarmos um café, conhecermos a maquete completa e escolhermos a sua unidade no mapa.
 
-Fica melhor para você no sábado às 10h ou no domingo às 14h?`
+Para eu reservar a sua vaga na minha agenda: fica melhor para você no *sábado às 10h* ou no *domingo às 14h*?`
   },
   {
-    id: "fechamento", etapa: 7, titulo: "Etapa 7/6 · Fechamento",
+    id: "fechamento", etapa: 6, titulo: "Etapa 6 · Fechamento & assinatura digital (Acelera 3.0)",
     quando: "Crédito aprovado + unidade escolhida + condição cabe no orçamento",
-    texto: `{primeiroNome}, aprovamos a sua análise, a unidade escolhida atende tudo o que você precisa e a condição de pagamento cabe no seu orçamento.
+    texto: `{primeiroNome}, sua aprovação está garantida, a parcela cabe perfeitamente no seu bolso e a unidade que escolhemos é a melhor do empreendimento.
 
-Vamos dar o passo oficial hoje para travar esse valor e garantir o seu imóvel antes que a tabela mude? Vou gerar o link de assinatura digital do contrato para você!`
+Para evitarmos perda de tabela ou virada de lote de unidades da MRV, vou gerar o seu link de reserva e assinatura digital do contrato agora.
+
+Posso enviar o link no seu WhatsApp ou prefere que eu te auxilie por chamada de vídeo?`
   },
   {
     id: "followup_d1", etapa: 0, titulo: "Follow-up D+1 · Sem resposta",
@@ -253,24 +261,25 @@ Vamos dar o passo oficial hoje para travar esse valor e garantir o seu imóvel a
 
 const MANUAL_ACELERA = {
   pilares: [
-    "Tradição: líder absoluta de mercado no segmento e parceira do programa Minha Casa Minha Vida.",
-    "Garantia de entrega: milhares de famílias atendidas com transparência e solididez financeira (+500 mil chaves entregues, +40 anos de mercado).",
+    "Identidade: {corretor} — Especialista/Consultor de Vendas MRV (em TODAS as abordagens e etapas).",
+    "Ancoragem de marca: a MRV é a maior construtora da América Latina — segurança jurídica, liquidez, sólida garantia de entrega e condições facilitadas pelo Minha Casa Minha Vida (+500 mil chaves, +40 anos).",
     "Acompanhamento contínuo: o cliente é guiado do primeiro 'olá' até a entrega das chaves.",
   ],
   regrasOuro: [
     "Autoridade imediata: apresente-se com nome e sobrenome ancorando a MRV (maior da América Latina).",
-    "Controle da conversa: termine TODA interação com uma pergunta direta (fechada ou de dupla escolha).",
+    "Regra de Ouro Acelera 3.0 — controle da conversa: TODA mensagem DEVE terminar com pergunta clara de dupla escolha ou resposta direta.",
     "Validação progressiva: nunca avance de etapa (simulação/visita) sem validar a etapa anterior (dados/documentos).",
     "Tempo de resposta: lead novo em até 5 minutos — velocidade no 1º contato é determinante p/ conversão.",
     "Áudios curtos (máx. 40s), tom confiante e entusiasmado, após o primeiro texto.",
     "Não envie simulação sem antes coletar/validar dados financeiros e documentação básica.",
   ],
   promocao: [
-    "Lead Novo → Em Atendimento: mensagem enviada e cliente respondeu.",
-    "Em Atendimento → Em Qualificação: dados de renda, entrada e localização coletados.",
-    "Em Qualificação → Em Análise de Crédito: documentação completa enviada.",
-    "Em Análise → Proposta/Agendado: crédito aprovado e visita agendada.",
-    "Proposta → Fechamento: contrato gerado e enviado para assinatura.",
+    "1 Primeiro Contato → 2 Triagem: lead respondeu com o número/região do Menu 1–9.",
+    "2 Triagem → 3 Documentos: composição, renda, FGTS e entrada mapeados.",
+    "3 Documentos → 4 Simulação: documentos legíveis recebidos (análise Caixa rodada).",
+    "4 Simulação → 5 Agendamento: cliente aprovou subsídio/parcela apresentados.",
+    "5 Agendamento → 6 Fechamento: data/horário de visita confirmados.",
+    "6 Fechamento → Venda: contrato assinado (link de reserva/assinatura digital).",
   ],
 };
 
@@ -308,8 +317,8 @@ function menu9Texto() {
   const numEmoji = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣"];
   const ap = EMPREENDIMENTOS.filter(e => e.num <= 3);
   const go = EMPREENDIMENTOS.filter(e => e.num >= 4 && e.num <= 9);
-  const linha = e => `${numEmoji[e.num-1]} ${e.nome} — ${e.bairro}`;
-  return `📍 APARECIDA DE GOIÂNIA\n${ap.map(linha).join("\n")}\n\n📍 GOIÂNIA\n${go.map(linha).join("\n")}`;
+  const linha = e => `${numEmoji[e.num-1]} *${e.nome}* — ${e.bairro}`;
+  return `📍 *APARECIDA DE GOIÂNIA*\n${ap.map(linha).join("\n")}\n\n📍 *GOIÂNIA*\n${go.map(linha).join("\n")}`;
 }
 
 function fichaEmpreendimento(emp) {

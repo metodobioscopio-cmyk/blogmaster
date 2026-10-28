@@ -18,7 +18,7 @@ const fmtTel = t => { const d = String(t || "").replace(/\D/g, "").replace(/^55/
 function carregar() {
   try {
     const raw = localStorage.getItem(LS);
-    if (raw) { const s = JSON.parse(raw); if (s && Array.isArray(s.leads)) return s; }
+    if (raw) { const s = JSON.parse(raw); if (s && Array.isArray(s.leads)) { s.leads.forEach(l => { if (l.estagio === "regiao") l.estagio = "triagem"; }); return s; } } // migracao Acelera 3.0
   } catch (e) { /* ignora */ }
   return {
     config: { consultor: "Januário Leal", bsp: "", numero: "", templateApi: "" },
@@ -48,13 +48,13 @@ function scoreHtml(l) { const { score } = scoreLead(l); return `<span class="sco
 
 /* ================= Navegação ================= */
 const TITULOS = {
-  dashboard: ["Visão Geral", "Funil Método Acelera · Goiânia & Aparecida de Goiânia"],
+  dashboard: ["Visão Geral", "Funil Método Acelera 3.0 (6 etapas) · Goiânia & Aparecida de Goiânia"],
   listas: ["Painel por Listas", "Cole TXT ou envie TXT/CSV/PDF/DOCX — o Agente classifica e prepara o 1º contato"],
   leads: ["Leads / CRM", "Clique num lead para abrir a ficha completa, documentos e linha do tempo"],
   espelho: ["Espelho WhatsApp do Lead", "Prévia fiel da conversa + scripts do Método Acelera + envio manual 1 clique"],
   fila: ["Fila Segura Anti-Ban", "Processo agêntico de 1º contato com human-in-the-loop (sem robô de disparo)"],
   empreendimentos: ["9 Empreendimentos MRV", "Fichas prontas p/ WhatsApp · Goiânia & Aparecida de Goiânia"],
-  manual: ["Manual de Conduta & Scripts — Método Acelera MRV", "Do 1º 'olá' ao fechamento: abertura, validação por etapas, docs, simulação, visita e assinatura"],
+  manual: ["Manual Oficial de Atendimento — Método Acelera 3.0 MRV", "Do 1º contato à Venda em 6 etapas: Menu 1–9, triagem financeira, documentos Caixa, simulação, estande VIP e assinatura digital"],
   pesquisa: ["Pesquisa · Sales & Marketing — Real Estate", "Playbook de aquisição e conversão para habitação econômica / MCMV em Goiânia e Aparecida"],
   config: ["Configurações", "Consultor, API Oficial do WhatsApp e backup dos seus dados"],
 };
@@ -80,7 +80,7 @@ function renderDashboard() {
   const ativos = state.leads.filter(l => l.estagio !== "perdido");
   const quentes = state.leads.filter(l => classificarLead(l) === "quente").length;
   const novos = state.leads.filter(l => l.estagio === "conexao").length;
-  const docsPend = state.leads.filter(l => ["triagem", "regiao", "docs"].includes(l.estagio)).length;
+  const docsPend = state.leads.filter(l => ["triagem", "docs"].includes(l.estagio)).length;
   const visitas = state.leads.filter(l => l.estagio === "visita").length;
   const fechados = state.leads.filter(l => l.estagio === "fechamento").length;
   const semTel = state.leads.filter(l => !l.telefone).length;
@@ -94,8 +94,8 @@ function renderDashboard() {
     ["⚠️", semTel, "Sem telefone (completar)", semTel ? "red" : ""],
   ].map(([i, v, t, c]) => `<div class="kpi ${c}"><b>${i} ${v}</b><span>${t} · ${ativos.length} ativos no funil</span></div>`).join("");
 
-  const max = Math.max(1, ...ESTAGIOS.slice(0, 7).map(e => state.leads.filter(l => l.estagio === e.id).length));
-  $("#funil").innerHTML = ESTAGIOS.slice(0, 7).map(e => {
+  const max = Math.max(1, ...ESTAGIOS.filter(e => e.n > 0).map(e => state.leads.filter(l => l.estagio === e.id).length));
+  $("#funil").innerHTML = ESTAGIOS.filter(e => e.n > 0).map(e => {
     const n = state.leads.filter(l => l.estagio === e.id).length;
     return `<div class="funil-row"><span>${e.n}. ${e.nome}</span><span class="funil-bar"><i style="width:${Math.round(n / max * 100)}%"></i></span><b>${n}</b></div>`;
   }).join("") + `<p class="muted">Gatilho de avanço: ver matriz completa no Manual Acelera. Perdidos/opt-out: ${state.leads.filter(l => l.estagio === "perdido").length}.</p>`;
@@ -108,7 +108,7 @@ function renderDashboard() {
       <button class="btn sm" onclick="abrirDrawer('${l.id}')">Ficha</button></div>`;
   }).join("") : `<p class="muted">Importe uma lista em <b>Painel por Listas</b> para o Agente começar a trabalhar.</p>`;
 
-  $("#kanban").innerHTML = ESTAGIOS.slice(0, 7).map(e => {
+  $("#kanban").innerHTML = ESTAGIOS.filter(e => e.n > 0).map(e => {
     const cards = state.leads.filter(l => l.estagio === e.id);
     return `<div class="kcol"><h3>${e.n}. ${esc(e.curto)} <span>${cards.length}</span></h3>${cards.map(l => `
       <div class="kcard" onclick="abrirDrawer('${l.id}')">
@@ -124,7 +124,7 @@ function renderDashboard() {
 
 function promoverLead(id, forcar = false) {
   const l = lead(id); if (!l) return;
-  const ordem = ["conexao", "triagem", "regiao", "docs", "simulacao", "visita", "fechamento"];
+  const ordem = ["conexao", "triagem", "docs", "simulacao", "visita", "fechamento"];
   const i = ordem.indexOf(l.estagio);
   if (i < 0 || i >= ordem.length - 1) { toast("Lead já está na etapa final (ou perdido)."); return; }
   const destino = ordem[i + 1];
@@ -581,11 +581,11 @@ function bindCopy() {
 
 /* ================= Manual & Pesquisa ================= */
 function renderManual() {
-  const matriz = ESTAGIOS.slice(0, 7).map(e => {
+  const matriz = ESTAGIOS.filter(e => e.n > 0).map(e => {
     const t = TEMPLATES.find(x => x.etapa === e.n);
     return `<tr><td><b>${e.n}. ${e.nome}</b></td><td>${esc(e.acao)}</td><td><small>${esc(t ? t.titulo : "—")}</small></td><td>${esc(e.gatilho)}</td></tr>`;
   }).join("");
-  const scriptsPorEtapa = [1, 2, 3, 4, 5, 6, 7, 0].map(n => {
+  const scriptsPorEtapa = [1, 2, 3, 4, 5, 6, 0].map(n => {
     const ts = TEMPLATES.filter(t => t.etapa === n);
     if (!ts.length) return "";
     const titulo = n === 0 ? "Follow-ups (cadência)" : `Etapa ${n} — ${ESTAGIOS.find(e => e.n === n).nome}`;
@@ -597,12 +597,12 @@ function renderManual() {
   $("#manual-html").innerHTML = `
     <div class="card"><h2>1 · Posicionamento de marca & pilar de segurança</h2>
       <p><b>O que é a MRV?</b> A MRV é a <b>maior construtora e incorporadora da América Latina</b>, com mais de 40 anos de mercado e centenas de milhares de chaves entregues (+500 mil). Toda abertura do ${esc(state.config.consultor)} ancora essa frase — é o pilar de segurança que reduz objeção e bloqueio/spam.</p>
-      <ul>${MANUAL_ACELERA.pilares.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>
+      <ul>${MANUAL_ACELERA.pilares.map(p => `<li>${esc(personalizeSeguro(p))}</li>`).join("")}</ul></div>
     <div class="card"><h2>2 · Regras de ouro (diretriz de abertura & validação)</h2>
       <ol>${MANUAL_ACELERA.regrasOuro.map(r => `<li>${esc(r)}</li>`).join("")}</ol>
       <div class="warn-box">Neste CRM as regras viraram sistema: o botão <b>Promover ▶</b> bloqueia/alerta quando falta validação (renda, entrada, empreendimento, documentos, parcela, unidade).</div></div>
     <div class="card"><h2>3 · Fluxo visual</h2>
-      <div class="pre-box">[1 Conexão] → [2 Triagem] → [3 Validação de Região] → [4 Docs/Caixa] → [5 Simulação] → [6 Visita] → [7 Fechamento]</div></div>
+      <div class="pre-box">[1 Primeiro Contato — Menu 1–9] → [2 Triagem Financeira] → [3 Documentos/Caixa] → [4 Simulação] → [5 Agendamento/Estande] → [6 Fechamento → Venda]</div></div>
     <div class="card"><h2>4 · Matriz do processo completo</h2>
       <div class="table-wrap"><table class="matriz"><thead><tr><th>Etapa</th><th>Ação principal</th><th>Script-base</th><th>Critério p/ avançar (gatilho)</th></tr></thead><tbody>${matriz}</tbody></table></div></div>
     <div class="card"><h2>5 · Checklist de promoção do lead</h2><ol>${MANUAL_ACELERA.promocao.map(p => `<li>${esc(p)}</li>`).join("")}</ol></div>

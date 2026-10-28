@@ -45,9 +45,9 @@ function dadosFaltantes(lead) {
   return f;
 }
 
-/* Portões de validação (Método Acelera): o que falta p/ promover. */
+/* Portões de validação (Método Acelera 3.0): o que falta p/ promover. */
 function portaoPromocao(lead, destinoId) {
-  const ordem = ["conexao", "triagem", "regiao", "docs", "simulacao", "visita", "fechamento"];
+  const ordem = ["conexao", "triagem", "docs", "simulacao", "visita", "fechamento"]; // Acelera 3.0: 6 etapas
   const falta = [];
   if (destinoId === "perdido") return { ok: true, falta: [] };
   const idx = ordem.indexOf(destinoId);
@@ -57,7 +57,7 @@ function portaoPromocao(lead, destinoId) {
   if (idx >= 2 && !lead.empreendimento) falta.push("definir empreendimento principal");
   if (idx >= 3 && !(lead.docs && lead.docs.doc_id && lead.docs.doc_renda)) falta.push("receber RG/CNH + comprovante de renda legíveis");
   if (idx >= 4 && !lead.parcela) falta.push("preencher parcela da simulação");
-  if (idx >= 6 && !lead.unidade) falta.push("definir unidade reservada");
+  if (idx >= 5 && !lead.unidade) falta.push("definir unidade reservada");
   return { ok: falta.length === 0, falta };
 }
 
@@ -67,15 +67,14 @@ function proximaAcao(lead) {
     case "conexao": return lead.empreendimento
       ? { template: "abertura_especifica", acao: "Enviar abertura específica + pedir permissão p/ 3 perguntas" }
       : { template: "menu9", acao: "Enviar abertura com Menu 1–9 (ele responde só o número)" };
-    case "triagem": return !lead.renda ? { template: "triagem_renda", acao: "Validar renda (individual x composição)" }
-      : !lead.fgts ? { template: "triagem_fgts", acao: "Validar FGTS (+3 anos carteira)" }
-      : lead.entrada == null ? { template: "triagem_entrada", acao: "Validar entrada disponível" }
-      : { template: "docs", acao: "Triagem completa → pedir documentos (análise Caixa sem custo)" };
-    case "regiao": return { template: "validacao_regiao", acao: "Travar empreendimento principal pela rotina do cliente" };
+    case "triagem": return !lead.composicao ? { template: "triagem_composicao", acao: "Etapa 2.1 — validar composição (sozinho x compor renda)" }
+      : (!lead.renda || !lead.fgts) ? { template: "triagem_renda_fgts", acao: "Etapa 2.2 — renda bruta familiar + FGTS (CLT +3 anos)" }
+      : lead.entrada == null ? { template: "triagem_entrada", acao: "Etapa 2.3 — recurso de entrada (dinheiro/PIX/veículo)" }
+      : { template: "docs", acao: "Triagem completa → pedir documentos (análise oficial Caixa, sem custo)" };
     case "docs": return { template: "docs", acao: "Cobrar documentos faltantes: " + falta.filter(f => f.includes("documentos")).join(", ") };
-    case "simulacao": return { template: "simulacao", acao: "Apresentar simulação ancorando parcela + subsídio (tarde ou noite?)" };
+    case "simulacao": return { template: "simulacao", acao: "Apresentar Resumo das Condições (subsídio + parcela) — tarde ou noite?" };
     case "visita": return { template: "visita", acao: "Agendar visita com dupla escolha (sábado 10h ou domingo 14h)" };
-    case "fechamento": return { template: "fechamento", acao: "Enviar link de assinatura digital e travar a unidade" };
+    case "fechamento": return { template: "fechamento", acao: "Gerar link de reserva/assinatura — WhatsApp ou videochamada?" };
     default: return { template: "followup_d1", acao: "Lead arquivado — só reativar se ele chamar (respeitar opt-out)" };
   }
 }
@@ -153,12 +152,12 @@ function interpretarResposta(lead, texto) {
   const soNum = t.match(/^\D*([1-9])\D*$/);
   if (soNum && typeof EMPREENDIMENTOS !== "undefined") {
     const emp = EMPREENDIMENTOS.find(e => e.num === Number(soNum[1]));
-    if (emp) return { tipo: "menu", empreendimento: emp.nome, acao: `Definir empreendimento = ${emp.nome} (${emp.bairro}) → promover p/ Triagem e validar renda.`, proximoTemplate: "triagem_renda" };
+    if (emp) return { tipo: "menu", empreendimento: emp.nome, acao: `Definir empreendimento = ${emp.nome} (${emp.bairro}) → promover p/ Triagem (Etapa 2.1 composição).`, proximoTemplate: "triagem_composicao" };
   }
-  if (/simula|parcela|valor|quanto|pre[çc]o/i.test(t)) return { tipo: "simulacao", acao: "Quer valores → NÃO pular etapa: validar renda/FGTS/entrada primeiro (regra de ouro).", proximoTemplate: "triagem_renda" };
+  if (/simula|parcela|valor|quanto|pre[çc]o/i.test(t)) return { tipo: "simulacao", acao: "Quer valores → NÃO pular etapa: validar renda/FGTS/entrada primeiro (regra de ouro).", proximoTemplate: "triagem_composicao" };
   if (/visita|conhec|estande|presencial|endere[çc]o/i.test(t)) return { tipo: "visita", acao: "Quer conhecer → oferecer visita com dupla escolha.", proximoTemplate: "visita" };
   const renda = t.match(/R?\$?\s*([\d.,]{3,})/);
-  if (renda && /renda|ganho|recebo|sal[aá]rio/i.test(t)) return { tipo: "renda", acao: "Registrar renda informada e validar FGTS em seguida.", proximoTemplate: "triagem_fgts" };
+  if (renda && /renda|ganho|recebo|sal[aá]rio/i.test(t)) return { tipo: "renda", acao: "Registrar renda informada e validar FGTS/entrada em seguida.", proximoTemplate: "triagem_renda_fgts" };
   return { tipo: "generica", acao: "Responder mantendo o controle: terminar com pergunta da etapa atual.", proximoTemplate: proximaAcao(lead).template };
 }
 
