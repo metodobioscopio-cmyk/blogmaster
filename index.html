@@ -75,7 +75,7 @@
       <div class="card">
         <h2>📥 Importar lista — colar TXT ou enviar arquivo</h2>
         <button class="btn" type="button" onclick="window.abrirBoxLista && abrirBoxLista()">⚡ Importação rápida (box com preview)</button>
-        <p class="muted">Cole o texto da lista (fichas, nomes/telefones, relatórios) ou envie <b>.txt, .csv, .md</b> (offline) / <b>.pdf, .docx</b> (via leitor no navegador). O Agente extrai <b>nome, telefone, renda, entrada, FGTS, empreendimento, bairro e cidade</b>, remove duplicados por telefone e classifica cada lead.</p>
+        <p class="muted">Cole o texto da lista (fichas, nomes/telefones, relatórios) ou envie <b>.txt, .csv, .md</b> (offline) / <b>.pdf, .docx</b> (via leitor no navegador). O Agente extrai <b>nome, telefone, renda, entrada, FGTS, empreendimento, bairro e cidade</b> (aceita fichas, 1 por linha e <b>lista corrida</b> "Nome Telefone Nome Telefone" sem quebras — 1 lead por pessoa), remove duplicados por telefone e classifica cada lead.</p>
         <label>Nome da nova lista
           <input id="imp-lista-nome" placeholder="Ex.: Lista Papillon Park — semana 44">
         </label>
@@ -289,7 +289,7 @@ Empreendimento: Gran Verona — Bairro: Papillon Park"></textarea>
 <div id="modal-lista" class="modal-overlay" hidden>
   <div class="modal-box modal-lg">
     <h2>📥 Importar lista</h2>
-    <p>Cole o texto da lista ou envie um arquivo (.txt, .csv, .md). O Agente separa <strong>nome</strong>, <strong>telefone</strong> e demais informações — confira no preview antes de confirmar.</p>
+    <p>Cole o texto da lista ou envie um arquivo (.txt, .csv, .md). O Agente separa <strong>nome</strong>, <strong>telefone</strong> e demais informações — inclusive lista corrida colada sem quebras (<code>Nome 62999998888 Outro Nome 62988887777…</code> vira 1 lead por pessoa). Confira no preview antes de confirmar.</p>
     <textarea id="input-lista-texto" rows="8" placeholder="Ex.:
 José Fernando Ribeiro Matos - (62) 99107-4310 - renda 5000 - entrada 5000 - Gran Verona - Papillon Park
 Maryana - 62 98888-1111 - renda 3200 - Aparecida de Goiânia"></textarea>
