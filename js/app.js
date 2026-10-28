@@ -14,6 +14,16 @@ const fmtR$ = v => v == null || v === "" ? "—" : Number(v).toLocaleString("pt-
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const agora = () => new Date().toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 const telWA = t => { const d = String(t || "").replace(/\D/g, ""); return d ? (d.startsWith("55") ? d : "55" + d) : ""; };
+const linkWA = (telefone, mensagem) => { const tel = telWA(telefone); return tel ? `https://wa.me/${tel}${mensagem ? `?text=${encodeURIComponent(mensagem)}` : ""}` : ""; };
+/* Abrir WhatsApp sem depender de window.open (bloqueado por pop-up em
+   iframes/prévias): clica numa âncora real target=_blank. */
+function abrirWhats(url) {
+  if (!url) return false;
+  const a = document.createElement("a");
+  a.href = url; a.target = "_blank"; a.rel = "noopener noreferrer";
+  document.body.appendChild(a); a.click(); a.remove();
+  return true;
+}
 const fmtTel = t => { const d = String(t || "").replace(/\D/g, "").replace(/^55/, ""); return d.length >= 10 ? `(${d.slice(0,2)}) ${d.slice(2, d.length-4)}-${d.slice(-4)}` : (t || "—"); };
 
 function carregar() {
@@ -458,6 +468,22 @@ function pintarWA(l) {
     hist.map(h => `<div class="wa-msg ${h.tipo === "envio" ? "out" : "in"}">${esc(h.texto)}<time>${esc(h.quando.split(" ").slice(-1)[0] || "")} ${h.tipo === "envio" ? "✓✓" : ""}</time></div>`).join("") +
     `<div class="wa-msg out" style="outline:2px dashed #f97316">${esc($("#esp-mensagem").value)}<time>prévia · não enviada</time></div>`;
   $("#wa-body").scrollTop = $("#wa-body").scrollHeight;
+  atualizarLinkWhats(l);
+}
+/* Mantém o botão-âncora do Espelho sempre apontando p/ wa.me certo
+   (número + mensagem atual) — clique em link real não é bloqueado. */
+function atualizarLinkWhats(l) {
+  const btn = $("#btn-esp-enviar"); if (!btn) return;
+  const fb = $("#esp-link-fallback");
+  const msg = $("#esp-mensagem")?.value.trim() || "";
+  const url = l ? linkWA(l.telefone, msg) : "";
+  if (url) {
+    btn.href = url; btn.removeAttribute("aria-disabled"); btn.style.opacity = "";
+    if (fb) fb.innerHTML = `Vai abrir a conversa com <b>${esc(fmtTel(l.telefone))}</b> já com a mensagem pronta. Não abriu? <a href="${url}" target="_blank" rel="noopener noreferrer"><b>Toque neste link direto</b></a> · <a href="${url}" target="_top">abrir nesta tela</a>`;
+  } else {
+    btn.href = "#"; btn.style.opacity = ".55";
+    if (fb) fb.innerHTML = `⚠️ Este lead está <b>sem telefone</b> — cadastre DDD+número na Ficha para liberar o botão.`;
+  }
 }
 $("#esp-mensagem")?.addEventListener("input", () => { const l = lead(leadSelecionadoId); if (l) pintarWA(l); });
 $("#btn-esp-regenerar")?.addEventListener("click", () => atualizarEspelho(true));
@@ -470,18 +496,21 @@ $("#btn-esp-copiar")?.addEventListener("click", async () => {
   await navigator.clipboard.writeText($("#esp-mensagem").value).catch(() => {});
   toast("Mensagem copiada 📋");
 });
-$("#btn-esp-enviar")?.addEventListener("click", () => {
-  const l = lead(leadSelecionadoId); if (!l) return;
+$("#btn-esp-enviar")?.addEventListener("click", e => {
+  const l = lead(leadSelecionadoId); if (!l) { e.preventDefault(); return; }
   const tel = telWA(l.telefone);
-  if (!tel) { alert("⚠️ Este lead não tem telefone. Abra a Ficha e cadastre DDD+número para enviar."); abrirDrawer(l.id); return; }
+  if (!tel) { e.preventDefault(); alert("⚠️ Este lead não tem telefone. Abra a Ficha e cadastre DDD+número para enviar."); abrirDrawer(l.id); return; }
   const msg = $("#esp-mensagem").value.trim();
-  if (!msg) return;
-  if (/\[valor\]|\[unidade\]/.test(msg) && !confirm("A mensagem ainda tem [valor]/[unidade] sem preencher. Enviar mesmo assim?")) return;
-  window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, "_blank");
+  if (!msg) { e.preventDefault(); return; }
+  if (/\[valor\]|\[unidade\]/.test(msg) && !confirm("A mensagem ainda tem [valor]/[unidade] sem preencher. Enviar mesmo assim?")) { e.preventDefault(); return; }
+  // href já aponta p/ wa.me (atualizarLinkWhats) — NÃO usar window.open
+  // (pop-up bloqueado em prévias/iframes). Não prevenir o clique da âncora:
+  e.currentTarget.href = linkWA(l.telefone, msg);
   registrar(l, "envio", msg);
-  if (l.estagio === "conexao") registrar(l, "sistema", "1º contato enviado (aguardando resposta p/ promover).");
-  salvar(); pintarWA(l); renderDashboard();
-  toast("WhatsApp aberto com a mensagem pronta — confira e toque em enviar lá 💬 (envio humano = sem ban)");
+  if (l.estagio === "conexao") registrar(l, "sistema", "1º contato aberto no WhatsApp pelo Espelho (aguardando resposta p/ promover).");
+  salvar(); renderDashboard();
+  setTimeout(() => pintarWA(l), 50);
+  toast("Abrindo seu WhatsApp com a mensagem pronta — confira e toque em enviar lá 💬");
 });
 $("#btn-esp-resposta")?.addEventListener("click", () => {
   const l = lead(leadSelecionadoId); if (!l) return;
@@ -549,7 +578,7 @@ function pintarFila() {
 function enviarDaFila(fid) {
   const f = filaAtual.find(x => x.id === fid); if (!f) return;
   if (!lead(f.leadId)) return;
-  window.open(`https://wa.me/${telWA(f.telefone)}?text=${encodeURIComponent(f.mensagem)}`, "blogmaster_wa");
+  abrirWhats(linkWA(f.telefone, f.mensagem));
   registrarEnvioFila(f, "web"); pintarFila();
   toast(`💬 WhatsApp aberto p/ ${f.nome}. Confira e envie lá. Respeite o intervalo sugerido!`);
 }

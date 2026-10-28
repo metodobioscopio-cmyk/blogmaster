@@ -146,3 +146,4 @@ dialog::backdrop{background:rgba(8,30,20,.5)}
 .btn.big-disparo{font-size:1rem;padding:13px 20px;background:#25d366;color:#07331b;border-color:#25d366}
 .btn.big-disparo:disabled{opacity:.5}
 .fila-item.atual{outline:3px solid #25d366;outline-offset:1px;background:#f2fff6}
+a.btn{text-decoration:none}

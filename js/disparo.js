@@ -87,7 +87,7 @@ function disparoEnviarAtual() {
   const f = itemDisparo(); if (!f) { pararDisparo(); return; }
   disparo.atualId = f.id; disparo.erro = "";
   if ((state.config.waModo || "web") === "api") return enviarViaAPI(f);
-  window.open(`https://wa.me/${telWA(f.telefone)}?text=${encodeURIComponent(f.mensagem)}`, "blogmaster_wa");
+  abrirWhats(linkWA(f.telefone, f.mensagem));
   disparo.aguardando = true;
   pintarFila();
 }
@@ -196,7 +196,7 @@ function salvarConexao() {
 }
 
 function abrirWhatsWeb() {
-  window.open("https://web.whatsapp.com", "_blank");
+  abrirWhats("https://web.whatsapp.com");
   toast("📷 No celular: WhatsApp → Aparelhos conectados → escanear o QR. Depois volte e marque conectado.");
 }
 
@@ -211,7 +211,7 @@ function marcarWebConectado() {
 function testarWeb() {
   const num = telWA(state.config.numero || $("#wa-web-numero")?.value || "");
   if (!num) { toast("Informe seu número primeiro."); return; }
-  window.open(`https://wa.me/${num}?text=${encodeURIComponent("✅ Teste BlogMaster CRM — WhatsApp do corretor conectado! — " + state.config.consultor + ", MRV (a maior construtora da América Latina)")}`, "_blank");
+  abrirWhats(linkWA(num, "✅ Teste BlogMaster CRM — WhatsApp do corretor conectado! — " + state.config.consultor + ", MRV (a maior construtora da América Latina)"));
 }
 
 async function testarApi() {
