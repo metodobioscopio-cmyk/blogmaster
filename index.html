@@ -26,6 +26,7 @@
     <button data-view="leads">👥 Leads / CRM <span class="badge" id="badge-leads">0</span></button>
     <button data-view="espelho">📱 Espelho WhatsApp</button>
     <button data-view="fila">🛡️ Fila Segura Anti-Ban <span class="badge warn" id="badge-fila">0</span></button>
+    <button data-view="conexao">🔗 Conectar WhatsApp <span class="badge" id="badge-wa">off</span></button>
     <button data-view="empreendimentos">🏢 9 Empreendimentos</button>
     <button data-view="manual">📖 Manual &amp; Scripts Acelera 3.0</button>
     <button data-view="pesquisa">🔎 Pesquisa Sales &amp; Marketing</button>
@@ -190,6 +191,7 @@ Empreendimento: Gran Verona — Bairro: Papillon Park"></textarea>
         <label class="check"><input type="checkbox" id="fila-optin" checked> Só leads com interesse/opt-in registrado</label>
         <button class="btn primary" id="btn-fila-montar">🤖 Montar fila de 1º contato</button>
       </div>
+      <div id="disparo-panel"></div>
       <div id="fila-resumo"></div>
       <div id="fila-lista-ui"></div>
     </div>
@@ -210,6 +212,62 @@ Empreendimento: Gran Verona — Bairro: Papillon Park"></textarea>
 
   <!-- ============ PESQUISA ============ -->
   <section class="view" id="view-pesquisa"><div id="pesquisa-html"></div></section>
+
+  <!-- ============ CONEXÃO WHATSAPP ============ -->
+  <section class="view" id="view-conexao">
+    <div class="grid-2">
+      <div class="card">
+        <h2>🟢 Modo Web — conectar o WhatsApp do corretor (QR Code)</h2>
+        <p class="muted">Funciona <b>hoje</b>, sem custo e sem robô: você conecta o seu WhatsApp no computador e o <b>Disparo Sequencial</b> abre cada conversa já com a mensagem personalizada — você só confere e aperta enviar.</p>
+        <ol class="muted" style="line-height:1.7">
+          <li>Clique em <b>Abrir WhatsApp Web</b>;</li>
+          <li>No celular: <b>WhatsApp → ⋮ → Aparelhos conectados → Conectar aparelho</b> e escaneie o QR;</li>
+          <li>Volte aqui, informe seu número e clique em <b>Marcar como conectado</b>.</li>
+        </ol>
+        <button class="btn whatsapp" onclick="abrirWhatsWeb()">📷 Abrir WhatsApp Web (escanear QR)</button>
+        <label>Meu número de WhatsApp (com DDD) <input id="wa-web-numero" placeholder="Ex.: 62999998888"></label>
+        <div class="row gap wrap">
+          <button class="btn primary" onclick="marcarWebConectado()">✅ Marcar como conectado</button>
+          <button class="btn" onclick="testarWeb()">🧪 Testar (mensagem p/ mim)</button>
+        </div>
+        <div id="wa-web-status"></div>
+      </div>
+      <div class="card">
+        <h2>☁️ Modo API Oficial — Meta Cloud API (disparo automático permitido)</h2>
+        <p class="muted">Para disparar <b>sem abrir o WhatsApp</b>, conecte a API Oficial: crie um app em <b>developers.facebook.com</b> → WhatsApp, copie o <b>Phone Number ID</b> e um <b>token</b>, e aprove um template com variáveis <code>{{1}}</code> = nome do lead e <code>{{2}}</code> = nome do corretor (ex.: a abertura Menu 1–9).</p>
+        <label>Phone Number ID <input id="wa-phone-id" placeholder="Ex.: 109876543210987"></label>
+        <label>WABA ID (conta comercial) <input id="wa-waba" placeholder="Ex.: 109876543210987"></label>
+        <div class="row gap">
+          <label style="flex:2">Template aprovado (1º contato) <input id="wa-template-api" placeholder="Ex.: mrv_abertura_menu9_v1"></label>
+          <label style="flex:1">Idioma <input id="wa-lang" value="pt_BR"></label>
+        </div>
+        <label>Token de acesso <input id="wa-token" type="password" placeholder="EAAB… (fica só neste navegador; ideal: WA_TOKEN no servidor)" autocomplete="off"></label>
+        <div class="row gap wrap">
+          <button class="btn primary" onclick="salvarConexao()">💾 Salvar conexão</button>
+          <button class="btn" onclick="testarApi()">🔌 Testar conexão API</button>
+        </div>
+        <div id="wa-api-status"></div>
+        <hr>
+        <p class="muted">📡 <b>Webhook</b> (p/ receber respostas no servidor):<br>
+        URL: <code id="wa-webhook-url">/api/whatsapp/webhook</code><br>
+        Verify token: <code id="wa-verify-token">blogmaster-acelera-2026</code></p>
+      </div>
+    </div>
+    <div class="card">
+      <h2>🚀 Modo do Disparo Sequencial</h2>
+      <div class="row gap wrap">
+        <label>Enviar usando
+          <select id="wa-modo">
+            <option value="web">🟢 WhatsApp Web conectado (1 clique por lead — recomendado)</option>
+            <option value="api">☁️ API Oficial Cloud API (automático, com template aprovado)</option>
+          </select>
+        </label>
+        <button class="btn primary" onclick="salvarConexao()">Salvar modo</button>
+        <button class="btn whatsapp" onclick="irPara('fila')">Ir para o Disparo Sequencial →</button>
+      </div>
+      <p class="muted">🛡️ Nos dois modos a fila respeita: só leads com interesse/opt-in, limite diário, intervalo entre envios, horário comercial e opt-out. É isso que mantém o número longe de banimento.</p>
+    </div>
+  </section>
 
   <!-- ============ CONFIG ============ -->
   <section class="view" id="view-config">
@@ -318,5 +376,6 @@ Maryana - 62 98888-1111 - renda 3200 - Aparecida de Goiânia"></textarea>
 <script src="js/agent.js"></script>
 <script src="js/app.js"></script>
 <script src="js/onboarding.js"></script>
+<script src="js/disparo.js"></script>
 </body>
 </html>

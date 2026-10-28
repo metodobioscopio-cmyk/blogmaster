@@ -3,6 +3,7 @@ const LS = "blogmaster_crm_v1";
 let state = carregar();
 let importPreview = [];
 let filaAtual = [];
+let disparo = { ativo: false, pausado: false, atualId: null, aguardando: false, timer: null, resta: 0, enviando: false, erro: "" };
 let leadSelecionadoId = null;
 let drawerLeadId = null;
 
@@ -18,10 +19,10 @@ const fmtTel = t => { const d = String(t || "").replace(/\D/g, "").replace(/^55/
 function carregar() {
   try {
     const raw = localStorage.getItem(LS);
-    if (raw) { const s = JSON.parse(raw); if (s && Array.isArray(s.leads)) { s.leads.forEach(l => { if (l.estagio === "regiao") l.estagio = "triagem"; }); return s; } } // migracao Acelera 3.0
+    if (raw) { const s = JSON.parse(raw); if (s && Array.isArray(s.leads)) { s.leads.forEach(l => { if (l.estagio === "regiao") l.estagio = "triagem"; }); s.config = Object.assign({ waModo: "web", waWebConectado: false, waPhoneId: "", waWaba: "", waTemplate: "", waLang: "pt_BR", waToken: "" }, s.config || {}); return s; } } // migracao Acelera 3.0
   } catch (e) { /* ignora */ }
   return {
-    config: { consultor: "Januário Leal", bsp: "", numero: "", templateApi: "" },
+    config: { consultor: "Januário Leal", bsp: "", numero: "", templateApi: "", waModo: "web", waWebConectado: false, waPhoneId: "", waWaba: "", waTemplate: "", waLang: "pt_BR", waToken: "" },
     listas: JSON.parse(JSON.stringify(SEED_LISTAS)),
     leads: JSON.parse(JSON.stringify(SEED_LEADS)),
     filaHistorico: [],
@@ -56,6 +57,7 @@ const TITULOS = {
   empreendimentos: ["9 Empreendimentos MRV", "Fichas prontas p/ WhatsApp · Goiânia & Aparecida de Goiânia"],
   manual: ["Manual Oficial de Atendimento — Método Acelera 3.0 MRV", "Do 1º contato à Venda em 6 etapas: Menu 1–9, triagem financeira, documentos Caixa, simulação, estande VIP e assinatura digital"],
   pesquisa: ["Pesquisa · Sales & Marketing — Real Estate", "Playbook de aquisição e conversão para habitação econômica / MCMV em Goiânia e Aparecida"],
+  conexao: ["Conectar WhatsApp do Corretor", "WhatsApp Web por QR (hoje) ou API Oficial Meta (automático com template aprovado)"],
   config: ["Configurações", "Consultor, API Oficial do WhatsApp e backup dos seus dados"],
 };
 function irPara(view) {
@@ -69,6 +71,7 @@ function irPara(view) {
   if (view === "leads") renderLeads();
   if (view === "dashboard") renderDashboard();
   if (view === "fila") renderFilaSelectors();
+  if (view === "conexao") renderConexao();
 }
 $$("#nav button").forEach(b => b.addEventListener("click", () => irPara(b.dataset.view)));
 $("#btn-menu").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
@@ -162,12 +165,14 @@ function renderListas() {
       <div class="mini-stats"><span>👥 ${leads.length} leads</span><span>🆕 ${novosL} p/ 1º contato</span><span>💬 ${resp} responderam</span>${semTel ? `<span>⚠️ ${semTel} sem telefone</span>` : ""}</div>
       <div class="row gap wrap">
         <button class="btn sm primary" onclick="irFilaLista('${lst.id}')">🤖 Rodar Agente (1º contato)</button>
+        <button class="btn sm whatsapp" onclick="irDisparoLista('${lst.id}')">🚀 Disparo sequencial</button>
         <button class="btn sm" onclick="filtrarPorLista('${lst.id}')">Ver leads</button>
         <button class="btn sm danger" onclick="excluirLista('${lst.id}')">Excluir lista</button>
       </div></div>`;
   }).join("") || `<p class="muted">Nenhuma lista ainda — importe a primeira ao lado.</p>`;
 }
 function irFilaLista(id) { irPara("fila"); $("#fila-lista").value = id; montarFila(); }
+function irDisparoLista(id) { irFilaLista(id); iniciarDisparo(); setTimeout(() => $("#disparo-panel")?.scrollIntoView({ behavior: "smooth", block: "center" }), 80); }
 function filtrarPorLista(id) { irPara("leads"); $("#f-lista").value = id; renderLeads(); }
 function excluirLista(id) {
   const n = state.leads.filter(l => l.listaId === id).length;
@@ -516,7 +521,7 @@ function cfgFila() {
 }
 function montarFila() {
   const { fila, pulados } = montarFilaSegura(state.leads, cfgFila(), $("#fila-lista").value || null);
-  filaAtual = fila;
+  pararDisparo(true); filaAtual = fila;
   $("#badge-fila").textContent = fila.length;
   $("#fila-resumo").innerHTML = `<div class="${fila.length ? "ok-box" : "warn-box"}">🤖 Fila montada: <b>${fila.length} contato(s)</b> personalizado(s) (nome do lead + nome do corretor em cada mensagem), ordenados por score, espaçados em ${cfgFila().intervaloMin} min em horário comercial. <b>Mensagem do disparo:</b> ${cfgFila().templateId === "auto" ? "automática (Agente)" : esc((TEMPLATES.find(x => x.id === cfgFila().templateId) || {}).titulo || cfgFila().templateId)}.
     ${pulados.length ? `<br>⏭️ <b>${pulados.length} pulado(s):</b> ${pulados.map(p => `${esc(p.lead.nome)} (${esc(p.motivo)})`).join(" · ")}` : ""}
@@ -529,7 +534,7 @@ function pintarFila() {
   const feitos = filaAtual.filter(f => f.status === "enviado").length;
   el.innerHTML = filaAtual.length ? `<div class="progress"><i style="width:${filaAtual.length ? Math.round(feitos / filaAtual.length * 100) : 0}%"></i></div>
     <p class="muted">${feitos}/${filaAtual.length} enviados nesta sessão de fila.</p>` +
-    filaAtual.map((f, i) => `<div class="fila-item ${f.status === "enviado" ? "done" : ""}" id="fila-${f.id}">
+    filaAtual.map((f, i) => `<div class="fila-item ${f.status === "enviado" ? "done" : ""} ${disparo.ativo && disparo.atualId === f.id ? "atual" : ""}" id="fila-${f.id}">
       <div>${scoreHtml(lead(f.leadId) || { docs: {}, historico: [] })}</div>
       <div><b>${i + 1}. ${esc(f.nome || "Sem nome")}</b> · ${fmtTel(f.telefone)} · <small class="muted">sugerido ${esc(f.previsao)} · script: ${f.templateId === "menu9" ? "Menu 1–9" : "Abertura específica"}</small>
       <details><summary>Ver mensagem personalizada</summary><pre>${esc(f.mensagem)}</pre></details></div>
@@ -539,16 +544,13 @@ function pintarFila() {
          <button class="btn sm" onclick="pularDaFila('${f.id}')">Pular</button>`}</div></div>`).join("")
     : `<p class="muted">Nenhuma fila montada. Escolha a lista e clique em <b>Montar fila de 1º contato</b>.</p>`;
   $("#badge-fila").textContent = filaAtual.filter(f => f.status === "pendente").length;
+  pintarDisparo();
 }
 function enviarDaFila(fid) {
   const f = filaAtual.find(x => x.id === fid); if (!f) return;
-  const l = lead(f.leadId); if (!l) return;
-  window.open(`https://wa.me/${telWA(f.telefone)}?text=${encodeURIComponent(f.mensagem)}`, "_blank");
-  registrar(l, "envio", f.mensagem);
-  registrar(l, "sistema", "1º contato enviado pela Fila Segura (envio manual human-in-the-loop).");
-  f.status = "enviado";
-  state.filaHistorico.push({ quando: agora(), leadId: f.leadId, templateId: f.templateId });
-  salvar(); pintarFila(); renderDashboard();
+  if (!lead(f.leadId)) return;
+  window.open(`https://wa.me/${telWA(f.telefone)}?text=${encodeURIComponent(f.mensagem)}`, "blogmaster_wa");
+  registrarEnvioFila(f, "web"); pintarFila();
   toast(`💬 WhatsApp aberto p/ ${f.nome}. Confira e envie lá. Respeite o intervalo sugerido!`);
 }
 function pularDaFila(fid) { filaAtual = filaAtual.filter(f => f.id !== fid); pintarFila(); }
@@ -690,7 +692,7 @@ function aplicarNomeConsultor(nome) {
   document.dispatchEvent(new CustomEvent("acelera:corretor-alterado"));
 }
 function salvarConfig() {
-  state.config.bsp = $("#cfg-bsp").value.trim(); state.config.numero = $("#cfg-numero").value.trim(); state.config.templateApi = $("#cfg-template").value.trim();
+  state.config.bsp = $("#cfg-bsp").value.trim(); state.config.numero = $("#cfg-numero").value.trim(); state.config.templateApi = $("#cfg-template").value.trim(); state.config.waTemplate = state.config.templateApi;
   aplicarNomeConsultor($("#cfg-consultor").value);
   toast("Configurações salvas ✅ Scripts já usam o novo nome.");
 }
@@ -736,6 +738,7 @@ function boot() {
   } catch (e) { /* ignora */ }
   renderConfig(); renderListaSelects(); renderDashboard(); renderListas(); renderLeads();
   renderEmpreendimentos(); renderManual(); renderPesquisa();
+  if (typeof renderConexao === "function") renderConexao();
   leadSelecionadoId = state.leads[0]?.id || null;
 }
 document.addEventListener("DOMContentLoaded", boot);
