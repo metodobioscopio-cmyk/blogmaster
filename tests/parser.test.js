@@ -41,6 +41,16 @@ const ll = parseTextoParaLeads(linhas);
 assert.strictEqual(ll.length, 2);
 console.log("✔ 1 por linha:", ll.map(x => x.telefone).join(", "));
 
+// formato do box de importação (onboarding): "Nome - Tel - renda 5000 - ..."
+const box = "José Fernando Ribeiro Matos - (62) 99107-4310 - renda 5000 - entrada 5000 - Gran Verona - Papillon Park\nMaryana - 62 98888-1111 - renda 3200 - Aparecida de Goiânia";
+const lbox = parseTextoParaLeads(box);
+assert.strictEqual(lbox.length, 2);
+assert.strictEqual(lbox[0].nome, "José Fernando Ribeiro Matos");
+assert.strictEqual(lbox[0].renda, 5000); assert.strictEqual(lbox[0].entrada, 5000);
+assert.strictEqual(lbox[0].bairro, "Papillon Park");
+assert.strictEqual(lbox[1].nome, "Maryana"); assert.strictEqual(lbox[1].cidade, "Aparecida de Goiânia");
+console.log("✔ formato box onboarding:", lbox.map(x => x.nome).join(" + "));
+
 assert.strictEqual(parseMoeda("R$ 5.000,00"), 5000);
 assert.strictEqual(parseTextoParaLeads("").length, 0);
 console.log("✅ parser.test.js OK");

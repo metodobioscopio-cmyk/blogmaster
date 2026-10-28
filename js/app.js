@@ -29,6 +29,12 @@ function carregar() {
 }
 function salvar() { localStorage.setItem(LS, JSON.stringify(state)); }
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 3400); }
+/* Personalização global {corretor}: usa onboarding.js (Corretor) com fallback no state. */
+function personalizeSeguro(texto) {
+  if (typeof window !== "undefined" && window.Corretor && Corretor.personalize) return Corretor.personalize(texto);
+  const nome = state.config.consultor || "Januário Leal";
+  return String(texto).replace(/\{\{\s*(corretor|consultor)\s*\}\}/gi, nome).replace(/\{\s*(corretor|consultor)\s*\}/gi, nome);
+}
 function lead(id) { return state.leads.find(l => l.id === id); }
 function listaNome(id) { const l = state.listas.find(x => x.id === id); return l ? l.nome : "Sem lista"; }
 function estagioNome(id) { const e = ESTAGIOS.find(x => x.id === id); return e ? `${e.n || "✕"} · ${e.nome}` : id; }
@@ -237,30 +243,43 @@ $("#btn-imp-preview").addEventListener("click", () => {
   $("#btn-imp-cancelar").addEventListener("click", () => { importPreview = []; el.innerHTML = ""; });
 });
 
-function confirmarImport() {
-  let listaId = $("#imp-lista-select").value;
-  const novoNome = $("#imp-lista-nome").value.trim();
-  if (novoNome) {
-    listaId = uid("lista");
-    state.listas.push({ id: listaId, nome: novoNome, origem: "Importação (TXT/arquivo)", criadaEm: new Date().toISOString().slice(0, 10) });
-  }
-  if (!listaId) { toast("Crie ou selecione uma lista destino."); return; }
+function criarLista(nome, origem) {
+  const id = uid("lista");
+  state.listas.push({ id, nome, origem: origem || "Importação", criadaEm: new Date().toISOString().slice(0, 10) });
+  return id;
+}
+
+/* Núcleo único de importação (Painel por Listas + box do onboarding):
+   deduplica por telefone, cria leads na etapa Conexão e devolve contadores. */
+function adicionarLeadsAoCRM(parsed, listaId) {
   const tels = new Set(state.leads.map(l => l.telefone).filter(Boolean));
   let add = 0, dup = 0;
-  for (const p of importPreview) {
-    if (p.telefone && tels.has(p.telefone)) { dup++; continue; }
+  for (const p of (parsed || [])) {
+    const tel = String(p.telefone || "").replace(/\D/g, "").replace(/^55(?=\d{10,11}$)/, "");
+    if (tel && tels.has(tel)) { dup++; continue; }
     const novo = {
-      id: uid("lead"), listaId, nome: p.nome || "Lead sem nome", telefone: p.telefone || "",
-      renda: p.renda ?? null, entrada: p.entrada ?? null, fgts: p.fgts || "", composicao: p.composicao || "",
+      id: uid("lead"), listaId, nome: p.nome || "Lead sem nome", telefone: tel,
+      renda: (p.renda === "" || p.renda == null) ? null : (typeof p.renda === "number" ? p.renda : parseMoeda(p.renda)),
+      entrada: (p.entrada === "" || p.entrada == null) ? null : (typeof p.entrada === "number" ? p.entrada : parseMoeda(p.entrada)),
+      fgts: p.fgts || "", composicao: p.composicao || "",
       empreendimento: p.empreendimento || "", bairro: p.bairro || "", cidade: p.cidade || "",
-      estagio: "conexao", optIn: true, canal: "WhatsApp", docs: {}, parcela: "", subsidio: "", unidade: "",
+      estagio: "conexao", optIn: p.optIn !== false, canal: "WhatsApp", docs: {}, parcela: "", subsidio: "", unidade: "",
       obs: p.obs || "", insights: [], criadoEm: new Date().toISOString().slice(0, 10), historico: [],
     };
     registrar(novo, "sistema", `Importado da lista "${listaNome(listaId)}". Falta: ${dadosFaltantes(novo).join("; ") || "nada — pronto p/ análise"}.`);
-    state.leads.push(novo); if (p.telefone) tels.add(p.telefone); add++;
+    state.leads.push(novo); if (tel) tels.add(tel); add++;
   }
-  salvar(); importPreview = []; $("#imp-preview").innerHTML = ""; $("#imp-lista-nome").value = "";
-  renderListas(); renderDashboard();
+  salvar(); renderListas(); renderDashboard(); renderLeads();
+  return { add, dup, listaId };
+}
+
+function confirmarImport() {
+  let listaId = $("#imp-lista-select").value;
+  const novoNome = $("#imp-lista-nome").value.trim();
+  if (novoNome) listaId = criarLista(novoNome, "Importação (TXT/arquivo)");
+  if (!listaId) { toast("Crie ou selecione uma lista destino."); return; }
+  const { add, dup } = adicionarLeadsAoCRM(importPreview, listaId);
+  importPreview = []; $("#imp-preview").innerHTML = ""; $("#imp-lista-nome").value = "";
   toast(`✅ ${add} lead(s) importado(s)${dup ? ` · ${dup} duplicado(s) ignorado(s)` : ""}. Rode o Agente na Fila Segura!`);
   irFilaLista(listaId);
 }
@@ -416,7 +435,7 @@ function atualizarEspelho(sugerirTemplate) {
   if (sugerirTemplate) $("#esp-template").value = p.template;
   const t = TEMPLATES.find(x => x.id === $("#esp-template").value) || TEMPLATES[0];
   $("#esp-template-quando").textContent = "Quando usar: " + t.quando;
-  $("#esp-mensagem").value = renderMensagem(t.texto, l, state.config.consultor);
+  $("#esp-mensagem").value = personalizeSeguro(renderMensagem(t.texto, l, state.config.consultor));
   const faixa = faixaMCMV(l.renda);
   $("#esp-resumo").innerHTML = `<div class="ok-box">🤖 <b>Agente:</b> ${esc(p.acao)}<br>
     <small>Score ${scoreLead(l).score} · ${esc(classificarLead(l))} · ${esc(estagioNome(l.estagio))}${faixa ? ` · ${faixa.faixa} MCMV (estimativa)` : ""}<br>
@@ -561,7 +580,7 @@ function renderManual() {
     if (!ts.length) return "";
     const titulo = n === 0 ? "Follow-ups (cadência)" : `Etapa ${n} — ${ESTAGIOS.find(e => e.n === n).nome}`;
     return `<details class="acc" ${n === 1 ? "open" : ""}><summary>${titulo} (${ts.length} script(s))</summary><div class="acc-body">
-      ${ts.map(t => `<h4>${esc(t.titulo)}</h4><p class="muted">Quando: ${esc(t.quando)}</p><div class="script-box" id="scr-${t.id}">${esc(t.texto)}</div>
+      ${ts.map(t => `<h4>${esc(t.titulo)}</h4><p class="muted">Quando: ${esc(t.quando)}</p><div class="script-box" id="scr-${t.id}">${esc(personalizeSeguro(t.texto))}</div>
       <button class="btn sm" data-copy="#scr-${t.id}">📋 Copiar</button>
       <button class="btn sm primary" onclick="usarScript('${t.id}')">📱 Usar no Espelho</button>`).join("")}</div></details>`;
   }).join("");
@@ -650,10 +669,20 @@ function renderConfig() {
   $("#consultor-nome-side").textContent = state.config.consultor || "Januário Leal";
   $("#cfg-bsp").value = state.config.bsp || ""; $("#cfg-numero").value = state.config.numero || ""; $("#cfg-template").value = state.config.templateApi || "";
 }
+const CORRETOR_KEY = "acelera.corretorNome";
+/* Aplica o nome do corretor globalmente ({corretor} nos scripts, sidebar, espelho). */
+function aplicarNomeConsultor(nome) {
+  state.config.consultor = (nome || "").trim() || "Januário Leal";
+  try { localStorage.setItem(CORRETOR_KEY, state.config.consultor); } catch (e) { /* ignora */ }
+  salvar(); renderConfig(); renderEmpreendimentos(); renderManual(); renderPesquisa();
+  const esp = $("#view-espelho");
+  if (esp && esp.classList.contains("active")) renderEspelho();
+  document.dispatchEvent(new CustomEvent("acelera:corretor-alterado"));
+}
 function salvarConfig() {
-  state.config.consultor = $("#cfg-consultor").value.trim() || "Januário Leal";
   state.config.bsp = $("#cfg-bsp").value.trim(); state.config.numero = $("#cfg-numero").value.trim(); state.config.templateApi = $("#cfg-template").value.trim();
-  salvar(); renderConfig(); renderEmpreendimentos(); renderManual(); toast("Configurações salvas ✅ Scripts já usam o novo nome.");
+  aplicarNomeConsultor($("#cfg-consultor").value);
+  toast("Configurações salvas ✅ Scripts já usam o novo nome.");
 }
 $("#btn-cfg-salvar")?.addEventListener("click", salvarConfig);
 $("#btn-cfg-salvar2")?.addEventListener("click", salvarConfig);
@@ -668,11 +697,33 @@ $("#restore-file")?.addEventListener("change", async e => {
 });
 $("#btn-reset")?.addEventListener("click", () => {
   if (!confirm("Apagar TODOS os dados e voltar aos leads-semente (José Fernando + Maryana)?")) return;
-  localStorage.removeItem(LS); location.reload();
+  localStorage.removeItem(LS); localStorage.removeItem(CORRETOR_KEY); location.reload();
 });
+
+/* API pública p/ onboarding.js (box de importação) e integrações futuras. */
+window.adicionarLeads = function (parsed) {
+  const data = new Date().toLocaleDateString("pt-BR");
+  const listaId = criarLista(`Importação rápida — ${data}`, "Box de importação (onboarding)");
+  const { add, dup } = adicionarLeadsAoCRM(parsed, listaId);
+  toast(`✅ ${add} lead(s) importado(s)${dup ? ` · ${dup} duplicado(s) ignorado(s)` : ""} na lista "Importação rápida".`);
+  irFilaLista(listaId);
+  return { add, dup, listaId };
+};
+window.importarLeads = window.adicionarLeads;
+window.BlogMaster = {
+  aplicarNomeConsultor,
+  getConsultor: () => state.config.consultor || "",
+  adicionarLeads: window.adicionarLeads,
+  irPara,
+};
 
 /* ================= Boot ================= */
 function boot() {
+  // Nome vindo do onboarding (acelera.corretorNome) tem prioridade sobre o seed.
+  try {
+    const salvo = (localStorage.getItem(CORRETOR_KEY) || "").trim();
+    if (salvo && salvo !== state.config.consultor) { state.config.consultor = salvo; salvar(); }
+  } catch (e) { /* ignora */ }
   renderConfig(); renderListaSelects(); renderDashboard(); renderListas(); renderLeads();
   renderEmpreendimentos(); renderManual(); renderPesquisa();
   leadSelecionadoId = state.leads[0]?.id || null;

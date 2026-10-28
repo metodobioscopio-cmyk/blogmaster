@@ -31,7 +31,13 @@ function extrairTelefone(bloco) {
   return d ? d[1].slice(-11) : "";
 }
 
+const BAIRROS_CONHECIDOS = ["Papillon Park", "Parque Atheneu", "Parque das Nações", "Jardim Nova Esperança", "Carolina Parque", "Jardim Gardênia", "Jardim Novo Mundo", "Parque Amazônia"];
+const CIDADES_CONHECIDAS = ["Aparecida de Goiânia", "Goiânia"];
+
 function extrairNome(bloco) {
+  // Formato 1-por-linha do box de importação: "Nome - (62) 99999-0000 - ..."
+  const antesTel = bloco.split(/\r?\n/)[0].match(/^([A-ZÀ-Ú][A-Za-zÀ-ú' ]{2,60}?)\s*[-–—;|]\s*(?:\+?55|\(?\d{2}\)?|\d{10,})/);
+  if (antesTel) return limparNome(antesTel[1]);
   const padroes = [
     /nome\s*[:\-]\s*([^\n\r;]+)/i,
     /lead\s*[:\-]\s*([^\n\r;]+)/i,
@@ -58,7 +64,7 @@ function limparNome(n) {
 
 function extrairCampoMoeda(bloco, rotulos) {
   for (const r of rotulos) {
-    const m = bloco.match(new RegExp(r + "[^R$\\n]{0,25}R?\\$?\\s*([\\d.,]+\\s*(?:mil)?)", "i"));
+    const m = bloco.match(new RegExp(r + "[^R$\\d\\n]{0,25}R?\\$?\\s*([\\d.,]+\\s*(?:mil)?)", "i"));
     if (m) {
       let v = m[1];
       const mil = /mil/i.test(v);
@@ -91,8 +97,8 @@ function parseBloco(bloco) {
     fgts,
     composicao: /sozinh/i.test(bloco) ? "sozinho" : /(c[ôo]njuge|espos|marido|companheir|comp(or|osi[çc][aã]o))/i.test(bloco) ? "composição de renda" : "",
     empreendimento: emp || "",
-    bairro: extrairTexto(bloco, ["bairro de interesse inicial", "bairro"]) || (emp ? "" : ""),
-    cidade: extrairTexto(bloco, ["cidade de interesse inicial", "cidade"]) || "",
+    bairro: extrairTexto(bloco, ["bairro de interesse inicial", "bairro"]) || BAIRROS_CONHECIDOS.find(b => norm(bloco).includes(norm(b))) || "",
+    cidade: extrairTexto(bloco, ["cidade de interesse inicial", "cidade"]) || CIDADES_CONHECIDAS.find(c => norm(bloco).includes(norm(c))) || "",
     obs: bloco.replace(/\s+/g, " ").trim().slice(0, 600),
     optIn: true,
   };
@@ -151,4 +157,7 @@ function parseTextoParaLeads(texto) {
   return [...porTel.values(), ...semTel];
 }
 
+/* Integração onboarding.js: o box de importação usa window.parseLista
+   (este parser completo tem prioridade sobre o fallback do onboarding). */
+if (typeof window !== "undefined") window.parseLista = parseTextoParaLeads;
 if (typeof module !== "undefined") module.exports = { parseTextoParaLeads, parseMoeda, parseBloco, extrairTelefone };

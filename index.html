@@ -74,6 +74,7 @@
     <div class="grid-2">
       <div class="card">
         <h2>📥 Importar lista — colar TXT ou enviar arquivo</h2>
+        <button class="btn" type="button" onclick="window.abrirBoxLista && abrirBoxLista()">⚡ Importação rápida (box com preview)</button>
         <p class="muted">Cole o texto da lista (fichas, nomes/telefones, relatórios) ou envie <b>.txt, .csv, .md</b> (offline) / <b>.pdf, .docx</b> (via leitor no navegador). O Agente extrai <b>nome, telefone, renda, entrada, FGTS, empreendimento, bairro e cidade</b>, remove duplicados por telefone e classifica cada lead.</p>
         <label>Nome da nova lista
           <input id="imp-lista-nome" placeholder="Ex.: Lista Papillon Park — semana 44">
@@ -215,6 +216,7 @@ Empreendimento: Gran Verona — Bairro: Papillon Park"></textarea>
       <div class="card">
         <h2>👤 Consultor</h2>
         <label>Nome que assina TODOS os scripts <input id="cfg-consultor" value="Januário Leal"></label>
+        <button class="btn" type="button" onclick="window.abrirModalCorretor && abrirModalCorretor()">👋 Trocar nome do corretor (popup)</button>
         <p class="muted">Padrão de abertura: <i>"Sou o Januário Leal, especialista de atendimento da MRV — a maior construtora da América Latina!"</i></p>
         <button class="btn primary" id="btn-cfg-salvar">Salvar</button>
         <hr>
@@ -266,10 +268,54 @@ Empreendimento: Gran Verona — Bairro: Papillon Park"></textarea>
   </form>
 </dialog>
 
+
+<!-- Modal 1: Nome do corretor (1o acesso — onboarding) -->
+<div id="modal-corretor" class="modal-overlay" hidden>
+  <div class="modal-box">
+    <h2>👋 Antes de começar</h2>
+    <p>Digite o nome do corretor. <b>Todas</b> as mensagens, scripts e o Espelho WhatsApp serão personalizados com esse nome (convenção <code>{corretor}</code>).</p>
+    <label for="input-corretor-nome">Nome do corretor</label>
+    <input id="input-corretor-nome" type="text" placeholder="Ex.: Januário Leal" autocomplete="off">
+    <div class="modal-actions">
+      <button id="btn-cancelar-corretor" class="btn-secondary" hidden>Cancelar</button>
+      <button id="btn-salvar-corretor" class="btn-primary">Salvar e continuar</button>
+    </div>
+    <small>Salvo no seu navegador. Você pode trocar depois em ⚙️ Configurações.</small>
+  </div>
+</div>
+
+<!-- Modal 2: Importar lista (abre logo apos salvar o nome) -->
+<div id="modal-lista" class="modal-overlay" hidden>
+  <div class="modal-box modal-lg">
+    <h2>📥 Importar lista</h2>
+    <p>Cole o texto da lista ou envie um arquivo (.txt, .csv, .md). O Agente separa <strong>nome</strong>, <strong>telefone</strong> e demais informações — confira no preview antes de confirmar.</p>
+    <textarea id="input-lista-texto" rows="8" placeholder="Ex.:
+José Fernando Ribeiro Matos - (62) 99107-4310 - renda 5000 - entrada 5000 - Gran Verona - Papillon Park
+Maryana - 62 98888-1111 - renda 3200 - Aparecida de Goiânia"></textarea>
+    <div class="file-row">
+      <input id="input-lista-file" type="file" accept=".txt,.csv,.md">
+      <button id="btn-analisar-lista" class="btn-primary">🤖 Analisar com o Agente</button>
+      <button id="btn-pular-lista" class="btn-secondary">Pular por agora</button>
+    </div>
+    <div id="preview-lista" hidden>
+      <p id="preview-resumo" class="preview-resumo"></p>
+      <div style="overflow:auto"><table class="tabela-preview">
+        <thead><tr><th>Nome</th><th>Telefone</th><th>Renda</th><th>Entrada</th><th>FGTS</th><th>Empreendimento</th><th>Bairro · Cidade</th></tr></thead>
+        <tbody id="preview-lista-body"></tbody>
+      </table></div>
+      <div class="modal-actions">
+        <button id="btn-cancelar-lista" class="btn-secondary">Cancelar</button>
+        <button id="btn-confirmar-lista" class="btn-primary">✅ Confirmar importação</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="toast" role="status"></div>
 <script src="js/data.js"></script>
 <script src="js/parser.js"></script>
 <script src="js/agent.js"></script>
 <script src="js/app.js"></script>
+<script src="js/onboarding.js"></script>
 </body>
 </html>

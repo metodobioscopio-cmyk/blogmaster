@@ -53,7 +53,7 @@ const DOCS_CHECKLIST = [
 ];
 
 /* ---------- Templates de mensagem (Método Acelera) ----------
-   Variáveis: {primeiroNome} {nome} {consultor} {empreendimento}
+   Variáveis: {primeiroNome} {nome} {corretor} {empreendimento}
    {bairro} {cidade} {parcela} {subsidio} {unidade} {menu9}        */
 const TEMPLATES = [
   {
@@ -61,7 +61,7 @@ const TEMPLATES = [
     quando: "Lead sem empreendimento definido — ele responde só com o número",
     texto: `Olá, {primeiroNome}, tudo bem?
 
-Sou o {consultor}, especialista de atendimento da MRV — a maior construtora da América Latina! 🏢✨
+Sou o {corretor}, especialista de atendimento da MRV — a maior construtora da América Latina! 🏢✨
 
 Posso te fazer uma pergunta rápida? Para eu te enviar os detalhes exatos e calcular as melhores condições para você, qual destas localizações você prefere?
 
@@ -74,7 +74,7 @@ Me responda apenas com o número da opção que mais te interessa!`
     quando: "Lead já demonstrou interesse num empreendimento (ex.: José Fernando / Gran Verona)",
     texto: `Olá, {primeiroNome}! Tudo bem?
 
-Aqui é o {consultor}, especialista de atendimento da MRV — a maior construtora da América Latina! 🏢✨
+Aqui é o {corretor}, especialista de atendimento da MRV — a maior construtora da América Latina! 🏢✨
 
 Vi que você demonstrou interesse no {empreendimento}, no {bairro}. É uma excelente escolha de região e um empreendimento incrível!
 
@@ -85,7 +85,7 @@ Para que eu possa te apresentar as melhores condições e valores de parcela que
     quando: "Saudação curta de conexão",
     texto: `Olá, {primeiroNome}! Tudo bem?
 
-Aqui é o {consultor}, consultor de vendas da MRV — a maior construtora da América Latina! 🏢✨
+Aqui é o {corretor}, consultor de vendas da MRV — a maior construtora da América Latina! 🏢✨
 
 Vi seu interesse no {empreendimento}, no {bairro}. Como posso te ajudar hoje?`
   },
@@ -94,7 +94,7 @@ Vi seu interesse no {empreendimento}, no {bairro}. Como posso te ajudar hoje?`
     quando: "Saudação curta de conexão",
     texto: `Olá, {primeiroNome}, excelente dia!
 
-Meu nome é {consultor} e falo em nome da MRV, a maior construtora da América Latina.
+Meu nome é {corretor} e falo em nome da MRV, a maior construtora da América Latina.
 
 É um prazer conectar com você! Vi que você tem interesse no projeto do {empreendimento}. Como estão seus planos para essa conquista?`
   },
@@ -103,7 +103,7 @@ Meu nome é {consultor} e falo em nome da MRV, a maior construtora da América L
     quando: "Saudação curta de conexão",
     texto: `Oi, {primeiroNome}! Tudo ótimo por aí?
 
-Sou o {consultor}, especialista de atendimento da MRV, a maior construtora da América Latina.
+Sou o {corretor}, especialista de atendimento da MRV, a maior construtora da América Latina.
 
 Recebi sua mensagem sobre o {empreendimento} em {cidade} e estou à disposição para te apresentar todos os detalhes do empreendimento!`
   },
@@ -112,7 +112,7 @@ Recebi sua mensagem sobre o {empreendimento} em {cidade} e estou à disposição
     quando: "Base fria/mista dos 9 empreendimentos",
     texto: `Olá, {primeiroNome}! Tudo bem?
 
-Aqui é o {consultor}, especialista de atendimento da MRV — a maior construtora da América Latina! 🏢✨
+Aqui é o {corretor}, especialista de atendimento da MRV — a maior construtora da América Latina! 🏢✨
 
 Vi que você está em busca do seu novo imóvel e demonstrou interesse em nossas opções. Para que eu possa te enviar a opção ideal e calcular as menores parcelas para o seu perfil, me conta: você busca um apê para morar ou para investir?`
   },
@@ -121,7 +121,7 @@ Vi que você está em busca do seu novo imóvel e demonstrou interesse em nossas
     quando: "Base fria/mista dos 9 empreendimentos",
     texto: `Olá, {primeiroNome}, excelente dia!
 
-Meu nome é {consultor} e falo em nome da MRV, a maior construtora da América Latina.
+Meu nome é {corretor} e falo em nome da MRV, a maior construtora da América Latina.
 
 Vi seu contato sobre os nossos empreendimentos! Temos excelentes condições de entrada facilitada e subsídios do Governo para esta região.
 
@@ -130,7 +130,7 @@ Para eu já separar as melhores unidades dentro do seu orçamento, você pretend
   {
     id: "generica_c", etapa: 1, titulo: "Genérica C · Curta e direta",
     quando: "Base fria/mista dos 9 empreendimentos",
-    texto: `Oi, {primeiroNome}! {consultor} por aqui, da MRV (a maior construtora da América Latina).
+    texto: `Oi, {primeiroNome}! {corretor} por aqui, da MRV (a maior construtora da América Latina).
 
 Recebi o seu interesse nos nossos lançamentos e quero te ajudar a conquistar o seu apê com as melhores condições do mercado!
 
@@ -141,7 +141,7 @@ Posso te fazer 3 perguntas rápidas para montar uma simulação sem compromisso?
     quando: "Lead com renda/entrada já informadas — empurrar p/ simulação",
     texto: `Olá, {primeiroNome}! Tudo bem?
 
-Aqui é o {consultor}, consultor de vendas da MRV — a maior construtora da América Latina! 🏢✨
+Aqui é o {corretor}, consultor de vendas da MRV — a maior construtora da América Latina! 🏢✨
 
 Vi que você demonstrou interesse no {empreendimento}, no {bairro}. É uma excelente escolha de região e um empreendimento incrível!
 
@@ -152,7 +152,7 @@ Pelo que vi, você já tem os dados de renda e entrada definidos para darmos o p
     quando: "Lead consultivo, valoriza localização",
     texto: `Olá, {primeiroNome}! Como vai?
 
-Sou o {consultor}, especialista da MRV, a maior construtora da América Latina.
+Sou o {corretor}, especialista da MRV, a maior construtora da América Latina.
 
 Recebi seu contato sobre o {empreendimento}, no bairro {bairro} em {cidade}. Além da estrutura do condomínio ser fantástica, a localização é excelente para quem busca praticidade no dia a dia.
 
@@ -163,7 +163,7 @@ Posso te enviar o material completo com fotos do projeto e agendarmos uma simula
     quando: "Lead morno — pedir melhor horário",
     texto: `Olá, {primeiroNome}, excelente dia!
 
-Meu nome é {consultor} e falo em nome da MRV, a maior construtora da América Latina.
+Meu nome é {corretor} e falo em nome da MRV, a maior construtora da América Latina.
 
 Vi que você está interessado no {empreendimento} ({bairro}) e quero te ajudar a realizar esse projeto! Já organizei os dados que você enviou de renda e entrada.
 
@@ -237,7 +237,7 @@ Vamos dar o passo oficial hoje para travar esse valor e garantir o seu imóvel a
   {
     id: "followup_d1", etapa: 0, titulo: "Follow-up D+1 · Sem resposta",
     quando: "Cadência Acelera — curto, uma pergunta só",
-    texto: `Oi, {primeiroNome}! {consultor}, da MRV. Só confirmando se você viu minha mensagem sobre o {empreendimento}. Quer que eu te envie a simulação rapidinho, sem compromisso?`
+    texto: `Oi, {primeiroNome}! {corretor}, da MRV. Só confirmando se você viu minha mensagem sobre o {empreendimento}. Quer que eu te envie a simulação rapidinho, sem compromisso?`
   },
   {
     id: "followup_d3", etapa: 0, titulo: "Follow-up D+3 · Valor/prova",
@@ -247,7 +247,7 @@ Vamos dar o passo oficial hoje para travar esse valor e garantir o seu imóvel a
   {
     id: "followup_d7", etapa: 0, titulo: "Follow-up D+7 · Encerramento elegante",
     quando: "Última tentativa antes de arquivar (evita spam/ban)",
-    texto: `{primeiroNome}, vou encerrar seu atendimento por aqui para não te incomodar, tudo bem? Se voltar a pensar no seu apê, é só me chamar que reativo suas condições na hora. — {consultor}, MRV`
+    texto: `{primeiroNome}, vou encerrar seu atendimento por aqui para não te incomodar, tudo bem? Se voltar a pensar no seu apê, é só me chamar que reativo suas condições na hora. — {corretor}, MRV`
   },
 ];
 

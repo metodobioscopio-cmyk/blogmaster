@@ -93,6 +93,7 @@ function renderMensagem(templateTexto, lead, consultor) {
   const map = {
     "{primeiroNome}": primeiroNome(lead.nome) || "tudo bem",
     "{nome}": lead.nome || "",
+    "{corretor}": consultor || "Januário Leal",
     "{consultor}": consultor || "Januário Leal",
     "{empreendimento}": lead.empreendimento || (emp && emp.nome) || "nossos empreendimentos",
     "{bairro}": lead.bairro || (emp && emp.bairro) || "região de seu interesse",
