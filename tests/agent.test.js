@@ -36,6 +36,12 @@ assert.strictEqual(fila.fila[0].leadId, "j1", "fila ordenada por score: José Fe
 assert(fila.fila[0].mensagem.includes("Gran Verona"));
 console.log("✔ fila segura ok:", fila.fila.map(f => f.nome).join(" → "));
 
+// mensagem do disparo escolhida pelo corretor (template forçado)
+const filaForcada = A.montarFilaSegura([jose, mary], { consultor: "Januário Leal", templateId: "generica_c" }, "l1");
+assert(filaForcada.fila.every(f => f.templateId === "generica_c"), "todas usam o template escolhido");
+assert(filaForcada.fila[0].mensagem.includes("Januário Leal") && filaForcada.fila[0].mensagem.includes("José"), "nome do lead + do corretor na mensagem");
+console.log("✔ template do disparo forçado + personalização ok");
+
 const portao = A.portaoPromocao(jose, "docs");
 assert.strictEqual(portao.ok, false); assert(portao.falta.some(f => /RG/.test(f)));
 console.log("✔ portão de documentos ok");

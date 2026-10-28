@@ -38,6 +38,8 @@ function extrairNome(bloco) {
   // Formato 1-por-linha do box de importação: "Nome - (62) 99999-0000 - ..."
   const antesTel = bloco.split(/\r?\n/)[0].match(/^([A-ZÀ-Ú][A-Za-zÀ-ú' ]{2,60}?)\s*[-–—;|]\s*(?:\+?55|\(?\d{2}\)?|\d{10,})/);
   if (antesTel) return limparNome(antesTel[1]);
+  const nomeTelJunto = bloco.split(/\r?\n/)[0].match(/^([A-Za-z\u00c0-\u00fa][A-Za-z\u00c0-\u00fa' ]{1,60}?)\s+(?:\+?55\s?)?\(?\d{2}\)?[\s.-]?9?\d{4}/);
+  if (nomeTelJunto && !/(renda|entrada|contato|telefone)/i.test(nomeTelJunto[1])) return limparNome(nomeTelJunto[1]);
   const padroes = [
     /nome\s*[:\-]\s*([^\n\r;]+)/i,
     /lead\s*[:\-]\s*([^\n\r;]+)/i,
@@ -127,12 +129,57 @@ function parseCSV(texto) {
   });
 }
 
+
+/* ---- Texto corrido: "Nome 62999998888 OUTRO NOME 62988887777 ..." ----
+   Lista colada sem quebras de linha: cada telefone fecha um lead e o
+   nome é o texto entre o telefone anterior e o próximo. */
+const FONE_FONTE = "(?:\\+?55[\\s.-]?)?\\(?\\d{2}\\)?[\\s.-]?9?\\d{4}[\\s.-]?\\d{4}";
+function encontrarTelefones(texto) { return [...String(texto).matchAll(new RegExp(FONE_FONTE, "g"))]; }
+function nomeBonito(nome) {
+  return String(nome).toLowerCase().split(/\s+/).map((w, i) =>
+    (i > 0 && ["de", "da", "do", "das", "dos", "e"].includes(w)) ? w : (w.charAt(0).toUpperCase() + w.slice(1))
+  ).join(" ");
+}
+function parseTextoCorrido(texto) {
+  if (/renda|entrada|fgts|R\$/i.test(texto)) return null; // tem dados extras: usar parser por bloco
+  const matches = encontrarTelefones(texto);
+  if (matches.length < 2) return null;
+  const leads = [];
+  let anterior = 0;
+  for (const m of matches) {
+    let nome = texto.slice(anterior, m.index)
+      .replace(/[\r\n]+/g, " ").replace(/^[\s\-–—:;|,.]+|[\s\-–—:;|,.]+$/g, "")
+      .replace(/^(nome|cliente|lead)\s*:\s*/i, "").replace(/\s+/g, " ").trim();
+    anterior = m.index + m[0].length;
+    if (nome.length > 70) return null; // segmento grande demais: não é lista corrida
+    if (/n(ã|a)o inform/i.test(nome)) nome = "";
+    let tel = m[0].replace(/\D/g, "");
+    if (tel.length >= 12 && tel.startsWith("55")) tel = tel.slice(2);
+    if (tel.length < 10 || tel.length > 11) continue;
+    leads.push({
+      nome: nome ? nomeBonito(nome) : "", telefone: tel,
+      renda: null, entrada: null, fgts: "", composicao: "",
+      empreendimento: "", bairro: "", cidade: "",
+      obs: `${nome} ${m[0]}`.trim(), optIn: true,
+    });
+  }
+  return leads.length >= 2 ? leads : null;
+}
+function detectarTextoCorrido(texto) {
+  const linhas = String(texto).split(/\r?\n/).filter(l => l.trim());
+  const total = encontrarTelefones(texto).length;
+  const maxPorLinha = linhas.reduce((mx, l) => Math.max(mx, encontrarTelefones(l).length), 0);
+  return (total >= 2 && maxPorLinha >= 2) ? parseTextoCorrido(texto) : null;
+}
+
 function parseTextoParaLeads(texto) {
   if (!texto || !texto.trim()) return [];
   const csv = parseCSV(texto);
   let leads;
   if (csv && csv.length) {
     leads = csv;
+  } else if (detectarTextoCorrido(texto)) {
+    leads = detectarTextoCorrido(texto);
   } else {
     let blocos = texto.split(/\n\s*---\s*\n|\n{3,}|(?=\n\s*(?:nome|lead|cliente)\s*[:\-])/i).map(b => b.trim()).filter(b => b.length > 3);
     // formato 1 por linha: "Nome; 62 99999-9999" / "Nome - telefone"

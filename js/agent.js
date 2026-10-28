@@ -134,7 +134,8 @@ function montarFilaSegura(leads, config, listaId) {
   if (inicio.getHours() >= cfg.horaFim) { inicio.setDate(inicio.getDate() + 1); inicio.setHours(cfg.horaInicio, 0, 0, 0); }
   const fila = ordenados.map((lead, i) => {
     const quando = new Date(inicio.getTime() + i * cfg.intervaloMin * 60000);
-    const tId = lead.empreendimento ? "abertura_especifica" : "menu9";
+    const forcado = (cfg.templateId && cfg.templateId !== "auto" && typeof TEMPLATES !== "undefined" && TEMPLATES.some(x => x.id === cfg.templateId)) ? cfg.templateId : null;
+    const tId = forcado || (lead.empreendimento ? "abertura_especifica" : "menu9");
     const t = (typeof TEMPLATES !== "undefined" ? TEMPLATES.find(x => x.id === tId) : null);
     const msg = t ? variarMensagem(renderMensagem(t.texto, lead, cfg.consultor), lead.id + lead.telefone) : "";
     return { id: "q-" + lead.id, leadId: lead.id, nome: lead.nome, telefone: lead.telefone, previsao: quando.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }), templateId: tId, mensagem: msg, status: "pendente", score: scoreLead(lead).score };

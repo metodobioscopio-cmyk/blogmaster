@@ -500,15 +500,25 @@ $("#btn-esp-resposta")?.addEventListener("click", () => {
 });
 
 /* ================= Fila Segura ================= */
-function renderFilaSelectors() { renderListaSelectsKeep(); pintarFila(); }
+function renderFilaSelectors() {
+  renderListaSelectsKeep();
+  const sel = $("#fila-template");
+  if (sel) {
+    const atual = sel.value || "auto";
+    sel.innerHTML = `<option value="auto">🤖 Automática — Agente escolhe (Menu 1–9 ou específica)</option>` +
+      TEMPLATES.filter(x => x.etapa === 1).map(x => `<option value="${x.id}">${esc(x.titulo)}</option>`).join("");
+    sel.value = [...sel.options].some(o => o.value === atual) ? atual : "auto";
+  }
+  pintarFila();
+}
 function cfgFila() {
-  return { limiteDia: Number($("#fila-limite").value) || 40, intervaloMin: Number($("#fila-intervalo").value) || 3, horaInicio: Number($("#fila-hini").value) || 8, horaFim: Number($("#fila-hfim").value) || 20, soOptIn: $("#fila-optin").checked, consultor: state.config.consultor };
+  return { limiteDia: Number($("#fila-limite").value) || 40, intervaloMin: Number($("#fila-intervalo").value) || 3, horaInicio: Number($("#fila-hini").value) || 8, horaFim: Number($("#fila-hfim").value) || 20, soOptIn: $("#fila-optin").checked, consultor: state.config.consultor, templateId: ($("#fila-template")?.value || "auto") };
 }
 function montarFila() {
   const { fila, pulados } = montarFilaSegura(state.leads, cfgFila(), $("#fila-lista").value || null);
   filaAtual = fila;
   $("#badge-fila").textContent = fila.length;
-  $("#fila-resumo").innerHTML = `<div class="${fila.length ? "ok-box" : "warn-box"}">🤖 Fila montada: <b>${fila.length} contato(s)</b> personalizado(s), ordenados por score, espaçados em ${cfgFila().intervaloMin} min em horário comercial.
+  $("#fila-resumo").innerHTML = `<div class="${fila.length ? "ok-box" : "warn-box"}">🤖 Fila montada: <b>${fila.length} contato(s)</b> personalizado(s) (nome do lead + nome do corretor em cada mensagem), ordenados por score, espaçados em ${cfgFila().intervaloMin} min em horário comercial. <b>Mensagem do disparo:</b> ${cfgFila().templateId === "auto" ? "automática (Agente)" : esc((TEMPLATES.find(x => x.id === cfgFila().templateId) || {}).titulo || cfgFila().templateId)}.
     ${pulados.length ? `<br>⏭️ <b>${pulados.length} pulado(s):</b> ${pulados.map(p => `${esc(p.lead.nome)} (${esc(p.motivo)})`).join(" · ")}` : ""}
     <br><small>Nada foi enviado. Envie 1 a 1 abaixo — clique humano abre seu WhatsApp com o texto pronto.</small></div>`;
   pintarFila();

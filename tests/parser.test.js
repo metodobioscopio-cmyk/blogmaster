@@ -51,6 +51,26 @@ assert.strictEqual(lbox[0].bairro, "Papillon Park");
 assert.strictEqual(lbox[1].nome, "Maryana"); assert.strictEqual(lbox[1].cidade, "Aparecida de Goiânia");
 console.log("✔ formato box onboarding:", lbox.map(x => x.nome).join(" + "));
 
+// lista corrida (sem quebras): "Nome Tel Nome2 Tel2 ..." — formato real do corretor
+const corrida = "Ketuly 62990001001 MURILO HENRIQUE DIAS DOS SANTOS 62990001002 luiz 62990001003 Larissa dos Reis e silva 62990001004 Nome não informado 62990001005 David Reithon Muniz 5562990001006 Fê 12990001007 maryana barbosa 62990001008";
+const lc = parseTextoParaLeads(corrida);
+assert.strictEqual(lc.length, 8, "8 leads na lista corrida");
+assert.strictEqual(lc[0].nome, "Ketuly"); assert.strictEqual(lc[0].telefone, "62990001001");
+assert.strictEqual(lc[1].nome, "Murilo Henrique Dias dos Santos");
+assert.strictEqual(lc[2].nome, "Luiz");
+assert.strictEqual(lc[3].nome, "Larissa dos Reis e Silva");
+assert.strictEqual(lc[4].nome, ""); assert.strictEqual(lc[4].telefone, "62990001005"); // "Nome não informado" mantém só o telefone
+assert.strictEqual(lc[5].telefone, "62990001006"); // prefixo 55 removido
+assert.strictEqual(lc[6].nome, "Fê"); assert.strictEqual(lc[6].telefone, "12990001007");
+assert.strictEqual(lc[7].nome, "Maryana Barbosa");
+console.log("✔ lista corrida:", lc.length, "leads separados nome/telefone");
+
+// 1 por linha sem traço: "Nome 62999998888"
+const junto = parseTextoParaLeads("Ketuly 62990002001\nMurilo Sousa 62990002002");
+assert.strictEqual(junto.length, 2);
+assert.strictEqual(junto[0].nome, "Ketuly");
+console.log("✔ nome+telefone por linha sem traço");
+
 assert.strictEqual(parseMoeda("R$ 5.000,00"), 5000);
 assert.strictEqual(parseTextoParaLeads("").length, 0);
 console.log("✅ parser.test.js OK");
