@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BlogMaster — Copiloto de Afiliados Gringa</title>
+<meta name="description" content="Copiloto interativo para campanhas de display e outros canais em affiliate marketing gringo: radar de produto, blueprints validados, gerador de presell, keyword harvester, calculadora de ROI e arsenal GitHub/Hugging Face.">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2338e0a3'/><text x='16' y='22' font-size='16' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%23052b22'>B</text></svg>">
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div><b>BlogMaster</b><small>Copiloto afiliado</small></div>
+    </div>
+    <nav id="nav"></nav>
+    <div class="foot">
+      Snapshot de dados: 04/11/2026<br>
+      Métricas mudam — confirme na rede.
+    </div>
+  </aside>
+
+  <main>
+    <!-- ============ COCKPIT ============ -->
+    <section class="page on" id="p-inicio">
+      <h1>Seu copiloto de campanhas</h1>
+      <p class="lead">Um caminho único, do produto à campanha validada. Cada etapa tem ferramenta, número de referência e critério de decisão. Nada aqui é "confie em mim" — é "meça isso antes de gastar".</p>
+
+      <div class="grid g4" style="margin-top:20px" id="cockpitStats"></div>
+
+      <h2>Comece por aqui</h2>
+      <div class="grid g3" id="cockpitCards"></div>
+
+      <h2>Regras que não se negociam</h2>
+      <div class="grid g2">
+        <div class="card">
+          <h3>🔒 Estrutura própria, sempre</h3>
+          <p class="sub">Anúncio → sua presell no seu domínio → link de afiliado → página do produtor. O link direto no anúncio muda de URL no redirect, o que gera reprovação por destino incompatível e mata a recuperação de venda. Sem presell você não tem remarketing, não tem pixel, não tem dado.</p>
+        </div>
+        <div class="card">
+          <h3>📊 Sem número, não há decisão</h3>
+          <p class="sub">Antes de subir: EPC, APV, CVR e comissão. Depois de subir: CPC, CTR, CVR da presell e RPC. O Copiloto transforma esses 4 últimos em escalar / ajustar / cortar.</p>
+        </div>
+        <div class="card">
+          <h3>🧪 Um teste por vez</h3>
+          <p class="sub">Uma oferta, um ângulo, um canal, uma variável. Quem muda tudo ao mesmo tempo aprende nada e culpa o canal.</p>
+        </div>
+        <div class="card">
+          <h3>⚖️ Compliance é parte da campanha</h3>
+          <p class="sub">Disclosure de afiliado (FTC), sem promessa de cura/ganho garantido, sem se passar pelo produtor, sem múltiplas contas. Reprovação acumulada é o que transforma "campanha pausada" em "conta perdida".</p>
+        </div>
+      </div>
+
+      <h2>Mapa completo do fluxo</h2>
+      <div class="card">
+        <div id="flowMap"></div>
+      </div>
+    </section>
+
+    <!-- ============ RADAR ============ -->
+    <section class="page" id="p-radar">
+      <h1>Radar de produtos</h1>
+      <p class="lead">Ofertas do mercado gringo com as métricas que importam. O <b>Score</b> combina retorno esperado, prova de mercado, risco de compliance e compatibilidade com presell. Ordene, filtre, clique numa linha e veja o plano de ataque daquela oferta.</p>
+      <div class="row" style="margin:16px 0">
+        <div style="flex:1;min-width:200px"><input id="radarSearch" placeholder="Buscar produto, rede ou nicho…"></div>
+        <select id="radarNicho" style="max-width:200px"></select>
+        <select id="radarRede" style="max-width:180px"></select>
+        <select id="radarOrd" style="max-width:220px">
+          <option value="score">Ordenar por Score</option>
+          <option value="epc">Ordenar por EPC</option>
+          <option value="comissao">Ordenar por comissão</option>
+          <option value="cvr">Ordenar por CVR</option>
+          <option value="gravity">Ordenar por gravity</option>
+          <option value="risco">Menor risco primeiro</option>
+        </select>
+      </div>
+      <div class="grid g2" style="align-items:start">
+        <div class="card pad0" style="grid-column:1/-1"><div class="tblwrap"><table id="radarTable"></table></div></div>
+      </div>
+      <div id="radarDetail" style="margin-top:16px"></div>
+      <div class="note">Fonte dos números: ClickBank Top Offers, cbhive, BuyGoods e material de vendor (2026). Gravity = nº de afiliados com venda nas últimas 12 semanas. EPC = ganho por clique (hop). APV = valor médio por venda. Sempre reconfirme no painel da rede.</div>
+    </section>
+
+    <!-- ============ CAMPANHAS ============ -->
+    <section class="page" id="p-campanhas">
+      <h1>Campanhas validadas (blueprints)</h1>
+      <p class="lead">Arquétipos que a indústria já testou milhões de vezes. Não são "hacks": são estruturas com KPIs de referência e um critério claro de quando escalar ou matar. Escolha o canal e siga o passo a passo.</p>
+      <div class="tabs" id="bpTabs"></div>
+      <div id="bpBody"></div>
+      <h2>Todos os canais, lado a lado</h2>
+      <div class="card pad0"><div class="tblwrap"><table id="canalTable"></table></div></div>
+    </section>
+
+    <!-- ============ COPILOTO ============ -->
+    <section class="page" id="p-copiloto">
+      <h1>Copiloto de decisão</h1>
+      <p class="lead">Jogue os números reais da campanha e receba a decisão: escalar, ajustar criativo, ajustar presell, trocar ângulo ou cortar oferta. É a mesma regra usada por media buyer sênior — só que explícita.</p>
+      <div class="grid g2" style="margin-top:16px;align-items:start">
+        <div class="card">
+          <h3>Dados da campanha</h3>
+          <div class="grid g2">
+            <div class="field"><label class="f">Orçamento gasto (US$)</label><input id="cpSpend" type="number" step="0.01" value="60"></div>
+            <div class="field"><label class="f">Cliques</label><input id="cpClicks" type="number" value="220"></div>
+            <div class="field"><label class="f">Impressões</label><input id="cpImpr" type="number" value="38000"></div>
+            <div class="field"><label class="f">Cliques no botão da presell</label><input id="cpOut" type="number" value="48"></div>
+            <div class="field"><label class="f">Vendas</label><input id="cpSales" type="number" value="1"></div>
+            <div class="field"><label class="f">Comissão por venda (US$)</label><input id="cpComm" type="number" step="0.01" value="53"></div>
+            <div class="field"><label class="f">Dias no ar</label><input id="cpDays" type="number" value="3"></div>
+            <div class="field"><label class="f">Canal</label><select id="cpChan"><option>Display</option><option>Search</option><option>Demand Gen/YouTube</option><option>Native</option><option>Meta</option><option>TikTok</option><option>Microsoft Ads</option></select></div>
+          </div>
+          <button class="btn pri" id="cpRun">Diagnosticar campanha</button>
+          <button class="btn ghost" id="cpReset">Limpar</button>
+        </div>
+        <div id="cpOut2"></div>
+      </div>
+    </section>
+
+    <!-- ============ GERADOR ============ -->
+    <section class="page" id="p-gerador">
+      <h1>Gerador de presell e anúncios</h1>
+      <p class="lead">Preencha o briefing, escolha o formato e receba a presell completa (com disclosure, prós e contras e CTA), headlines, hooks de vídeo e roteiro. Tudo em português ou inglês — a oferta é gringa, o anúncio é em inglês; sua operação pode ser em português.</p>
+      <div class="tabs" id="genTabs2">
+        <div class="tab on" data-gen="presell">Presell</div>
+        <div class="tab" data-gen="heads">Headlines &amp; hooks</div>
+        <div class="tab" data-gen="video">Roteiro de vídeo</div>
+        <div class="tab" data-gen="native">Headline native/advertorial</div>
+      </div>
+      <div class="grid g2" style="align-items:start">
+        <div class="card">
+          <h3>Briefing</h3>
+          <div class="field"><label class="f">Produto</label><input id="gProd" value="The Brain Song"><span class="hint">Nome exato como aparece no anúncio.</span></div>
+          <div class="field"><label class="f">Nicho</label><select id="gNicho"></select></div>
+          <div class="field"><label class="f">Público (dor ou desejo)</label><input id="gPub" value="adultos 45+ que sentem que a memória e o foco pioraram"></div>
+          <div class="field"><label class="f">Mecanismo único (por que funciona)</label><input id="gMec" value="faixas de áudio com frequências gama que o cérebro sincroniza"></div>
+          <div class="field"><label class="f">Resultado prometido — sem claim de cura</label><input id="gBen" value="mais clareza mental e foco no dia a dia"></div>
+          <div class="field"><label class="f">Ângulo</label><select id="gAng"></select></div>
+          <div class="field"><label class="f">Formato</label><select id="gFmt"></select></div>
+          <div class="field"><label class="f">Idioma da saída</label><select id="gLang"><option value="en">Inglês (tráfego)</option><option value="pt">Português (revisão/operação)</option></select></div>
+          <div class="field"><label class="f">Seu link de afiliado</label><input id="gLink" placeholder="https://hop.clickbank.net/?affiliate=..."></div>
+          <div class="field"><label class="f">Seu domínio da presell</label><input id="gDom" placeholder="https://seu-dominio.com"></div>
+          <div class="field"><label class="f">Seu nome / marca</label><input id="gMarca" value="Redação independente"></div>
+          <button class="btn pri" id="gRun">Gerar</button>
+          <button class="btn ghost" id="gCopy">Copiar HTML</button>
+          <div class="note">A saída é um rascunho estruturado: revise claims, números e depoimentos antes de publicar. Depoimento inventado = violação de política e de lei.</div>
+        </div>
+        <div>
+          <div class="tabs" style="margin-top:0"><div class="tab on">Preview</div><div class="tab" id="gTabCode">HTML</div></div>
+          <div id="gPreview"></div>
+          <div id="gCode" style="display:none"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ KEYWORD ============ -->
+    <section class="page" id="p-keyword">
+      <h1>Keyword &amp; intenção</h1>
+      <p class="lead">O "search eficiente" não é procurar muita keyword: é achar os termos onde a pessoa já decidiu que quer resolver o problema e está comparando soluções. Gere a matriz de intenção, filtre o que presta e saia com o Custom Segment pronto para colar no Google Ads.</p>
+      <div class="grid g2" style="align-items:start;margin-top:16px">
+        <div class="card">
+          <h3>Matriz de intenção</h3>
+          <div class="field"><label class="f">Produto / tema</label><input id="kwSeed" value="brain song"></div>
+          <div class="field"><label class="f">Categoria genérica</label><input id="kwCat" value="brainwave audio"></div>
+          <div class="field"><label class="f">Problema</label><input id="kwProb" value="memory and focus"></div>
+          <div class="field"><label class="f">Concorrentes (separe por vírgula)</label><input id="kwComp" value="genius wave, pineal xt"></div>
+          <div class="field"><label class="f">Idioma</label><select id="kwLang"><option value="en">Inglês</option><option value="pt">Português</option></select></div>
+          <button class="btn pri" id="kwRun">Gerar matriz</button>
+        </div>
+        <div class="card">
+          <h3>Como usar</h3>
+          <ol style="margin-left:18px;font-size:13.5px;color:var(--dim);display:flex;flex-direction:column;gap:7px">
+            <li><b>Transacional / comparativo</b> → vai para Search e para Custom Intent do Display.</li>
+            <li><b>Problema</b> → só em Search amplo e em remarketing, nunca display frio.</li>
+            <li><b>Informacional</b> → matéria-prima para conteúdo/SEO/parasita, não para anúncio.</li>
+            <li>Cole a lista no Google Ads → Públicos → Segmentos personalizados → "Pessoas com qualquer um destes interesses".</li>
+            <li>Baixe o CSV e alimente o script <span class="mono">tools/keyword_harvest.py</span> deste repositório para coletar sugestões reais do Google.</li>
+          </ol>
+        </div>
+      </div>
+      <div id="kwOut" style="margin-top:16px"></div>
+    </section>
+
+    <!-- ============ VIABILIDADE ============ -->
+    <section class="page" id="p-viab">
+      <h1>Viabilidade &amp; plano de teste</h1>
+      <p class="lead">Antes de gastar: quanto você precisa faturar por clique para a campanha existir? Esta calculadora mostra o CPC máximo, o orçamento de teste mínimo e em quantos dias você tem significância estatística.</p>
+      <div class="grid g2" style="align-items:start;margin-top:16px">
+        <div class="card">
+          <h3>Parâmetros da oferta</h3>
+          <div class="grid g2">
+            <div class="field"><label class="f">Comissão por venda (US$)</label><input id="viaComm" type="number" step="0.01" value="53"></div>
+            <div class="field"><label class="f">CVR esperada presell → venda (%)</label><input id="viaCvr" type="number" step="0.1" value="1.0"></div>
+            <div class="field"><label class="f">CTR esperado (%)</label><input id="viaCtr" type="number" step="0.1" value="0.8"></div>
+            <div class="field"><label class="f">CPC esperado (US$)</label><input id="viaCpc" type="number" step="0.01" value="0.28"></div>
+            <div class="field"><label class="f">Margem desejada (%)</label><input id="viaMarg" type="number" value="30"></div>
+            <div class="field"><label class="f">Reembolso/chargeback (%)</label><input id="viaRef" type="number" step="0.1" value="8"></div>
+          </div>
+          <button class="btn pri" id="viaRun">Calcular</button>
+        </div>
+        <div id="viaOut"></div>
+      </div>
+      <h2>Builder de link de rastreio</h2>
+      <div class="card">
+        <p class="sub" style="margin-bottom:12px">Sempre envie o clique para a SUA presell com parâmetros, e da presell para o link de afiliado. Assim você sabe qual anúncio, ângulo e campanha gerou a venda — e o vendor vê o sub-id.</p>
+        <div class="grid g3">
+          <div class="field"><label class="f">Link base de afiliado</label><input id="lkBase" value="https://hop.clickbank.net/?affiliate=SEUID&vendor=brainsng"></div>
+          <div class="field"><label class="f">Parâmetro de sub-id do vendor</label><input id="lkParam" value="tid"></div>
+          <div class="field"><label class="f">Origem (utm_source)</label><input id="lkSrc" value="google-display"></div>
+          <div class="field"><label class="f">Campanha (utm_campaign)</label><input id="lkCamp" value="brainsong-angle-medo"></div>
+          <div class="field"><label class="f">Ângulo (sub-id)</label><input id="lkAng" value="a1-medo"></div>
+        </div>
+        <button class="btn" id="lkRun">Montar links</button>
+        <div id="lkOut" style="margin-top:14px"></div>
+      </div>
+    </section>
+
+    <!-- ============ CHECKLIST ============ -->
+    <section class="page" id="p-check">
+      <h1>Compliance &amp; pré-lançamento</h1>
+      <p class="lead">A parte chata que decide se sua conta dura 30 dias ou 3 anos. Marque conforme conclui — o progresso fica salvo no navegador.</p>
+      <div class="tabs" id="ckTabs"></div>
+      <div id="ckBody"></div>
+      <div class="note">Base: políticas de "Abusing the ad network" (compromised site, circumventing systems) e "Destination requirements" do Google Ads; políticas de saúde/atributos pessoais do Meta; guia de disclosure da FTC (16 CFR Part 255).</div>
+    </section>
+
+    <!-- ============ PLANO 7 DIAS ============ -->
+    <section class="page" id="p-plano">
+      <h1>Plano de 7 dias</h1>
+      <p class="lead">Sequência operacional para sair do zero a uma campanha com dado suficiente para decidir. Cada dia tem tarefas e uma entrega concreta. Marque e acompanhe.</p>
+      <div class="card" style="margin:16px 0"><div class="row between"><span class="small-label">Progresso</span><b id="planPct">0%</b></div><div class="meter" style="margin-top:8px"><i id="planBar" style="width:0%"></i></div></div>
+      <div id="planBody"></div>
+    </section>
+
+    <!-- ============ GITHUB ============ -->
+    <section class="page" id="p-github">
+      <h1>Arsenal GitHub</h1>
+      <p class="lead">Só o que serve para operar: MCPs de ads, scripts oficiais, skills de copy, trackers, builders de presell e pesquisa de keyword. Cada item tem o "como usar hoje" — não é lista de estrelas, é ferramenta.</p>
+      <div class="tabs" id="ghTabs"></div>
+      <div class="grid g2" id="ghBody"></div>
+    </section>
+
+    <!-- ============ HUGGING FACE ============ -->
+    <section class="page" id="p-hf">
+      <h1>Arsenal Hugging Face</h1>
+      <p class="lead">Modelos que resolvem problemas reais da operação: escrever, classificar intenção, agrupar termos, transcrever VSL e gerar criativo. Onde rodar local vale mais que API, está indicado.</p>
+      <div class="grid g2" id="hfBody"></div>
+      <h2>Receita de stack local (custo ~zero)</h2>
+      <div class="card">
+        <pre id="hfStack"></pre>
+      </div>
+    </section>
+
+    <!-- ============ MANUAL ============ -->
+    <section class="page" id="p-manual">
+      <h1>Manual prático</h1>
+      <p class="lead">O texto completo: fundamentos, escolha de oferta, estrutura, tipos de campanha além do display, números, compliance e erros que custam caro. Leia uma vez inteiro; depois use como referência por seção.</p>
+      <div class="tabs" id="manTabs"></div>
+      <div id="manBody"></div>
+    </section>
+
+    <!-- ============ CADERNO ============ -->
+    <section class="page" id="p-caderno">
+      <h1>Caderno da operação</h1>
+      <p class="lead">Suas decisões, hipóteses e resultados. Diário de bordo salvo no navegador — exporte em JSON para não perder.</p>
+      <div class="grid g2" style="align-items:start;margin-top:16px">
+        <div class="card">
+          <h3>Nova entrada</h3>
+          <div class="field"><label class="f">Campanha / oferta</label><input id="ntTitle" placeholder="Brain Song — Display — ângulo medo"></div>
+          <div class="field"><label class="f">Hipótese</label><textarea id="ntHyp" placeholder="Se eu usar hook de medo no primeiro segundo, o CTR sobe acima de 1%."></textarea></div>
+          <div class="field"><label class="f">Resultado / números</label><textarea id="ntRes" placeholder="220 cliques, 48 saídas, 1 venda. RPC 0,88. CPC 0,27."></textarea></div>
+          <div class="field"><label class="f">Decisão</label><select id="ntDec"><option>Escalar</option><option>Ajustar criativo</option><option>Ajustar presell</option><option>Trocar ângulo</option><option>Cortar</option></select></div>
+          <button class="btn pri" id="ntAdd">Salvar entrada</button>
+        </div>
+        <div class="card">
+          <div class="row between" style="margin-bottom:10px"><h3 style="margin:0">Entradas</h3>
+            <div class="row"><button class="btn sm ghost" id="ntExport">Exportar JSON</button><button class="btn sm ghost" id="ntImportBtn">Importar</button><input type="file" id="ntImport" accept=".json" style="display:none"></div>
+          </div>
+          <div id="ntList"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
