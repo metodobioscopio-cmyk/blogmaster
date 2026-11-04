@@ -1,0 +1,10 @@
+{
+  "name": "blogmaster-crm-acelera-mrv",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CRM agêntico de WhatsApp (modo sem ban, human-in-the-loop) — Método Acelera MRV · Januário Leal",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests/parser.test.js && node tests/agent.test.js"
+  }
+}

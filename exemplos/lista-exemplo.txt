@@ -1,0 +1,26 @@
+EXEMPLO DE LISTA PARA COLAR NO BLOGMASTER CRM (Painel por Listas)
+Um lead por bloco, separado por linha em branco ou ---
+
+José Fernando Ribeiro Matos
+📞 Contato: 62991074310
+Renda Mensal: R$ 5.000,00
+FGTS: não informou
+Entrada disponível: R$ 5.000,00
+Empreendimento: Gran Verona
+Bairro de interesse inicial: Papillon Park
+Classificação: em amadurecimento — compra sozinho, interesse na vizinhança, respostas rápidas.
+
+---
+
+Nome: Maria Clara Souza
+Telefone: (62) 98888-7777
+Renda: R$ 4.200
+Entrada: R$ 10.000
+Empreendimento: Gran Safira
+Bairro: Parque Atheneu
+
+---
+
+Nome: Carlos Eduardo Lima
+Celular: 62977776666
+(sem empreendimento definido — o Agente usa a abertura com o Menu 1-9)
