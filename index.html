@@ -288,6 +288,55 @@
         <div class="card"><div id="dgForm"></div><button class="btn pri" id="dgRun" style="margin-top:6px">Gerar recomendação</button></div>
         <div id="dgOut"></div>
       </div>
+      <div id="dgPlan" style="margin-top:16px"></div>
+    </section>
+
+
+    <!-- ============ FLUXO ============ -->
+    <section class="page" id="p-fluxo">
+      <div class="row between">
+        <div><h1>Executar plano</h1><p class="lead">Diagnóstico → Radar → Gerador em um fluxo só. A oferta escolhida fica travada, a presell é montada no formato do canal, e o YAML é validado contra as mesmas 10 regras do dry-run. O que falhar bloqueia o passo seguinte.</p></div>
+        <div class="pill b" id="fxHeader">sem plano ativo</div>
+      </div>
+
+      <div class="row" style="margin:16px 0;gap:6px" id="fxSteps"></div>
+
+      <!-- passo 1 -->
+      <div class="card" id="fxS1">
+        <div class="row between"><h3 style="margin:0">1 · Oferta (do Radar)</h3><span class="pill" id="fxOfferPill">nenhuma</span></div>
+        <div class="grid g2" style="margin-top:12px;align-items:start">
+          <div>
+            <div class="field"><label class="f">Trocar oferta</label><select id="fxOffer"></select></div>
+            <div class="row"><button class="btn sm" id="fxPick">Usar esta oferta</button><button class="btn sm ghost" data-go="radar">Abrir Radar completo</button></div>
+          </div>
+          <div id="fxOfferInfo"></div>
+        </div>
+      </div>
+
+      <!-- passo 2 -->
+      <div class="card" id="fxS2" style="margin-top:14px">
+        <h3>2 · Briefing e formato</h3>
+        <div class="grid g2">
+          <div>
+            <div class="field"><label class="f">Produto</label><input id="fxProd"></div>
+            <div class="field"><label class="f">Público (dor ou desejo)</label><input id="fxPub"></div>
+            <div class="field"><label class="f">Mecanismo único</label><input id="fxMec"></div>
+          </div>
+          <div>
+            <div class="field"><label class="f">Benefício — sem claim de cura</label><input id="fxBen"></div>
+            <div class="field"><label class="f">Formato da presell (sugerido pelo canal)</label><select id="fxFmt"></select></div>
+            <div class="field"><label class="f">Ângulo</label><select id="fxAng"></select></div>
+          </div>
+        </div>
+        <div class="grid g2">
+          <div class="field"><label class="f">Seu link de afiliado</label><input id="fxLink" placeholder="https://hop.clickbank.net/?affiliate=..."></div>
+          <div class="field"><label class="f">Seu domínio</label><input id="fxDom" placeholder="https://seu-dominio.com"></div>
+        </div>
+        <div class="row"><button class="btn pri" id="fxBuild">Montar plano completo</button><button class="btn ghost sm" id="fxFill">Preencher com o padrão do nicho</button></div>
+      </div>
+
+      <!-- resultado -->
+      <div id="fxResult" style="margin-top:16px"></div>
     </section>
 
     <!-- ============ REDES ============ -->
@@ -379,7 +428,7 @@
           <h3>Validador de campanha (pré-commit)</h3>
           <p class="sub">Equivalente local e honesto do Harness Dry-Run: valida o YAML da campanha e o RBAC de execução antes de qualquer chamada de API. Não roda pipeline — valida.</p>
           <div class="field" style="margin-top:10px"><label class="f">YAML da campanha</label><textarea id="dbYaml" class="mono" style="min-height:150px"></textarea></div>
-          <div class="row"><button class="btn pri" id="dbValidate">Validar (dry-run)</button><button class="btn ghost sm" id="dbYamlReset">Restaurar exemplo</button></div>
+          <div class="row"><button class="btn pri" id="dbValidate">Validar (dry-run)</button><button class="btn ghost sm" id="dbYamlReset">Restaurar exemplo</button><button class="btn ghost sm" id="dbYamlPlan">Carregar do plano</button></div>
           <div id="dbYamlOut" style="margin-top:12px"></div>
         </div>
       </div>

@@ -27,6 +27,23 @@ Redes 2026 (10 redes com status de verificação) · Stack & MCPs auditados · M
 pipeline, checklist diário, **validador de campanha (dry-run de YAML)** , **FTC checker** e
 UTM builder · Spec verificada item a item.
 
+### Fluxo único `Executar plano`
+
+Diagnóstico → Radar → Gerador em um clique. A oferta escolhida é travada, o briefing vem
+pré-preenchido pelo nicho, e o app monta de uma vez:
+
+1. **presell** no formato do canal, com disclosure FTC;
+2. **YAML** de campanha validado pelas mesmas 10 regras do dry-run;
+3. **UTM + sub-id** prontos;
+4. **4 gates de liberação** — dados da oferta · estrutura própria (domínio sem a marca do
+   produto) · campanha + disclosure · compliance de copy. Gate vermelho **bloqueia** o botão
+   de execução;
+5. **execução**: `POST /ads/create_campaign` no bridge (sempre `PAUSED`) ou prompt pronto
+   para colar no MCP.
+
+O plano vive em `localStorage` (`bm__fx`) e se espelha no Radar, no Gerador e no Dashboard —
+sobrevive ao reload.
+
 **Copiloto** — cockpit, radar de 21 ofertas, 8 blueprints de campanha, diagnóstico de
 campanha, gerador de presell, keyword/intenção, viabilidade, compliance, plano de 7 dias,
 arsenal GitHub/HF, integrações MCP e manual.

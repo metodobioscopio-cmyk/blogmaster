@@ -591,3 +591,19 @@ window.BM_DATA.integracoes = {
     ]
   }
 };
+
+/* =========================================================================
+   Briefing por nicho — usado pelo fluxo "Executar plano" para pré-preencher
+   público, mecanismo e benefício sem claim de cura.
+   ========================================================================= */
+window.BM_DATA.briefingPorNicho = {
+  nutra:        { pub: "adultos 45+ que já tentaram outras soluções e não mantiveram o resultado", mec: "o mecanismo metabólico que o produto organiza em 3 fases", ben: "mais disposição e consistência no dia a dia", fmt: "advertorial", canal: "native" },
+  espiritual:   { pub: "pessoas que sentem que estão travadas e já tentaram mudar de rotina", mec: "um padrão de áudio/ritual que sincroniza o estado mental", ben: "mais foco, calma e clareza mental", fmt: "advertorial", canal: "native" },
+  sobrevivencia:{ pub: "homens 40+ preocupados com autonomia e segurança da família", mec: "um projeto de baixo custo que gera energia/reserva em casa", ben: "independência em situações de falta de recursos", fmt: "advertorial", canal: "native" },
+  pets:         { pub: "tutores que já gastaram com ração e suplementos sem ver diferença", mec: "a combinação de nutrientes que age na flora do animal", ben: "mais energia e digestão estável no pet", fmt: "advertorial", canal: "meta" },
+  financas:     { pub: "pessoas endividadas que querem organizar a vida financeira sem risco", mec: "um método de organização e corte de gastos invisíveis", ben: "controle do orçamento e folga no fim do mês", fmt: "review", canal: "search" },
+  relacionamento:{ pub: "pessoas que sentem distância crescente no relacionamento", mec: "um conjunto de gatilhos de comunicação e reconexão", ben: "conversas mais próximas e menos conflito", fmt: "quiz", canal: "meta" },
+  software:     { pub: "profissionais que perdem horas em tarefas repetitivas", mec: "automação com IA que roda em segundo plano", ben: "menos trabalho manual e mais entrega por semana", fmt: "review", canal: "search" },
+  ecom:         { pub: "pessoas comparando opções antes de comprar", mec: "a diferença de construção e durabilidade frente às alternativas", ben: "uma compra que não precisa ser repetida", fmt: "review", canal: "display" },
+  educacao:     { pub: "adultos que precisam do idioma/skill para o trabalho", mec: "um método de prática curta e diária com correção", ben: "progresso mensurável em poucas semanas", fmt: "review", canal: "search" }
+};

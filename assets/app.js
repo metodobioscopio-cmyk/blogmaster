@@ -40,6 +40,7 @@
     { grupo: "CirurgiaAfiliada", itens: [
       ["home", "Home", "◆"],
       ["diagnostico", "Diagnóstico", "✧"],
+      ["fluxo", "Executar plano", "⟶"],
       ["redes", "Redes 2026", "▥"],
       ["stack", "Stack & MCPs", "⌗"],
       ["metodo", "Método BOFU", "◐"],
@@ -81,6 +82,7 @@
     var el = $("#p-" + id);
     if (el) el.classList.add("on");
     $$(".nav-item").forEach(function (a) { a.classList.toggle("on", a.dataset.page === id); });
+    if (id === "fluxo" && typeof renderFluxo === "function") renderFluxo();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -187,7 +189,10 @@
     html += "</tbody>";
     $("#radarTable").innerHTML = html;
     $$("#radarTable tbody tr").forEach(function (tr) {
-      tr.onclick = function () { radarSel = tr.dataset.name; drawRadar(); drawRadarDetail(); };
+      tr.onclick = function () {
+        radarSel = tr.dataset.name; drawRadar(); drawRadarDetail();
+        if (FX) { FX.oferta = radarSel; saveFx(); }
+      };
     });
   }
   function drawRadarDetail() {
@@ -235,8 +240,10 @@
           "<b>Risco de compliance: " + riscoLabel(p.risco) + ".</b> " + esc(riscoTexto(p)) +
         "</div>" +
         "<div class=\"note\">Fonte dos números: " + esc(p.fonte) + ". Reconfirme no painel da rede antes de investir.</div>" +
+        "<div class=\"row\" style=\"margin-top:16px\"><button class=\"btn pri fx-start\" data-plan2=\"" + esc(p.nome) + "\">Executar plano com esta oferta (presell + YAML + UTM)</button></div>" +
       "</div>";
     $$("[data-bp]", box).forEach(function (b) { b.onclick = function () { go("campanhas"); selectBlueprint(b.dataset.bp); }; });
+    $$("[data-plan2]", box).forEach(function (b) { b.onclick = function () { startPlan(b.dataset.plan2); }; });
   }
   function mini(l, v, s) {
     return "<div style=\"background:#ffffff05;border:1px solid var(--line);border-radius:10px;padding:12px\"><div class=\"small-label\">" + esc(l) + "</div><div style=\"font-size:18px;font-weight:800;margin:4px 0\" class=\"mono\">" + v + "</div><div class=\"sub\" style=\"font-size:11.5px\">" + esc(s) + "</div></div>";
@@ -1159,6 +1166,311 @@
   }
 
 
+
+  /* ------------------------------ fluxo único ------------------------------ */
+  function startPlan(nome) {
+    var p = D.produtos.filter(function (x) { return x.nome === nome; })[0];
+    if (!p) { toast("Oferta não encontrada."); return; }
+    FX = FX || {};
+    FX.oferta = p.nome;
+    FX.canal = (D.briefingPorNicho[p.nicho] || {}).canal || "display";
+    FX.dom = FX.dom || ""; FX.link = FX.link || "";
+    saveFx();
+    radarSel = p.nome;
+    go("fluxo");
+    renderFluxo();
+    if (!FX.dom) toast("Falta o seu domínio no passo 2 — ele é gate obrigatório.");
+  }
+
+  /* estado do plano: vive em localStorage (_fx) e alimenta Radar, Gerador, Dashboard */
+  var FX = null;
+  var GATE_LABELS = ["Dados da oferta", "Estrutura própria", "Campanha + disclosure", "Compliance de copy"];
+  var CANAL_FMT = { display: "advertorial", search: "review", "demand-gen": "vsl", native: "advertorial", meta: "quiz", tiktok: "quiz", bing: "review", email: "advertorial" };
+  var CANAL_YAML = { display: "google_ads", search: "google_ads", "demand-gen": "google_ads", native: "native", meta: "meta_ads", tiktok: "tiktok_ads", bing: "microsoft_ads", email: "email" };
+  var CANAL_LABEL = { display: "Google Display", search: "Google Search", "demand-gen": "Demand Gen/YouTube", native: "Native", meta: "Meta Ads", tiktok: "TikTok", bing: "Microsoft Ads", email: "Email/SEO" };
+  var AD_NET = { google_ads: "display", meta_ads: "meta", tiktok_ads: "tiktok", microsoft_ads: "search", native: "native", email: "email" };
+
+  function loadFx() { if (!FX) FX = LS.get("_fx", null); return FX; }
+  function saveFx() { LS.set("_fx", FX); }
+  function fxChannel() {
+    var p = fxProduto();
+    if (!p) return "display";
+    var b = D.blueprints.filter(function (x) { return x.id === bpSel; })[0] || {};
+    var map = { "Display": "display", "Search": "search", "Demand Gen": "demand-gen", "Native": "native", "Meta": "meta", "Microsoft": "bing", "Email": "email" };
+    var k = Object.keys(map).filter(function (x) { return (b.canal || "").indexOf(x) === 0; })[0];
+    return k ? map[k] : (D.briefingPorNicho[p.nicho] || {}).canal || "display";
+  }
+  function fxProduto() {
+    if (!FX || !FX.oferta) return null;
+    return D.produtos.filter(function (p) { return p.nome === FX.oferta; })[0] || null;
+  }
+  function fxScore() { var p = fxProduto(); return p ? scoreOf(p) : 0; }
+
+  function fxGates() {
+    var p = fxProduto();
+    var yaml = FX && FX.yaml ? FX.yaml : "";
+    var copy = (FX && FX.presellHtml ? FX.presellHtml : "") + (FX && FX.presellText ? FX.presellText : "");
+    var dom = fxDomOk();
+    var y = validarYamlTexto(yaml);
+    var ftc = ftcCheck(copy);
+    return [
+      { label: GATE_LABELS[0], ok: !!p, detail: p ? ("score " + scoreOf(p) + " · EPC " + money(p.epc) + " · risco " + riscoLabel(p.risco)) : "nenhuma oferta escolhida", acao: "radar" },
+      { label: GATE_LABELS[1], ok: !!dom, detail: dom ? ("domínio próprio: " + FX.dom) : "informe seu domínio (não use subdomínio do produtor)", acao: "fluxo" },
+      { label: GATE_LABELS[2], ok: !!yaml && y.ok, detail: yaml ? (y.fail ? y.fail + " bloqueio(s) no YAML" : (y.warn ? "válido com " + y.warn + " aviso(s)" : "YAML válido · campanha pausada")) : "gere o YAML do plano", acao: "fluxo" },
+      { label: GATE_LABELS[3], ok: !!copy && ftc.ok, detail: copy ? (ftc.ok ? "disclosure + termos + contato ok" : "falta: " + ftc.fails.join(", ")) : "gere a presell", acao: "gerador" }
+    ];
+  }
+  function fxDomOk() {
+    if (!FX || !FX.dom) return false;
+    var d = FX.dom.replace(/^https?:\/\//, "");
+    if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(d)) return false;
+    var prod = fxProduto();
+    if (prod) {
+      var stop = ["the", "with", "from", "and", "for", "plus", "program", "system"];
+      var token = prod.nome.toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length > 3 && stop.indexOf(w) < 0; }).join("");
+      var domCompact = d.toLowerCase().replace(/[^a-z0-9]/g, "");
+      if (token.length >= 5 && domCompact.indexOf(token) >= 0) return false;
+    }
+    return true;
+  }
+
+  function renderFluxo() {
+    loadFx();
+    var p = fxProduto();
+    var ch = fxChannel();
+
+    // passos
+    var steps = ["Oferta", "Briefing", "Presell", "YAML validado", "UTM", "Execução"];
+    $("#fxSteps").innerHTML = steps.map(function (x, i) {
+      var done = (i === 0 && p) || (i >= 2 && FX && FX.yaml);
+      return "<div class=\"pill " + (done ? "g" : "") + "\">" + (i + 1) + " · " + esc(x) + "</div>" + (i < steps.length - 1 ? "<span class=\"dim\">→</span>" : "");
+    }).join("") + "<span class=\"pill b\" style=\"margin-left:auto\">" + esc(CANAL_LABEL[ch] || ch) + "</span>";
+    $("#fxHeader").textContent = p ? (p.nome + " · " + (CANAL_LABEL[ch] || ch)) : "sem plano ativo";
+
+    // select de ofertas
+    if (!$("#fxOffer").options.length) {
+      $("#fxOffer").innerHTML = D.produtos.slice().sort(function (a, b) { return scoreOf(b) - scoreOf(a); }).map(function (x) {
+        return "<option value=\"" + esc(x.nome) + "\" " + (p && p.nome === x.nome ? "selected" : "") + ">" + esc(x.nome) + " — " + esc(x.rede) + " (score " + scoreOf(x) + ")</option>";
+      }).join("");
+    }
+    $("#fxOfferPill").textContent = p ? ("score " + scoreOf(p)) : "nenhuma";
+    $("#fxOfferPill").className = "pill " + (p ? (scoreOf(p) >= 70 ? "g" : "b") : "");
+    $("#fxOfferInfo").innerHTML = p ? "<div class=\"card\" style=\"background:#0a0f16\">" +
+      "<div class=\"grid g2\">" + mini("EPC", money(p.epc), "por clique") + mini("APV", money(p.apv), "ticket médio") +
+      mini("CVR hop", p.cvr.toFixed(2) + "%", "clique → venda") + mini("Risco", riscoLabel(p.risco), p.rede) + "</div>" +
+      "<div class=\"note\" style=\"margin-top:10px\">Formato de presell sugerido para " + esc(CANAL_LABEL[ch]) + ": <b>" + esc(CANAL_FMT[ch]) + "</b>.</div></div>" : "<div class=\"callout\">Escolha uma oferta (ou clique numa linha do Radar) para começar.</div>";
+
+    // selects de formato/ângulo
+    $("#fxFmt").innerHTML = Object.keys(D.presellTemplates).map(function (k) { return "<option value=\"" + k + "\">" + esc(D.presellTemplates[k].nome) + "</option>"; }).join("");
+    $("#fxAng").innerHTML = Object.keys(D.hooksPorAngulo).map(function (k) { return "<option value=\"" + k + "\">" + esc(k) + "</option>"; }).join("");
+
+    $("#fxPick").onclick = function () {
+      FX = FX || {}; FX.oferta = $("#fxOffer").value; saveFx(); prefillFx(true); renderFluxo(); toast("Oferta do plano: " + FX.oferta);
+    };
+    $("#fxFill").onclick = function () { prefillFx(true); toast("Briefing preenchido pelo nicho"); };
+    $("#fxBuild").onclick = buildPlan;
+
+    if (document.activeElement !== $("#fxProd") && p) prefillFx(false);
+    renderFxResult();
+  }
+
+  /* preenche o briefing: force=true sobrescreve o que o usuário editou */
+  function prefillFx(force) {
+    var p = fxProduto(); if (!p) return;
+    var b = D.briefingPorNicho[p.nicho] || {};
+    var ch = fxChannel();
+    function set(id, val) { var el = $("#" + id); if (force || !el.value || el.dataset.auto === "1") { el.value = val == null ? "" : val; el.dataset.auto = "1"; } }
+    set("fxProd", p.nome);
+    set("fxPub", b.pub); set("fxMec", b.mec); set("fxBen", b.ben);
+    var fmt = b.fmt || CANAL_FMT[ch] || "advertorial";
+    set("fxFmt", CANAL_FMT[ch] || fmt);
+    var angs = angulosPara(p);
+    set("fxAng", angs[0]);
+    if (FX && FX.dom) set("fxDom", FX.dom);
+    if (FX && FX.link) set("fxLink", FX.link);
+  }
+
+  function buildPlan() {
+    var p = fxProduto();
+    if (!p) { toast("Escolha uma oferta primeiro."); return; }
+    var dom = ($("#fxDom").value || "").trim();
+    var link = ($("#fxLink").value || "").trim();
+    FX = FX || {};
+    FX.oferta = p.nome; FX.dom = dom; FX.link = link;
+    FX.pub = $("#fxPub").value; FX.mec = $("#fxMec").value; FX.ben = $("#fxBen").value;
+    FX.fmt = $("#fxFmt").value; FX.ang = $("#fxAng").value;
+    FX.canal = fxChannel();
+    FX.prod = $("#fxProd").value || p.nome;
+
+    // 1) PRESELL — usa o mesmo gerador do app
+    $$("#gLang option").forEach(function (o) { o.selected = o.value === "en"; });
+    $("#gProd").value = FX.prod; $("#gNicho").value = p.nicho;
+    $("#gPub").value = FX.pub; $("#gMec").value = FX.mec; $("#gBen").value = FX.ben;
+    $("#gAng").value = FX.ang; $("#gFmt").value = FX.fmt;
+    $("#gLink").value = link || "https://SEU-LINK-DE-AFILIADO";
+    $("#gDom").value = dom || "https://seu-dominio.com";
+    gerar();
+    FX.presellHtml = $("#gCode").textContent || "";
+    FX.presellPreview = $("#gPreview").innerHTML || "";
+
+    // 2) UTM + sub-id
+    var slug = FX.prod.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    var dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    var subid = "bofu_" + FX.ang + "_" + dateStr;
+    var utm = (dom || "https://seu-dominio.com").replace(/\/$/, "") + "/" + slug +
+      "?utm_source=" + (FX.canal === "meta" ? "meta" : FX.canal === "native" ? "native" : "google") +
+      "&utm_medium=cpc&utm_campaign=bofu-" + slug + "&utm_content=" + encodeURIComponent(FX.ang) + "&utm_id=" + dateStr;
+    FX.utm = utm; FX.subid = subid;
+    FX.affLink = (link || "https://hop.clickbank.net/?affiliate=SEUID&vendor=SEUVENDOR") +
+      (link && link.indexOf("?") >= 0 ? "&" : "?") + "tid=" + subid;
+
+    // 3) YAML validado
+    var rede = /clickbank/i.test(p.rede) ? "clickbank" : /buygoods/i.test(p.rede) ? "buygoods" : p.rede.toLowerCase();
+    var cpcMax = +(Math.min(6, Math.max(2.5, p.epc * 0.7)).toFixed(2));
+    var daily = FX.canal === "meta" ? 30 : FX.canal === "native" ? 50 : 35;
+    var terms = [p.nome.toLowerCase(), p.nome.toLowerCase() + " review", "where to buy " + p.nome.toLowerCase(), p.nome.toLowerCase() + " official website"];
+    FX.yaml = [
+      "campaign:",
+      "  name: bofu-" + slug + "-" + FX.canal,
+      "  platform: " + (CANAL_YAML[FX.canal] || "google_ads"),
+      "  status: PAUSED",
+      "  budget:",
+      "    daily: " + daily,
+      "    currency: " + (FX.canal === "native" ? "USD" : "BRL"),
+      "  bidding: maximize_clicks",
+      "  max_cpc: " + cpcMax,
+      "  network: " + FX.canal,
+      "  targeting:",
+      "    custom_intent: [" + terms.map(function (t) { return "\"" + t + "\""; }).join(", ") + "]",
+      "  exclusions:",
+      "    placements: [" + (FX.canal === "meta" ? "audience_network" : "apps") + ", kids_channels]",
+      "  landing: " + (dom || "https://seu-dominio.com") + "/" + slug,
+      "  affiliate:",
+      "    network: " + rede,
+      "    subid: " + subid,
+      "  compliance:",
+      "    disclosure_above_fold: true",
+      "    owner_domain: " + (fxDomOk() ? "true" : "false")
+    ].join("\n");
+
+    saveFx();
+    syncDownstream();
+    renderFluxo();
+    toast("Plano montado — revise os gates abaixo");
+  }
+
+  /* espelha o plano nas outras telas (Radar, Gerador, Dashboard) */
+  function syncDownstream() {
+    if (!FX) return;
+    radarSel = FX.oferta; drawRadar(); drawRadarDetail();
+    $("#gCode").innerHTML = "<div class=\"rel\"><pre>" + esc(FX.presellHtml) + "</pre></div>";
+    $("#gCode").style.display = "block";
+    if ($("#dbYaml")) { $("#dbYaml").value = FX.yaml; $("#dbYamlOut").innerHTML = ""; }
+    if ($("#dbCopy")) $("#dbCopy").value = FX.presellHtml;
+    if ($("#dbuOffer")) { $("#dbuOffer").value = FX.oferta.toLowerCase().replace(/[^a-z0-9]+/g, "-"); $("#dbuAngle").value = FX.ang; }
+  }
+
+  function renderFxResult() {
+    var box = $("#fxResult");
+    if (!FX || !FX.yaml) {
+      box.innerHTML = "<div class=\"callout info\">O fluxo ainda não foi executado. Escolha a oferta, confira o briefing e clique em <b>Montar plano completo</b> — ele gera presell, YAML validado e UTM de uma vez.</div>";
+      return;
+    }
+    var gates = fxGates();
+    var g = validarYamlTexto(FX.yaml);
+    var ftc = ftcCheck(FX.presellHtml);
+    var yamlRows = g.rows.map(function (c) {
+      return "<div class=\"kv\"><span>" + esc(c.label) + "</span><span class=\"pill " + (c.ok ? "g" : c.sev === "bloqueia" ? "r" : "y") + "\">" + (c.ok ? "passou" : c.sev === "bloqueia" ? "bloqueia" : "atenção") + "</span></div>";
+    }).join("");
+
+    box.innerHTML =
+      "<div class=\"card\" style=\"border-color:" + (gates.every(function (x) { return x.ok; }) ? "#38e0a355" : "#ffb52044") + "\">" +
+        "<div class=\"row between\"><h2 style=\"margin:0\">Plano: " + esc(FX.oferta) + "</h2>" +
+        "<span class=\"pill " + (gates.every(function (x) { return x.ok; }) ? "g" : g.ok ? "y" : "r") + "\">" +
+        (gates.every(function (x) { return x.ok; }) ? "PRONTO PARA SUBIR" : g.ok ? "RESSALVAS" : "BLOQUEADO") + "</span></div>" +
+        "<div class=\"grid g4\" style=\"margin-top:14px\">" + gates.map(function (x) {
+          return "<div style=\"background:#" + (x.ok ? "38e0a30c" : "ff5d6c0c") + ";border:1px solid " + (x.ok ? "#38e0a344" : "#ff5d6c44") + ";border-radius:10px;padding:11px\">" +
+            "<div class=\"small-label\">" + (x.ok ? "✓ " : "✕ ") + esc(x.label) + "</div>" +
+            "<div class=\"sub\" style=\"margin-top:5px;font-size:11.5px\">" + esc(x.detail) + "</div></div>";
+        }).join("") + "</div>" +
+      "</div>" +
+
+      "<div class=\"grid g2\" style=\"margin-top:14px;align-items:start\">" +
+        "<div class=\"card\">" +
+          "<div class=\"row between\"><h3 style=\"margin:0\">Presell gerada</h3><span class=\"pill b\">" + esc(D.presellTemplates[FX.fmt] ? D.presellTemplates[FX.fmt].nome : FX.fmt) + "</span></div>" +
+          "<div class=\"sub\" style=\"margin:6px 0 10px\">" + (ftc.ok ? "Compliance de copy: ok nos 4 gates." : "Compliance de copy: falta " + esc(ftc.fails.join(", "))) + "</div>" +
+          "<div class=\"preview\" style=\"max-height:320px;font-size:14px\">" + (FX.presellPreview || "<i>preview indisponível — use o HTML</i>") + "</div>" +
+          "<div class=\"row\" style=\"margin-top:12px\"><button class=\"btn sm\" id=\"fxCpHtml\">Copiar HTML</button><button class=\"btn sm ghost\" data-go=\"gerador\">Abrir no Gerador</button></div>" +
+        "</div>" +
+        "<div>" +
+          "<div class=\"card\">" +
+            "<div class=\"row between\"><h3 style=\"margin:0\">YAML validado (dry-run)</h3><span class=\"pill " + (g.fail ? "r" : g.warn ? "y" : "g") + "\">" + (g.fail ? g.fail + " bloqueio(s)" : g.warn ? g.warn + " aviso(s)" : "validado") + "</span></div>" +
+            "<div style=\"margin-top:10px\">" + yamlRows + "</div>" +
+            "<div class=\"row\" style=\"margin-top:10px\"><button class=\"btn sm\" id=\"fxCpYaml\">Copiar YAML</button><button class=\"btn sm ghost\" data-go=\"dashboard\">Abrir no Dashboard</button></div>" +
+          "</div>" +
+          "<div class=\"card\" style=\"margin-top:14px\">" +
+            "<h3>UTM e sub-id</h3>" +
+            "<div class=\"small-label\" style=\"margin-top:8px\">URL do anúncio (sua presell)</div><pre>" + esc(FX.utm) + "</pre>" +
+            "<div class=\"small-label\" style=\"margin-top:10px\">Link de afiliado com sub-id</div><pre>" + esc(FX.affLink) + "</pre>" +
+            "<div class=\"row\" style=\"margin-top:10px\"><button class=\"btn sm\" id=\"fxCpUtm\">Copiar UTM</button><button class=\"btn sm ghost\" id=\"fxCpAff\">Copiar afiliado</button></div>" +
+          "</div>" +
+        "</div>" +
+      "</div>" +
+
+      "<div class=\"card\" style=\"margin-top:14px\">" +
+        "<h3>Execução</h3>" +
+        "<p class=\"sub\">A campanha nasce <b>pausada</b>. O bridge fala com a Adspirer via REST; sem token ele avisa e nada é enviado.</p>" +
+        "<div class=\"row\" style=\"margin-top:10px\">" +
+          "<button class=\"btn pri\" id=\"fxExec\">Criar campanha pausada (via bridge)</button>" +
+          "<button class=\"btn\" data-go=\"integracoes\">Ver integrações</button>" +
+          "<button class=\"btn ghost\" id=\"fxExecMcp\">Copiar prompt para o MCP</button>" +
+        "</div>" +
+        "<div id=\"fxExecOut\" style=\"margin-top:12px\"></div>" +
+      "</div>" +
+
+      "<div class=\"card\" style=\"margin-top:14px;background:#0a0f16\">" +
+        "<h3>Sequência manual (o que fazer agora)</h3>" +
+        "<div class=\"step\"><div class=\"n\">1</div><div style=\"font-size:13.5px\">Publique a presell no seu domínio (<span class=\"mono\">" + esc(FX.utm.split("?")[0]) + "</span>) e troque os depoimentos placeholder por reais.</div></div>" +
+        "<div class=\"step\"><div class=\"n\">2</div><div style=\"font-size:13.5px\">Teste o caminho completo do clique em janela anônima e no celular — o link de afiliado precisa cair na página do produtor com o sub-id <span class=\"mono\">" + esc(FX.subid) + "</span>.</div></div>" +
+        "<div class=\"step\"><div class=\"n\">3</div><div style=\"font-size:13.5px\">Crie a campanha com o YAML acima (ou pelo botão da Adspirer) e confirme que ela está <b>pausada</b>.</div></div>" +
+        "<div class=\"step\"><div class=\"n\">4</div><div style=\"font-size:13.5px\">Só então ative, com orçamento cirúrgico. Em 300 cliques, volte ao Copiloto para decidir escalar/ajustar/cortar.</div></div>" +
+      "</div>";
+
+    $("#fxCpHtml").onclick = function () { copyText(FX.presellHtml, "HTML copiado"); };
+    $("#fxCpYaml").onclick = function () { copyText(FX.yaml, "YAML copiado"); };
+    $("#fxCpUtm").onclick = function () { copyText(FX.utm, "UTM copiada"); };
+    $("#fxCpAff").onclick = function () { copyText(FX.affLink, "Link de afiliado copiado"); };
+    $("#fxExecMcp").onclick = function () {
+      copyText("Use a tool create_campaign da Adspirer com esta configuração (crie PAUSADA):\n\n" + FX.yaml, "Prompt copiado");
+    };
+    $("#fxExec").onclick = function () {
+      var out = $("#fxExecOut");
+      if (!gates.every(function (x) { return x.ok; })) {
+        out.innerHTML = "<div class=\"callout bad\">Gate bloqueado: " + esc(gates.filter(function (x) { return !x.ok; }).map(function (x) { return x.label; }).join(", ")) + ". Corrija antes de executar — subir campanha sem disclosure é o caminho mais curto para reprovação em série.</div>";
+        return;
+      }
+      var payload = {
+        platform: (CANAL_YAML[FX.canal] || "google_ads"),
+        name: "BM — " + FX.oferta + " — " + FX.canal,
+        budget: { amount: 20, currency: "USD" },
+        status: "PAUSED",
+        landing_url: FX.utm,
+        tracking: { subid: FX.subid }
+      };
+      out.innerHTML = "<span class=\"sub\">enviando ao bridge…</span>";
+      fetch(brBase() + "/ads/create_campaign", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+        .then(function (r) { return r.text().then(function (t) { return { s: r.status, t: t }; }); })
+        .then(function (res) {
+          var parsed; try { parsed = JSON.parse(res.t); } catch (e) { parsed = res.t; }
+          showJson("#fxExecOut", res.s, parsed, res.s < 300 ? "Campanha criada PAUSADA — ative só depois de revisar" : "Bridge respondeu HTTP " + res.s);
+        })
+        .catch(function () {
+          out.innerHTML = "<div class=\"callout bad\">Bridge offline — nada foi enviado. Alternativa: use o botão <b>Copiar prompt para o MCP</b> e execute pelo seu agente. O plano (presell + YAML + UTM) já está pronto e salvo.</div>";
+        });
+    };
+    bindGo(box);
+  }
+
   /* ------------------------------ cirurgia / MVP ------------------------------ */
   var C = window.BM_CIRURGIA;
   var dgSel = {};
@@ -1233,9 +1545,14 @@
         return "<div class=\"card\" style=\"background:#ffffff05;margin-bottom:8px\"><div class=\"row between\"><b>" + esc(p.nome) + "</b><span class=\"pill " + (scoreOf(p) >= 70 ? "g" : "b") + "\">score " + scoreOf(p) + "</span></div>" +
           "<div class=\"sub\" style=\"margin-top:4px\">" + esc(p.rede) + " · EPC " + money(p.epc) + " · gravity " + p.gravity + " · risco " + riscoLabel(p.risco) + "</div></div>";
       }).join("") +
-      "<div class=\"row\" style=\"margin-top:14px\"><button class=\"btn pri\" data-go=\"radar\">Abrir no Radar</button><button class=\"btn\" data-go=\"gerador\">Gerar a presell</button><button class=\"btn ghost\" data-go=\"dashboard\">Ir ao dashboard</button></div>" +
+      "<div class=\"row\" style=\"margin-top:14px\">" + picks.map(function (p, i) {
+        return "<button class=\"btn " + (i === 0 ? "pri" : "") + " sm\" data-plan=\"" + esc(p.nome) + "\">Executar plano: " + esc(p.nome) + "</button>";
+      }).join("") + "<button class=\"btn sm ghost\" data-go=\"radar\">Ver Radar</button></div>" +
       "<div class=\"note\">Regra do método aplicada: gravity > 50 e EPC > US$ 0,75. Oferta fora disso não entra na carteira.</div></div>";
     bindGo($("#dgOut"));
+    $$("[data-plan]", $("#dgOut")).forEach(function (b) {
+      b.onclick = function () { startPlan(b.dataset.plan); };
+    });
   }
 
   /* ---- redes ---- */
@@ -1380,6 +1697,11 @@
     if (!$("#dbYaml").value) $("#dbYaml").value = YAML_EXEMPLO;
     $("#dbYamlReset").onclick = function () { $("#dbYaml").value = YAML_EXEMPLO; $("#dbYamlOut").innerHTML = ""; };
     $("#dbValidate").onclick = validarYaml;
+    if ($("#dbYamlPlan")) $("#dbYamlPlan").onclick = function () {
+      var f = loadFx();
+      if (!f || !f.yaml) { toast("Nenhum plano montado ainda."); return; }
+      $("#dbYaml").value = f.yaml; validarYaml();
+    };
     $("#dbFtc").onclick = checarFtc;
     $("#dbFtcLoad").onclick = function () {
       var code = $("#gCode") && $("#gCode").textContent;
@@ -1395,52 +1717,58 @@
     }).join("");
   }
 
-  function validarYaml() {
-    var txt = $("#dbYaml").value || "";
-    var y = txt.toLowerCase();
-    var checks = [
-      ["Estrutura mínima", ["campaign:", "name:", "platform:", "budget:", "landing:"], "bloqueia"],
-      ["Orçamento declarado", ["budget:", "daily:"], "bloqueia"],
-      ["Campanha nasce pausada", ["status: paused"], "bloqueia"],
-      ["Teto de CPC (método BOFU)", ["max_cpc:"], "aviso"],
-      ["Custom Intent preenchido", ["custom_intent:"], "bloqueia"],
-      ["Exclusão de apps (display)", ["exclusions:", "apps"], "bloqueia"],
-      ["Landing no domínio próprio", ["landing: https://"], "bloqueia"],
-      ["Sub-id de rastreio", ["subid:"], "aviso"],
-      ["FTC: disclosure acima da dobra", ["disclosure_above_fold: true"], "bloqueia"],
-      ["RBAC: plataforma de anúncio declarada", ["platform: google_ads"], "aviso"]
-    ];
+  var YAML_REGRAS = [
+    ["Estrutura mínima", ["campaign:", "name:", "platform:", "budget:", "landing:"], "bloqueia"],
+    ["Orçamento declarado", ["budget:", "daily:"], "bloqueia"],
+    ["Campanha nasce pausada", ["status: paused"], "bloqueia", /status:\s*paused/i],
+    ["Teto de CPC (método BOFU)", ["max_cpc:"], "aviso"],
+    ["Custom Intent preenchido", ["custom_intent:"], "bloqueia", /custom_intent:\s*\[[^\]]+\]/i],
+    ["Exclusão de apps / audience network", ["exclusions:"], "bloqueia", /exclusions:[\s\S]{0,120}placements:\s*\[[^\]]*(apps|audience_network)/i],
+    ["Landing no domínio próprio", ["landing: https://"], "bloqueia"],
+    ["Sub-id de rastreio", ["subid:"], "aviso"],
+    ["FTC: disclosure acima da dobra", ["disclosure_above_fold: true"], "bloqueia"],
+    ["RBAC: plataforma de anúncio declarada", ["platform: google_ads"], "aviso"]
+  ];
+  function validarYamlTexto(txt) {
+    var y = (txt || "").toLowerCase();
     var fail = 0, warn = 0;
-    var rows = checks.map(function (c) {
-      var ok = c[1].every(function (k) { return y.indexOf(k) >= 0; });
+    var rows = YAML_REGRAS.map(function (c) {
+      var ok = c[3] ? c[3].test(txt || "") : c[1].every(function (k) { return y.indexOf(k) >= 0; });
       if (!ok) { if (c[2] === "bloqueia") fail++; else warn++; }
-      return "<div class=\"kv\"><span>" + esc(c[0]) + "</span><span class=\"pill " + (ok ? "g" : c[2] === "bloqueia" ? "r" : "y") + "\">" + (ok ? "passou" : c[2] === "bloqueia" ? "bloqueia" : "atenção") + "</span></div>";
+      return { label: c[0], ok: ok, sev: c[2] };
+    });
+    return { rows: rows, fail: fail, warn: warn, ok: fail === 0 };
+  }
+  function validarYaml() {
+    var r = validarYamlTexto($("#dbYaml").value);
+    var rows = r.rows.map(function (c) {
+      return "<div class=\"kv\"><span>" + esc(c.label) + "</span><span class=\"pill " + (c.ok ? "g" : c.sev === "bloqueia" ? "r" : "y") + "\">" + (c.ok ? "passou" : c.sev === "bloqueia" ? "bloqueia" : "atenção") + "</span></div>";
     }).join("");
-    var veredito = fail ? "<span class=\"pill r\">NÃO PODE SUBIR</span> " + fail + " bloqueio(s)" : warn ? "<span class=\"pill y\">PODE SUBIR COM RESSALVA</span> " + warn + " aviso(s)" : "<span class=\"pill g\">VALIDADO — pronto para criar pausada</span>";
+    var veredito = r.fail ? "<span class=\"pill r\">NÃO PODE SUBIR</span> " + r.fail + " bloqueio(s)" : r.warn ? "<span class=\"pill y\">PODE SUBIR COM RESSALVA</span> " + r.warn + " aviso(s)" : "<span class=\"pill g\">VALIDADO — pronto para criar pausada</span>";
     $("#dbYamlOut").innerHTML = "<div class=\"card\" style=\"background:#0a0f16\"><div class=\"row between\"><b>Dry-run</b>" + veredito + "</div>" + rows +
       "<div class=\"callout info\" style=\"margin-top:12px\">Isto valida <b>campos e regras</b> do YAML — não executa pipeline nem substitui o <span class=\"mono\">harness-schema</span>. É o gate que evita subir campanha sem disclosure, sem exclusão de apps ou sem sub-id.</div></div>";
   }
 
+  function ftcCheck(txt) {
+    var rows = C.dashboard.ftcRegras.map(function (r) {
+      var neg = r[0].indexOf("Sem claim") >= 0;
+      var hit = r[1].test(txt || "");
+      return { label: r[0], detalhe: r[2], ok: neg ? !hit : hit, neg: neg };
+    });
+    return { rows: rows, ok: rows.every(function (x) { return x.ok; }), fails: rows.filter(function (x) { return !x.ok; }).map(function (x) { return x.label; }) };
+  }
   function checarFtc() {
     var txt = $("#dbCopy").value || "";
     if (!txt.trim()) { $("#dbFtcOut").innerHTML = "<div class=\"callout\">Cole a copy ou use o botão para carregar a presell gerada.</div>"; return; }
-    var rows = C.dashboard.ftcRegras.map(function (r) {
-      var neg = r[0].indexOf("Sem claim") >= 0;
-      var hit = r[1].test(txt);
-      var ok = neg ? !hit : hit;
-      return { label: r[0], detalhe: r[2], ok: ok, neg: neg, hit: hit };
-    });
-    var fails = rows.filter(function (x) { return !x.ok; });
+    var r = ftcCheck(txt);
     var html = "<div class=\"card\" style=\"background:#0a0f16\"><div class=\"row between\"><b>FTC gate</b>" +
-      (fails.length ? "<span class=\"pill r\">PUBLICAÇÃO BLOQUEADA</span>" : "<span class=\"pill g\">LIBERADO</span>") + "</div>" +
-      rows.map(function (x) {
+      (r.ok ? "<span class=\"pill g\">LIBERADO</span>" : "<span class=\"pill r\">PUBLICAÇÃO BLOQUEADA</span>") + "</div>" +
+      r.rows.map(function (x) {
         return "<div class=\"kv\"><span>" + esc(x.label) + "<br><span class=\"sub\">" + esc(x.detalhe) + "</span></span><span class=\"pill " + (x.ok ? "g" : "r") + "\">" + (x.ok ? "ok" : x.neg ? "encontrado" : "ausente") + "</span></div>";
       }).join("");
-    if (fails.length) {
-      html += "<div class=\"callout bad\" style=\"margin-top:12px\"><b>Corrija antes de publicar:</b> " + esc(fails.map(function (f) { return f.label; }).join(", ")) + ". A FTC avalia por 'Net Impression' — disclosure no rodapé ou escondido não conta.</div>";
-    } else {
-      html += "<div class=\"callout good\" style=\"margin-top:12px\">Copy passou nos 4 gates. Lembre: o gate automatizado não substitui revisão humana de claims e de direitos autorais.</div>";
-    }
+    html += r.ok
+      ? "<div class=\"callout good\" style=\"margin-top:12px\">Copy passou nos 4 gates. Lembre: o gate automatizado não substitui revisão humana de claims e de direitos autorais.</div>"
+      : "<div class=\"callout bad\" style=\"margin-top:12px\"><b>Corrija antes de publicar:</b> " + esc(r.fails.join(", ")) + ". A FTC avalia por 'Net Impression' — disclosure no rodapé ou escondido não conta.</div>";
     html += "<div class=\"note\">Detecção por padrão de texto — falso negativo é possível (ex.: disclosure em imagem). Obrigatório revisar visualmente.</div></div>";
     $("#dbFtcOut").innerHTML = html;
   }
@@ -1479,7 +1807,7 @@
   /* ------------------------------ boot ------------------------------ */
   document.addEventListener("DOMContentLoaded", function () {
     buildNav();
-    renderHome(); renderDiagnostico(); renderRedes(); renderStack(); renderMetodo(); renderReddit(); renderDashboard(); renderSpec();
+    renderHome(); renderDiagnostico(); renderFluxo(); renderRedes(); renderStack(); renderMetodo(); renderReddit(); renderDashboard(); renderSpec();
     renderCockpit(); bindGo();
     renderRadar(); drawRadarDetail();
     renderCampanhas();
@@ -1498,6 +1826,7 @@
     renderManual();
     initCaderno();
     initIntegracoes();
+    if (loadFx() && FX.yaml) { try { syncDownstream(); } catch (e) {} }
     bindGo();
     go("home");
   });
