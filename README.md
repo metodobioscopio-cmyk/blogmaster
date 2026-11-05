@@ -44,6 +44,18 @@ pré-preenchido pelo nicho, e o app monta de uma vez:
 O plano vive em `localStorage` (`bm__fx`) e se espelha no Radar, no Gerador e no Dashboard —
 sobrevive ao reload.
 
+### Plano → Copiloto → Histórico
+
+- **Copiloto de decisão** recebe do plano: canal, comissão da oferta e orçamento de teste
+  (banner "Plano ativo" + botão *Preencher com o plano*). Com números, já diagnostica.
+- **Histórico de planos** (`localStorage` `bm_planos`): cada plano executado vira uma linha.
+  Umbral de comparação é **RPC por ângulo** — agrega cliques, gasto, vendas e mostra
+  `RPC ÷ CPC` por ângulo, com barra de força relativa. Um plano novo por variação de
+  oferta/ângulo/formato/canal; reabrir um plano antigo continua o mesmo teste.
+- Números do Copiloto voltam automaticamente para o plano do histórico, e o histórico
+  alimenta o Copiloto no sentido inverso (diagnosticar um plano antigo).
+- Export/import JSON do histórico; nada sai do navegador.
+
 **Copiloto** — cockpit, radar de 21 ofertas, 8 blueprints de campanha, diagnóstico de
 campanha, gerador de presell, keyword/intenção, viabilidade, compliance, plano de 7 dias,
 arsenal GitHub/HF, integrações MCP e manual.

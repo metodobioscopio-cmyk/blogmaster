@@ -97,6 +97,7 @@
     <section class="page" id="p-copiloto">
       <h1>Copiloto de decisão</h1>
       <p class="lead">Jogue os números reais da campanha e receba a decisão: escalar, ajustar criativo, ajustar presell, trocar ângulo ou cortar oferta. É a mesma regra usada por media buyer sênior — só que explícita.</p>
+      <div id="cpPlan" style="margin-top:14px"></div>
       <div class="grid g2" style="margin-top:16px;align-items:start">
         <div class="card">
           <h3>Dados da campanha</h3>
@@ -337,6 +338,27 @@
 
       <!-- resultado -->
       <div id="fxResult" style="margin-top:16px"></div>
+    </section>
+
+
+    <!-- ============ HISTÓRICO ============ -->
+    <section class="page" id="p-historico">
+      <h1>Histórico de planos</h1>
+      <p class="lead">Cada plano executado vira uma linha com os números do teste. Assim você compara <b>ângulos por RPC</b> em vez de recomeçar do zero a cada oferta — e vê qual gancho paga o clique naquele nicho.</p>
+      <div class="row" style="margin:16px 0">
+        <button class="btn" data-go="fluxo">+ Novo plano</button>
+        <button class="btn ghost sm" id="hsExport">Exportar JSON</button>
+        <button class="btn ghost sm" id="hsImportBtn">Importar</button>
+        <input type="file" id="hsImport" accept=".json" style="display:none">
+        <button class="btn ghost sm danger" id="hsClear">Limpar histórico</button>
+      </div>
+      <div class="grid g4" id="hsStats"></div>
+      <h2>Comparação por ângulo</h2>
+      <div class="card pad0"><div class="tblwrap"><table id="hsAngulo"></table></div></div>
+      <div class="note">RPC = (vendas × comissão) ÷ cliques. Só entra na comparação o plano com números registrados. Abaixo de 300 cliques, trate como hipótese.</div>
+      <h2>Planos</h2>
+      <div class="card pad0"><div class="tblwrap"><table id="hsTable"></table></div></div>
+      <div id="hsEdit" style="margin-top:16px"></div>
     </section>
 
     <!-- ============ REDES ============ -->

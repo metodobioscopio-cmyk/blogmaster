@@ -41,6 +41,7 @@
       ["home", "Home", "◆"],
       ["diagnostico", "Diagnóstico", "✧"],
       ["fluxo", "Executar plano", "⟶"],
+      ["historico", "Histórico", "≣"],
       ["redes", "Redes 2026", "▥"],
       ["stack", "Stack & MCPs", "⌗"],
       ["metodo", "Método BOFU", "◐"],
@@ -83,6 +84,8 @@
     if (el) el.classList.add("on");
     $$(".nav-item").forEach(function (a) { a.classList.toggle("on", a.dataset.page === id); });
     if (id === "fluxo" && typeof renderFluxo === "function") renderFluxo();
+    if (id === "historico" && typeof renderHistorico === "function") renderHistorico();
+    if (id === "copiloto" && typeof renderCopilotPlan === "function") renderCopilotPlan();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -343,6 +346,19 @@
     if (!actions.length) actions.push("Nenhum gargalo crítico identificado. Foque em volume de criativo novo (mínimo 4 por semana) para sustentar a escala.");
     if (dias300 > 21 && clicks < 300) actions.push("No ritmo atual você leva ~" + dias300 + " dias para 300 cliques. Aumente o orçamento de teste ou reduza o escopo (1 geo, 1 grupo).");
 
+    try {
+      var fxNow = loadFx();
+      if (fxNow && fxNow.oferta) {
+        fxNow.sp = spend; fxNow.cl = clicks; fxNow.out = out; fxNow.vd = sales;
+        fxNow.canal = fxNow.canal || "display";
+        saveFx();
+        var hid = histUpsert(fxNow, "copiloto");
+        var arrH = histLoad();
+        var idxH = arrH.map(function (x) { return x.id; }).findIndex(function (v) { return v === hid; });
+        if (idxH >= 0) { arrH[idxH].sp = spend; arrH[idxH].cl = clicks; arrH[idxH].out = out; arrH[idxH].vd = sales; arrH[idxH].comm = comm; histSave(arrH); }
+      }
+    } catch (e) {}
+
     $("#cpOut2").innerHTML =
       "<div class=\"card\" style=\"border-color:" + (cls === "g" ? "#38e0a355" : cls === "r" ? "#ff5d6c55" : cls === "y" ? "#ffb52055" : "var(--line)") + "\">" +
       "<div class=\"small-label\">Decisão</div><div class=\"big " + cls + "\" style=\"margin:4px 0 8px\">" + decisao + "</div>" +
@@ -362,8 +378,11 @@
       "<h3 style=\"margin-top:20px\">O que fazer agora</h3>" +
       "<ul style=\"margin-left:18px;font-size:13.5px;color:var(--dim);display:flex;flex-direction:column;gap:7px\">" + actions.map(function (a) { return "<li>" + esc(a) + "</li>"; }).join("") + "</ul>" +
       (confiavel ? "" : "<div class=\"callout\" style=\"margin-top:16px\">Dados ainda não significativos: " + clicks + "/300 cliques. Use este diagnóstico como hipótese, não como veredito.</div>") +
+      "<div class=\"row\" style=\"margin-top:12px\"><button class=\"btn sm\" id=\"cpToHist\">Ver isso no histórico</button><button class=\"btn sm ghost\" data-go=\"fluxo\">Voltar ao plano</button></div>" +
       "<div class=\"note\">Fórmulas: RPC = vendas × comissão ÷ cliques · RPC/CPC ≥ 1,3 = escalar · CPC máximo = RPC × (1 − margem).</div>" +
       "</div>";
+    if ($("#cpToHist")) $("#cpToHist").onclick = function () { var f2 = loadFx(); if (f2 && f2.id) hsSel = f2.id; go("historico"); renderHistorico(); };
+    bindGo($("#cpOut2"));
   }
 
   /* ------------------------------ gerador ------------------------------ */
@@ -1353,7 +1372,12 @@
       "    owner_domain: " + (fxDomOk() ? "true" : "false")
     ].join("\n");
 
+    FX.budget = daily;
+    var sig = [FX.oferta, FX.ang, FX.fmt, FX.canal].join("|");
+    if (!FX.id || (FX.sig && FX.sig !== sig)) { FX.id = null; FX.sp = FX.cl = FX.out = FX.vd = 0; }
+    FX.sig = sig;
     saveFx();
+    histUpsert(FX, "fluxo");
     syncDownstream();
     renderFluxo();
     toast("Plano montado — revise os gates abaixo");
@@ -1428,6 +1452,13 @@
         "<div id=\"fxExecOut\" style=\"margin-top:12px\"></div>" +
       "</div>" +
 
+      "<div class=\"card\" style=\"margin-top:14px;border-color:#22b8ff44\">" +
+        "<div class=\"row between\"><h3 style=\"margin:0\">Registrar e diagnosticar</h3><span class=\"pill b\">" + esc(FX.id || "plano") + "</span></div>" +
+        "<p class=\"sub\" style=\"margin-top:6px\">Rode o teste, volte com os números e compare ângulos por RPC no histórico. O plano já está salvo — nada recomeça do zero.</p>" +
+        "<div class=\"row\" style=\"margin-top:10px\"><button class=\"btn pri\" id=\"fxHist\">Registrar números deste plano</button><button class=\"btn\" id=\"fxCop\">Diagnosticar no Copiloto</button><button class=\"btn ghost\" data-go=\"historico\">Histórico completo</button></div>" +
+        "<div id=\"fxHistOut\" style=\"margin-top:10px\"></div>" +
+      "</div>" +
+
       "<div class=\"card\" style=\"margin-top:14px;background:#0a0f16\">" +
         "<h3>Sequência manual (o que fazer agora)</h3>" +
         "<div class=\"step\"><div class=\"n\">1</div><div style=\"font-size:13.5px\">Publique a presell no seu domínio (<span class=\"mono\">" + esc(FX.utm.split("?")[0]) + "</span>) e troque os depoimentos placeholder por reais.</div></div>" +
@@ -1440,6 +1471,11 @@
     $("#fxCpYaml").onclick = function () { copyText(FX.yaml, "YAML copiado"); };
     $("#fxCpUtm").onclick = function () { copyText(FX.utm, "UTM copiada"); };
     $("#fxCpAff").onclick = function () { copyText(FX.affLink, "Link de afiliado copiado"); };
+    if ($("#fxHist")) $("#fxHist").onclick = function () {
+      if (!FX.id) histUpsert(FX, "fluxo");
+      hsSel = FX.id; go("historico"); renderHistorico();
+    };
+    if ($("#fxCop")) $("#fxCop").onclick = cpFromPlan;
     $("#fxExecMcp").onclick = function () {
       copyText("Use a tool create_campaign da Adspirer com esta configuração (crie PAUSADA):\n\n" + FX.yaml, "Prompt copiado");
     };
@@ -1469,6 +1505,259 @@
         });
     };
     bindGo(box);
+  }
+
+
+  /* ------------------------------ histórico de planos ------------------------------ */
+  var hsSel = null;
+  function histLoad() { return LS.get("planos", []); }
+  function histSave(arr) { LS.set("planos", arr); }
+
+  function histUpsert(fx, origem) {
+    if (!fx || !fx.oferta) return null;
+    var arr = histLoad();
+    var id = fx.id || ("p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
+    fx.id = id;
+    var p = D.produtos.filter(function (x) { return x.nome === fx.oferta; })[0] || {};
+    var rec = {
+      id: id,
+      data: new Date().toISOString().slice(0, 10),
+      oferta: fx.oferta, rede: p.rede || "", nicho: p.nicho || "",
+      angulo: fx.ang || "", formato: fx.fmt || "", canal: fx.canal || "",
+      canalLabel: CANAL_LABEL[fx.canal] || fx.canal || "",
+      dom: fx.dom || "", subid: fx.subid || "", utm: fx.utm || "",
+      yaml: fx.yaml || "",
+      comm: p.comissao || 0,
+      budget: fx.budget || 0,
+      sp: fx.sp || 0, cl: fx.cl || 0, out: fx.out || 0, vd: fx.vd || 0,
+      origem: origem || "fluxo"
+    };
+    var i = arr.map(function (x) { return x.id; }).indexOf(id);
+    if (i >= 0) arr[i] = Object.assign(arr[i], rec); else arr.unshift(rec);
+    histSave(arr);
+    saveFx();
+    return id;
+  }
+
+  function histRpc(r) {
+    if (!r.cl) return null;
+    return (r.vd * r.comm) / r.cl;
+  }
+
+  function renderHistorico() {
+    var arr = histLoad();
+    var ativos = arr.filter(function (r) { return r.cl > 0; });
+    var totalGasto = arr.reduce(function (a, r) { return a + (+r.sp || 0); }, 0);
+    var totalVendas = arr.reduce(function (a, r) { return a + (+r.vd || 0); }, 0);
+    var totalComm = arr.reduce(function (a, r) { return a + (+r.vd || 0) * (+r.comm || 0); }, 0);
+    var comVenda = ativos.filter(function (r) { return (+r.vd || 0) > 0; });
+    var melhor = comVenda.slice().sort(function (a, b) { return (histRpc(b) || 0) - (histRpc(a) || 0); })[0];
+    $("#hsStats").innerHTML =
+      stat("Planos", arr.length, ativos.length + " com números") +
+      stat("Gasto acumulado", money(totalGasto), "soma dos testes") +
+      stat("Receita acumulada", money(totalComm), totalVendas + " venda(s)") +
+      stat("Melhor RPC", melhor ? money(histRpc(melhor)) : "—", melhor ? (melhor.oferta + " · " + melhor.angulo) : (ativos.length ? "nenhum plano com venda ainda" : "registre números"));
+
+    // por ângulo
+    var byAng = {};
+    arr.forEach(function (r) {
+      if (!r.cl) return;
+      var a = r.angulo || "(sem ângulo)";
+      var o = byAng[a] || (byAng[a] = { ang: a, cl: 0, sp: 0, vd: 0, rec: 0, n: 0, ofertas: {} });
+      o.cl += +r.cl; o.sp += +r.sp; o.vd += +r.vd; o.rec += (+r.vd) * (+r.comm); o.n++;
+      o.ofertas[r.oferta] = 1;
+    });
+    var angs = Object.keys(byAng).map(function (k) { return byAng[k]; }).sort(function (a, b) { return (b.rec / b.cl) - (a.rec / a.cl); });
+    if (!angs.length) {
+      $("#hsAngulo").innerHTML = "<tbody><tr><td class=\"sub\" style=\"padding:14px\">Sem números registrados ainda. Monte um plano, clique em <b>Registrar no histórico</b> e volte com os dados do teste.</td></tr></tbody>";
+    } else {
+      var maxRpc = Math.max.apply(null, angs.map(function (a) { return a.rec / a.cl; }));
+      $("#hsAngulo").innerHTML = "<thead><tr><th>Ângulo</th><th class=\"num\">Cliques</th><th class=\"num\">Gasto</th><th class=\"num\">Vendas</th><th class=\"num\">RPC</th><th class=\"num\">RPC ÷ CPC</th><th>Força</th><th class=\"num\">Planos</th></tr></thead><tbody>" +
+        angs.map(function (a) {
+          var rpc = a.rec / a.cl, cpc = a.sp / a.cl, ratio = cpc ? rpc / cpc : 0;
+          var w = maxRpc ? Math.round(rpc / maxRpc * 100) : 0;
+          return "<tr><td><b>" + esc(a.ang) + "</b><div class=\"sub\">" + Object.keys(a.ofertas).length + " oferta(s)</div></td>" +
+            "<td class=\"num\">" + a.cl + "</td><td class=\"num\">" + money(a.sp) + "</td><td class=\"num\">" + a.vd + "</td>" +
+            "<td class=\"num\">" + money(rpc) + "</td>" +
+            "<td class=\"num\"><span class=\"pill " + (ratio >= 1.3 ? "g" : ratio >= 0.8 ? "" : ratio >= 0.4 ? "y" : "r") + "\">" + ratio.toFixed(2) + "×</span></td>" +
+            "<td><div class=\"bar\" style=\"width:90px\"><i style=\"width:" + w + "%\"></i></div></td>" +
+            "<td class=\"num\">" + a.n + "</td></tr>";
+        }).join("") + "</tbody>";
+    }
+
+    // tabela de planos
+    if (!arr.length) {
+      $("#hsTable").innerHTML = "<tbody><tr><td class=\"sub\" style=\"padding:14px\">Nenhum plano salvo. Vá em <b>Executar plano</b> e monte o primeiro.</td></tr></tbody>";
+    } else {
+      $("#hsTable").innerHTML = "<thead><tr><th>Data</th><th>Oferta</th><th>Ângulo</th><th>Canal</th><th class=\"num\">Cliques</th><th class=\"num\">Vendas</th><th class=\"num\">RPC</th><th class=\"num\">Lucro</th><th></th></tr></thead><tbody>" +
+        arr.map(function (r) {
+          var rpc = histRpc(r);
+          var lucro = (+r.vd * +r.comm) - (+r.sp);
+          return "<tr class=\"" + (hsSel === r.id ? "sel" : "") + "\" data-hs=\"" + esc(r.id) + "\">" +
+            "<td class=\"sub\">" + esc(r.data) + "</td>" +
+            "<td><b>" + esc(r.oferta) + "</b><div class=\"sub\">" + esc(r.rede) + " · " + esc(r.canalLabel || r.canal) + "</div></td>" +
+            "<td><span class=\"pill p\">" + esc(r.angulo || "—") + "</span></td>" +
+            "<td class=\"sub\">" + esc(r.formato || "—") + "</td>" +
+            "<td class=\"num\">" + (+r.cl || 0) + "</td>" +
+            "<td class=\"num\">" + (+r.vd || 0) + "</td>" +
+            "<td class=\"num\">" + (rpc == null ? "<span class=\"dim\">—</span>" : money(rpc)) + "</td>" +
+            "<td class=\"num\">" + (r.sp || r.vd ? (lucro >= 0 ? "+" : "−") + money(Math.abs(lucro)) : "<span class=\"dim\">—</span>") + "</td>" +
+            "<td><button class=\"btn sm ghost\" data-hsload=\"" + esc(r.id) + "\">abrir</button></td></tr>";
+        }).join("") + "</tbody>";
+      $$("[data-hs]").forEach(function (tr) {
+        tr.onclick = function (e) { if (e.target.dataset.hsload) return; hsSel = tr.dataset.hs; renderHistorico(); };
+      });
+      $$("[data-hsload]").forEach(function (b) {
+        b.onclick = function (e) { e.stopPropagation(); openPlan(b.dataset.hsload); };
+      });
+    }
+    drawHsEdit();
+    $("#hsExport").onclick = function () { download("historico-planos.json", JSON.stringify(histLoad(), null, 2), "application/json"); };
+    $("#hsImportBtn").onclick = function () { $("#hsImport").click(); };
+    $("#hsImport").onchange = function (e) {
+      var f = e.target.files[0]; if (!f) return;
+      var rd = new FileReader();
+      rd.onload = function () {
+        try {
+          var data = JSON.parse(rd.result);
+          if (!Array.isArray(data)) throw new Error("formato");
+          var cur = histLoad();
+          data.forEach(function (d) { if (d && d.id && !cur.some(function (x) { return x.id === d.id; })) cur.push(d); });
+          histSave(cur); renderHistorico(); toast("Histórico importado");
+        } catch (err) { toast("Arquivo inválido"); }
+      };
+      rd.readAsText(f);
+    };
+    $("#hsClear").onclick = function () {
+      if (!confirm("Apagar todo o histórico de planos? Isso não pode ser desfeito.")) return;
+      LS.set("planos", []); hsSel = null; renderHistorico();
+    };
+  }
+
+  function drawHsEdit() {
+    var box = $("#hsEdit");
+    var r = histLoad().filter(function (x) { return x.id === hsSel; })[0];
+    if (!r) { box.innerHTML = "<div class=\"callout info\">Clique numa linha do histórico para registrar os números do teste (cliques, vendas, gasto) ou reabrir o plano.</div>"; return; }
+    box.innerHTML = "<div class=\"card\"><div class=\"row between\"><h3 style=\"margin:0\">Números do teste — " + esc(r.oferta) + " · " + esc(r.angulo) + "</h3><span class=\"pill b\">" + esc(r.data) + "</span></div>" +
+      "<div class=\"grid g4\" style=\"margin-top:12px\">" +
+        "<div class=\"field\"><label class=\"f\">Gasto (US$)</label><input id=\"hsSp\" type=\"number\" step=\"0.01\" value=\"" + (+r.sp || 0) + "\"></div>" +
+        "<div class=\"field\"><label class=\"f\">Cliques</label><input id=\"hsCl\" type=\"number\" value=\"" + (+r.cl || 0) + "\"></div>" +
+        "<div class=\"field\"><label class=\"f\">Saídas p/ oferta</label><input id=\"hsOut\" type=\"number\" value=\"" + (+r.out || 0) + "\"></div>" +
+        "<div class=\"field\"><label class=\"f\">Vendas</label><input id=\"hsVd\" type=\"number\" value=\"" + (+r.vd || 0) + "\"></div>" +
+      "</div>" +
+      "<div class=\"row\"><button class=\"btn pri\" id=\"hsSave\">Salvar números</button>" +
+        "<button class=\"btn\" id=\"hsReopen\">Reabrir plano no fluxo</button>" +
+        "<button class=\"btn ghost\" id=\"hsDiag\">Diagnosticar no Copiloto</button>" +
+        "<button class=\"btn ghost danger\" id=\"hsDel\">Remover</button></div>" +
+      "<div id=\"hsCalc\" style=\"margin-top:12px\"></div>" +
+      "<div class=\"note\">Comissão considerada: " + money(+r.comm || 0) + " (do Radar). Sub-id: <span class=\"mono\">" + esc(r.subid || "—") + "</span></div></div>";
+    hsCalcUpdate(r);
+    ["#hsSp", "#hsCl", "#hsOut", "#hsVd"].forEach(function (k) { $(k).oninput = function () { hsCalcUpdate(r, true); }; });
+    $("#hsSave").onclick = function () {
+      var arr = histLoad();
+      var i = arr.map(function (x) { return x.id; }).indexOf(r.id);
+      if (i < 0) return;
+      arr[i].sp = +$("#hsSp").value || 0; arr[i].cl = +$("#hsCl").value || 0;
+      arr[i].out = +$("#hsOut").value || 0; arr[i].vd = +$("#hsVd").value || 0;
+      histSave(arr);
+      if (FX && FX.id === r.id) { FX.sp = arr[i].sp; FX.cl = arr[i].cl; FX.out = arr[i].out; FX.vd = arr[i].vd; saveFx(); }
+      renderHistorico(); toast("Números salvos");
+    };
+    $("#hsReopen").onclick = function () { openPlan(r.id); };
+    $("#hsDiag").onclick = function () { cpFromHist(r); };
+    $("#hsDel").onclick = function () {
+      if (!confirm("Remover este plano do histórico?")) return;
+      histSave(histLoad().filter(function (x) { return x.id !== r.id; }));
+      hsSel = null; renderHistorico();
+    };
+  }
+
+  function hsCalcUpdate(r, fromInputs) {
+    var sp = fromInputs ? (+$("#hsSp").value || 0) : (+r.sp || 0);
+    var cl = fromInputs ? (+$("#hsCl").value || 0) : (+r.cl || 0);
+    var vd = fromInputs ? (+$("#hsVd").value || 0) : (+r.vd || 0);
+    var comm = +r.comm || 0;
+    var box = $("#hsCalc");
+    if (!box) return;
+    if (!cl) { box.innerHTML = "<div class=\"callout\">Informe cliques para calcular RPC.</div>"; return; }
+    var rpc = (vd * comm) / cl, cpc = sp / cl, ratio = cpc ? rpc / cpc : 0;
+    var lucro = vd * comm - sp;
+    box.innerHTML = "<div class=\"grid g4\">" +
+      mini("CPC", money(cpc), "gasto ÷ cliques") +
+      mini("RPC", money(rpc), "receita por clique") +
+      mini("RPC ÷ CPC", ratio.toFixed(2) + "×", ratio >= 1 ? "lucrativo" : "prejuízo") +
+      mini("Lucro", (lucro >= 0 ? "+" : "−") + money(Math.abs(lucro)), "comissão − gasto") +
+      "</div>";
+  }
+
+  /* reabre um plano salvo no fluxo */
+  function openPlan(id) {
+    var r = histLoad().filter(function (x) { return x.id === id; })[0];
+    if (!r) { toast("Plano não encontrado."); return; }
+    FX = {
+      id: r.id, oferta: r.oferta, canal: r.canal, ang: r.angulo, fmt: r.formato,
+      dom: r.dom, utm: r.utm, subid: r.subid, yaml: r.yaml,
+      affLink: r.utm, sp: r.sp, cl: r.cl, out: r.out, vd: r.vd
+    };
+    saveFx();
+    go("fluxo");
+    renderFluxo();
+    toast("Plano de " + r.oferta + " reaberto");
+  }
+
+  /* envia o plano (ou o histórico) para o Copiloto de decisão */
+  function cpFromPlan() {
+    var f = loadFx();
+    if (!f || !f.oferta) { toast("Monte um plano primeiro."); return; }
+    // sobrescreve: o plano manda no canal, na comissão e no orçamento
+    $("#cpSpend").value = f.sp ? f.sp : "";
+    $("#cpSpend").placeholder = f.budget ? "orçamento do plano: US$ " + f.budget : "gasto real";
+    $("#cpClicks").value = f.cl || "";
+    $("#cpOut").value = f.out || "";
+    $("#cpSales").value = f.vd || "";
+    var p = fxProduto();
+    $("#cpComm").value = p ? p.comissao : "";
+    if ($("#cpDays")) $("#cpDays").value = 3;
+    var mapCh = { display: "Display", search: "Search", "demand-gen": "Demand Gen/YouTube", native: "Native", meta: "Meta", tiktok: "TikTok", bing: "Microsoft Ads" };
+    if ($("#cpChan") && mapCh[f.canal]) $("#cpChan").value = mapCh[f.canal];
+    go("copiloto");
+    if (f.cl && f.sp) { runCopiloto(); toast("Copiloto preenchido e diagnosticado"); }
+    else {
+      $("#cpOut2").innerHTML = "<div class=\"callout info\">Plano carregado: <b>" + esc(f.oferta) + "</b> · " + esc(CANAL_LABEL[f.canal] || f.canal) + " · orçamento de teste US$ " + (f.budget || "—") + ". Rode a campanha e preencha gasto, cliques e vendas para o diagnóstico — ou registre os números no <b>Histórico</b>.</div>";
+      toast("Plano carregado — falta o gasto e os cliques");
+    }
+  }
+  function cpFromHist(r) {
+    $("#cpSpend").value = r.sp || ""; $("#cpClicks").value = r.cl || "";
+    $("#cpOut").value = r.out || ""; $("#cpSales").value = r.vd || "";
+    $("#cpComm").value = r.comm || "";
+    if ($("#cpImpr")) $("#cpImpr").value = "";
+    if ($("#cpDays")) $("#cpDays").value = 3;
+    var mapCh = { display: "Display", search: "Search", "demand-gen": "Demand Gen/YouTube", native: "Native", meta: "Meta", tiktok: "TikTok", bing: "Microsoft Ads" };
+    if ($("#cpChan") && mapCh[r.canal]) $("#cpChan").value = mapCh[r.canal];
+    go("copiloto");
+    runCopiloto();
+    toast("Copiloto preenchido com o histórico");
+  }
+
+  /* banner do plano ativo na página do Copiloto */
+  function renderCopilotPlan() {
+    var f = loadFx();
+    var box = $("#cpPlan");
+    if (!box) return;
+    if (!f || !f.oferta) {
+      box.innerHTML = "<div class=\"callout info\">Nenhum plano ativo. Monte um na aba <b>Executar plano</b> e o Copiloto já chega preenchido com canal, comissão e orçamento — sem digitar tudo de novo.</div>";
+      return;
+    }
+    var p = fxProduto();
+    box.innerHTML = "<div class=\"card\" style=\"background:#0a0f16;border-color:#22b8ff44;margin-bottom:16px\">" +
+      "<div class=\"row between\"><div><div class=\"small-label\">Plano ativo</div><b>" + esc(f.oferta) + "</b> · " + esc(CANAL_LABEL[f.canal] || f.canal) + " · ângulo " + esc(f.ang || "—") + "</div>" +
+      "<div class=\"row\"><button class=\"btn sm pri\" id=\"cpFill\">Preencher com o plano</button><button class=\"btn sm ghost\" data-go=\"fluxo\">Ver plano</button><button class=\"btn sm ghost\" data-go=\"historico\">Histórico</button></div></div>" +
+      "<div class=\"sub\" style=\"margin-top:8px\">" + (f.subid ? "sub-id <span class=\"mono\">" + esc(f.subid) + "</span> · " : "") +
+      (p ? "comissão " + money(p.comissao) + " · " : "") + (f.budget ? "orçamento do plano US$ " + f.budget : "") + "</div>" +
+      "</div>";
+    bindGo(box);
+    $("#cpFill").onclick = cpFromPlan;
   }
 
   /* ------------------------------ cirurgia / MVP ------------------------------ */
@@ -1807,7 +2096,7 @@
   /* ------------------------------ boot ------------------------------ */
   document.addEventListener("DOMContentLoaded", function () {
     buildNav();
-    renderHome(); renderDiagnostico(); renderFluxo(); renderRedes(); renderStack(); renderMetodo(); renderReddit(); renderDashboard(); renderSpec();
+    renderHome(); renderDiagnostico(); renderFluxo(); renderHistorico(); renderRedes(); renderStack(); renderMetodo(); renderReddit(); renderDashboard(); renderSpec();
     renderCockpit(); bindGo();
     renderRadar(); drawRadarDetail();
     renderCampanhas();
