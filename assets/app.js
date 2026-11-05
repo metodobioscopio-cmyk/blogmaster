@@ -37,26 +37,40 @@
 
   /* ------------------------------ nav ------------------------------ */
   var PAGES = [
-    ["inicio", "Cockpit", "◎"],
-    ["radar", "Radar de produto", "◉"],
-    ["campanhas", "Campanhas validadas", "▤"],
-    ["copiloto", "Copiloto de decisão", "◈"],
-    ["gerador", "Gerador de presell", "✎"],
-    ["keyword", "Keyword & intenção", "⌕"],
-    ["viab", "Viabilidade & links", "∑"],
-    ["check", "Compliance", "☑"],
-    ["plano", "Plano de 7 dias", "▷"],
-    ["github", "Arsenal GitHub", "◧"],
-    ["hf", "Arsenal Hugging Face", "◨"],
-    ["integracoes", "Integrações / MCP", "⚡"],
-    ["manual", "Manual prático", "❏"],
-    ["caderno", "Caderno", "✐"]
+    { grupo: "CirurgiaAfiliada", itens: [
+      ["home", "Home", "◆"],
+      ["diagnostico", "Diagnóstico", "✧"],
+      ["redes", "Redes 2026", "▥"],
+      ["stack", "Stack & MCPs", "⌗"],
+      ["metodo", "Método BOFU", "◐"],
+      ["reddit", "Reddit & Clonagem", "✳"],
+      ["dashboard", "Dashboard", "▣"],
+      ["spec", "Spec verificada", "✓"]
+    ]},
+    { grupo: "Copiloto", itens: [
+      ["inicio", "Cockpit", "◎"],
+      ["radar", "Radar de produto", "◉"],
+      ["campanhas", "Campanhas validadas", "▤"],
+      ["copiloto", "Copiloto de decisão", "◈"],
+      ["gerador", "Gerador de presell", "✎"],
+      ["keyword", "Keyword & intenção", "⌕"],
+      ["viab", "Viabilidade & links", "∑"],
+      ["check", "Compliance", "☑"],
+      ["plano", "Plano de 7 dias", "▷"],
+      ["integracoes", "Integrações / MCP", "⚡"],
+      ["github", "Arsenal GitHub", "◧"],
+      ["hf", "Arsenal Hugging Face", "◨"],
+      ["manual", "Manual prático", "❏"],
+      ["caderno", "Caderno", "✐"]
+    ]}
   ];
 
   function buildNav() {
     var nav = $("#nav");
-    nav.innerHTML = PAGES.map(function (p) {
-      return "<a class=\"nav-item\" data-page=\"" + p[0] + "\"><span class=\"ico\">" + p[2] + "</span>" + p[1] + "</a>";
+    nav.innerHTML = PAGES.map(function (g) {
+      return "<div class=\"nav-group\">" + esc(g.grupo) + "</div>" + g.itens.map(function (p) {
+        return "<a class=\"nav-item\" data-page=\"" + p[0] + "\"><span class=\"ico\">" + p[2] + "</span>" + p[1] + "</a>";
+      }).join("");
     }).join("");
     $$(".nav-item", nav).forEach(function (a) {
       a.addEventListener("click", function () { go(a.dataset.page); });
@@ -1144,9 +1158,328 @@
     $("#sigOut").innerHTML = html;
   }
 
+
+  /* ------------------------------ cirurgia / MVP ------------------------------ */
+  var C = window.BM_CIRURGIA;
+  var dgSel = {};
+  function stPill(st) {
+    var m = { ok: ["g", "verificado"], ajuste: ["y", "ajuste"], nok: ["r", "não existe"], "n/d": ["", "n/d"] };
+    var x = m[st] || ["", st];
+    return "<span class=\"pill " + x[0] + "\">" + x[1] + "</span>";
+  }
+  function renderHome() {
+    var P = C.posicionamento;
+    $("#heroSub").textContent = P.promessa;
+    $("#heroProva").innerHTML = "<b>Benchmark realista:</b> " + esc(P.provaSocial.texto) + "<br><span class=\"sub\">" + esc(P.provaSocial.honestidade) + "</span>";
+    $("#heroKpis").innerHTML = P.kpis.map(function (k) { return mini(k[0], k[1], k[2]); }).join("");
+    $("#heroOnboarding").innerHTML = C.onboarding3.map(function (o) {
+      return "<div class=\"card\"><div class=\"row\" style=\"gap:10px;align-items:center\"><div class=\"step\" style=\"padding:0;border:0;background:none;margin:0\"><div class=\"n\">" + esc(o[0]) + "</div></div><h3 style=\"margin:0\">" + esc(o[1]) + "</h3></div><p class=\"sub\" style=\"margin-top:8px\">" + esc(o[2]) + "</p></div>";
+    }).join("");
+    $("#heroModulos").innerHTML = [
+      ["diagnostico", "Diagnóstico determinístico", "5 perguntas → rede, nicho e 3 ofertas do Radar com o porquê de cada escolha."],
+      ["redes", "Redes 2026 verificadas", "10 redes BR e intl com comissão, payout e status de verificação."],
+      ["stack", "Stack & MCPs com status", "O que existe de verdade, o que mudou de nome e o que não existe."],
+      ["dashboard", "Compliance gate", "FTC checker bloqueia copy sem disclosure e claim absoluto."],
+      ["dashboard", "Validação pré-commit", "YAML da campanha validado antes de qualquer chamada de API."],
+      ["spec", "Spec auditada", "14 itens do blueprint confrontados com a fonte, com link e data."]
+    ].map(function (m) { return cardLink(m[0], m[1], m[2], "Abrir"); }).join("");
+    bindGo($("#p-home"));
+  }
+
+  /* ---- diagnóstico ---- */
+  function renderDiagnostico() {
+    $("#dgForm").innerHTML = C.diagnostico.perguntas.map(function (q) {
+      return "<div class=\"field\"><label class=\"f\">" + esc(q.label) + "</label><div class=\"row\">" +
+        q.opts.map(function (o) {
+          return "<div class=\"tag dg-opt\" data-q=\"" + q.id + "\" data-v=\"" + o[0] + "\">" + esc(o[1]) + "</div>";
+        }).join("") + "</div></div>";
+    }).join("");
+    $$(".dg-opt").forEach(function (t) {
+      t.onclick = function () {
+        dgSel[t.dataset.q] = t.dataset.v;
+        $$(".dg-opt[data-q=\"" + t.dataset.q + "\"]").forEach(function (x) { x.classList.remove("on"); });
+        t.classList.add("on");
+      };
+    });
+    $("#dgRun").onclick = runDiagnostico;
+    $("#dgOut").innerHTML = "<div class=\"callout info\">Responda as 5 perguntas (ou clique direto em gerar para usar o perfil padrão de iniciante com R$ 50/dia) e receba a recomendação com o raciocínio exposto.</div>";
+  }
+  function runDiagnostico() {
+    var a = Object.assign({ ads: "nao", tipo: "info", budget: "b50", trafego: "pago", dominio: "nao" }, dgSel);
+    var redeR, nichoR, motivo = [], alertas = [];
+    if (a.tipo === "saas") { redeR = ["Impact.com", "PartnerStack"]; nichoR = "software"; motivo.push("Você escolheu SaaS: comissão recorrente é o único modelo que compensa em ticket baixo."); }
+    else if (a.tipo === "fisico") { redeR = ["Braip", "Awin (ex-ShareASale)"]; nichoR = "ecom"; motivo.push("Produto físico pede frete/logística nativa — Braip resolve no BR; Awin cobre marca grande."); }
+    else { redeR = a.budget === "b30" ? ["Kiwify", "Hotmart"] : ["ClickBank", "BuyGoods"]; nichoR = "nutra"; motivo.push(a.budget === "b30" ? "Com R$ 30/dia, oferta BR de ticket médio converte com menos caixa." : "Acima de R$ 50/dia, ticket alto em dólar (ClickBank/BuyGoods) paga o CPC."); }
+    if (a.ads === "nao") { alertas.push("Sem conta Google Ads: comece no Microsoft Ads (Bing) para validar com CPC menor e aprovação fácil, depois importe para o Google."); }
+    if (a.ads === "bloqueada") { alertas.push("Conta bloqueada: NÃO abra outra para o mesmo domínio — isso é circumventing systems (suspensão sem aviso). Corrija o destino e apele."); }
+    if (a.dominio === "nao" || a.dominio === "naosei") { alertas.push("Sem estrutura própria: presell no seu domínio é pré-requisito. Sem ele não há disclosure consistente, pixel nem remarketing."); }
+    if (a.trafego === "org") { alertas.push("Só orgânico contradiz o método BOFU (tráfego pago puro). Se for o caso, use a trilha Email/SEO do Copiloto e trate Reddit como validador, não como tráfego."); }
+    var budgetDia = a.budget === "b30" ? 30 : a.budget === "b50" ? 50 : 100;
+    var cpc = nichoR === "nutra" ? 4.5 : nichoR === "ecom" ? 2.5 : 3.2;
+    var cliquesDia = Math.round(budgetDia / cpc);
+    var dias300 = Math.ceil(300 / Math.max(cliquesDia, 1));
+    var picks = D.produtos.filter(function (p) { return p.nicho === nichoR; }).sort(function (x, y) { return scoreOf(y) - scoreOf(x); }).slice(0, 3);
+    if (!picks.length) picks = D.produtos.slice().sort(function (x, y) { return scoreOf(y) - scoreOf(x); }).slice(0, 3);
+
+    $("#dgOut").innerHTML = "<div class=\"card\">" +
+      "<div class=\"small-label\">Recomendação</div>" +
+      "<h2 style=\"margin:6px 0 10px\">" + esc(redeR.join(" + ")) + " · " + esc(nichoNome[nichoR]) + "</h2>" +
+      "<div class=\"grid g3\">" + mini("Orçamento cirúrgico", "R$ " + budgetDia + "/dia", "faixa do método") + mini("CPC teto estimado", "R$ " + cpc.toFixed(2), "por nicho") + mini("Dias p/ 300 cliques", dias300 + " dias", cliquesDia + " cliques/dia") + "</div>" +
+      "<h3 style=\"margin-top:18px\">Por que essa recomendação</h3><ul style=\"margin-left:18px;color:var(--dim);font-size:13.5px;display:flex;flex-direction:column;gap:6px\">" +
+      motivo.map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>" +
+      (alertas.length ? "<h3 style=\"margin-top:16px\">Alertas do seu perfil</h3>" + alertas.map(function (m) { return "<div class=\"callout\" style=\"margin-bottom:8px\">" + esc(m) + "</div>"; }).join("") : "") +
+      "<h3 style=\"margin-top:18px\">3 ofertas do Radar compatíveis</h3>" +
+      picks.map(function (p) {
+        return "<div class=\"card\" style=\"background:#ffffff05;margin-bottom:8px\"><div class=\"row between\"><b>" + esc(p.nome) + "</b><span class=\"pill " + (scoreOf(p) >= 70 ? "g" : "b") + "\">score " + scoreOf(p) + "</span></div>" +
+          "<div class=\"sub\" style=\"margin-top:4px\">" + esc(p.rede) + " · EPC " + money(p.epc) + " · gravity " + p.gravity + " · risco " + riscoLabel(p.risco) + "</div></div>";
+      }).join("") +
+      "<div class=\"row\" style=\"margin-top:14px\"><button class=\"btn pri\" data-go=\"radar\">Abrir no Radar</button><button class=\"btn\" data-go=\"gerador\">Gerar a presell</button><button class=\"btn ghost\" data-go=\"dashboard\">Ir ao dashboard</button></div>" +
+      "<div class=\"note\">Regra do método aplicada: gravity > 50 e EPC > US$ 0,75. Oferta fora disso não entra na carteira.</div></div>";
+    bindGo($("#dgOut"));
+  }
+
+  /* ---- redes ---- */
+  function renderRedes() {
+    var tipos = [];
+    C.redes.forEach(function (r) { if (tipos.indexOf(r.tipo) < 0) tipos.push(r.tipo); });
+    $("#rdTipo").innerHTML = "<option value=\"\">Todos os tipos</option>" + tipos.map(function (t) { return "<option>" + esc(t) + "</option>"; }).join("");
+    ["#rdSearch", "#rdTipo", "#rdOrd"].forEach(function (x) { $(x).oninput = drawRedes; $(x).onchange = drawRedes; });
+    drawRedes();
+  }
+  function drawRedes() {
+    var q = ($("#rdSearch").value || "").toLowerCase(), t = $("#rdTipo").value, ord = $("#rdOrd").value;
+    var arr = C.redes.filter(function (r) {
+      if (t && r.tipo !== t) return false;
+      if (q && (r.nome + " " + r.tipo + " " + r.ideal).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    function maxCom(r) { var m = r.comissao.match(/(\d+)(?=[^\d]*$)/); return m ? +m[1] : 0; }
+    arr.sort(function (a, b) {
+      if (ord === "nome") return a.nome.localeCompare(b.nome);
+      if (ord === "payout") return (a.payout.indexOf("Semanal") >= 0 ? -1 : 1);
+      return maxCom(b) - maxCom(a);
+    });
+    $("#rdBody").innerHTML = arr.map(function (r) {
+      return "<div class=\"card ghcard\"><div class=\"name\">" + esc(r.nome) + " " + stPill(r.st) + "</div>" +
+        "<div class=\"row\" style=\"gap:6px\"><span class=\"pill b\">" + esc(r.tipo) + "</span><span class=\"pill g\">" + esc(r.comissao) + "</span><span class=\"pill\">" + esc(r.payout) + "</span></div>" +
+        "<p><b>Ideal para:</b> " + esc(r.ideal) + "</p><p class=\"sub\">" + esc(r.nota) + "</p></div>";
+    }).join("") || "<div class=\"callout\">Nenhuma rede com esse filtro.</div>";
+  }
+
+  /* ---- stack ---- */
+  var stSel = "skills";
+  function renderStack() {
+    var groups = [["skills", "A · Skills open-source"], ["mcps", "B · MCPs conectáveis"], ["validacao", "C · Validação"]];
+    $("#stTabs").innerHTML = groups.map(function (g) { return "<div class=\"tab\" data-st=\"" + g[0] + "\">" + esc(g[1]) + "</div>"; }).join("");
+    $$("#stTabs .tab").forEach(function (x) { x.onclick = function () { stSel = x.dataset.st; drawStack(); }; });
+    $("#stSnippets").textContent =
+      "# npm (funcionam hoje)\nnpx -y affiliate-networks-mcp        # repo: bobberrisford/affiliatemcp (v0.20.0)\nnpx -y mcp-redtrack setup SUA_API_KEY  # mcp-redtrack v0.3.1\nnpx -y feedico-mcp\n\n" +
+      "# Claude Code\nclaude mcp add redtrack -e REDTRACK_API_KEY=SUA_KEY -- npx mcp-redtrack\nclaude mcp add affiliate-networks -- npx -y affiliate-networks-mcp\n\n" +
+      "# Skills de agente (Affitor)\ngit clone https://github.com/Affitor/affiliate-skills\n\n" +
+      "# CLI openaffiliate (substitui a 'API sem chave' da spec)\nnpm i -g openaffiliate\n\n" +
+      "# Bridge deste repositório (Ads REST + Rally MCP + ProdIntel)\npython3 tools/mcp_bridge.py --port 8791";
+    drawStack();
+  }
+  function drawStack() {
+    $$("#stTabs .tab").forEach(function (x) { x.classList.toggle("on", x.dataset.st === stSel); });
+    var list = C.stack[stSel];
+    $("#stBody").innerHTML = "<div class=\"grid g2\">" + list.map(function (m) {
+      return "<div class=\"card ghcard\"><div class=\"name\">" + esc(m.nome) + " " + stPill(m.st) + "</div>" +
+        "<p>" + esc(m.o_que) + "</p><div class=\"how\">" + esc(m.detalhe) + "</div>" +
+        (m.url ? "<div><a class=\"btn sm ghost\" href=\"" + esc(m.url) + "\" target=\"_blank\" rel=\"noopener\">Abrir fonte ↗</a></div>" : "") + "</div>";
+    }).join("") + "</div>";
+  }
+
+  /* ---- método ---- */
+  function renderMetodo() {
+    var M = C.metodo;
+    $("#mtTitle").textContent = "Método " + M.nome;
+    $("#mtLead").innerHTML = "Timeline operacional de <b>" + esc(M.autor) + "</b>, mantida integralmente. Cada passo tem os números exatos do método e o que fazer no app.";
+    $("#mtMetodo").textContent = M.autor;
+    $("#mtSteps").innerHTML = M.passos.map(function (p) {
+      return "<div class=\"step\"><div class=\"n\">" + p.n + "</div><div>" +
+        "<div class=\"row between\"><h3 style=\"margin:0\">" + esc(p.t) + "</h3><div class=\"row\" style=\"gap:5px\">" +
+        p.tags.map(function (t) { return "<span class=\"chip\">" + esc(t) + "</span>"; }).join("") + "</div></div>" +
+        "<p style=\"font-size:13.5px;color:var(--dim);margin-top:6px\">" + esc(p.d) + "</p></div></div>";
+    }).join("");
+    $("#mtAviso").innerHTML = "<b>Alerta de compliance (passo 4):</b> " + esc(M.avisoCompliance);
+  }
+
+  /* ---- reddit ---- */
+  function renderReddit() {
+    var R = C.reddit;
+    $("#rddBridge").textContent = R.bridge;
+    $("#rddKarma").innerHTML = "<b>Karma prático:</b> " + esc(R.karma);
+    $("#rddTimeline").innerHTML = R.timeline.map(function (t) {
+      return "<div class=\"kv\"><span><b>" + esc(t[0]) + "</b><br><span class=\"sub\">" + esc(t[1]) + "</span></span></div>";
+    }).join("");
+    $("#rddSubs").innerHTML = "<thead><tr><th>Subreddit</th><th>Nicho</th><th>Potência</th></tr></thead><tbody>" +
+      R.subreddits.map(function (s) { return "<tr><td><b>" + esc(s[0]) + "</b></td><td class=\"sub\">" + esc(s[1]) + "</td><td><span class=\"pill " + (s[2] === "muito alta" ? "g" : "b") + "\">" + esc(s[2]) + "</span></td></tr>"; }).join("") + "</tbody>";
+    $("#rddHot").innerHTML = R.ofertasQuentes.map(function (o) { return "<div class=\"card\"><div class=\"small-label\">" + esc(o[2]) + "</div><div style=\"font-weight:700;margin:5px 0\">" + esc(o[0]) + "</div><div class=\"sub\">" + esc(o[1]) + "</div></div>"; }).join("");
+    var K = C.clonagem;
+    $("#clTools").innerHTML = K.ferramentas.map(function (f) { return "<span class=\"pill p\">" + esc(f) + "</span>"; }).join("");
+    $("#clRule").innerHTML = "<b>Regra de ouro:</b> " + esc(K.regraOuro);
+    $("#clComp").innerHTML = K.compliance.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("");
+    $("#clFramework").innerHTML = K.framework.map(function (f) { return "<div class=\"kv\"><span><b>" + esc(f[0]) + "</b><br><span class=\"sub\">" + esc(f[1]) + "</span></span></div>"; }).join("");
+  }
+
+  /* ---- dashboard ---- */
+  var YAML_EXEMPLO = [
+    "campaign:",
+    "  name: bofu-brain-song-display",
+    "  platform: google_ads",
+    "  status: PAUSED",
+    "  budget:",
+    "    daily: 35",
+    "    currency: BRL",
+    "  bidding: maximize_clicks",
+    "  max_cpc: 5.50",
+    "  network: display",
+    "  targeting:",
+    "    custom_intent: [\"brain song\", \"brain song review\", \"where to buy brain song\"]",
+    "  exclusions:",
+    "    placements: [apps, kids_channels]",
+    "  landing: https://SEU-DOMINIO.com/brain-song",
+    "  affiliate:",
+    "    network: clickbank",
+    "    subid: bofu_a1_medo",
+    "  compliance:",
+    "    disclosure_above_fold: true",
+    "    owner_domain: true"
+  ].join("\n");
+
+  function renderDashboard() {
+    // pipeline
+    var st = LS.get("dbPipe", {});
+    $("#dbPipeline").innerHTML = C.dashboard.pipeline.map(function (p, i) {
+      var on = st[i];
+      return "<div class=\"tag " + (on ? "on" : "") + "\" data-pipe=\"" + i + "\" title=\"" + esc(p[1]) + "\">" + (on ? "✓ " : "") + esc(p[0]) + "</div>" + (i < C.dashboard.pipeline.length - 1 ? "<span class=\"dim\">→</span>" : "");
+    }).join("");
+    $$("[data-pipe]").forEach(function (t) {
+      t.onclick = function () {
+        var s2 = LS.get("dbPipe", {});
+        var k = t.dataset.pipe; if (s2[k]) delete s2[k]; else s2[k] = 1;
+        LS.set("dbPipe", s2); renderDashboard();
+      };
+    });
+    // checklist
+    var ck = LS.get("dbCheck", {});
+    var done = C.dashboard.checklistDiario.filter(function (_, i) { return ck[i]; }).length;
+    $("#dbCkCount").textContent = done + "/" + C.dashboard.checklistDiario.length;
+    $("#dbChecklist").innerHTML = C.dashboard.checklistDiario.map(function (c, i) {
+      return "<div style=\"margin-bottom:8px\"><label class=\"check " + (ck[i] ? "done" : "") + "\"><input type=\"checkbox\" data-ck2=\"" + i + "\" " + (ck[i] ? "checked" : "") + "><span>" + esc(c) + "</span></label></div>";
+    }).join("");
+    $$("[data-ck2]").forEach(function (cb) {
+      cb.onchange = function () {
+        var s3 = LS.get("dbCheck", {});
+        if (cb.checked) s3[cb.dataset.ck2] = 1; else delete s3[cb.dataset.ck2];
+        LS.set("dbCheck", s3); renderDashboard();
+      };
+    });
+    // yaml
+    if (!$("#dbYaml").value) $("#dbYaml").value = YAML_EXEMPLO;
+    $("#dbYamlReset").onclick = function () { $("#dbYaml").value = YAML_EXEMPLO; $("#dbYamlOut").innerHTML = ""; };
+    $("#dbValidate").onclick = validarYaml;
+    $("#dbFtc").onclick = checarFtc;
+    $("#dbFtcLoad").onclick = function () {
+      var code = $("#gCode") && $("#gCode").textContent;
+      if (!code) { toast("Gere uma presell na aba Gerador primeiro."); return; }
+      $("#dbCopy").value = code; toast("Presell carregada — clique em verificar.");
+    };
+    $("#dbuDate").value = new Date().toISOString().slice(0, 10);
+    $("#dbuRun").onclick = buildUtm;
+    buildUtm();
+    // roadmap
+    $("#dbRoadmap").innerHTML = C.roadmap.map(function (r) {
+      return "<div class=\"kv\"><span><b>" + esc(r[0]) + "</b><br><span class=\"sub\">" + esc(r[1]) + "</span></span><span class=\"pill g\">" + esc(r[2]) + "</span></div>";
+    }).join("");
+  }
+
+  function validarYaml() {
+    var txt = $("#dbYaml").value || "";
+    var y = txt.toLowerCase();
+    var checks = [
+      ["Estrutura mínima", ["campaign:", "name:", "platform:", "budget:", "landing:"], "bloqueia"],
+      ["Orçamento declarado", ["budget:", "daily:"], "bloqueia"],
+      ["Campanha nasce pausada", ["status: paused"], "bloqueia"],
+      ["Teto de CPC (método BOFU)", ["max_cpc:"], "aviso"],
+      ["Custom Intent preenchido", ["custom_intent:"], "bloqueia"],
+      ["Exclusão de apps (display)", ["exclusions:", "apps"], "bloqueia"],
+      ["Landing no domínio próprio", ["landing: https://"], "bloqueia"],
+      ["Sub-id de rastreio", ["subid:"], "aviso"],
+      ["FTC: disclosure acima da dobra", ["disclosure_above_fold: true"], "bloqueia"],
+      ["RBAC: plataforma de anúncio declarada", ["platform: google_ads"], "aviso"]
+    ];
+    var fail = 0, warn = 0;
+    var rows = checks.map(function (c) {
+      var ok = c[1].every(function (k) { return y.indexOf(k) >= 0; });
+      if (!ok) { if (c[2] === "bloqueia") fail++; else warn++; }
+      return "<div class=\"kv\"><span>" + esc(c[0]) + "</span><span class=\"pill " + (ok ? "g" : c[2] === "bloqueia" ? "r" : "y") + "\">" + (ok ? "passou" : c[2] === "bloqueia" ? "bloqueia" : "atenção") + "</span></div>";
+    }).join("");
+    var veredito = fail ? "<span class=\"pill r\">NÃO PODE SUBIR</span> " + fail + " bloqueio(s)" : warn ? "<span class=\"pill y\">PODE SUBIR COM RESSALVA</span> " + warn + " aviso(s)" : "<span class=\"pill g\">VALIDADO — pronto para criar pausada</span>";
+    $("#dbYamlOut").innerHTML = "<div class=\"card\" style=\"background:#0a0f16\"><div class=\"row between\"><b>Dry-run</b>" + veredito + "</div>" + rows +
+      "<div class=\"callout info\" style=\"margin-top:12px\">Isto valida <b>campos e regras</b> do YAML — não executa pipeline nem substitui o <span class=\"mono\">harness-schema</span>. É o gate que evita subir campanha sem disclosure, sem exclusão de apps ou sem sub-id.</div></div>";
+  }
+
+  function checarFtc() {
+    var txt = $("#dbCopy").value || "";
+    if (!txt.trim()) { $("#dbFtcOut").innerHTML = "<div class=\"callout\">Cole a copy ou use o botão para carregar a presell gerada.</div>"; return; }
+    var rows = C.dashboard.ftcRegras.map(function (r) {
+      var neg = r[0].indexOf("Sem claim") >= 0;
+      var hit = r[1].test(txt);
+      var ok = neg ? !hit : hit;
+      return { label: r[0], detalhe: r[2], ok: ok, neg: neg, hit: hit };
+    });
+    var fails = rows.filter(function (x) { return !x.ok; });
+    var html = "<div class=\"card\" style=\"background:#0a0f16\"><div class=\"row between\"><b>FTC gate</b>" +
+      (fails.length ? "<span class=\"pill r\">PUBLICAÇÃO BLOQUEADA</span>" : "<span class=\"pill g\">LIBERADO</span>") + "</div>" +
+      rows.map(function (x) {
+        return "<div class=\"kv\"><span>" + esc(x.label) + "<br><span class=\"sub\">" + esc(x.detalhe) + "</span></span><span class=\"pill " + (x.ok ? "g" : "r") + "\">" + (x.ok ? "ok" : x.neg ? "encontrado" : "ausente") + "</span></div>";
+      }).join("");
+    if (fails.length) {
+      html += "<div class=\"callout bad\" style=\"margin-top:12px\"><b>Corrija antes de publicar:</b> " + esc(fails.map(function (f) { return f.label; }).join(", ")) + ". A FTC avalia por 'Net Impression' — disclosure no rodapé ou escondido não conta.</div>";
+    } else {
+      html += "<div class=\"callout good\" style=\"margin-top:12px\">Copy passou nos 4 gates. Lembre: o gate automatizado não substitui revisão humana de claims e de direitos autorais.</div>";
+    }
+    html += "<div class=\"note\">Detecção por padrão de texto — falso negativo é possível (ex.: disclosure em imagem). Obrigatório revisar visualmente.</div></div>";
+    $("#dbFtcOut").innerHTML = html;
+  }
+
+  function buildUtm() {
+    var offer = ($("#dbuOffer").value || "oferta").trim().replace(/\s+/g, "-").toLowerCase();
+    var ang = ($("#dbuAngle").value || "angulo").trim();
+    var ch = $("#dbuChannel").value;
+    var dt = $("#dbuDate").value || "";
+    var base = "https://seu-dominio.com/" + offer;
+    var utm = base + "?utm_source=" + encodeURIComponent(ch) + "&utm_medium=" + (ch === "email" ? "email" : "cpc") +
+      "&utm_campaign=bofu-" + encodeURIComponent(offer) + "&utm_content=" + encodeURIComponent(ang) + (dt ? "&utm_id=" + dt.replace(/-/g, "") : "");
+    var sub = offer + "_" + ang + (dt ? "_" + dt.replace(/-/g, "") : "");
+    var aff = "https://hop.clickbank.net/?affiliate=SEUID&vendor=SEUVENDOR&tid=" + encodeURIComponent(sub);
+    $("#dbuOut").innerHTML = "<div class=\"card\" style=\"background:#0a0f16\"><div class=\"small-label\">Presell (URL do anúncio)</div><pre>" + esc(utm) + "</pre>" +
+      "<div class=\"small-label\" style=\"margin-top:10px\">Link de afiliado com sub-id</div><pre>" + esc(aff) + "</pre>" +
+      "<div class=\"row\" style=\"margin-top:10px\"><button class=\"btn sm\" id=\"dbuC1\">Copiar presell</button><button class=\"btn sm ghost\" id=\"dbuC2\">Copiar afiliado</button></div>" +
+      "<div class=\"note\">O sub-id é o que faz o vendor te devolver qual ângulo vendeu. Sem ele você escala o criativo errado.</div></div>";
+    $("#dbuC1").onclick = function () { copyText(utm); };
+    $("#dbuC2").onclick = function () { copyText(aff); };
+  }
+
+  /* ---- spec ---- */
+  function renderSpec() {
+    $("#spTable").innerHTML = "<thead><tr><th>Item da spec</th><th>Status</th><th>O que foi verificado</th></tr></thead><tbody>" +
+      C.specCheck.map(function (r) {
+        return "<tr><td><b>" + esc(r[0]) + "</b></td><td>" + stPill(r[1]) + "</td><td class=\"sub\">" + esc(r[2]) + "</td></tr>";
+      }).join("") + "</tbody>";
+    var ok = C.specCheck.filter(function (r) { return r[1] === "ok"; }).length;
+    var aj = C.specCheck.filter(function (r) { return r[1] === "ajuste"; }).length;
+    var nd = C.specCheck.filter(function (r) { return r[1] === "n/d"; }).length;
+    var nk = C.specCheck.filter(function (r) { return r[1] === "nok"; }).length;
+    $("#spStats").innerHTML = stat("Confirmados", ok, "de " + C.specCheck.length + " itens") + stat("Ajustados", aj, "nome/rota diferentes") + stat("Não verificáveis", nd + nk, nk + " inexistente(s), " + nd + " sem resposta");
+  }
+
   /* ------------------------------ boot ------------------------------ */
   document.addEventListener("DOMContentLoaded", function () {
     buildNav();
+    renderHome(); renderDiagnostico(); renderRedes(); renderStack(); renderMetodo(); renderReddit(); renderDashboard(); renderSpec();
     renderCockpit(); bindGo();
     renderRadar(); drawRadarDetail();
     renderCampanhas();
@@ -1166,6 +1499,6 @@
     initCaderno();
     initIntegracoes();
     bindGo();
-    go("inicio");
+    go("home");
   });
 })();

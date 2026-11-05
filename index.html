@@ -259,6 +259,165 @@
       <div id="manBody"></div>
     </section>
 
+
+    <!-- ============ HOME ============ -->
+    <section class="page" id="p-home">
+      <div class="card" style="padding:34px 30px;background:linear-gradient(160deg,#12233a 0%,#131a25 55%,#1a1330 100%);border-color:#2b3d55">
+        <span class="pill b">MVP · blueprint validado</span>
+        <h1 style="font-size:30px;margin:12px 0 8px;max-width:22ch">Afiliado cirúrgico: intenção &gt; atenção.</h1>
+        <p class="lead" style="font-size:15.5px" id="heroSub"></p>
+        <div class="row" style="margin-top:18px">
+          <button class="btn pri" data-go="diagnostico">Começar diagnóstico gratuito</button>
+          <button class="btn" data-go="metodo">Ver blueprint completo</button>
+        </div>
+        <div class="callout good" style="margin-top:18px" id="heroProva"></div>
+      </div>
+      <div class="grid g4" style="margin-top:16px" id="heroKpis"></div>
+      <h2>Onboarding em 3 passos</h2>
+      <div class="grid g3" id="heroOnboarding"></div>
+      <h2>O que este módulo acrescenta ao Copiloto</h2>
+      <div class="grid g3" id="heroModulos"></div>
+      <div class="callout info" style="margin-top:16px">Este é um segundo eixo do mesmo app: nada do <b>Copiloto</b> foi removido ou alterado. O menu “Copiloto” continua com Radar, Campanhas, Gerador, Compliance e Manual exatamente como estavam.</div>
+    </section>
+
+    <!-- ============ DIAGNÓSTICO ============ -->
+    <section class="page" id="p-diagnostico">
+      <h1>Diagnóstico inteligente</h1>
+      <p class="lead">Cinco perguntas → rede recomendada, nicho, faixa de orçamento e 3 ofertas do Radar compatíveis com o seu perfil. O resultado é determinístico e auditável: cada recomendação mostra o porquê.</p>
+      <div class="grid g2" style="align-items:start;margin-top:16px">
+        <div class="card"><div id="dgForm"></div><button class="btn pri" id="dgRun" style="margin-top:6px">Gerar recomendação</button></div>
+        <div id="dgOut"></div>
+      </div>
+    </section>
+
+    <!-- ============ REDES ============ -->
+    <section class="page" id="p-redes">
+      <h1>Redes 2026 — onde está o dinheiro</h1>
+      <p class="lead">Comparativo por tipo, comissão, payout e perfil ideal. O selo ao lado de cada rede indica o status de verificação em 05/11/2026.</p>
+      <div class="row" style="margin:16px 0">
+        <div style="flex:1;min-width:200px"><input id="rdSearch" placeholder="Buscar rede ou tipo…"></div>
+        <select id="rdTipo" style="max-width:240px"></select>
+        <select id="rdOrd" style="max-width:220px">
+          <option value="comissao">Maior comissão</option>
+          <option value="nome">Nome (A–Z)</option>
+          <option value="payout">Payout mais rápido</option>
+        </select>
+      </div>
+      <div class="grid g2" id="rdBody"></div>
+      <div class="note">Comissões de infoproduto BR variam por oferta e por temperatura do tráfego. Os percentuais são faixas de mercado, não cotação da rede.</div>
+    </section>
+
+    <!-- ============ STACK ============ -->
+    <section class="page" id="p-stack">
+      <h1>Stack técnico — skills, MCPs e validação</h1>
+      <p class="lead">Tudo o que a spec pedia, com o status real de cada identificador. Repositórios e pacotes conferidos via GitHub API e npm registry; hosts e rotas marcados como n/d quando não responderam daqui.</p>
+      <div class="tabs" id="stTabs"></div>
+      <div id="stBody"></div>
+      <h2>Como plugar no seu fluxo</h2>
+      <div class="card"><pre id="stSnippets"></pre></div>
+      <div class="callout" style="margin-top:14px">Os MCPs rodam em <b>stdio</b> (Claude Desktop, Codex, Claude Code). O bridge local deste repositório já fala JSON-RPC com um deles (Rally) — o mesmo padrão serve para <span class="mono">affiliate-networks-mcp</span> e <span class="mono">mcp-redtrack</span>.</div>
+    </section>
+
+    <!-- ============ MÉTODO ============ -->
+    <section class="page" id="p-metodo">
+      <h1 id="mtTitle"></h1>
+      <p class="lead" id="mtLead"></p>
+      <div class="card" style="margin-top:16px">
+        <div class="row between" style="margin-bottom:14px"><span class="small-label">Timeline do método</span><span class="pill b" id="mtMetodo"></span></div>
+        <div id="mtSteps"></div>
+      </div>
+      <div class="callout bad" style="margin-top:16px" id="mtAviso"></div>
+    </section>
+
+    <!-- ============ REDDIT ============ -->
+    <section class="page" id="p-reddit">
+      <h1>Reddit playbook + clonagem legal</h1>
+      <p class="lead">Reddit como validador de oferta quente — não como fonte de tráfego em massa. E clonagem de <b>estrutura</b>, nunca de conteúdo.</p>
+      <div class="grid g2" style="align-items:start;margin-top:16px">
+        <div class="card">
+          <h3>Bridge page method</h3>
+          <p class="sub" id="rddBridge"></p>
+          <div class="callout" style="margin-top:10px" id="rddKarma"></div>
+        </div>
+        <div class="card">
+          <h3>Timeline de contribuição</h3>
+          <div id="rddTimeline"></div>
+        </div>
+      </div>
+      <h2>Onde converte</h2>
+      <div class="card pad0"><div class="tblwrap"><table id="rddSubs"></table></div></div>
+      <h2>Ofertas quentes 2026</h2>
+      <div class="grid g4" id="rddHot"></div>
+      <h2>Clonagem cirúrgica legal</h2>
+      <div class="grid g2" style="align-items:start">
+        <div class="card">
+          <h3>Ferramentas</h3>
+          <div class="row" id="clTools"></div>
+          <div class="callout bad" style="margin-top:12px" id="clRule"></div>
+          <h3 style="margin-top:18px">Compliance</h3>
+          <ul id="clComp" style="margin-left:18px;font-size:13px;color:var(--dim);display:flex;flex-direction:column;gap:6px"></ul>
+        </div>
+        <div class="card">
+          <h3>Framework de copy</h3>
+          <div id="clFramework"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DASHBOARD ============ -->
+    <section class="page" id="p-dashboard">
+      <h1>Dashboard do afiliado</h1>
+      <p class="lead">O "modo sócio cirúrgico": pipeline do dia, checklist, verificador de copy FTC e validação de campanha antes de subir. Estado salvo no navegador — sem login, sem servidor.</p>
+      <h2>Pipeline</h2>
+      <div class="card"><div class="row" id="dbPipeline" style="gap:6px;flex-wrap:wrap"></div><div class="note" style="margin-top:10px">Clique numa etapa para marcar como concluída hoje. O progresso é diário.</div></div>
+      <div class="grid g2" style="align-items:start;margin-top:16px">
+        <div class="card">
+          <div class="row between" style="margin-bottom:10px"><h3 style="margin:0">Checklist diário</h3><span class="pill" id="dbCkCount"></span></div>
+          <div id="dbChecklist"></div>
+        </div>
+        <div class="card">
+          <h3>Validador de campanha (pré-commit)</h3>
+          <p class="sub">Equivalente local e honesto do Harness Dry-Run: valida o YAML da campanha e o RBAC de execução antes de qualquer chamada de API. Não roda pipeline — valida.</p>
+          <div class="field" style="margin-top:10px"><label class="f">YAML da campanha</label><textarea id="dbYaml" class="mono" style="min-height:150px"></textarea></div>
+          <div class="row"><button class="btn pri" id="dbValidate">Validar (dry-run)</button><button class="btn ghost sm" id="dbYamlReset">Restaurar exemplo</button></div>
+          <div id="dbYamlOut" style="margin-top:12px"></div>
+        </div>
+      </div>
+      <div class="grid g2" style="align-items:start;margin-top:16px">
+        <div class="card">
+          <h3>FTC checker de copy</h3>
+          <p class="sub">Cole a presell (texto ou HTML) e receba o gate de compliance: disclosure, termos, contato e claims proibidos. Bloqueia o que não pode publicar.</p>
+          <div class="field" style="margin-top:10px"><label class="f">Copy da presell</label><textarea id="dbCopy" style="min-height:150px" placeholder="Cole aqui o texto/HTML da página…"></textarea></div>
+          <div class="row"><button class="btn pri" id="dbFtc">Verificar compliance</button><button class="btn ghost sm" id="dbFtcLoad">Usar presell gerada</button></div>
+          <div id="dbFtcOut" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <h3>UTM builder (RedTrack-style)</h3>
+          <div class="grid g2">
+            <div class="field"><label class="f">Oferta</label><input id="dbuOffer" value="brain-song"></div>
+            <div class="field"><label class="f">Ângulo</label><input id="dbuAngle" value="a1-medo"></div>
+            <div class="field"><label class="f">Canal</label><select id="dbuChannel"><option>google</option><option>meta</option><option>native</option><option>reddit</option><option>email</option></select></div>
+            <div class="field"><label class="f">Data</label><input id="dbuDate" type="date"></div>
+          </div>
+          <button class="btn" id="dbuRun">Montar UTM</button>
+          <div id="dbuOut" style="margin-top:12px"></div>
+        </div>
+      </div>
+      <h2>Roadmap e status da spec</h2>
+      <div class="grid g2" style="align-items:start">
+        <div class="card"><h3>Roadmap 4 semanas</h3><div id="dbRoadmap"></div></div>
+        <div class="card"><h3>Spec original vs. verificado</h3><div class="note" style="margin-bottom:8px">Mesma disciplina do módulo de integrações.</div><a class="btn sm" data-go="spec">Abrir tabela completa →</a></div>
+      </div>
+    </section>
+
+    <!-- ============ SPEC CHECK ============ -->
+    <section class="page" id="p-spec">
+      <h1>Spec original vs. verificado</h1>
+      <p class="lead">Cada item do blueprint foi conferido contra GitHub API, npm registry, DNS e HTTP. O que não pude confirmar ficou como <b>n/d</b> — não foi apagado, mas também não foi promovido a verdade.</p>
+      <div class="card pad0" style="margin-top:16px"><div class="tblwrap"><table id="spTable"></table></div></div>
+      <div class="grid g3" style="margin-top:16px" id="spStats"></div>
+    </section>
+
     <!-- ============ INTEGRAÇÕES ============ -->
     <section class="page" id="p-integracoes">
       <h1>Integrações: Ads, mercado BR e sinais ao vivo</h1>
@@ -370,6 +529,7 @@ python3 tools/mcp_bridge.py --port 8791</pre>
   </main>
 </div>
 <script src="assets/data.js"></script>
+<script src="assets/cirurgia.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

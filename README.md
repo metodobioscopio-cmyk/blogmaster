@@ -1,4 +1,4 @@
-# BlogMaster — Copiloto de Afiliados (Gringa)
+# BlogMaster — Copiloto de Afiliados (Gringa) + CirurgiaAfiliada (MVP BR)
 
 Aplicação web (HTML/CSS/JS puro, zero build) que funciona como **copiloto interativo**
 para campanhas de afiliado no mercado gringo: radar de produto com score, blueprints de
@@ -16,6 +16,26 @@ python3 -m http.server 8080
 Não precisa de instalação, servidor Node, nem chave de API. Todo o estado que você digita
 (checklists, plano, caderno) fica no `localStorage` do navegador.
 
+## Duas camadas, um app
+
+O menu tem dois grupos e **nada foi removido**:
+
+**CirurgiaAfiliada (MVP)** — `assets/cirurgia.js`
+Home com posicionamento e onboarding 3 passos · Diagnóstico determinístico de 5 perguntas ·
+Redes 2026 (10 redes com status de verificação) · Stack & MCPs auditados · Método BOFU
+(Thiago Boeiras, números preservados) · Reddit playbook + clonagem legal · Dashboard com
+pipeline, checklist diário, **validador de campanha (dry-run de YAML)** , **FTC checker** e
+UTM builder · Spec verificada item a item.
+
+**Copiloto** — cockpit, radar de 21 ofertas, 8 blueprints de campanha, diagnóstico de
+campanha, gerador de presell, keyword/intenção, viabilidade, compliance, plano de 7 dias,
+arsenal GitHub/HF, integrações MCP e manual.
+
+```bash
+# os dois eixos usam o mesmo bridge quando precisam de rede
+python3 tools/mcp_bridge.py --port 8791
+```
+
 ## Estrutura
 
 ```
@@ -23,6 +43,7 @@ index.html              # shell da aplicação
 assets/styles.css       # design system (tema escuro)
 assets/data.js          # base: ofertas, blueprints, canais, checklists, arsenal, templates
 assets/manual.js        # manual prático em 10 seções
+assets/cirurgia.js      # MVP CirurgiaAfiliada: redes, stack, método, reddit, spec auditada
 assets/app.js           # motor: roteamento, score, gerador, diagnóstico, checklists
 tools/keyword_harvest.py  # coleta autocomplete do Google → CSV de termos
 tools/cluster_intent.py   # embeddings + KMeans para agrupar search terms por intenção
