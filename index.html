@@ -259,6 +259,93 @@
       <div id="manBody"></div>
     </section>
 
+    <!-- ============ INTEGRAÇÕES ============ -->
+    <section class="page" id="p-integracoes">
+      <h1>Integrações: Ads, mercado BR e sinais ao vivo</h1>
+      <p class="lead">Três pilares plugados no Copiloto. Todos passam por um <b>bridge local</b> por três motivos técnicos: CORS, token fora do navegador e o Rally MCP, que só fala JSON-RPC sobre STDIO. O app continua funcionando 100% sem bridge — as integrações são um upgrade, não uma dependência.</p>
+
+      <div class="card" style="margin-top:18px;border-color:#22b8ff44">
+        <div class="row between" style="align-items:flex-start">
+          <div><h3 style="margin:0">1 · Bridge local</h3><p class="sub" style="margin-top:4px">Rode na sua máquina. É ele que guarda o token e fala com a Adspirer e com o Rally.</p></div>
+          <span class="pill" id="brStatus">verificando…</span>
+        </div>
+        <pre style="margin-top:12px">export ADSPIRER_TOKEN=sk_live_...      # https://adspirer.ai/keys
+export ML_AFFILIATE_ID=seu_matt_tool_id
+export SHOPEE_APP_ID=...  SHOPEE_SECRET=...
+python3 tools/mcp_bridge.py --port 8791</pre>
+        <div class="row" style="margin-top:12px">
+          <div style="flex:1;min-width:220px"><label class="f">URL do bridge</label><input id="brUrl" value="http://127.0.0.1:8791"></div>
+          <div style="align-self:flex-end"><button class="btn pri" id="brTest">Testar conexão</button></div>
+        </div>
+        <div id="brOut" style="margin-top:12px"></div>
+      </div>
+
+      <h2>2 · Ads — execução a partir do Radar</h2>
+      <div class="grid g2" style="align-items:start">
+        <div class="card">
+          <h3>Adspirer / Ads MCP</h3>
+          <p class="sub">Transforma o Radar de "painel de métricas" em braço de execução: campanha criada <b>pausada</b>, para você revisar antes de qualquer gasto.</p>
+          <div class="kv"><span class="dim">MCP remoto</span><a href="https://mcp.adspirer.com/mcp" target="_blank" rel="noopener" class="mono">mcp.adspirer.com/mcp</a></div>
+          <div class="kv"><span class="dim">REST</span><span class="mono" style="font-size:11.5px">POST api.adspirer.ai/api/v1/tools/&lt;tool&gt;/execute</span></div>
+          <div class="kv"><span class="dim">Auth</span><span class="mono">Bearer sk_live_…</span></div>
+          <div class="kv"><span class="dim">Docs / chaves</span><span><a href="https://api.adspirer.ai/docs" target="_blank" rel="noopener">Swagger</a> · <a href="https://adspirer.ai/keys" target="_blank" rel="noopener">chaves</a> · <a href="https://adspirer.ai/connections" target="_blank" rel="noopener">conectar contas</a></span></div>
+          <div class="callout" style="margin-top:12px"><b>Limite real:</b> free = 15 chamadas/mês. Plus 150 (US$ 49), Pro 600 (US$ 99), Max 3.000 (US$ 199). O free serve para testar, não para operar.</div>
+        </div>
+        <div class="card">
+          <h3>Executar uma tool</h3>
+          <div class="field"><label class="f">Tool</label><select id="adsTool"></select></div>
+          <div class="field"><label class="f">Payload (JSON)</label><textarea id="adsPayload" class="mono" style="min-height:130px"></textarea></div>
+          <div class="row"><button class="btn pri" id="adsRun">Executar via bridge</button><button class="btn ghost sm" id="adsFromRadar">Usar oferta selecionada no Radar</button></div>
+          <div id="adsOut" style="margin-top:12px"></div>
+          <div class="note">Sem bridge, use a via MCP no seu agente (Claude Code: <span class="mono">claude mcp add --transport http adspirer https://mcp.adspirer.com/mcp</span>) — a chamada é a mesma, só muda o transporte.</div>
+        </div>
+      </div>
+
+      <h2>3 · Mercado brasileiro — Rally MCP (Mercado Livre + Shopee)</h2>
+      <div class="grid g2" style="align-items:start">
+        <div class="card">
+          <h3>Como funciona</h3>
+          <p class="sub">O Rally é um pacote npm que abstrai o Mercado Livre (que não tem API pública de afiliado) e a Shopee. O bridge sobe o pacote via <span class="mono">npx</span> e conversa com ele em JSON-RPC.</p>
+          <pre style="margin-top:10px">npm i @andrehocsis/rally-mcp-server
+# o bridge já chama: npx -y @andrehocsis/rally-mcp-server</pre>
+          <div class="kv"><span class="dim">Versão verificada</span><span class="mono">1.0.0</span></div>
+          <div class="kv"><span class="dim">Env obrigatório</span><span class="mono" style="font-size:11.5px">ML_AFFILIATE_ID · SHOPEE_APP_ID · SHOPEE_SECRET</span></div>
+          <div class="callout" style="margin-top:12px"><b>Honestidade sobre comissão:</b> ML/Shopee mudam percentual por categoria e campanha. O app usa <b>faixas editáveis</b>, não cotação oficial. Se o Rally responder, o número real entra no lugar do estimado.</div>
+        </div>
+        <div class="card">
+          <h3>Chamar uma tool do Rally</h3>
+          <div class="field"><label class="f">Tool</label><select id="rallyTool"></select></div>
+          <div class="field"><label class="f">Argumentos (JSON)</label><textarea id="rallyArgs" class="mono" style="min-height:120px"></textarea></div>
+          <button class="btn pri" id="rallyRun">Executar via bridge</button>
+          <div id="rallyOut" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <h2>4 · Sinais ao vivo — ProdIntel (Reddit + HN + Trends)</h2>
+      <div class="grid g2" style="align-items:start">
+        <div class="card">
+          <h3>O que dá para fazer (e o que não dá)</h3>
+          <p class="sub"><span class="mono">/api/signals</span> devolve o que está em alta <b>agora</b> — temas globais de Trends + Reddit + Hacker News. Ele <b>não aceita busca por produto</b>: o cruzamento com as suas ofertas é feito no cliente, por tokens do nome e sinônimos do nicho.</p>
+          <div class="kv"><span class="dim">Rate limit</span><span class="mono">40 req/min por IP</span></div>
+          <div class="kv"><span class="dim">Cache</span><span class="mono">15 min (CDN)</span></div>
+          <div class="kv"><span class="dim">Gate de reputação</span><span class="mono">/api/reputation</span></div>
+          <button class="btn pri" id="sigRun" style="margin-top:12px">Puxar sinais agora</button>
+          <div id="sigOut" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <h3>Gate de confiança de domínio</h3>
+          <p class="sub">Antes de comprar tráfego, verifique o domínio do produtor: shortener, punycode, IP cru, typosquat, TLD abusado.</p>
+          <div class="field"><label class="f">Domínio ou URL</label><input id="repInput" placeholder="ex.: paginadoprodutor.com"></div>
+          <button class="btn" id="repRun">Verificar reputação</button>
+          <div id="repOut" style="margin-top:12px"></div>
+          <div class="callout info" style="margin-top:12px">Isso é um gate de <b>segurança de domínio</b>, não um score de qualidade da oferta. Não confunda.</div>
+        </div>
+      </div>
+
+      <h2>5 · O que a spec original dizia vs. o que é real</h2>
+      <div class="card pad0"><div class="tblwrap"><table id="specTable"></table></div></div>
+    </section>
+
     <!-- ============ CADERNO ============ -->
     <section class="page" id="p-caderno">
       <h1>Caderno da operação</h1>

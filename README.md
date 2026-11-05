@@ -26,7 +26,27 @@ assets/manual.js        # manual prático em 10 seções
 assets/app.js           # motor: roteamento, score, gerador, diagnóstico, checklists
 tools/keyword_harvest.py  # coleta autocomplete do Google → CSV de termos
 tools/cluster_intent.py   # embeddings + KMeans para agrupar search terms por intenção
+tools/mcp_bridge.py       # bridge local (stdlib only): Ads REST, Rally MCP via STDIO, ProdIntel
 ```
+
+## Integrações (aba ⚡)
+
+Tudo passa pelo `tools/mcp_bridge.py`, por três motivos técnicos: **CORS**, **token fora
+do navegador** (o app é estático) e **Rally MCP só falar JSON-RPC sobre STDIO**.
+
+```bash
+export ADSPIRER_TOKEN=sk_live_...        # https://adspirer.ai/keys
+export ML_AFFILIATE_ID=... SHOPEE_APP_ID=... SHOPEE_SECRET=...
+python3 tools/mcp_bridge.py --port 8791
+```
+
+| Pilar | Ferramenta | Rota no bridge | Verificado 05/11/2026 |
+|---|---|---|---|
+| Execução de anúncios | Adspirer / `amekala/ads-mcp` | `POST /ads/<tool>` | REST `api.adspirer.ai/api/v1/tools/<tool>/execute`, Bearer `sk_live_`. Free = **15 chamadas/mês** (Plus 150/US$49, Pro 600/US$99, Max 3.000/US$199). Campanhas nascem **pausadas**. |
+| Mercado BR | `@andrehocsis/rally-mcp-server` v1.0.0 | `POST /rally/<tool>` | Existe no npm; 6 tools (`search_products`, `trending_products`, `analyze_product`, `generate_affiliate_link`, `generate_copy`, `commission_calculator`); env `ML_AFFILIATE_ID`, `SHOPEE_APP_ID`, `SHOPEE_SECRET`. |
+| Sinais ao vivo | ProdIntel `alicelabs-llc/Scraper` | `GET /signals`, `GET /reputation?domain=` | `/api/signals` é GET **sem query de produto** (trending global), 40 req/min, cache 900s. `api/reputation` é o gate de domínio. |
+
+O app funciona 100% sem bridge — as integrações são upgrade opcional.
 
 ## Módulos
 

@@ -497,3 +497,97 @@ window.BM_DATA = {
     }
   }
 };
+
+/* =========================================================================
+   INTEGRAÇÕES — verificado em 05/11/2026 contra GitHub API + npm registry.
+   Cada campo "verificado" indica a fonte real. Não invente endpoint.
+   ========================================================================= */
+window.BM_DATA.integracoes = {
+  verificado: "05/11/2026",
+
+  bridge: {
+    nome: "Bridge local (recomendado)",
+    padrao: "http://127.0.0.1:8791",
+    cmd: "python3 tools/mcp_bridge.py --port 8791",
+    porque: "Resolve CORS, mantém token fora da página e permite falar com o Rally MCP (que só existe via STDIO/JSON-RPC, não via navegador)."
+  },
+
+  ads: {
+    nome: "Adspirer / Ads MCP",
+    repo: "https://github.com/amekala/ads-mcp",
+    mcpUrl: "https://mcp.adspirer.com/mcp",
+    restBase: "https://api.adspirer.ai/api/v1/tools/{tool}/execute",
+    docs: "https://api.adspirer.ai/docs",
+    keys: "https://adspirer.ai/keys",
+    connections: "https://adspirer.ai/connections",
+    auth: "Bearer sk_live_…  (Personal Access Token)",
+    verificado: "REST de 178 endpoints + MCP remoto com OAuth 2.1 PKCE — confirmado no README oficial do repo em 05/11/2026",
+    atencao: [
+      "Plano free = 15 chamadas/mês (Plus 150/US$49, Pro 600/US$99, Max 3.000/US$199). Para operação real, o free não cobre.",
+      "Campanhas novas são SEMPRE criadas pausadas — nada gasta sem você ativar na plataforma.",
+      "As contas de anúncio precisam estar conectadas em adspirer.ai/connections (OAuth no navegador).",
+      "O app é estático: chamar api.adspirer.ai direto do navegador pode ser barrado por CORS. Por isso o bridge. O token nunca deve ir para um servidor de terceiros."
+    ],
+    toolsSugeridas: [
+      ["create_campaign", "cria campanha pausada", "{\"platform\":\"google_ads\",\"name\":\"BM — {{oferta}} — display\",\"budget\":{\"amount\":20,\"currency\":\"USD\"},\"status\":\"PAUSED\"}"],
+      ["fetch_metrics", "puxa métricas da conta", "{\"platform\":\"google_ads\",\"date_range\":{\"start\":\"2026-11-01\",\"end\":\"2026-11-05\"}}"],
+      ["list_campaigns", "lista campanhas", "{\"platform\":\"google_ads\"}"]
+    ]
+  },
+
+  rally: {
+    nome: "Rally MCP (Mercado Livre + Shopee)",
+    pkg: "@andrehocsis/rally-mcp-server",
+    versao: "1.0.0",
+    npm: "https://www.npmjs.com/package/@andrehocsis/rally-mcp-server",
+    autor: "André Hocsis (Rally de Vendas)",
+    verificado: "pacote existe e está publicado no npm; README confirma 6 ferramentas e as 3 variáveis de ambiente (05/11/2026)",
+    env: [
+      ["ML_AFFILIATE_ID", "seu matt_tool_id do Mercado Livre"],
+      ["SHOPEE_APP_ID", "App ID da Shopee Affiliate Open Platform"],
+      ["SHOPEE_SECRET", "Secret da Shopee Affiliate Open Platform"]
+    ],
+    tools: [
+      ["search_products", "busca produtos com estimativa de comissão", "{\"marketplace\":\"mercadolibre\",\"query\":\"fone bluetooth\",\"limit\":20}"],
+      ["trending_products", "produtos em alta por categoria", "{\"marketplace\":\"mercadolibre\",\"category\":\"MLB1051\",\"period\":\"7d\"}"],
+      ["analyze_product", "score 0-100 do anúncio (título, fotos, descrição, preço)", "{\"marketplace\":\"mercadolibre\",\"product_id\":\"MLB12345\"}"],
+      ["generate_affiliate_link", "link rastreado com parâmetros de campanha", "{\"marketplace\":\"mercadolibre\",\"product_url\":\"https://produto.ml.com.br/...\",\"campaign\":\"tiktok_nov\"}"],
+      ["generate_copy", "copy por canal (tiktok, reels, whatsapp, telegram, blog)", "{\"product_id\":\"MLB12345\",\"channel\":\"tiktok\",\"language\":\"pt-BR\"}"],
+      ["commission_calculator", "projeta ganho por venda", "{\"marketplace\":\"shopee\",\"price\":149.9,\"category\":\"eletronicos\"}"]
+    ],
+    atencao: [
+      "É servidor MCP (STDIO/JSON-RPC). Navegador não fala MCP — precisa do bridge.",
+      "Comissões de ML/Shopee mudam por categoria e por campanha: os percentuais do app são faixa típica EDITÁVEL, não cotação oficial.",
+      "ML não tem API pública de afiliado; o pacote abstrai isso e pode parar de funcionar se o marketplace mudar. Teste antes de confiar."
+    ],
+    comissoesTipicas: [
+      ["Mercado Livre — Eletrônicos", 4, 6],
+      ["Mercado Livre — Casa/Decoração", 6, 10],
+      ["Mercado Livre — Moda/Beleza", 8, 12],
+      ["Mercado Livre — Esporte/Lazer", 6, 9],
+      ["Shopee — Eletrônicos", 2, 5],
+      ["Shopee — Moda/Beleza", 5, 10],
+      ["Shopee — Casa/Utilidades", 4, 8],
+      ["Shopee — Cupons/Ofertas", 1, 3]
+    ]
+  },
+
+  sinais: {
+    nome: "ProdIntel — sinais ao vivo (Reddit + Hacker News + Google Trends)",
+    repo: "https://github.com/alicelabs-llc/Scraper",
+    base: "https://prodintel-two.vercel.app",
+    endpoints: [
+      ["/api/signals", "GET", "Sinais globais já mesclados (Trends RSS + Reddit + HN). NÃO aceita query de produto — é o trending do momento.", "40 req/min por IP, cache de 15 min"],
+      ["/api/reputation?domain=", "GET", "Source Safety Gate: reputação de domínio (allowlist, shortener, punycode, IP cru, typosquat, TLD abusado).", "público, sem chave"],
+      ["/api/signals?probe=1", "GET", "checagem de disponibilidade do serviço", "-"]
+    ],
+    verificado: "li o código de api/signals.ts no repo: é GET sem parâmetro de busca, com rate limit de 40/min e cache CDN de 900s. O uso de 'query por produto' da spec original não existe (05/11/2026)",
+    scoreProdIntel: "Deal Score = momentum de tendência 55% + margem 35% + link de fonte real 10% (documentado no README deles)",
+    comoUsar: [
+      "1. Puxe /api/signals para saber o que está em alta AGORA (temas, não produtos).",
+      "2. Faça matching de tokens do nome da oferta + sinônimos do nicho contra os títulos retornados.",
+      "3. Match encontrado = badge 'sinal vivo'. Sem match = 'sem menção' (não é sinal negativo, é ausência de dado).",
+      "4. Passe o domínio da página do produtor em /api/reputation como gate de confiança antes de comprar tráfego."
+    ]
+  }
+};

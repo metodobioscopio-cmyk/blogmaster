@@ -48,6 +48,7 @@
     ["plano", "Plano de 7 dias", "▷"],
     ["github", "Arsenal GitHub", "◧"],
     ["hf", "Arsenal Hugging Face", "◨"],
+    ["integracoes", "Integrações / MCP", "⚡"],
     ["manual", "Manual prático", "❏"],
     ["caderno", "Caderno", "✐"]
   ];
@@ -100,7 +101,8 @@
       cardLink("campanhas", "3 · Subir a campanha", "Escolha o blueprint do canal, siga a estrutura e os KPIs de referência.", "Ver blueprints"),
       cardLink("copiloto", "4 · Decidir com números", "Cole gasto, cliques e vendas. Receba escalar / ajustar / cortar com critério.", "Diagnosticar"),
       cardLink("keyword", "5 · Montar Custom Intent", "Gere a matriz de intenção e saia com o segmento pronto para colar.", "Gerar keywords"),
-      cardLink("check", "0 · Antes de tudo: compliance", "15 pontos que evitam reprovação e bloqueio de conta.", "Abrir checklist")
+      cardLink("check", "0 · Antes de tudo: compliance", "15 pontos que evitam reprovação e bloqueio de conta.", "Abrir checklist"),
+      cardLink("integracoes", "⚡ · Plugar Ads, mercado BR e sinais", "Adspirer (execução), Rally (Mercado Livre/Shopee) e ProdIntel (Reddit/Trends) via bridge local seguro.", "Ver integrações")
     ].join("");
 
     var fluxo = ["Nicho", "Oferta (EPC/APV)", "Presell própria", "Criativo + termos", "Campanha teste", "300 cliques", "Decisão", "Escala 20–30%"];
@@ -969,6 +971,179 @@
     });
   }
 
+
+  /* ------------------------------ integrações ------------------------------ */
+  var INT = D.integracoes;
+  function brBase() {
+    var v = ($("#brUrl") && $("#brUrl").value || INT.bridge.padrao).trim().replace(/\/+$/, "");
+    LS.set("bridge", v);
+    return v;
+  }
+  function brFetch(path, opts) {
+    var o = opts || {};
+    o.headers = Object.assign({ "Content-Type": "application/json" }, o.headers || {});
+    return fetch(brBase() + path, o);
+  }
+  function showJson(sel, status, data, okLabel) {
+    var box = $(sel);
+    var pretty = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+    var cls = status >= 200 && status < 300 ? "good" : status === 0 ? "" : "bad";
+    box.innerHTML = "<div class=\"callout " + cls + "\">" + esc(okLabel || ("HTTP " + status)) + "</div>" +
+      "<div class=\"card pad0\" style=\"margin-top:8px\"><pre style=\"max-height:340px\">" + esc(pretty.slice(0, 6000)) + "</pre></div>";
+  }
+  function initIntegracoes() {
+    if (!$("#brTest")) return;
+    if (typeof fetch !== "function") {
+      $("#brStatus").className = "pill y"; $("#brStatus").textContent = "navegador sem fetch";
+      $("#brOut").innerHTML = "<div class=\"callout\">Este navegador não expõe <span class=\"mono\">fetch</span> — as integrações ficam indisponíveis, o resto do app funciona normalmente.</div>";
+      return;
+    }
+    var saved = LS.get("bridge", INT.bridge.padrao);
+    if ($("#brUrl")) $("#brUrl").value = saved;
+
+    // --- bridge ---
+    $("#brTest").onclick = function () {
+      var box = $("#brOut"), st = $("#brStatus");
+      box.innerHTML = "<span class=\"sub\">testando…</span>";
+      brFetch("/health").then(function (r) { return r.json(); }).then(function (j) {
+        st.className = "pill g"; st.textContent = "bridge online";
+        box.innerHTML = "<div class=\"callout good\">Bridge respondendo. Token Adspirer: <b>" + esc(j.ads_token) + "</b> · Rally: ML " + (j.rally_env.ML_AFFILIATE_ID ? "ok" : "—") + ", Shopee " + (j.rally_env.SHOPEE_APP_ID ? "ok" : "—") + "</div>";
+      }).catch(function () {
+        st.className = "pill r"; st.textContent = "bridge offline";
+        box.innerHTML = "<div class=\"callout bad\">Não alcançou o bridge. Rode <span class=\"mono\">python3 tools/mcp_bridge.py --port 8791</span> na raiz do projeto. Sem ele os botões abaixo avisam, mas o resto do app continua funcionando.</div>";
+      });
+    };
+    brFetch("/health").then(function (r) { return r.json(); }).then(function (j) {
+      var st = $("#brStatus"); st.className = "pill g"; st.textContent = "bridge online";
+      $("#brOut").innerHTML = "<div class=\"callout good\">Bridge já está rodando neste ambiente (token " + esc(j.ads_token) + ").</div>";
+    }).catch(function () {
+      var st = $("#brStatus"); st.className = "pill"; st.textContent = "bridge não detectado";
+    });
+
+    // --- ads ---
+    $("#adsTool").innerHTML = INT.ads.toolsSugeridas.map(function (t) {
+      return "<option value=\"" + esc(t[2]) + "\" data-name=\"" + esc(t[0]) + "\">" + esc(t[0]) + " — " + esc(t[1]) + "</option>";
+    }).join("");
+    function setAdsPayload() {
+      var o = $("#adsTool").selectedOptions[0];
+      $("#adsPayload").value = JSON.stringify(JSON.parse(o.dataset.name === "create_campaign" ? o.value.replace("{{oferta}}", (radarSel || "oferta")) : o.value), null, 2);
+    }
+    $("#adsTool").onchange = setAdsPayload;
+    setAdsPayload();
+    $("#adsRun").onclick = function () {
+      var name = $("#adsTool").selectedOptions[0].dataset.name;
+      var payload;
+      try { payload = JSON.parse($("#adsPayload").value); } catch (e) { showJson("#adsOut", 0, "JSON inválido no payload.", "Corrija o JSON"); return; }
+      $("#adsOut").innerHTML = "<span class=\"sub\">chamando o bridge…</span>";
+      brFetch("/ads/" + encodeURIComponent(name), { method: "POST", body: JSON.stringify(payload) })
+        .then(function (r) { return r.text().then(function (t) { return { s: r.status, t: t }; }); })
+        .then(function (res) {
+          var parsed; try { parsed = JSON.parse(res.t); } catch (e) { parsed = res.t; }
+          showJson("#adsOut", res.s, parsed, res.s < 300 ? "Executado. Campanha criada PAUSADA — revise e ative na plataforma." : "Falhou (HTTP " + res.s + ")");
+        })
+        .catch(function () {
+          $("#adsOut").innerHTML = "<div class=\"callout bad\">Bridge offline. Suba o bridge ou execute a mesma tool pelo MCP no seu agente. Token nunca vai no navegador.</div>";
+        });
+    };
+    $("#adsFromRadar").onclick = function () {
+      if (!radarSel) { toast("Selecione uma oferta no Radar primeiro."); return; }
+      var o = $("#adsTool").selectedOptions[0];
+      o.value = o.value.replace("{{oferta}}", radarSel);
+      $("#adsPayload").value = JSON.stringify({ platform: "google_ads", name: "BM — " + radarSel + " — display", budget: { amount: 20, currency: "USD" }, status: "PAUSED" }, null, 2);
+      toast("Payload montado com " + radarSel);
+    };
+
+    // --- rally ---
+    $("#rallyTool").innerHTML = INT.rally.tools.map(function (t) {
+      return "<option value=\"" + esc(t[2]) + "\" data-name=\"" + esc(t[0]) + "\">" + esc(t[0]) + " — " + esc(t[1]) + "</option>";
+    }).join("");
+    function setRallyArgs() { $("#rallyArgs").value = JSON.stringify(JSON.parse($("#rallyTool").selectedOptions[0].value), null, 2); }
+    $("#rallyTool").onchange = setRallyArgs;
+    setRallyArgs();
+    $("#rallyRun").onclick = function () {
+      var name = $("#rallyTool").selectedOptions[0].dataset.name;
+      var args;
+      try { args = JSON.parse($("#rallyArgs").value); } catch (e) { showJson("#rallyOut", 0, "JSON inválido.", "Corrija o JSON"); return; }
+      $("#rallyOut").innerHTML = "<span class=\"sub\">chamando o Rally MCP via bridge…</span>";
+      brFetch("/rally/" + encodeURIComponent(name), { method: "POST", body: JSON.stringify(args) })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j && j.error) {
+            var motivo = (j.error.message || "").indexOf("fetch") >= 0
+              ? "O Rally respondeu, mas não conseguiu alcançar o Mercado Livre/Shopee. Na prática: (a) faltam ML_AFFILIATE_ID / SHOPEE_APP_ID / SHOPEE_SECRET no ambiente do bridge, (b) o marketplace bloqueou a requisição, ou (c) sem saída de rede neste ambiente."
+              : "O Rally devolveu um erro de protocolo. Confira o nome da tool e o formato dos argumentos.";
+            $("#rallyOut").innerHTML = "<div class=\"callout bad\"><b>Erro do Rally MCP:</b> " + esc(j.error.message || "") + "<br>" + esc(motivo) + "</div>" +
+              "<div class=\"card pad0\" style=\"margin-top:8px\"><pre>" + esc(JSON.stringify(j, null, 2)) + "</pre></div>";
+            return;
+          }
+          showJson("#rallyOut", 200, j, "Resposta do Rally MCP");
+        })
+        .catch(function () {
+          $("#rallyOut").innerHTML = "<div class=\"callout bad\">Bridge offline. O Rally só funciona via MCP (STDIO) — suba o bridge com as variáveis ML_AFFILIATE_ID / SHOPEE_APP_ID / SHOPEE_SECRET.</div>";
+        });
+    };
+
+    // --- sinais ---
+    $("#sigRun").onclick = function () {
+      $("#sigOut").innerHTML = "<span class=\"sub\">puxando sinais…</span>";
+      brFetch("/signals").then(function (r) { return r.json(); }).then(function (j) { renderSinais(j); })
+        .catch(function () { renderSinais(null); });
+    };
+    $("#repRun").onclick = function () {
+      var d = $("#repInput").value.trim();
+      if (!d) { toast("Informe o domínio."); return; }
+      $("#repOut").innerHTML = "<span class=\"sub\">consultando…</span>";
+      brFetch("/reputation?domain=" + encodeURIComponent(d)).then(function (r) { return r.json(); })
+        .then(function (j) { showJson("#repOut", 200, j, "Reputação do domínio"); })
+        .catch(function () { $("#repOut").innerHTML = "<div class=\"callout bad\">Bridge offline — o endpoint é público, mas o navegador pode ser barrado por CORS. Use o bridge.</div>"; });
+    };
+
+    // --- tabela spec vs real ---
+    var rows = [
+      ["Ads REST", "POST api.adspirer.ai/api/v1/tools/&lt;tool&gt;/execute com Bearer sk_live_", "Confere", "g"],
+      ["Ads: preço", "“pode ter limites”", "Free = 15 chamadas/mês. Plus US$49/150. Pro US$99/600. Max US$199/3.000.", "y"],
+      ["Ads: segurança", "token guardado “no seu backend”", "App é estático: o token fica no ambiente do bridge (Python), nunca na página.", "b"],
+      ["Rally: pacote", "@andrehocsis/rally-mcp-server", "Confere — existe no npm, v1.0.0, 6 tools, 3 variáveis de env.", "g"],
+      ["Rally: transporte", "“expor como endpoints REST no seu backend”", "Não vem pronto: é MCP sobre STDIO. O bridge faz a ponte JSON-RPC.", "y"],
+      ["ProdIntel: busca", "“/api/signals?q=nome-do-produto”", "Não existe. O endpoint é GET sem query: devolve trending global. O cruzamento é feito no cliente.", "r"],
+      ["ProdIntel: rate limit", "“público com rate limit por IP”", "Confere e é melhor: 40 req/min + cache CDN de 900s.", "g"],
+      ["Ordem sugerida", "Sinais → Rally → Ads", "Concordo, com uma ressalva: sinais primeiro porque é o único que não exige credencial.", "b"]
+    ];
+    $("#specTable").innerHTML = "<thead><tr><th>Pilar</th><th>O que a spec dizia</th><th>O que é real (verificado 05/11/2026)</th></tr></thead><tbody>" +
+      rows.map(function (r) { return "<tr><td><b>" + esc(r[0]) + "</b></td><td class=\"sub\">" + r[1] + "</td><td><span class=\"pill " + r[3] + "\" style=\"margin-right:6px\">" + (r[3] === "g" ? "confirma" : r[3] === "y" ? "ajuste" : r[3] === "r" ? "corrige" : "nota") + "</span>" + r[2] + "</td></tr>"; }).join("") + "</tbody>";
+  }
+
+  function renderSinais(j) {
+    if (!j) {
+      $("#sigOut").innerHTML = "<div class=\"callout bad\">Bridge offline. Alternativa: o endpoint é público e keyless — <span class=\"mono\">curl https://prodintel-two.vercel.app/api/signals</span>. O app não chama direto porque CORS pode barrar e você não quer depender disso.</div>";
+      return;
+    }
+    var titles = [];
+    (function walk(o) {
+      if (!o) return;
+      if (Array.isArray(o)) return o.forEach(walk);
+      if (typeof o === "object") {
+        if (o.title || o.name) titles.push({ t: String(o.title || o.name), s: o.score || o.points || o.momentum || null, src: o.source || o.type || "" });
+        Object.keys(o).forEach(function (k) { if (k !== "title" && k !== "name") walk(o[k]); });
+      }
+    })(j);
+    if (!titles.length) { showJson("#sigOut", 200, j, "Resposta recebida (formato não reconhecido)"); return; }
+    titles = titles.slice(0, 24);
+    var hay = titles.map(function (x) { return x.t.toLowerCase(); });
+    var html = "<div class=\"card\" style=\"background:#0a0f16\"><div class=\"row between\"><b>" + titles.length + " sinais ao vivo</b><span class=\"pill g\">ProdIntel</span></div>" +
+      "<div style=\"margin-top:10px;display:flex;flex-direction:column;gap:6px\">" +
+      titles.map(function (x) {
+        var match = radarSel && hay.indexOf(x.t.toLowerCase()) >= 0;
+        var tokens = radarSel ? radarSel.toLowerCase().split(/\s+/).filter(function (w) { return w.length > 3; }) : [];
+        var near = tokens.length && tokens.some(function (w) { return x.t.toLowerCase().indexOf(w) >= 0; });
+        return "<div class=\"kv\"><span style=\"font-size:13px\">" + esc(x.t) + (near ? " <span class=\"pill g\">relacionado</span>" : "") + "</span><span class=\"sub\">" + esc(x.src || "") + (x.s != null ? " · " + esc(x.s) : "") + "</span></div>";
+      }).join("") + "</div>" +
+      "<div class=\"callout info\" style=\"margin-top:12px\">" + (radarSel
+        ? "Cruzando com <b>" + esc(radarSel) + "</b>. Nenhum sinal = ausência de dado, não validação negativa. Não invente."
+        : "Selecione uma oferta no Radar para cruzar os sinais com o produto.") + "</div></div>";
+    $("#sigOut").innerHTML = html;
+  }
+
   /* ------------------------------ boot ------------------------------ */
   document.addEventListener("DOMContentLoaded", function () {
     buildNav();
@@ -989,6 +1164,7 @@
     renderHF();
     renderManual();
     initCaderno();
+    initIntegracoes();
     bindGo();
     go("inicio");
   });
