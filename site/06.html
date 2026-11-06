@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Compliance · Grok × Canais</title>
+<title>Playbook · Grok × Canais</title>
 <meta name="description" content="Dossiê operacional multicanal: Grok bot de vendas para affiliate marketing e real estate.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -24,19 +24,22 @@
   <aside class="sidebar" id="sidebar">
     <nav class="nav">
       <span class="nav__label">Dossiê</span>
-      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+      <span class="nav__part"><em>Parte I</em>O fundamento</span>
+<a class="nav__link" href="00.html"><span class="nav__num">00</span>O bot</a>
+<span class="nav__part"><em>Parte II</em>Os dois mercados</span>
 <a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
 <a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
-<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
-<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
-<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
-<a class="nav__link active" href="06.html"><span class="nav__num">06</span>Compliance</a>
-<a class="nav__link" href="c1.html"><span class="nav__num">C1</span>Mapa dos canais</a>
-<a class="nav__link" href="c2.html"><span class="nav__num">C2</span>Setup técnico</a>
-<a class="nav__link" href="c3.html"><span class="nav__num">C3</span>Custos &amp; ROI</a>
-<a class="nav__link" href="c4.html"><span class="nav__num">C4</span>Riscos &amp; bans</a>
-<a class="nav__link" href="c5.html"><span class="nav__num">C5</span>Case 14 dias</a>
-<a class="nav__link" href="motor.html"><span class="nav__num">M</span>Motor em Python</a>
+<span class="nav__part"><em>Parte III</em>Os canais</span>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Os 20 canais</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>As 11 rotas</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Setup técnico</a>
+<span class="nav__part"><em>Parte IV</em>A operação</span>
+<a class="nav__link active" href="06.html"><span class="nav__num">06</span>Playbook</a>
+<a class="nav__link" href="07.html"><span class="nav__num">07</span>Compliance</a>
+<a class="nav__link" href="08.html"><span class="nav__num">08</span>Custos &amp; ROI</a>
+<a class="nav__link" href="09.html"><span class="nav__num">09</span>Case · 14 dias</a>
+<a class="nav__link" href="10.html"><span class="nav__num">10</span>Plano &amp; piloto</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">M</span>O motor</a>
     </nav>
     <div class="sidebar__foot">
       <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
@@ -45,370 +48,598 @@
 
   <main class="main">
     <article class="doc">
-      <p class="eyebrow">DOC 06 · 6 MIN DE LEITURA</p>
-      <h1 class="doc__title">Compliance, ética e o que destrói a operação</h1>
+      <p class="eyebrow">DOC 06 · 10 MIN DE LEITURA</p>
+      <h1 class="doc__title">Playbook Grok — operação, prompts e controle de custo</h1>
       <blockquote>
-<p>Este documento existe porque <strong>a maior causa de morte de um bot de Reddit não é técnica, é uma remoção</strong>. Aqui estão as regras que realmente são aplicadas, com data de verificação, e o mapa do que é permitido, do que é zona cinzenta e do que é ban na certa.</p>
+<p>Manual de campo do bot, <strong>em todos os canais</strong>. Não é teoria: cada seção corresponde a um arquivo do motor <code>grok-channel-ops</code> e a um prompt versionado em <code>prompts/</code>. Se você seguir na ordem, termina com o radar rodando, o validador de canal ligado e um relatório semanal na mão.</p>
 </blockquote>
 <hr />
-<h2 id="1-reddit-as-tres-camadas-de-regra">1. Reddit — as três camadas de regra<a class="headerlink" href="#1-reddit-as-tres-camadas-de-regra" title="Permanent link">&para;</a></h2>
-<h3 id="camada-1-politica-global-sitewide">Camada 1: política global (sitewide)<a class="headerlink" href="#camada-1-politica-global-sitewide" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Regra</th>
-<th>O que diz</th>
-<th>Como se aplica a você</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Spam</strong></td>
-<td>Proíbe postar repetidamente conteúdo próprio, conteúdo repetitivo em massa para exposição/ganho financeiro, e uso de bots/IA que facilitem proliferação de spam</td>
-<td>Sem copy-paste entre subs; sem volume automatizado</td>
-</tr>
-<tr>
-<td><strong>Manipulated Content</strong></td>
-<td>Proíbe conteúdo gerado por IA que "se apresenta como gerado por humano"; pede rótulo de divulgação de IA</td>
-<td>Reescreva na sua voz; não finja experiência que não teve</td>
-</tr>
-<tr>
-<td><strong>Impersonation</strong></td>
-<td>Proíbe se passar por outra pessoa/marca</td>
-<td>Uma identidade real; sem "cliente fake"</td>
-</tr>
-<tr>
-<td><strong>Disrupting Communities</strong></td>
-<td>Proíbe manipulação de voto, votos coordenados e evasão de ban</td>
-<td>Nunca peça upvote; nunca crie conta após ban</td>
-</tr>
-<tr>
-<td><strong>Rótulo <code>[App]</code></strong> (política de 25/03/2026)</td>
-<td>Conta que usa automação em modo permitido deve usar o rótulo</td>
-<td><strong>Seu bot não posta — então essa regra é sobre monitoramento e perfis automatizados</strong></td>
-</tr>
-<tr>
-<td><strong>Self-promotion</strong></td>
-<td>Diretriz de ~9:1: no máximo ~10% da atividade própria</td>
-<td>Trate como piso; operadores longevos rodam 19:1 ou 95:5</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Números de enforcement (2026):</strong> ~23 milhões de views de spam bloqueadas/dia; ~2 milhões de votos inautênticos revogados/dia; ~100 mil contas automatizadas removidas/dia; ~25 mil posts/comentários spam novos detectados/dia.</p>
-<h3 id="camada-2-regra-do-subreddit-sempre-prevalece">Camada 2: regra do subreddit (sempre prevalece)<a class="headerlink" href="#camada-2-regra-do-subreddit-sempre-prevalece" title="Permanent link">&para;</a></h3>
-<p>Dados de 64 comunidades que fundadores usam: <strong>34% proíbem autopromoção</strong>, <strong>23% permitem apenas sob 9:1</strong>, <strong>2% acolhem</strong>. Muitos exigem conta com 30+ dias e 100+ karma. Em 2026, <code>r/SaaS</code> e <code>r/startups</code> endureceram (categoria banida, 1 post/60 dias).</p>
-<p><strong>Regra operacional:</strong> a regra do sub é a lei. Se ela proíbe link, não existe "mas meu caso é diferente". A saída é o perfil (rota 5) ou o anúncio (rota 7).</p>
-<h3 id="camada-3-automoderator-a-aplicacao-real">Camada 3: AutoModerator (a aplicação real)<a class="headerlink" href="#camada-3-automoderator-a-aplicacao-real" title="Permanent link">&para;</a></h3>
-<p>O AutoModerator remove <strong>silenciosamente</strong> — você acha que publicou, e ninguém vê. Regras típicas: karma mínimo, idade da conta, palavras proibidas ("DM", "check my", "free trial"), link domains bloqueados, flair obrigatória.</p>
-<p><strong>Como testar se você foi removido:</strong> abra a thread em janela anônima/deslogado. Se seu comentário não aparece, foi removido.</p>
-<hr />
-<h2 id="2-disclosure-o-que-e-obrigatorio-e-onde">2. Disclosure — o que é obrigatório e onde<a class="headerlink" href="#2-disclosure-o-que-e-obrigatorio-e-onde" title="Permanent link">&para;</a></h2>
-<h3 id="eua-ftc-16-cfr-part-255-revisao-2023-enforcement-pleno-em-2026">EUA — FTC, 16 CFR Part 255 (revisão 2023, enforcement pleno em 2026)<a class="headerlink" href="#eua-ftc-16-cfr-part-255-revisao-2023-enforcement-pleno-em-2026" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Situação</th>
-<th>O que fazer</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Link de afiliado em texto</td>
-<td>Disclosure <strong>no topo</strong>, antes do link, linguagem simples e inequívoca</td>
-</tr>
-<tr>
-<td>Vídeo</td>
-<td>Divulgação <strong>no vídeo</strong>, em áudio e/ou texto — não só na descrição</td>
-</tr>
-<tr>
-<td>Conteúdo gerado por IA</td>
-<td><strong>Mesma obrigação</strong> de conteúdo humano (explícito desde jul/2026)</td>
-</tr>
-<tr>
-<td>Testemunho/resultado</td>
-<td>Adicionar contexto de que resultados variam; não implicar independência se há comissão</td>
-</tr>
-<tr>
-<td>Redes que recrutam criadores</td>
-<td>Responsabilidade solidária desde 2026</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Frases que funcionam:</strong> <em>"I earn a commission if you buy through this link."</em> / <em>"This is an ad for [Produto], and I get paid if you sign up."</em>
-<strong>Frases que não funcionam:</strong> "partner", "sp", "thanks to [marca]", hashtag perdida no meio de outras, aviso só no rodapé.</p>
-<h3 id="brasil-conar-guia-vigente-em-01062026-lei-153252026">Brasil — CONAR, Guia vigente em 01/06/2026 + Lei 15.325/2026<a class="headerlink" href="#brasil-conar-guia-vigente-em-01062026-lei-153252026" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Situação</th>
-<th>O que fazer</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Link de afiliado / cupom</td>
-<td><strong>É publicidade.</strong> Identificar com <code>#publi</code>/<code>#publicidade</code> <strong>ou</strong> selo da plataforma</td>
-</tr>
-<tr>
-<td>Posição</td>
-<td><strong>Primeiro plano</strong>, visível sem clicar em "mais"</td>
-</tr>
-<tr>
-<td>Vídeo</td>
-<td>No início ou no momento da recomendação, em texto <strong>e</strong> áudio</td>
-</tr>
-<tr>
-<td>Post de "recebidos"</td>
-<td>Categoria "mensagem ativada": mencionar que o produto veio da marca</td>
-</tr>
-<tr>
-<td>Conteúdo com IA</td>
-<td>Regras valem integralmente</td>
-</tr>
-<tr>
-<td>Responsabilidade</td>
-<td>Anunciante e agência também respondem</td>
-</tr>
-</tbody>
-</table>
-<h3 id="imobiliario-crecicofeci">Imobiliário — CRECI/COFECI<a class="headerlink" href="#imobiliario-crecicofeci" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Regra</th>
-<th>Aplicação</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Nome registrado + "corretor de imóveis" + CRECI (PF) / CRECI-J (PJ)</td>
-<td>Bio, posts, anúncios, artes</td>
-</tr>
-<tr>
-<td>Número do CRECI ≥ 25% do tamanho do nome</td>
-<td>Peças publicitárias</td>
-</tr>
-<tr>
-<td>Autorização escrita do proprietário</td>
-<td>Antes de anunciar qualquer imóvel</td>
-</tr>
-<tr>
-<td>Veracidade de metragem, valor, condições</td>
-<td>Sem exceção</td>
-</tr>
-<tr>
-<td>Nome fantasia registrado</td>
-<td>Antes de usar marca</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="3-contato-e-dados-a-parte-que-gera-processo">3. Contato e dados — a parte que gera processo<a class="headerlink" href="#3-contato-e-dados-a-parte-que-gera-processo" title="Permanent link">&para;</a></h2>
-<h3 id="lgpd-brasil">LGPD (Brasil)<a class="headerlink" href="#lgpd-brasil" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Requisito</th>
-<th>Na prática</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Base legal</td>
-<td>Consentimento (art. 7º, I) ou execução de contrato (art. 7º, V)</td>
-</tr>
-<tr>
-<td>Consentimento específico</td>
-<td>Nomear empresa, canal (WhatsApp/e-mail) e forma de saída</td>
-</tr>
-<tr>
-<td>Opt-in rastreável</td>
-<td>Data, hora, origem, texto exato — registrar no CRM</td>
-</tr>
-<tr>
-<td>Lista comprada</td>
-<td><strong>Sem base legal. Não existe uso legítimo.</strong></td>
-</tr>
-<tr>
-<td>Retenção</td>
-<td>Prazo definido; apagar inativo</td>
-</tr>
-<tr>
-<td>Compartilhamento</td>
-<td>Informar parceiros no termo</td>
-</tr>
-<tr>
-<td>Revogação</td>
-<td>Gratuita e imediata</td>
-</tr>
-</tbody>
-</table>
-<h3 id="tcpa-eua-status-em-nov2026">TCPA (EUA) — status em nov/2026<a class="headerlink" href="#tcpa-eua-status-em-nov2026" title="Permanent link">&para;</a></h3>
+<h2 id="1-setup-em-20-minutos">1. Setup em 20 minutos<a class="headerlink" href="#1-setup-em-20-minutos" title="Permanent link">&para;</a></h2>
+<h3 id="11-pre-requisitos">1.1 Pré-requisitos<a class="headerlink" href="#11-pre-requisitos" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>Item</th>
-<th>Status</th>
+<th>Como obter</th>
+<th>Observação</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Consentimento prévio escrito para texto marketing</td>
-<td><strong>Exigido</strong></td>
+<td><code>XAI_API_KEY</code></td>
+<td>console.x.ai → API Keys</td>
+<td>Novos usuários costumam receber créditos promocionais; confirme no painel</td>
 </tr>
 <tr>
-<td>Regra <em>one-to-one consent</em></td>
-<td><strong>Vacada</strong> em 24/01/2025 (11º Cir.); nunca entrou em vigor — desconfie de guias que dizem "vale em jan/2026"</td>
+<td>Python 3.10+</td>
+<td>já instalado na maioria dos ambientes</td>
+<td>sem dependências externas no modo fixture</td>
 </tr>
 <tr>
-<td>Revogação por qualquer meio razoável</td>
-<td><strong>Ativa</strong> desde 11/04/2025; 10 dias úteis; 7 palavras mínimas</td>
+<td>Fonte de dados</td>
+<td>Reddit: <code>fixture</code>/<code>oauth</code>/<code>manual</code>; X: <code>X_BEARER_TOKEN</code></td>
+<td>ver seção 2</td>
 </tr>
 <tr>
-<td><em>Revocation-all</em> (opt-out vale para todos os canais)</td>
-<td>Adiada para <strong>31/01/2027</strong></td>
+<td>Conta real em cada canal</td>
+<td>Reddit: 30+ dias e 100+ karma · IG: conta Business · WhatsApp: WABA aprovado</td>
+<td><strong>sem conta real, não há canal</strong></td>
 </tr>
 <tr>
-<td>Do Not Call aplicado a texto</td>
-<td>Ativo</td>
-</tr>
-<tr>
-<td>Multa</td>
-<td>US$ 500–1.500 <strong>por mensagem</strong></td>
+<td>Telegram</td>
+<td><code>TELEGRAM_BOT_TOKEN</code> (10 min, custo zero)</td>
+<td><strong>comece por aqui</strong> para validar o fluxo</td>
 </tr>
 </tbody>
 </table>
-<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
-<div class="callout__body"><p><strong>Regra dura do inbound:</strong> quem comentou numa thread deu consentimento para você responder <strong>ali</strong>. Não deu consentimento para WhatsApp, e-mail ou DM. A migração de canal exige convite explícito da pessoa ("pode me chamar no zap?") e registro desse convite com data.</p></div></div>
+<h3 id="12-instalacao">1.2 Instalação<a class="headerlink" href="#12-instalacao" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">cd grok-channel-ops
+cp .env.example .env          # preencha XAI_API_KEY
+python -m src.cli doctor                # confere config
+python -m src.cli canais                # matriz dos 20 canais
+python -m src.cli radar --source fixture --limit 12
+python -m src.cli weekly --input output/leads.jsonl
+</code></pre>
+<p>O primeiro comando já produz lead cards usando dados de exemplo — sem gastar um centavo de API. É assim que você calibra antes de ligar o modelo.</p>
+<h3 id="13-variaveis-de-ambiente">1.3 Variáveis de ambiente<a class="headerlink" href="#13-variaveis-de-ambiente" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Padrão</th>
+<th>Para que serve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XAI_API_KEY</code></td>
+<td>—</td>
+<td>autenticação</td>
+</tr>
+<tr>
+<td><code>GROK_MODEL</code></td>
+<td><code>grok-4.3</code></td>
+<td>cavalo de batalha; troque sem mexer no código</td>
+</tr>
+<tr>
+<td><code>GROK_MODEL_FAST</code></td>
+<td><code>grok-4.1-fast</code></td>
+<td>triagem volumosa</td>
+</tr>
+<tr>
+<td><code>X_SEARCH_POSTS_BUDGET</code></td>
+<td><code>200</code></td>
+<td><strong>teto diário de posts do X</strong> (controle de custo)</td>
+</tr>
+<tr>
+<td><code>REDDIT_SOURCE</code></td>
+<td><code>fixture</code></td>
+<td><code>fixture</code> | <code>oauth</code> | <code>manual</code></td>
+</tr>
+<tr>
+<td><code>MIN_SCORE</code></td>
+<td><code>60</code></td>
+<td>corte de intenção</td>
+</tr>
+<tr>
+<td><code>DAILY_DRAFT_CAP</code></td>
+<td><code>8</code></td>
+<td>máximo de rascunhos/dia (evita overposting)</td>
+</tr>
+<tr>
+<td><code>DISCLOSURE_MODE</code></td>
+<td><code>strict</code></td>
+<td>injeta disclosure obrigatório no Scribe</td>
+</tr>
+<tr>
+<td><code>TELEGRAM_BOT_TOKEN</code></td>
+<td>—</td>
+<td>canal de teste e alerta de lead quente</td>
+</tr>
+<tr>
+<td><code>WA_TOKEN</code> / <code>WA_PHONE_NUMBER_ID</code></td>
+<td>—</td>
+<td>WhatsApp Cloud API (janela 24h)</td>
+</tr>
+<tr>
+<td><code>IG_TOKEN</code> / <code>IG_USER_ID</code></td>
+<td>—</td>
+<td>Instagram Business (50–100 posts/24h)</td>
+</tr>
+<tr>
+<td><code>TIKTOK_AUDITED</code></td>
+<td><code>false</code></td>
+<td>enquanto <code>false</code>, o validador bloqueia publicação</td>
+</tr>
+<tr>
+<td><code>YOUTUBE_REPLIES_DAILY_CAP</code></td>
+<td><code>198</code></td>
+<td>teto de respostas/dia (cota 10.000 un)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-a-camada-de-dados-tres-modos-uma-interface">2. A camada de dados: três modos, uma interface<a class="headerlink" href="#2-a-camada-de-dados-tres-modos-uma-interface" title="Permanent link">&para;</a></h2>
+<pre><code>RedditSource (interface)
+├── FixtureSource   → lê fixtures/threads.json (desenvolvimento, demo, testes)
+├── OAuthSource     → API oficial do Reddit (PRAW/HTTP OAuth), respeita limite
+└── ManualSource    → você cola o texto da thread, o bot analisa
+</code></pre>
+<p><strong>Por que isso importa:</strong> a API pública do Reddit termina em março de 2027 e o cadastro self-service já está fechado. Um bot que depende de scraping morre nessa data. Um bot com interface plugável troca de fonte em uma linha.</p>
+<pre><code class="language-python"># trocar a fonte não muda nada no resto do pipeline
+source = get_source(os.getenv(&quot;REDDIT_SOURCE&quot;, &quot;fixture&quot;))
+threads = source.fetch(subreddits=SUBS, since_hours=48, limit=40)
+</code></pre>
+<hr />
+<h2 id="3-as-doze-tarefas-e-seus-prompts">3. As doze tarefas e seus prompts<a class="headerlink" href="#3-as-doze-tarefas-e-seus-prompts" title="Permanent link">&para;</a></h2>
+<p>Cada prompt é um arquivo em <code>prompts/</code>. Todos exigem saída estruturada e citação. Versione-os: mudança de prompt é mudança de produto.</p>
+<h3 id="p1-nichomd-escolher-o-que-vender"><code>P1-nicho.md</code> — escolher o que vender<a class="headerlink" href="#p1-nichomd-escolher-o-que-vender" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> seu perfil (tempo, capital, experiência).
+<strong>Saída:</strong> 5 nichos ranqueados com comissão, LTV estimado, dificuldade de moderação no Reddit e veredito.
+<strong>Critério de sucesso:</strong> você consegue dizer em uma frase por que o nicho nº 1 paga suas contas em 12 meses.</p>
+<h3 id="p2-subsmd-mapear-comunidades"><code>P2-subs.md</code> — mapear comunidades<a class="headerlink" href="#p2-subsmd-mapear-comunidades" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> nicho + idioma + país.
+<strong>Saída:</strong> tabela com sub, tamanho, tolerância a promo, regra citada, rota recomendada, risco.
+<strong>Regra embutida:</strong> se o prompt não conseguir citar a regra do sub, ele deve marcar <code>needs_manual_check: true</code>. Nunca invente regra.</p>
+<h3 id="p3-radarmd-achar-intencao"><code>P3-radar.md</code> — achar intenção<a class="headerlink" href="#p3-radarmd-achar-intencao" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> lote de threads (título, sub, texto, idade, score, comentários).
+<strong>Saída:</strong> para cada thread, <code>intent_score</code> 0–100 + <code>intent_type</code> + <code>buying_stage</code> + <code>reason</code>.
+<strong>Definição operacional de intenção (embutida no prompt):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Sinal</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>80–100</td>
+<td>Pergunta explícita de compra/recomendação, recente (&lt; 24 h), sem resposta boa</td>
+<td>Responder hoje</td>
+</tr>
+<tr>
+<td>60–79</td>
+<td>Dor clara, sem pedido explícito</td>
+<td>Comentar com valor, sem oferta</td>
+</tr>
+<tr>
+<td>40–59</td>
+<td>Tema adjacente</td>
+<td>Só se sobrar tempo</td>
+</tr>
+<tr>
+<td>0–39</td>
+<td>Desabafo, notícia, humor</td>
+<td>Ignorar</td>
+</tr>
+</tbody>
+</table>
+<h3 id="p4-leadcardmd-qualificar"><code>P4-leadcard.md</code> — qualificar<a class="headerlink" href="#p4-leadcardmd-qualificar" title="Permanent link">&para;</a></h3>
+<p><strong>Saída (JSON, validado):</strong></p>
+<pre><code class="language-json">{
+  &quot;thread_id&quot;: &quot;...&quot;, &quot;subreddit&quot;: &quot;...&quot;, &quot;url&quot;: &quot;...&quot;,
+  &quot;intent_score&quot;: 87, &quot;intent_type&quot;: &quot;recommendation_request&quot;,
+  &quot;buying_stage&quot;: &quot;solution_aware&quot;,
+  &quot;persona&quot;: &quot;investidor iniciante, 32-45, renda 10-20k&quot;,
+  &quot;pain&quot;: &quot;não sabe se compra agora ou espera juros caírem&quot;,
+  &quot;offer_fit&quot;: &quot;alto&quot;, &quot;angle&quot;: &quot;comparar custo de esperar vs. comprar&quot;,
+  &quot;risk_flags&quot;: [&quot;thread antiga? não&quot;, &quot;sub proíbe link: sim&quot;],
+  &quot;citations&quot;: [&quot;https://reddit.com/r/.../...&quot;],
+  &quot;needs_human_facts&quot;: [&quot;m² atualizado do bairro&quot;, &quot;taxa de juros vigente&quot;]
+}
+</code></pre>
+<p><strong>Por que JSON e não texto:</strong> você consegue filtrar, somar, deduplicar, jogar no CRM e medir precisão. Texto livre não escala.</p>
+<h3 id="p5-scribemd-redigir"><code>P5-scribe.md</code> — redigir<a class="headerlink" href="#p5-scribemd-redigir" title="Permanent link">&para;</a></h3>
+<p><strong>Regras embutidas no prompt:</strong>
+1. Responder a pergunta <strong>na primeira frase</strong> (44% das citações de IA vêm do primeiro 30% do texto).
+2. Máximo 250 palavras em comentário; 1.500 em post.
+3. Sem superlativos, sem emoji, sem "game changer", sem CAIXA ALTA.
+4. Incluir disclosure se houver menção comercial (<code>DISCLOSURE_MODE=strict</code>).
+5. Se a regra do sub proíbe link → <code>link_allowed: false</code> e destino é o perfil.
+6. Marcar <code>[VERIFICAR]</code> em qualquer número que o humano precise confirmar.
+7. Nunca inventar experiência pessoal — o humano reescreve em primeira pessoa.</p>
+<h3 id="p6-atribuicaomd-medir"><code>P6-atribuicao.md</code> — medir<a class="headerlink" href="#p6-atribuicaomd-medir" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> CSV de cliques, trials, vendas + log de respostas.
+<strong>Saída:</strong> EPC por sub, por ângulo, por tipo de thread; custo por lead; ranking de respostas que geraram clique.
+<strong>Regra:</strong> se uma métrica não muda uma decisão, não colete.</p>
+<h3 id="p7-midiamd-decidir-anuncio"><code>P7-midia.md</code> — decidir anúncio<a class="headerlink" href="#p7-midiamd-decidir-anuncio" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> LTV, CAC atual, volume de leads, orçamento.
+<strong>Saída:</strong> veredito go/no-go, budget diário sugerido, formato recomendado e critério de corte em 14 dias.</p>
+<p><em>(Os promptos abaixo são a camada multicanal. O corpo completo está em <code>prompts/</code>; aqui vão só os gatilhos.)</em></p>
+<h3 id="p8-adaptador-canalmd-traduzir-1-conteudo-para-1-canal"><code>P8-adaptador-canal.md</code> — traduzir 1 conteúdo para 1 canal<a class="headerlink" href="#p8-adaptador-canalmd-traduzir-1-conteudo-para-1-canal" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> tema + canal + fatos verificados. <strong>Saída:</strong> peça nativa com limite respeitado, disclosure no lugar e uma variante B.</p>
+<h3 id="p9-whatsapp-fluxomd-montar-o-atendimento-que-fecha"><code>P9-whatsapp-fluxo.md</code> — montar o atendimento que fecha<a class="headerlink" href="#p9-whatsapp-fluxomd-montar-o-atendimento-que-fecha" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> mercado + origem do lead + ticket. <strong>Saída:</strong> fluxo em 4 etapas, templates para aprovação da Meta e manual de handoff.</p>
+<h3 id="p10-repurposingmd-1-ideia-12-pecas"><code>P10-repurposing.md</code> — 1 ideia → 12 peças<a class="headerlink" href="#p10-repurposingmd-1-ideia-12-pecas" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> peça que performou. <strong>Saída:</strong> 12 peças nativas de 7 canais, cada uma com CTA próprio.</p>
+<h3 id="p11-radar-multicanalmd-ler-4-fontes-ranquear-uma-fila"><code>P11-radar-multicanal.md</code> — ler 4 fontes, ranquear uma fila<a class="headerlink" href="#p11-radar-multicanalmd-ler-4-fontes-ranquear-uma-fila" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> posts de Reddit, X, IG e Google. <strong>Saída:</strong> score 0–100, tipo de intenção, risco do canal e ação sugerida (sempre "responder no post", nunca DM).</p>
+<h3 id="p12-auditoria-canalmd-go-ajustar-no-go"><code>P12-auditoria-canal.md</code> — GO / AJUSTAR / NO-GO<a class="headerlink" href="#p12-auditoria-canalmd-go-ajustar-no-go" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> 30 dias de métricas + incidentes. <strong>Saída:</strong> nota em compliance, custo, conversão e risco, com o que escalar e o que parar hoje.</p>
+<hr />
+<h2 id="4-controle-de-custo-a-parte-que-salva-o-projeto">4. Controle de custo (a parte que salva o projeto)<a class="headerlink" href="#4-controle-de-custo-a-parte-que-salva-o-projeto" title="Permanent link">&para;</a></h2>
+<h3 id="41-as-quatro-alavancas-cerebro">4.1 As quatro alavancas (cérebro)<a class="headerlink" href="#41-as-quatro-alavancas-cerebro" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Alavanca</th>
+<th>Efeito</th>
+<th>Como implementar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cache de system prompt</strong></td>
+<td>−75 a −90% de input</td>
+<td>Prompt fixo grande + <code>prompt_cache_key</code> estável</td>
+</tr>
+<tr>
+<td><strong>Modelo em cascata</strong></td>
+<td>−80%</td>
+<td>fast para triagem → 4.3 para shortlist → 4.6 só no topo</td>
+</tr>
+<tr>
+<td><strong>Recorte de contexto</strong></td>
+<td>−50 a −95%</td>
+<td>mandar título + 1.500 chars + top 5 comentários, nunca a thread inteira</td>
+</tr>
+<tr>
+<td><strong>Teto de <code>x_search</code></strong></td>
+<td>−90%</td>
+<td><code>X_SEARCH_POSTS_BUDGET</code> diário + <code>from_date</code> + <code>allowed_x_handles</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-o-custo-muda-de-canal-para-canal-o-que-o-teto-de-x_search-nao-ve">4.2 O custo muda de canal para canal (o que o teto de x_search não vê)<a class="headerlink" href="#42-o-custo-muda-de-canal-para-canal-o-que-o-teto-de-x_search-nao-ve" title="Permanent link">&para;</a></h3>
+<p>O controle de custo do motor cobre o <strong>cérebro</strong> (xAI). O que estoura orçamento é o <strong>canal</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Ação</th>
+<th>Custo unitário</th>
+<th>Onde dói</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>X</td>
+<td>post sem link</td>
+<td>US$ 0,015</td>
+<td>barato</td>
+</tr>
+<tr>
+<td>X</td>
+<td><strong>post com link</strong></td>
+<td><strong>US$ 0,20</strong></td>
+<td>13× — 3 posts/dia com link = US$ 18/mês</td>
+</tr>
+<tr>
+<td>X</td>
+<td>leitura de post</td>
+<td>US$ 0,005</td>
+<td>radar de 4.500 leituras/mês = US$ 22,50</td>
+</tr>
+<tr>
+<td>WhatsApp</td>
+<td>marketing BR</td>
+<td>R$ 0,3217</td>
+<td>1.000 disparos = R$ 322</td>
+</tr>
+<tr>
+<td>WhatsApp</td>
+<td>serviço</td>
+<td>R$ 0 (1.000 grátis) → R$ 0,035</td>
+<td>quase grátis</td>
+</tr>
+<tr>
+<td>Grok Imagine</td>
+<td>vídeo 15s 720p</td>
+<td>US$ 2,10</td>
+<td>30 Reels/mês = US$ 63</td>
+</tr>
+<tr>
+<td>Meta/TikTok/YouTube/LinkedIn/GBP</td>
+<td>publicar</td>
+<td>US$ 0</td>
+<td>cota, não dinheiro</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regra prática:</strong> mantenha o <strong>gasto de canal</strong> abaixo de 40% do gasto total de API. Se o X estiver consumindo mais que isso, o problema é o calendário de posts com link — troque o link para a resposta.</p>
+<h3 id="43-simulacao-de-custo-por-1000-threads">4.3 Simulação de custo por 1.000 threads<a class="headerlink" href="#43-simulacao-de-custo-por-1000-threads" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>Modelo</th>
+<th>Tokens in</th>
+<th>Tokens out</th>
+<th>Custo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Triagem</td>
+<td>4.1-fast</td>
+<td>1.000 × 1.200 = 1,2M</td>
+<td>200K</td>
+<td><strong>US$ 0,34</strong></td>
+</tr>
+<tr>
+<td>Scoring</td>
+<td>4.3</td>
+<td>160 × 2.500 = 400K</td>
+<td>48K</td>
+<td><strong>US$ 0,62</strong></td>
+</tr>
+<tr>
+<td>Redação</td>
+<td>4.3 (cache 80%)</td>
+<td>160 × 3.000 = 480K</td>
+<td>72K</td>
+<td><strong>US$ 0,38</strong></td>
+</tr>
+<tr>
+<td>Web search</td>
+<td>—</td>
+<td>200 chamadas</td>
+<td>—</td>
+<td><strong>US$ 1,00</strong></td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>≈ US$ 2,34 / 1.000 threads</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Ou seja: <strong>meio centavo por thread analisada.</strong> O erro clássico não é gastar com modelo — é mandar 40 mil tokens por thread por preguiça de recortar.</p>
+<h3 id="44-guard-rails-no-codigo">4.4 Guard-rails no código<a class="headerlink" href="#44-guard-rails-no-codigo" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python"># src/budget.py
+class Budget:
+    def __init__(self, daily_usd=1.00, daily_x_posts=200): ...
+    def can_spend(self, estimated_usd: float) -&gt; bool: ...
+    def charge(self, usage) -&gt; None: ...   # lê usage do response
+</code></pre>
+<p>Se o orçamento estourar, o bot <strong>para e avisa</strong> em vez de continuar gastando. Um bot que não tem freio é um cartão de crédito com API.</p>
+<p>E o freio de <strong>canal</strong>, que é tão importante quanto o de dinheiro:</p>
+<pre><code class="language-python">from src.channels import validate_channel_post, ChannelViolation
 
+try:
+    validate_channel_post(&quot;instagram_dm&quot;, {&quot;cold&quot;: True})
+except ChannelViolation as e:
+    print(e.rule)   # COLD_DM_META — e o envio nunca acontece
+</code></pre>
+<p><strong>Dois freios, dois riscos diferentes:</strong> o de orçamento protege o bolso; o de canal protege a conta. Um sem o outro é meio sistema.</p>
 <hr />
-<h2 id="4-zona-cinzenta-o-que-e-tecnicamente-possivel-e-eticamente-indefensavel">4. Zona cinzenta: o que é tecnicamente possível e eticamente indefensável<a class="headerlink" href="#4-zona-cinzenta-o-que-e-tecnicamente-possivel-e-eticamente-indefensavel" title="Permanent link">&para;</a></h2>
+<h2 id="5-qualidade-como-saber-se-o-bot-esta-certo">5. Qualidade: como saber se o bot está certo<a class="headerlink" href="#5-qualidade-como-saber-se-o-bot-esta-certo" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Prática</th>
-<th>Por que parece funcionar</th>
-<th>Por que não fazer</th>
+<th>Teste</th>
+<th>O que mede</th>
+<th>Meta</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Plantar 13 palavras em comentário para virar recomendação de IA</td>
-<td>Estudo de Cornell (2026) mostra que basta 1 comentário</td>
-<td>É manipulação de conteúdo; Reddit caça; o ganho dura semanas e o ban é permanente</td>
+<td><strong>Precisão do score</strong></td>
+<td>20 threads rotuladas à mão vs. saída do bot</td>
+<td>≥ 70% de concordância</td>
 </tr>
 <tr>
-<td>Contas múltiplas "cliente satisfeito"</td>
-<td>Cria prova social falsa</td>
-<td>Violação de impersonation + manipulação; ban em rede</td>
+<td><strong>Recall de intenção</strong></td>
+<td>threads de compra que o bot deixou passar</td>
+<td>≤ 20%</td>
 </tr>
 <tr>
-<td>Pedir upvote em grupo</td>
-<td>Acelera o post</td>
-<td>Voto coordenado = ban de conta e de IP</td>
+<td><strong>Factualidade</strong></td>
+<td>números nas respostas conferidos na fonte</td>
+<td>100% (não é meta, é requisito)</td>
 </tr>
 <tr>
-<td>Reescrever review de IA como "usei por 6 meses"</td>
-<td>Copy fácil</td>
-<td>Violação de Manipulated Content + FTC (testemunho falso)</td>
+<td><strong>Tom</strong></td>
+<td>resposta parece humana daquele sub?</td>
+<td>revisão cega de 5 respostas</td>
 </tr>
 <tr>
-<td>Comprar lista de leads</td>
-<td>Volume imediato</td>
-<td>LGPD sem base legal; TCPA US$ 500–1.500/msg</td>
+<td><strong>Regra</strong></td>
+<td><code>link_allowed</code> correto por sub</td>
+<td>100% (checagem contra <code>rules.yaml</code>)</td>
 </tr>
 <tr>
-<td>Seeded subreddit com 20 threads fake</td>
-<td>Parece comunidade</td>
-<td>Precedente de 2026: comunidades removidas em bloco</td>
+<td><strong>Custo</strong></td>
+<td>US$/thread</td>
+<td>&lt; US$ 0,01</td>
 </tr>
 <tr>
-<td>Ferramenta que posta sozinha</td>
-<td>"Escala"</td>
-<td>Automação de postagem sem rótulo + spam = ban; e o texto é sempre pior</td>
+<td><strong>Política</strong></td>
+<td>payload reprovado pelo validador antes de chegar na API</td>
+<td>100% (bloqueio, não aviso)</td>
+</tr>
+<tr>
+<td><strong>Canal</strong></td>
+<td>resposta dentro da janela (24h Meta/WhatsApp)</td>
+<td>&gt; 90%</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Teste de sanidade (use antes de qualquer tática):</strong> <em>Se um moderador lesse seu histórico completo e seu extrato bancário lado a lado, você teria vergonha?</em> Se sim, não faça.</p>
+<p><strong>Como rotular 20 threads em 15 minutos:</strong> leia só o título e o primeiro parágrafo; marque 1 (compraria hoje), 0,5 (dor, sem pedido), 0 (irrelevante). Compare com a saída. Ajuste o prompt citando os 3 casos em que errou — isso vale mais que 10 regras novas.</p>
 <hr />
-<h2 id="5-checklist-de-publicacao-imprima-e-deixe-ao-lado">5. Checklist de publicação (imprima e deixe ao lado)<a class="headerlink" href="#5-checklist-de-publicacao-imprima-e-deixe-ao-lado" title="Permanent link">&para;</a></h2>
-<p><strong>Antes de postar:</strong>
-- [ ] Li a regra do sub <strong>hoje</strong>.
-- [ ] A resposta ajuda mesmo sem a oferta.
-- [ ] Todo número tem fonte e data.
-- [ ] Não estou apresentando texto de IA como experiência pessoal.
-- [ ] Se há menção comercial, o disclosure está visível antes do link.
-- [ ] Não há link onde o sub proíbe.
-- [ ] Não há promessa de renda ou resultado garantido.
-- [ ] Se é imóvel: CRECI visível + autorização do proprietário + dados exatos.
-- [ ] Se vou migrar para WhatsApp: a pessoa pediu, e eu registrei.</p>
-<p><strong>Depois de postar:</strong>
-- [ ] Abri deslogado para confirmar que não fui removido.
-- [ ] Respondi todos os comentários nas primeiras 2 h.
-- [ ] Registrei no painel (resposta, clique, conversa).
-- [ ] Marquei a thread para revisitar em 7 dias.</p>
+<h2 id="6-rag-proprio-a-base-que-ninguem-tem">6. RAG próprio: a base que ninguém tem<a class="headerlink" href="#6-rag-proprio-a-base-que-ninguem-tem" title="Permanent link">&para;</a></h2>
+<p>O diferencial do bot imobiliário não é o modelo, é a <strong>base local</strong>:</p>
+<pre><code>data/kb/
+├── bairros/goiania-bueno.md        # m², valorização, aluguel/m², IPTU, escolas
+├── bairros/goiania-marista.md
+├── financiamento/tabela-2026.md    # taxas, entrada, MIP/DFI, seguro
+├── custos/itbi-escritura-go.md     # alíquotas, cartório
+└── ofertas/programa-x.md           # comissão, cookie, requisitos (afiliados)
+</code></pre>
+<p>Cada arquivo tem: <strong>fonte, data de coleta, responsável</strong>. O retriever é simples (TF-IDF ou embeddings) e o prompt exige que a resposta cite o arquivo. Sem isso, o modelo inventa m² — e um m² errado no Reddit destrói a credibilidade em um comentário.</p>
 <hr />
-<h2 id="6-plano-de-crise-quando-a-conta-toma-remocao-ou-ban">6. Plano de crise (quando a conta toma remoção ou ban)<a class="headerlink" href="#6-plano-de-crise-quando-a-conta-toma-remocao-ou-ban" title="Permanent link">&para;</a></h2>
+<h2 id="7-integracao-com-o-resto-da-stack">7. Integração com o resto da stack<a class="headerlink" href="#7-integracao-com-o-resto-da-stack" title="Permanent link">&para;</a></h2>
+<p><strong>A arquitetura de três camadas</strong> (detalhada em <code>05-setup-tecnico.md</code> §0):</p>
+<pre><code>CÉREBRO      Grok via API (chat, web, X) ou Grok Bot (agente persistente, US$ 30/mês)
+   ↓
+ORQUESTRADOR fila → validate_channel_post() → aprovação humana → publica
+   ↓
+CANAIS       X · Meta · WhatsApp · TikTok · YouTube · Telegram · GBP · Threads · Bluesky
+</code></pre>
+<p>O ponto que não se negocia: <strong>a validação vem antes da chamada de API.</strong> Um orquestrador que valida depois só documenta o ban.</p>
 <table>
 <thead>
 <tr>
-<th>Situação</th>
-<th>Primeira ação</th>
-<th>Segunda ação</th>
-<th>O que <strong>não</strong> fazer</th>
+<th>Destino</th>
+<th>Como</th>
+<th>Por quê</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Comentário removido</td>
-<td>Ler a regra citada</td>
-<td>Reescrever e, se injusto, modmail educado</td>
-<td>Repostar igual</td>
+<td><strong>Planilha / Google Sheets</strong></td>
+<td>CSV em <code>output/weekly.csv</code></td>
+<td>simplicidade radical; todo mundo sabe abrir</td>
 </tr>
 <tr>
-<td>Ban de sub</td>
-<td>Aceitar; não discutir</td>
-<td>Pedir desculpa por modmail, uma vez</td>
-<td>Criar conta nova para burlar</td>
+<td><strong>CRM</strong> (HubSpot, Pipedrive, Follow Up Boss)</td>
+<td>webhook ou export</td>
+<td>atribuição por origem "reddit"</td>
 </tr>
 <tr>
-<td>Shadowban (sem views)</td>
-<td>Testar deslogado</td>
-<td>Pausar 30 dias, remover links, reduzir volume</td>
-<td>Continuar postando (agrava)</td>
+<td><strong>WhatsApp</strong></td>
+<td>link <code>wa.me</code> no perfil, <strong>nunca</strong> na thread</td>
+<td>compliance LGPD/TCPA</td>
 </tr>
 <tr>
-<td>Ban de conta</td>
-<td>Avaliar o que causou</td>
-<td>Recomeçar com outra identidade <strong>real</strong> e outra estratégia</td>
-<td>Voltar com o mesmo comportamento</td>
+<td><strong>Telegram/Slack</strong></td>
+<td>alerta quando <code>intent_score ≥ 85</code></td>
+<td>resposta em minutos</td>
 </tr>
 <tr>
-<td>Reclamação pública no sub</td>
-<td>Responder em público, sem defensiva, corrigindo o fato</td>
-<td>Oferecer solução</td>
-<td>Apagar e fugir (piora)</td>
+<td><strong>Notion</strong></td>
+<td>base de conteúdo e calendário editorial</td>
+<td>opcional</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Ativo insubstituível = conta com histórico.</strong> É por isso que a estratégia do dossiê sacrifica velocidade em troca de longevidade. Uma conta de 2 anos com 3 mil karma vale mais que 10 contas novas que durarão 4 dias.</p>
 <hr />
-<h2 id="7-o-que-este-dossie-deliberadamente-nao-ensina">7. O que este dossiê deliberadamente <strong>não</strong> ensina<a class="headerlink" href="#7-o-que-este-dossie-deliberadamente-nao-ensina" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Criar fazenda de contas.</li>
-<li>Automatizar postagem/voto em massa.</li>
-<li>Raspar o Reddit contra os termos.</li>
-<li>Plantar recomendação para IA.</li>
-<li>Inventar depoimento ou resultado.</li>
-<li>Comprar seguidores, karma ou lista.</li>
-<li>"Contornar" regra de sub com sinônimo.</li>
-</ol>
-<p>Não é pudor: cada item acima tem <strong>retorno decrescente e risco crescente</strong>. A conta que sobrevive é o ativo; a tática que a queima é passivo.</p>
+<h2 id="8-rotina-diaria-de-45-minutos-o-formato-que-sobrevive">8. Rotina diária de 45 minutos (o formato que sobrevive)<a class="headerlink" href="#8-rotina-diaria-de-45-minutos-o-formato-que-sobrevive" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Minuto</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–5</td>
+<td>Rodar radar; ler os 5 cards de score mais alto</td>
+</tr>
+<tr>
+<td>5–20</td>
+<td>Responder 2 threads (rascunho do bot + sua reescrita de 3 min)</td>
+</tr>
+<tr>
+<td>20–30</td>
+<td>3 comentários puramente úteis, sem menção (rota 3)</td>
+</tr>
+<tr>
+<td>30–35</td>
+<td>1 comentário em thread de ontem que você deixou pendente</td>
+</tr>
+<tr>
+<td>35–40</td>
+<td>Registrar no painel: publicado, removido, clique</td>
+</tr>
+<tr>
+<td>40–45</td>
+<td>Ver 1 thread nova do X search e anotar 1 insight de oferta</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Semana:</strong> 1 post de caso ou análise (4 h em um dia só). <strong>Mês:</strong> 1 revisão de <code>rules.yaml</code> e 1 calibração de score.</p>
+<hr />
+<h2 id="9-sinais-de-que-o-bot-esta-te-prejudicando-pare-imediatamente">9. Sinais de que o bot está te prejudicando (pare imediatamente)<a class="headerlink" href="#9-sinais-de-que-o-bot-esta-te-prejudicando-pare-imediatamente" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Sinal</th>
+<th>Diagnóstico</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Remoções começaram a aparecer</td>
+<td>Tom virou anúncio</td>
+<td>Voltar para rota 3 por 30 dias</td>
+</tr>
+<tr>
+<td>Upvotes caíram no mesmo sub</td>
+<td>A comunidade te reconheceu como vendedor</td>
+<td>Trocar sub ou mudar de ângulo</td>
+</tr>
+<tr>
+<td>Conta com "shadowban" (posts sem views)</td>
+<td>Link repetido / volume</td>
+<td>Testar com conta deslogada; pausar 30 dias</td>
+</tr>
+<tr>
+<td>Zero clique no perfil com 20 respostas</td>
+<td>Oferta errada ou sub errado</td>
+<td>Trocar a oferta antes de trocar o volume</td>
+</tr>
+<tr>
+<td>Custo por lead subiu muito</td>
+<td><code>x_search</code> descontrolado ou contexto inflado</td>
+<td>Aplicar as 4 alavancas da seção 4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-checklist-de-conformidade-antes-de-publicar">10. Checklist de conformidade antes de publicar<a class="headerlink" href="#10-checklist-de-conformidade-antes-de-publicar" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Li a regra do sub hoje (não a do mês passado).</li>
+<li>[ ] Se há menção comercial, o disclosure está <strong>na mesma tela</strong>, antes do link.</li>
+<li>[ ] Não há link onde o sub proíbe.</li>
+<li>[ ] Todo número tem fonte e data.</li>
+<li>[ ] Não estou apresentando texto de IA como experiência pessoal — reescrevi.</li>
+<li>[ ] Não há promessa de renda/resultado.</li>
+<li>[ ] Se é imóvel: CRECI visível, autorização do proprietário, dados exatos.</li>
+<li>[ ] Se é lead: registro de consentimento e canal de saída.</li>
+<li>[ ] A resposta seria útil mesmo sem a oferta.</li>
+</ul>
     </article>
 
     <nav class="pager">
-      <a class="pager__link" href="05.html"><span class="pager__label">← Anterior</span><span class="pager__title">Plano &amp; piloto</span></a>
-      <a class="pager__link" href="c1.html"><span class="pager__label">Próximo →</span><span class="pager__title">Mapa dos canais</span></a>
+      <a class="pager__link" href="05.html"><span class="pager__label">← Anterior</span><span class="pager__title">Setup técnico</span></a>
+      <a class="pager__link" href="07.html"><span class="pager__label">Próximo →</span><span class="pager__title">Compliance</span></a>
     </nav>
     <footer class="foot">
       <p>grok-reddit-ops · dossiê operacional · 2026</p>
@@ -420,27 +651,41 @@
     <span class="toc__label">Nesta página</span>
     <div class="toc">
 <ul>
-<li><a href="#1-reddit-as-tres-camadas-de-regra">1. Reddit — as três camadas de regra</a><ul>
-<li><a href="#camada-1-politica-global-sitewide">Camada 1: política global (sitewide)</a></li>
-<li><a href="#camada-2-regra-do-subreddit-sempre-prevalece">Camada 2: regra do subreddit (sempre prevalece)</a></li>
-<li><a href="#camada-3-automoderator-a-aplicacao-real">Camada 3: AutoModerator (a aplicação real)</a></li>
+<li><a href="#1-setup-em-20-minutos">1. Setup em 20 minutos</a><ul>
+<li><a href="#11-pre-requisitos">1.1 Pré-requisitos</a></li>
+<li><a href="#12-instalacao">1.2 Instalação</a></li>
+<li><a href="#13-variaveis-de-ambiente">1.3 Variáveis de ambiente</a></li>
 </ul>
 </li>
-<li><a href="#2-disclosure-o-que-e-obrigatorio-e-onde">2. Disclosure — o que é obrigatório e onde</a><ul>
-<li><a href="#eua-ftc-16-cfr-part-255-revisao-2023-enforcement-pleno-em-2026">EUA — FTC, 16 CFR Part 255 (revisão 2023, enforcement pleno em 2026)</a></li>
-<li><a href="#brasil-conar-guia-vigente-em-01062026-lei-153252026">Brasil — CONAR, Guia vigente em 01/06/2026 + Lei 15.325/2026</a></li>
-<li><a href="#imobiliario-crecicofeci">Imobiliário — CRECI/COFECI</a></li>
+<li><a href="#2-a-camada-de-dados-tres-modos-uma-interface">2. A camada de dados: três modos, uma interface</a></li>
+<li><a href="#3-as-doze-tarefas-e-seus-prompts">3. As doze tarefas e seus prompts</a><ul>
+<li><a href="#p1-nichomd-escolher-o-que-vender">P1-nicho.md — escolher o que vender</a></li>
+<li><a href="#p2-subsmd-mapear-comunidades">P2-subs.md — mapear comunidades</a></li>
+<li><a href="#p3-radarmd-achar-intencao">P3-radar.md — achar intenção</a></li>
+<li><a href="#p4-leadcardmd-qualificar">P4-leadcard.md — qualificar</a></li>
+<li><a href="#p5-scribemd-redigir">P5-scribe.md — redigir</a></li>
+<li><a href="#p6-atribuicaomd-medir">P6-atribuicao.md — medir</a></li>
+<li><a href="#p7-midiamd-decidir-anuncio">P7-midia.md — decidir anúncio</a></li>
+<li><a href="#p8-adaptador-canalmd-traduzir-1-conteudo-para-1-canal">P8-adaptador-canal.md — traduzir 1 conteúdo para 1 canal</a></li>
+<li><a href="#p9-whatsapp-fluxomd-montar-o-atendimento-que-fecha">P9-whatsapp-fluxo.md — montar o atendimento que fecha</a></li>
+<li><a href="#p10-repurposingmd-1-ideia-12-pecas">P10-repurposing.md — 1 ideia → 12 peças</a></li>
+<li><a href="#p11-radar-multicanalmd-ler-4-fontes-ranquear-uma-fila">P11-radar-multicanal.md — ler 4 fontes, ranquear uma fila</a></li>
+<li><a href="#p12-auditoria-canalmd-go-ajustar-no-go">P12-auditoria-canal.md — GO / AJUSTAR / NO-GO</a></li>
 </ul>
 </li>
-<li><a href="#3-contato-e-dados-a-parte-que-gera-processo">3. Contato e dados — a parte que gera processo</a><ul>
-<li><a href="#lgpd-brasil">LGPD (Brasil)</a></li>
-<li><a href="#tcpa-eua-status-em-nov2026">TCPA (EUA) — status em nov/2026</a></li>
+<li><a href="#4-controle-de-custo-a-parte-que-salva-o-projeto">4. Controle de custo (a parte que salva o projeto)</a><ul>
+<li><a href="#41-as-quatro-alavancas-cerebro">4.1 As quatro alavancas (cérebro)</a></li>
+<li><a href="#42-o-custo-muda-de-canal-para-canal-o-que-o-teto-de-x_search-nao-ve">4.2 O custo muda de canal para canal (o que o teto de x_search não vê)</a></li>
+<li><a href="#43-simulacao-de-custo-por-1000-threads">4.3 Simulação de custo por 1.000 threads</a></li>
+<li><a href="#44-guard-rails-no-codigo">4.4 Guard-rails no código</a></li>
 </ul>
 </li>
-<li><a href="#4-zona-cinzenta-o-que-e-tecnicamente-possivel-e-eticamente-indefensavel">4. Zona cinzenta: o que é tecnicamente possível e eticamente indefensável</a></li>
-<li><a href="#5-checklist-de-publicacao-imprima-e-deixe-ao-lado">5. Checklist de publicação (imprima e deixe ao lado)</a></li>
-<li><a href="#6-plano-de-crise-quando-a-conta-toma-remocao-ou-ban">6. Plano de crise (quando a conta toma remoção ou ban)</a></li>
-<li><a href="#7-o-que-este-dossie-deliberadamente-nao-ensina">7. O que este dossiê deliberadamente não ensina</a></li>
+<li><a href="#5-qualidade-como-saber-se-o-bot-esta-certo">5. Qualidade: como saber se o bot está certo</a></li>
+<li><a href="#6-rag-proprio-a-base-que-ninguem-tem">6. RAG próprio: a base que ninguém tem</a></li>
+<li><a href="#7-integracao-com-o-resto-da-stack">7. Integração com o resto da stack</a></li>
+<li><a href="#8-rotina-diaria-de-45-minutos-o-formato-que-sobrevive">8. Rotina diária de 45 minutos (o formato que sobrevive)</a></li>
+<li><a href="#9-sinais-de-que-o-bot-esta-te-prejudicando-pare-imediatamente">9. Sinais de que o bot está te prejudicando (pare imediatamente)</a></li>
+<li><a href="#10-checklist-de-conformidade-antes-de-publicar">10. Checklist de conformidade antes de publicar</a></li>
 </ul>
 </div>
 

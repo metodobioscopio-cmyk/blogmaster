@@ -1,4 +1,4 @@
-# grok-reddit-ops
+# grok-channel-ops
 
 Copiloto de vendas multicanal usando a API da xAI (Grok). Transforma threads públicas em **lead cards qualificados** e **rascunhos de resposta**, e valida cada publicação contra as regras do canal antes de qualquer chamada de API. Sempre com revisão humana antes de publicar.
 
@@ -9,7 +9,7 @@ Copiloto de vendas multicanal usando a API da xAI (Grok). Transforma threads pú
 ## Instalação (30 segundos, zero dependências)
 
 ```bash
-cd grok-reddit-ops
+cd grok-channel-ops
 cp .env.example .env       # opcional: preencha XAI_API_KEY para usar o modelo
 python3 -m src.cli doctor
 ```
@@ -156,7 +156,7 @@ Custo medido na simulação do playbook: **≈ US$ 2,34 por 1.000 threads** (tri
 | `manual` | analisar uma thread que você viu | nada |
 | `oauth` | operação com a API oficial | `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET` aprovados |
 
-A API oficial do Reddit exige acordo para uso comercial (a tabela pública termina em **março de 2027**). Ver `docs/06-compliance.md`.
+A API oficial do Reddit exige acordo para uso comercial (a tabela pública termina em **março de 2027**). Ver `docs/07-compliance.md`.
 
 ---
 
@@ -204,7 +204,7 @@ A API oficial do Reddit exige acordo para uso comercial (a tabela pública termi
 
 | Prioridade | O que |
 |---|---|
-| 1 | Rodar o piloto de 14 dias (`docs/05-plano-90-dias.md`) |
+| 1 | Rodar o piloto de 14 dias (`docs/10-plano-90-dias.md`) |
 | 2 | Rotular 20 threads e calibrar o score |
 | 3 | Ligar `x_search` com `from_date` e `allowed_x_handles` |
 | 4 | Conectar o `weekly` ao CRM via webhook |

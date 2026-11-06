@@ -1,9 +1,9 @@
-# Meta-pesquisa: o que é (e o que não é) um "Grok bot" de vendas
+# O bot — o que é (e o que não é) um "Grok bot" de vendas
 
-> **Escopo deste documento.** Investigação sobre o estado real da plataforma Grok/xAI em novembro de 2026, o que ela faz melhor do que as alternativas, quanto custa de verdade operá-la e qual arquitetura sobrevive ao contato com as regras do Reddit. É o alicerce dos dois estudos de mercado que vêm depois.
+> **Escopo deste documento.** Investigação sobre o estado real da plataforma Grok/xAI em novembro de 2026: o que ela faz melhor do que as alternativas, quanto custa operá-la e qual arquitetura sobrevive ao contato com as regras **de cada canal** — Reddit, X, Meta, WhatsApp, TikTok, YouTube, LinkedIn, Telegram e Google. É o alicerce dos dois estudos de mercado que vêm depois.
 
 ::: meta
-**Verificado em:** 06/11/2026 · **Fontes:** docs.x.ai, pricing público xAI, relatórios trimestrais da Reddit (Q2 2026), política de conteúdo Reddit (mar/2026), FTC 16 CFR 255, CONAR 2026, FCC/TCPA.
+**Verificado em:** 06/11/2026 · **Fontes:** docs.x.ai, pricing público xAI, relatórios trimestrais da Reddit (Q2 2026) e da Meta, rate cards de X API/Meta/Google/TikTok (2026), FTC 16 CFR 255, CONAR 2026, FCC/TCPA.
 **Regra de leitura:** preços de modelo e de ferramenta mudam a cada trimestre. Trate toda cifra como *ordem de grandeza verificada*, não como contrato.
 :::
 
@@ -19,7 +19,7 @@ A expressão aparece no mercado com três significados que se confundem. Separar
 | **B** | **Grok Business/Enterprise** (US$ 30/assento/mês; Enterprise sob consulta) | Grok com SOC 2, RBAC, SSO, sem treino nos seus dados | Uso interno de equipe: analisar conversas, redigir, resumir. Não posta, não prospecta. |
 | **C** | **Bot operado por Grok** (o que este dossiê entrega) | Programa próprio que chama a **API da xAI** com ferramentas (`x_search`, `web_search`), pontua intenção de compra, redige resposta e entrega ao humano | **Sim — é o único dos três que gera pipeline.** |
 
-Este dossiê trata de **C**. A tese central, que a pesquisa sustenta: *o valor não está no modelo, está no encanamento entre o modelo e o lugar onde a conversa de compra acontece.* Grok é commodity; o diferencial é o acesso nativo ao X e o custo por token. O Reddit é onde a intenção fica escrita em texto público. O bot é a ponte.
+Este dossiê trata de **C**. A tese central, que a pesquisa sustenta: *o valor não está no modelo, está no encanamento entre o modelo e o lugar onde a conversa de compra acontece.* Grok é commodity; o diferencial é o acesso nativo ao X e o custo por token. A intenção de compra aparece em canais diferentes — escrita em texto público no Reddit, em tempo real no X, em comentário no Instagram, em busca no Google — e cada um tem regra própria. O bot é a ponte; o validador de canal é o freio.
 
 ---
 
@@ -66,7 +66,7 @@ Este dossiê trata de **C**. A tese central, que a pesquisa sustenta: *o valor n
 | Batch API | Sim | Rodar scoring noturno de 10 mil threads com desconto |
 | Rate limits (padrão) | 150 req/s · 7.200 req/min · 50M tokens/min | Nunca será seu gargalo; o gargalo é a fonte de dados |
 | Fine-tuning | Não confirmado | Não planeje em cima disso |
-| Conector nativo de Reddit | **Não** | **Você traz os dados do Reddit.** Este é o trabalho real. |
+| Conector nativo de Reddit | **Não** | **Você traz os dados do Reddit.** Um dos 20 canais; ver doc 03. |
 
 ### 2.4 Onde Grok ganha e onde perde
 
@@ -84,9 +84,9 @@ Este dossiê trata de **C**. A tese central, que a pesquisa sustenta: *o valor n
 
 ---
 
-## 3. Por que Reddit + Grok, e não Reddit + ChatGPT
+## 3. Por que Grok, e não ChatGPT — o acesso ao X
 
-O Reddit virou infraestrutura de descoberta, não só fórum. Os números de 2026 explicam por que uma conversa enterrada num subreddit de 40 mil membros vale mais hoje do que valia em 2023:
+O Reddit virou infraestrutura de descoberta, não só fórum — e é o canal onde a intenção fica **durável e indexada**, o que o torna o melhor laboratório para começar. Os números de 2026 explicam por que uma conversa enterrada num subreddit de 40 mil membros vale mais hoje do que valia em 2023:
 
 | Métrica (Q2 2026) | Valor | Fonte |
 |---|---|---|
@@ -103,7 +103,7 @@ Duas consequências que mudam a estratégia:
 1. **O leitor do seu comentário frequentemente não é um redditor.** 60% do tráfego diário chega deslogado, via Google. Um comentário útil de 2022 continua vendendo em 2026 porque é *citado por IA*.
 2. **IA cita Reddit porque Reddit é opinião humana em texto.** Isso significa que responder bem no Reddit é, hoje, a forma mais barata de aparecer na resposta do ChatGPT/Perplexity/Gemini quando alguém pesquisa "melhor corretor em Goiânia" ou "is [SaaS] worth it". Tráfego vindo de IA converte ~4,4× melhor que orgânico tradicional (Seer Interactive, 2026).
 
-E por que **Grok** especificamente nesse jogo: a xAI é a única que vende busca no X por API com citação, a US$ 5/1.000 posts. O X é onde a intenção *quente* aparece primeiro (o comprador reclamando de um portal, o investidor perguntando de bairro, o afiliado pedindo programa). O Reddit é onde a intenção *durável* fica indexada. O bot usa os dois: X para velocidade, Reddit para permanência.
+E por que **Grok** especificamente nesse jogo: a xAI é a única que vende busca no X por API com citação, a US$ 5/1.000 posts. O X é onde a intenção *quente* aparece primeiro (o comprador reclamando de um portal, o investidor perguntando de bairro, o afiliado pedindo programa). O Reddit é onde a intenção *durável* fica indexada. **Os outros 18 canais entram depois, cada um com sua função** — o mapa completo está em `03-mapa-canais.md`. O bot usa todos: velocidade no X, permanência no Reddit, conversa no WhatsApp, autoridade no YouTube.
 
 ::: nota
 **Honestidade sobre o efeito GEO.** "Otimizar para ser citado por IA" beira manipulação quando feito com contas falsas. A linha ética e legal é simples: **humano real, opinião real, divulgação da relação comercial, sem enxame de contas.** A Reddit bloqueia ~23 milhões de visualizações de spam/dia, remove ~100 mil contas automatizadas/dia e, desde 25/03/2026, exige rótulo **[App]** para conta automatizada. O Cornell study de 2026 mostrou que 13 palavras plantadas num comentário bastam para virar uma recomendação de IA — e que isso é trivial de fazer. Justamente por ser trivial, é o caminho mais rápido para tomar ban e queimar o ativo. Este dossiê usa o efeito GEO **legítimo**: conteúdo verdadeiro que merece ser citado.
@@ -165,7 +165,7 @@ Esta é a parte que ninguém coloca no pitch e que decide a viabilidade técnica
 | **Reddit Pro (nativo, grátis)** | US$ 0 | Ativo, Trends só em inglês | Descoberta de comunidade e keyword |
 
 ::: decisao
-**Decisão de arquitetura deste dossiê:** o motor (`grok-reddit-ops`) funciona em três modos — `fixture` (dados locais, custo zero, para desenvolver e demonstrar), `oauth` (API oficial com suas credenciais) e `manual` (você cola o texto da thread). Nenhum modo raspa o site em violação de termos. Para produção acima de ~150 mil leituras/mês, o caminho é contrato comercial com o Reddit ou provedor licenciado.
+**Decisão de arquitetura deste dossiê:** o motor (`grok-channel-ops`) funciona em três modos — `fixture` (dados locais, custo zero, para desenvolver e demonstrar), `oauth` (API oficial com suas credenciais) e `manual` (você cola o texto da thread). Nenhum modo raspa o site em violação de termos. Para produção acima de ~150 mil leituras/mês, o caminho é contrato comercial com o Reddit ou provedor licenciado.
 :::
 
 ---
@@ -203,6 +203,7 @@ Cenário: operação de 1 pessoa, 3 subreddits, ~200 threads/semana monitoradas,
 | Fim da API pública do Reddit (mar/2027) | Certa | Médio | Camada de dados plugável (fixture/oauth/manual/provedor) |
 | Lead card alucinado | Média | Alto | Structured output + exigência de `citations` + revisão |
 | Regra do sub mudar | Alta | Médio | `rules.yaml` por subreddit, revisão mensal |
+| Política de canal mudar (Meta, TikTok, X) | Alta | Alto | `src/channels.py` centraliza as regras; revisão trimestral |
 | Vazamento de dado pessoal no CRM | Baixa | Altíssimo | LGPD: base legal, minimização, retenção, criptografia |
 
 **O bot não faz:** criar contas, votar, postar sozinho, mandar DM em massa, raspar o Reddit contra os termos, inventar depoimento, comprar lista. Cada um desses itens é, simultaneamente, ban garantido e problema jurídico. A entrega é um **copiloto de vendas**, não um exército de fantasmas.
@@ -213,7 +214,7 @@ Cenário: operação de 1 pessoa, 3 subreddits, ~200 threads/semana monitoradas,
 
 1. **Grok é infraestrutura, não produto.** O que você vende é o fluxo: radar → qualificação → rascunho → humano → CRM.
 2. **O custo de token é ruído; o custo de ferramenta e de tempo é o jogo.** Parametrizar `x_search` vale mais que trocar de modelo.
-3. **Reddit não é canal de mídia, é canal de indexação e confiança.** O retorno vem de comentários que continuam sendo lidos e citados 12 meses depois — não do post da semana.
+3. **Reddit não é canal de mídia, é canal de indexação e confiança.** O retorno vem de comentários que continuam sendo lidos e citados 12 meses depois — não do post da semana. E é apenas **um** dos 20 canais: a regra vale igual para Threads, Bluesky, YouTube e Google Business.
 4. **A vantagem defensável é a disciplina.** 9:1, disclosure, sem link onde não pode, humano no comando. Chato, auditável e escalável.
 5. **Os dois mercados exigem bots diferentes.** Afiliados: volume alto, ticket baixo, ciclo de dias, otimiza EPC. Imobiliário: volume baixo, ticket altíssimo, ciclo de semanas, otimiza **velocidade de resposta**. Os estudos 1 e 2 tratam cada um com sua própria matemática.
 

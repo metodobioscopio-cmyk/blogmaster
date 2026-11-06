@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Motor em Python · Grok × Canais</title>
+<title>O motor · Grok × Canais</title>
 <meta name="description" content="Dossiê operacional multicanal: Grok bot de vendas para affiliate marketing e real estate.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -24,19 +24,22 @@
   <aside class="sidebar" id="sidebar">
     <nav class="nav">
       <span class="nav__label">Dossiê</span>
-      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+      <span class="nav__part"><em>Parte I</em>O fundamento</span>
+<a class="nav__link" href="00.html"><span class="nav__num">00</span>O bot</a>
+<span class="nav__part"><em>Parte II</em>Os dois mercados</span>
 <a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
 <a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
-<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
-<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
-<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
-<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
-<a class="nav__link" href="c1.html"><span class="nav__num">C1</span>Mapa dos canais</a>
-<a class="nav__link" href="c2.html"><span class="nav__num">C2</span>Setup técnico</a>
-<a class="nav__link" href="c3.html"><span class="nav__num">C3</span>Custos &amp; ROI</a>
-<a class="nav__link" href="c4.html"><span class="nav__num">C4</span>Riscos &amp; bans</a>
-<a class="nav__link" href="c5.html"><span class="nav__num">C5</span>Case 14 dias</a>
-<a class="nav__link active" href="motor.html"><span class="nav__num">M</span>Motor em Python</a>
+<span class="nav__part"><em>Parte III</em>Os canais</span>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Os 20 canais</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>As 11 rotas</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Setup técnico</a>
+<span class="nav__part"><em>Parte IV</em>A operação</span>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Playbook</a>
+<a class="nav__link" href="07.html"><span class="nav__num">07</span>Compliance</a>
+<a class="nav__link" href="08.html"><span class="nav__num">08</span>Custos &amp; ROI</a>
+<a class="nav__link" href="09.html"><span class="nav__num">09</span>Case · 14 dias</a>
+<a class="nav__link" href="10.html"><span class="nav__num">10</span>Plano &amp; piloto</a>
+<a class="nav__link active" href="motor.html"><span class="nav__num">M</span>O motor</a>
     </nav>
     <div class="sidebar__foot">
       <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
@@ -46,14 +49,14 @@
   <main class="main">
     <article class="doc">
       <p class="eyebrow">DOC M · 5 MIN DE LEITURA</p>
-      <h1 class="doc__title">grok-reddit-ops</h1>
+      <h1 class="doc__title">grok-channel-ops</h1>
       <p>Copiloto de vendas multicanal usando a API da xAI (Grok). Transforma threads públicas em <strong>lead cards qualificados</strong> e <strong>rascunhos de resposta</strong>, e valida cada publicação contra as regras do canal antes de qualquer chamada de API. Sempre com revisão humana antes de publicar.</p>
 <blockquote>
 <p><strong>O que este projeto não faz:</strong> não posta, não vota, não cria contas, não manda DM em massa, não raspa o Reddit. A publicação é sempre sua. Essa é a diferença entre um canal que dura anos e uma conta que dura uma semana.</p>
 </blockquote>
 <hr />
 <h2 id="instalacao-30-segundos-zero-dependencias">Instalação (30 segundos, zero dependências)<a class="headerlink" href="#instalacao-30-segundos-zero-dependencias" title="Permanent link">&para;</a></h2>
-<pre><code class="language-bash">cd grok-reddit-ops
+<pre><code class="language-bash">cd grok-channel-ops
 cp .env.example .env       # opcional: preencha XAI_API_KEY para usar o modelo
 python3 -m src.cli doctor
 </code></pre>
@@ -200,7 +203,7 @@ weekly.md  ──►  decisão (manter / pivotar / escalar)
 </tr>
 </tbody>
 </table>
-<p>A API oficial do Reddit exige acordo para uso comercial (a tabela pública termina em <strong>março de 2027</strong>). Ver <code>docs/06-compliance.md</code>.</p>
+<p>A API oficial do Reddit exige acordo para uso comercial (a tabela pública termina em <strong>março de 2027</strong>). Ver <code>docs/07-compliance.md</code>.</p>
 <hr />
 <h2 id="seguranca-e-compliance-embutidos">Segurança e compliance embutidos<a class="headerlink" href="#seguranca-e-compliance-embutidos" title="Permanent link">&para;</a></h2>
 <ul>
@@ -309,7 +312,7 @@ weekly.md  ──►  decisão (manter / pivotar / escalar)
 <tbody>
 <tr>
 <td>1</td>
-<td>Rodar o piloto de 14 dias (<code>docs/05-plano-90-dias.md</code>)</td>
+<td>Rodar o piloto de 14 dias (<code>docs/10-plano-90-dias.md</code>)</td>
 </tr>
 <tr>
 <td>2</td>
@@ -332,7 +335,7 @@ weekly.md  ──►  decisão (manter / pivotar / escalar)
     </article>
 
     <nav class="pager">
-      <a class="pager__link" href="c5.html"><span class="pager__label">← Anterior</span><span class="pager__title">Case 14 dias</span></a>
+      <a class="pager__link" href="10.html"><span class="pager__label">← Anterior</span><span class="pager__title">Plano &amp; piloto</span></a>
       <span></span>
     </nav>
     <footer class="foot">

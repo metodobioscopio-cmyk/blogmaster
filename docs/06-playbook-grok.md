@@ -1,6 +1,6 @@
 # Playbook Grok — operação, prompts e controle de custo
 
-> Manual de campo do bot. Não é teoria: cada seção corresponde a um arquivo do motor `grok-reddit-ops` e a um prompt versionado em `prompts/`. Se você seguir na ordem, termina com um radar rodando e um relatório semanal na mão.
+> Manual de campo do bot, **em todos os canais**. Não é teoria: cada seção corresponde a um arquivo do motor `grok-channel-ops` e a um prompt versionado em `prompts/`. Se você seguir na ordem, termina com o radar rodando, o validador de canal ligado e um relatório semanal na mão.
 
 ---
 
@@ -12,14 +12,17 @@
 |---|---|---|
 | `XAI_API_KEY` | console.x.ai → API Keys | Novos usuários costumam receber créditos promocionais; confirme no painel |
 | Python 3.10+ | já instalado na maioria dos ambientes | sem dependências externas no modo fixture |
-| Fonte de dados do Reddit | `fixture` (grátis) · `oauth` (API oficial) · `manual` (colar texto) | ver seção 2 |
-| Conta Reddit com histórico | 30+ dias, 100+ karma | **sem isso, nada funciona** |
+| Fonte de dados | Reddit: `fixture`/`oauth`/`manual`; X: `X_BEARER_TOKEN` | ver seção 2 |
+| Conta real em cada canal | Reddit: 30+ dias e 100+ karma · IG: conta Business · WhatsApp: WABA aprovado | **sem conta real, não há canal** |
+| Telegram | `TELEGRAM_BOT_TOKEN` (10 min, custo zero) | **comece por aqui** para validar o fluxo |
 
 ### 1.2 Instalação
 
 ```bash
-cd grok-reddit-ops
+cd grok-channel-ops
 cp .env.example .env          # preencha XAI_API_KEY
+python -m src.cli doctor                # confere config
+python -m src.cli canais                # matriz dos 20 canais
 python -m src.cli radar --source fixture --limit 12
 python -m src.cli weekly --input output/leads.jsonl
 ```
@@ -38,6 +41,11 @@ O primeiro comando já produz lead cards usando dados de exemplo — sem gastar 
 | `MIN_SCORE` | `60` | corte de intenção |
 | `DAILY_DRAFT_CAP` | `8` | máximo de rascunhos/dia (evita overposting) |
 | `DISCLOSURE_MODE` | `strict` | injeta disclosure obrigatório no Scribe |
+| `TELEGRAM_BOT_TOKEN` | — | canal de teste e alerta de lead quente |
+| `WA_TOKEN` / `WA_PHONE_NUMBER_ID` | — | WhatsApp Cloud API (janela 24h) |
+| `IG_TOKEN` / `IG_USER_ID` | — | Instagram Business (50–100 posts/24h) |
+| `TIKTOK_AUDITED` | `false` | enquanto `false`, o validador bloqueia publicação |
+| `YOUTUBE_REPLIES_DAILY_CAP` | `198` | teto de respostas/dia (cota 10.000 un) |
 
 ---
 
@@ -60,7 +68,7 @@ threads = source.fetch(subreddits=SUBS, since_hours=48, limit=40)
 
 ---
 
-## 3. As sete tarefas e seus prompts
+## 3. As doze tarefas e seus prompts
 
 Cada prompt é um arquivo em `prompts/`. Todos exigem saída estruturada e citação. Versione-os: mudança de prompt é mudança de produto.
 
@@ -131,11 +139,28 @@ Cada prompt é um arquivo em `prompts/`. Todos exigem saída estruturada e cita�
 **Entrada:** LTV, CAC atual, volume de leads, orçamento.
 **Saída:** veredito go/no-go, budget diário sugerido, formato recomendado e critério de corte em 14 dias.
 
+*(Os promptos abaixo são a camada multicanal. O corpo completo está em `prompts/`; aqui vão só os gatilhos.)*
+
+### `P8-adaptador-canal.md` — traduzir 1 conteúdo para 1 canal
+**Entrada:** tema + canal + fatos verificados. **Saída:** peça nativa com limite respeitado, disclosure no lugar e uma variante B.
+
+### `P9-whatsapp-fluxo.md` — montar o atendimento que fecha
+**Entrada:** mercado + origem do lead + ticket. **Saída:** fluxo em 4 etapas, templates para aprovação da Meta e manual de handoff.
+
+### `P10-repurposing.md` — 1 ideia → 12 peças
+**Entrada:** peça que performou. **Saída:** 12 peças nativas de 7 canais, cada uma com CTA próprio.
+
+### `P11-radar-multicanal.md` — ler 4 fontes, ranquear uma fila
+**Entrada:** posts de Reddit, X, IG e Google. **Saída:** score 0–100, tipo de intenção, risco do canal e ação sugerida (sempre "responder no post", nunca DM).
+
+### `P12-auditoria-canal.md` — GO / AJUSTAR / NO-GO
+**Entrada:** 30 dias de métricas + incidentes. **Saída:** nota em compliance, custo, conversão e risco, com o que escalar e o que parar hoje.
+
 ---
 
 ## 4. Controle de custo (a parte que salva o projeto)
 
-### 4.1 As quatro alavancas
+### 4.1 As quatro alavancas (cérebro)
 
 | Alavanca | Efeito | Como implementar |
 |---|---|---|
@@ -144,7 +169,23 @@ Cada prompt é um arquivo em `prompts/`. Todos exigem saída estruturada e cita�
 | **Recorte de contexto** | −50 a −95% | mandar título + 1.500 chars + top 5 comentários, nunca a thread inteira |
 | **Teto de `x_search`** | −90% | `X_SEARCH_POSTS_BUDGET` diário + `from_date` + `allowed_x_handles` |
 
-### 4.2 Simulação de custo por 1.000 threads
+### 4.2 O custo muda de canal para canal (o que o teto de x_search não vê)
+
+O controle de custo do motor cobre o **cérebro** (xAI). O que estoura orçamento é o **canal**:
+
+| Canal | Ação | Custo unitário | Onde dói |
+|---|---|---|---|
+| X | post sem link | US$ 0,015 | barato |
+| X | **post com link** | **US$ 0,20** | 13× — 3 posts/dia com link = US$ 18/mês |
+| X | leitura de post | US$ 0,005 | radar de 4.500 leituras/mês = US$ 22,50 |
+| WhatsApp | marketing BR | R$ 0,3217 | 1.000 disparos = R$ 322 |
+| WhatsApp | serviço | R$ 0 (1.000 grátis) → R$ 0,035 | quase grátis |
+| Grok Imagine | vídeo 15s 720p | US$ 2,10 | 30 Reels/mês = US$ 63 |
+| Meta/TikTok/YouTube/LinkedIn/GBP | publicar | US$ 0 | cota, não dinheiro |
+
+**Regra prática:** mantenha o **gasto de canal** abaixo de 40% do gasto total de API. Se o X estiver consumindo mais que isso, o problema é o calendário de posts com link — troque o link para a resposta.
+
+### 4.3 Simulação de custo por 1.000 threads
 
 | Etapa | Modelo | Tokens in | Tokens out | Custo |
 |---|---|---|---|---|
@@ -156,7 +197,7 @@ Cada prompt é um arquivo em `prompts/`. Todos exigem saída estruturada e cita�
 
 Ou seja: **meio centavo por thread analisada.** O erro clássico não é gastar com modelo — é mandar 40 mil tokens por thread por preguiça de recortar.
 
-### 4.3 Guard-rails no código
+### 4.4 Guard-rails no código
 
 ```python
 # src/budget.py
@@ -167,6 +208,19 @@ class Budget:
 ```
 
 Se o orçamento estourar, o bot **para e avisa** em vez de continuar gastando. Um bot que não tem freio é um cartão de crédito com API.
+
+E o freio de **canal**, que é tão importante quanto o de dinheiro:
+
+```python
+from src.channels import validate_channel_post, ChannelViolation
+
+try:
+    validate_channel_post("instagram_dm", {"cold": True})
+except ChannelViolation as e:
+    print(e.rule)   # COLD_DM_META — e o envio nunca acontece
+```
+
+**Dois freios, dois riscos diferentes:** o de orçamento protege o bolso; o de canal protege a conta. Um sem o outro é meio sistema.
 
 ---
 
@@ -180,6 +234,8 @@ Se o orçamento estourar, o bot **para e avisa** em vez de continuar gastando. U
 | **Tom** | resposta parece humana daquele sub? | revisão cega de 5 respostas |
 | **Regra** | `link_allowed` correto por sub | 100% (checagem contra `rules.yaml`) |
 | **Custo** | US$/thread | < US$ 0,01 |
+| **Política** | payload reprovado pelo validador antes de chegar na API | 100% (bloqueio, não aviso) |
+| **Canal** | resposta dentro da janela (24h Meta/WhatsApp) | > 90% |
 
 **Como rotular 20 threads em 15 minutos:** leia só o título e o primeiro parágrafo; marque 1 (compraria hoje), 0,5 (dor, sem pedido), 0 (irrelevante). Compare com a saída. Ajuste o prompt citando os 3 casos em que errou — isso vale mais que 10 regras novas.
 
@@ -203,6 +259,18 @@ Cada arquivo tem: **fonte, data de coleta, responsável**. O retriever é simple
 ---
 
 ## 7. Integração com o resto da stack
+
+**A arquitetura de três camadas** (detalhada em `05-setup-tecnico.md` §0):
+
+```
+CÉREBRO      Grok via API (chat, web, X) ou Grok Bot (agente persistente, US$ 30/mês)
+   ↓
+ORQUESTRADOR fila → validate_channel_post() → aprovação humana → publica
+   ↓
+CANAIS       X · Meta · WhatsApp · TikTok · YouTube · Telegram · GBP · Threads · Bluesky
+```
+
+O ponto que não se negocia: **a validação vem antes da chamada de API.** Um orquestrador que valida depois só documenta o ban.
 
 | Destino | Como | Por quê |
 |---|---|---|

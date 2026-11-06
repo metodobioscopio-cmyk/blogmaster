@@ -1,18 +1,24 @@
-# Rotas do Reddit — o mapa completo (11 caminhos + matriz de decisão)
+# As 11 rotas — o mapa completo (canal por canal + matriz de decisão)
 
-> Documento de referência cruzada dos dois estudos. Aqui as rotas estão consolidadas, comparadas lado a lado e ligadas a exemplos executáveis. Se você só puder ler um arquivo antes de agir, leia a **matriz de decisão** da seção 3.
+> Documento de referência cruzada dos dois estudos. As 11 rotas de venda estão aqui consolidadas, **cada uma com o canal onde funciona melhor**, comparadas lado a lado e ligadas a exemplos executáveis. Se você só puder ler um arquivo antes de agir, leia a **matriz de decisão** da seção 3.
+>
+> **Por que o Reddit aparece tanto:** é onde cada rota é mais barata de testar (API, texto público, zero mídia). O que funciona lá migra para os outros canais com ajuste de formato — e é isso que a seção 2.5 mostra.
 
 ---
 
 ## 1. O princípio que organiza tudo
 
-O Reddit não tem um canal de vendas. Tem **onze canais com regras diferentes**, e o erro mais comum é usar o canal errado no momento errado. A regra que resolve 80% dos casos:
+Não existe "a rede social que vende". Existem **onze mecânicas de venda**, e cada uma funciona melhor em um canal diferente, com uma regra diferente. O erro mais comum é usar a mecânica certa no canal errado (postar análise de bairro no X, tentar DM frio no Instagram). A regra que resolve 80% dos casos:
 
 > **Intenção primeiro, oferta depois.** Se a pessoa não declarou intenção de compra, você não vende — você ajuda. A venda vem do perfil, do histórico e do efeito composto.
 
 E a segunda regra, que protege sua conta:
 
 > **Onde há link, há risco. Onde há valor, há retorno.** Comece sempre pelo caminho sem link.
+
+E a terceira, que protege o tempo:
+
+> **Escolha 1 canal de intenção e 1 de conversa.** Operar seis canais com uma pessoa produz seis mediocridades.
 
 ---
 
@@ -65,12 +71,27 @@ E a segunda regra, que protege sua conta:
 - **Proibido:** DM em massa, DM sem convite, DM com link de afiliado em conta nova.
 - **Métrica:** taxa de resposta (benchmark: 50% com convite e personalização; <20% em massa).
 
-### Rota 7 · Reddit Ads
+### Rota 7 · Anúncio (Reddit Ads e equivalentes)
 
-- **Formatos:** Promoted Post, **Conversation Ad** (mais nativa), Lead Gen Ad, Carousel, Free-form, Product Ads, Max Campaigns.
+- **Formatos no Reddit:** Promoted Post, **Conversation Ad** (mais nativa), Lead Gen Ad, Carousel, Free-form, Product Ads, Max Campaigns.
 - **Mínimo:** US$ 5/dia oficial, mas **teste real = US$ 50–100/dia por 14 dias**.
 - **Quando ativar:** depois de 5+ vendas orgânicas. Antes disso você compra ruído.
-- **Métrica:** CPL vs. CPL do portal/Google; CTR > 1,5%.
+- **Métrica:** CPL vs. CPL do canal alternativo; CTR > 1,5%.
+
+**Equivalente por canal (CPL mediano 2026):**
+
+| Canal | Formato nativo | CPL mediano | Quando faz sentido |
+|---|---|---|---|
+| Reddit Ads | Conversation Ad / Lead Gen | US$ 17–40 | nicho que se autoidentifica em sub |
+| Meta | Click-to-WhatsApp / Click-to-DM | US$ 35–65 (imob.) · 50–75 (B2B) | volume + conversa no mesmo ecossistema |
+| TikTok | Lead Gen nativo | US$ 18–38 | topo de funil com vídeo barato |
+| Google Search | Search / Local Services | US$ 80–250 | intenção já digitada |
+| LinkedIn | Lead Gen Form | US$ 95–202 | B2B com ticket alto |
+| Nextdoor (EUA) | Neighborhood Sponsorship | US$ 30–150/ZIP/mês | imobiliário hiperlocal |
+
+::: alerta
+**Nenhum canal pago fecha a conta com ticket baixo.** Se a comissão por venda é menor que US$ 1.500, mídia paga dá prejuízo — a matemática está em [`08-custos-roi.md`](08-custos-roi.md).
+:::
 
 ### Rota 8 · AMA
 
@@ -78,11 +99,11 @@ E a segunda regra, que protege sua conta:
 - **Preparação:** 10 perguntas prováveis respondidas com número; 3 histórias de erro.
 - **Retorno:** autoridade concentrada + DMs + citações posteriores.
 
-### Rota 9 · Subreddit próprio
+### Rota 9 · Comunidade própria
 
-- **Veredito:** não antes de 6–12 meses de reputação real e massa crítica de pauta.
-- **Risco:** "seeded community" é removida em bloco (precedente de 2026: 4 comunidades derrubadas).
-- **Alternativa:** comunidade no WhatsApp/Telegram, que não depende de moderação alheia.
+- **No Reddit (subreddit):** não antes de 6–12 meses de reputação real e massa crítica de pauta. "Seeded community" é removida em bloco (precedente de 2026: 4 comunidades derrubadas).
+- **Melhor caminho:** comunidade no WhatsApp (grupo ou canal de transmissão) ou Telegram — não depende de moderação alheia e o opt-in é seu.
+- **Aviso:** grupo de WhatsApp é o canal com maior risco de block rate. Máximo 4 mensagens/mês e botão de saída visível.
 
 ### Rota 10 · Parceria com criador do sub
 
@@ -95,6 +116,30 @@ E a segunda regra, que protege sua conta:
 - **Como:** estrutura extraível (resposta direta no início, tabela, 5–7 estatísticas com fonte, data de atualização, linguagem definida).
 - **Por que:** Reddit é 2ª fonte de citações em AI Overviews (18,5%) e 46,7% no Perplexity.
 - **Regra ética:** conteúdo verdadeiro. Nada de palavra-chave plantada.
+
+---
+
+## 2.5 O equivalente de cada rota nos outros canais
+
+A mesma mecânica, traduzida. Use esta tabela quando for aplicar uma rota fora do Reddit.
+
+| Rota | Reddit | X | Instagram | WhatsApp / Messenger | YouTube | LinkedIn (manual) | Google Business |
+|---|---|---|---|---|---|---|---|
+| **1. Resposta-âncora** | comentário em thread quente | reply em post de dor | resposta em comentário | — | resposta em comentário do canal | comentário em post de terceiro (não automatizar) | responder avaliação |
+| **2. Post de caso** | post com números | thread com números | carrossel + Reel | — | vídeo de 6–10 min | artigo | post local (1.500 ch, 7d) |
+| **3. Educar sem vender** | 20 comentários úteis | 5 posts técnicos | Reels de diagnóstico | — | tutorial | conteúdo próprio | Q&A e serviço |
+| **4. Thread/comunidade** | sub permissivo | thread própria | — | grupo de transmissão (opt-in) | community post | — | — |
+| **5. Perfil como funil** | bio + posts fixos | bio + pinned | bio + destaques + link | catálogo/perfil comercial | banner + playlist | headline + featured | fotos + serviços + posts |
+| **6. DM consentida** | só se pedirem | só se pedirem | **comentário → 1 DM (7d)** | **janela 24h, opt-in** | — | mensagem manual | — |
+| **7. Anúncio** | Reddit Ads | X Ads (pay-per-use) | Meta Ads / Click-to-DM | Click-to-WhatsApp | YouTube Ads | LinkedIn Ads | Local Services (EUA) |
+| **8. AMA / live** | AMA | Spaces | Live | — | live | live | — |
+| **9. Comunidade própria** | subreddit | — | canal de broadcast | **grupo/comunidade** | membros | newsletter | — |
+| **10. Parceria** | criador do sub | creator do X | creator de bairro | co-marketing | youtuber de nicho | indicação | corretor parceiro |
+| **11. GEO** | comentário indexado | post indexado | — | — | vídeo transcrito | artigo | reviews e Q&A |
+
+::: alerta
+**As rotas 6 e 7 são onde as pessoas tomam ban.** DM consentida só existe onde a pessoa falou primeiro (roteiro na seção 2, rota 6). Anúncio é sempre a via legítima de comprar espaço — nunca "automatizar o engajamento".
+:::
 
 ---
 
@@ -206,4 +251,4 @@ E a segunda regra, que protege sua conta:
 | Painel de 4 números (respostas, cliques, DMs, vendas) | Você não sabe o que funcionou |
 | Revisão mensal | As regras mudam e você não percebe |
 
-É exatamente isso que o motor `grok-reddit-ops` implementa — e é o que separa "postar no Reddit" de "operar um canal".
+É exatamente isso que o motor `grok-channel-ops` implementa — e é o que separa "postar no Reddit" de "operar um canal".

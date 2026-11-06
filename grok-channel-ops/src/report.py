@@ -97,7 +97,7 @@ def _verdict(clicks: int, posts: int, trials: int, sales: int, convs: int) -> di
 def _render_markdown(cfg, leads, by_sub, by_type, by_engine, smin, smax,
                      posts, clicks, convs, trials, sales, revenue, cost, verdict) -> str:
     lines = [
-        "# Relatório semanal — grok-reddit-ops",
+        "# Relatório semanal — grok-channel-ops",
         "",
         f"- mercado: **{cfg.market}** · idioma: **{cfg.language}** · fonte: **{cfg.source}**",
         f"- modelo: `{cfg.model}` (rápido: `{cfg.fast_model}`)",
@@ -143,7 +143,7 @@ def _render_markdown(cfg, leads, by_sub, by_type, by_engine, smin, smax,
     lines += [
         "",
         "---",
-        "_Gerado por grok-reddit-ops. Números do funil são informados manualmente; "
+        "_Gerado por grok-channel-ops. Números do funil são informados manualmente; "
         "o custo de API é estimado pela tabela de preços do playbook._",
     ]
     return "\n".join(lines)

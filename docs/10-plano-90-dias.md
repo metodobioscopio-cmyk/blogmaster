@@ -1,6 +1,8 @@
-# Plano de 90 dias e piloto de 14 dias — executável
+# Plano de 90 dias e piloto de 14 dias — executável em 6 canais
 
 > Dois trilhos rodando em paralelo com orçamento separado e critérios de corte independentes. Se um dos dois falhar, o outro continua. A regra do plano: **nenhuma decisão por sensação — cada fase tem métrica e corte definidos antes de começar.**
+>
+> **E a regra dos canais:** cada trilho começa em **1 canal de intenção + 1 de conversa** e só abre o terceiro canal depois de 30 dias estáveis. A sequência está na seção 2.1.
 
 ---
 
@@ -8,17 +10,35 @@
 
 | Item | Valor | Quando | Observação |
 |---|---|---|---|
-| API xAI | **US$ 20/mês** | contínuo | suficiente para 1 operador e 3 subs |
-| Conta Reddit | US$ 0 | dia 0 | precisa ter 30+ dias de idade |
-| Ferramentas (opcional) | US$ 0–30/mês | dia 15+ | Reddit Pro é grátis; F5Bot/Syften só se sentir falta |
-| Domínio + hub (perfil como funil) | US$ 12/ano | dia 7 | pode ser Notion público, custo zero |
+| API xAI (redação + radar) | **US$ 20/mês** | contínuo | 1 operador, 3 fontes |
+| API do X (leitura + posts) | **US$ 22–30/mês** | dia 7+ | US$ 0,005/leitura; link só na resposta |
+| Telegram | US$ 0 | dia 1 | valida o fluxo sem risco |
+| WhatsApp Cloud (marketing) | **R$ 322/mês** (se 1.000 msgs) | dia 15+ | serviço: 1.000 grátis |
+| Instagram (publicação) | US$ 0 | dia 15+ | custo é vídeo: US$ 2,10/Reel |
+| Grok Bot (agente) | **US$ 30/mês** | dia 20+ | opcional; substitui orquestração manual |
+| Ferramentas (opcional) | US$ 0–30/mês | dia 30+ | Reddit Pro é grátis; n8n self-host, US$ 0 |
+| Domínio + hub (perfil como funil) | US$ 12/ano | dia 7 | pode ser Notion público |
 | Mídia (afiliados) | US$ 420 | dia 60+ | só após 5 vendas orgânicas |
 | Mídia (imobiliário) | R$ 3.000–8.000 | dia 45+ | só após 2 visitas agendadas |
-| **Total sem mídia** | **≈ US$ 22/mês** | | o custo real é tempo |
+| **Total sem mídia** | **≈ US$ 95–115/mês** | | o custo real é tempo |
 
 ---
 
 ## 2. Estrutura de semanas
+
+### 2.1 A sequência de canais (não abra dois de uma vez)
+
+| Mês | Canal de intenção | Canal de conversa | Canal de prova | Total ativo |
+|---|---|---|---|---|
+| **1** | Reddit (+ Telegram para validar) | — | — | 2 |
+| **2** | Reddit + X | WhatsApp | — | 3 |
+| **3** | Reddit + X | WhatsApp | Instagram (orgânico) | 4 |
+| **4** | os mesmos | os mesmos | + YouTube ou Nextdoor | 5 |
+| **5+** | + TikTOk *só se* audit aprovado | os mesmos | + Threads/Bluesky (teste) | 6–7 |
+
+**Por que essa ordem:** Reddit é onde o erro custa menos (texto público, sem custo por mensagem). X cobra por leitura, então só entra quando você já sabe qual termo converte. WhatsApp entra quando há conversa para atender. Instagram entra como prova, não como aquisição. **TikTok é o último** porque depende de audit e vídeo.
+
+### 2.2 Calendário
 
 | Semana | Trilho afiliados | Trilho imobiliário | Entrega comum |
 |---|---|---|---|
@@ -106,15 +126,20 @@
 
 ## 6. O que fazer quando algo dá errado (árvore de decisão)
 
-| Sintoma | Causa provável | Ação |
-|---|---|---|
-| Post removido | Regra do sub / tom de anúncio | Ler regra, reescrever, pedir desculpa ao mod por modmail |
-| Conta sem views | Shadowban por link repetido | Pausar 30 dias, remover links, testar deslogado |
-| Muitos downvotes | Tom arrogante ou número errado | Revisar tom; conferir fonte |
-| Zero DM | Oferta fraca ou thread errada | Testar outra rota (2 ou 8) |
-| Muita DM e pouca venda | Qualificação ruim | Usar `P4` e cortar score < 70 |
-| Custo de API subiu | `x_search` sem teto ou contexto inflado | Aplicar alavancas do Playbook §4 |
-| Cansaço no dia 20 | Rotina insustentável | Reduzir para 30 min/dia e priorizar rota 2 |
+| Sintoma | Canal | Causa provável | Ação |
+|---|---|---|---|
+| Post removido | Reddit | Regra do sub / tom de anúncio | Ler regra, reescrever, pedir desculpa ao mod por modmail |
+| Conta sem views | Reddit | Shadowban por link repetido | Pausar 30 dias, remover links, testar deslogado |
+| `outside the allowed window` | Meta | Mensagem fora das 24h | Usar template aprovado; esperar a pessoa escrever |
+| Block rate > 2% | WhatsApp | Mensagem para quem não pediu | Parar disparo, auditar lista, reconstruir opt-in |
+| Post sai privado | TikTok | App sem audit | Submeter ao audit; não insistir |
+| `quotaExceeded` | YouTube | 10.000 unidades/dia estouradas | Reset à meia-noite do Pacífico; enfileirar |
+| Custo de X 10× o previsto | X | Post com link em vez de sem link | Link na resposta (US$ 0,015 vs US$ 0,20) |
+| Conta restrita | LinkedIn | Automação de sessão | Nunca automatizar; §8.2 |
+| Zero conversa | todos | Oferta fraca ou canal errado | Trocar rota (2 ou 8), não aumentar volume |
+| Muita conversa e pouca venda | WhatsApp | Qualificação ruim | Usar `P4`; cortar score < 70; handoff humano cedo |
+| Custo de API subiu | xAI | `x_search` sem teto ou contexto inflado | Alavancas do Playbook §4 |
+| Cansaço no dia 20 | todos | Rotina insustentável | Reduzir para 30 min/dia; fechar canais extras |
 
 ---
 
@@ -123,11 +148,12 @@
 Estrutura de uma página:
 
 1. **Números:** respostas, cliques, conversas, vendas, receita, custo total, custo por venda.
-2. **Ranking de rotas:** qual gerou mais conversa e qual gerou mais venda (não são a mesma).
-3. **Ranking de subs:** EPC/CPL por comunidade.
-4. **O que eu errei:** 3 decisões que custaram tempo.
-5. **Decisão:** escalar / manter / pivotar / encerrar — com o número que sustenta a decisão.
-6. **Próximo trimestre:** 1 meta, 1 aposta, 1 coisa que vou parar de fazer.
+2. **Ranking de canais:** qual gerou conversa, qual gerou venda, qual só consumiu tempo (não são o mesmo).
+3. **Ranking de rotas e subs:** EPC/CPL por comunidade.
+4. **Auditoria de canal:** rodar `P12` em cada canal ativo — GO / AJUSTAR / NO-GO.
+5. **O que eu errei:** 3 decisões que custaram tempo.
+6. **Decisão:** escalar / manter / pivotar / encerrar — com o número que sustenta a decisão.
+7. **Próximo trimestre:** 1 meta, 1 aposta, 1 coisa que vou parar de fazer (e 1 canal que vou fechar).
 
 ---
 
@@ -135,7 +161,7 @@ Estrutura de uma página:
 
 | Papel | Responsabilidade | Tempo |
 |---|---|---|
-| **Operador** | Radar, revisão, publicação, relacionamento | 45 min/dia |
+| **Operador** | Radar nos 3 canais, revisão, publicação, relacionamento | 45 min/dia |
 | **Especialista** (você, corretor, afiliado) | Conhecimento, números, credibilidade | 2 h/semana |
 | **Editor** (opcional) | Reescrever no tom, revisar compliance | 1 h/semana |
 | **Analista** (opcional) | Painel, atribuição, P6 | 1 h/semana |

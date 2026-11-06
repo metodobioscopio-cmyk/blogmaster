@@ -22,27 +22,33 @@ SITE = ROOT / "site"
 
 # ordem e metadados de navegação
 PAGES = [
-    ("00-metapesquisa-grok.md", "00", "Meta-pesquisa", "O que é um bot Grok de vendas, o que custa e o que não faz"),
-    ("01-estudo-afiliados.md", "01", "Estudo 1 · Afiliados", "Unit economics, rotas, cases e o caminho real até o dólar"),
-    ("02-estudo-real-estate.md", "02", "Estudo 2 · Real estate", "Velocidade de resposta, Goiânia, EUA e compliance"),
-    ("03-playbook-grok.md", "03", "Playbook Grok", "Setup, prompts P1–P7 e controle de custo"),
-    ("04-rotas-reddit.md", "04", "Rotas do Reddit", "As 11 formas de vender, comparadas"),
-    ("05-plano-90-dias.md", "05", "Plano & piloto", "90 dias, 14 dias e critérios de corte"),
-    ("06-compliance.md", "06", "Compliance", "Reddit, FTC, CONAR, CRECI, LGPD e TCPA"),
-]
-
-# Fase 2 — expansão multicanal (numeração própria para não renumerar a Fase 1)
-CHANNEL_PAGES = [
-    ("07-canais-2026.md", "C1", "Mapa dos canais", "Onde o bot vende, o que é permitido e quanto custa em 2026"),
-    ("08-setup-tecnico.md", "C2", "Setup técnico", "As 12 configs que fazem o bot publicar sem tomar ban"),
-    ("09-custos-roi.md", "C3", "Custos & ROI", "CPL, custo por venda e payback por canal"),
-    ("10-riscos-compliance.md", "C4", "Riscos & bans", "Os 6 banimentos reais e a defesa em código"),
-    ("11-case-multicanal.md", "C5", "Case 14 dias", "5 canais, US$ 47 e 9 conversas — o que funcionou"),
+    # PARTE I — fundamento
+    ("00-metapesquisa-grok.md", "00", "O bot", "O que a plataforma faz, quanto custa e qual arquitetura sobrevive", "I"),
+    # PARTE II — os dois mercados
+    ("01-estudo-afiliados.md", "01", "Estudo 1 · Afiliados", "Unit economics, as 11 rotas e o caminho real até o dólar", "II"),
+    ("02-estudo-real-estate.md", "02", "Estudo 2 · Real estate", "Janela dos 5 minutos, Goiânia, EUA e compliance", "II"),
+    # PARTE III — os canais
+    ("03-mapa-canais.md", "03", "Os 20 canais", "Onde o bot vende, o que é permitido e quanto custa", "III"),
+    ("04-rotas-canal.md", "04", "As 11 rotas", "Cada rota no canal onde funciona — e o equivalente em todos", "III"),
+    ("05-setup-tecnico.md", "05", "Setup técnico", "As 12 configurações que fazem o bot publicar sem tomar ban", "III"),
+    # PARTE IV — operação
+    ("06-playbook-grok.md", "06", "Playbook", "Prompts P1–P12, custo e controle de qualidade", "IV"),
+    ("07-compliance.md", "07", "Compliance", "Os 6 banimentos reais e a defesa em código", "IV"),
+    ("08-custos-roi.md", "08", "Custos & ROI", "CPL, custo por venda e payback por canal", "IV"),
+    ("09-case-14-dias.md", "09", "Case · 14 dias", "5 canais, US$ 47 e 9 conversas — o que funcionou", "IV"),
+    ("10-plano-90-dias.md", "10", "Plano & piloto", "90 dias, 14 dias e critérios de corte", "IV"),
 ]
 
 EXTRA_PAGES = [
-    ("README-codigo.md", "M", "Motor em Python", "grok-reddit-ops: instalação, uso e arquitetura"),
+    ("README-codigo.md", "M", "O motor", "grok-channel-ops: instalação, uso e arquitetura", "IV"),
 ]
+
+PARTS = {
+    "I": ("Parte I", "O fundamento"),
+    "II": ("Parte II", "Os dois mercados"),
+    "III": ("Parte III", "Os canais"),
+    "IV": ("Parte IV", "A operação"),
+}
 
 CALLOUT_LABELS = {
     "meta": ("Contexto", "◷"),
@@ -105,13 +111,11 @@ def build() -> None:
     SITE.mkdir(parents=True, exist_ok=True)
     (SITE / "assets").mkdir(exist_ok=True)
 
-    pages = (PAGES
-             + [p for p in CHANNEL_PAGES if (DOCS / p[0]).exists()]
-             + [p for p in EXTRA_PAGES if (DOCS / p[0]).exists()])
+    pages = PAGES + [p for p in EXTRA_PAGES if (DOCS / p[0]).exists()]
     built = []
     search_index = []
 
-    for filename, num, title, subtitle in pages:
+    for filename, num, title, subtitle, part in pages:
         path = DOCS / filename
         if not path.exists():
             print(f"  ! faltando: {filename}")
@@ -120,9 +124,7 @@ def build() -> None:
         # remove o H1 do topo: ele já é renderizado como título da página
         raw_body = re.sub(r"\A\s*#\s+.*?\n", "", raw, count=1)
         body, toc = render(raw_body)
-        out_name = f"{num.lower()}.html" if num != "00" else "meta.html"
-        if num == "M":
-            out_name = "motor.html"
+        out_name = "motor.html" if num == "M" else f"{num}.html"
         mins = reading_time(raw)
 
         # extrai h1 e subtítulo do primeiro blockquote
@@ -133,12 +135,12 @@ def build() -> None:
                 break
 
         built.append({
-            "num": num, "title": title, "subtitle": subtitle,
+            "num": num, "title": title, "subtitle": subtitle, "part": part,
             "h1": h1, "file": out_name, "mins": mins,
             "body": body, "toc": toc,
         })
         search_index.append({
-            "num": num, "title": title, "file": out_name,
+            "num": num, "title": title, "file": out_name, "part": part,
             "text": re.sub(r"\s+", " ", re.sub(r"[#*`>|:]", " ", raw))[:6000],
         })
 
@@ -180,8 +182,15 @@ def build() -> None:
 
 
 def nav_html(pages, current_num) -> str:
-    items = []
+    items, last_part = [], None
     for p in pages:
+        part = p.get("part")
+        if part != last_part and part in PARTS:
+            label, name = PARTS[part]
+            items.append(
+                f'<span class="nav__part"><em>{label}</em>{html.escape(name)}</span>'
+            )
+            last_part = part
         active = " active" if p["num"] == current_num else ""
         items.append(
             f'<a class="nav__link{active}" href="{p["file"]}">'
@@ -271,8 +280,8 @@ HOME = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grok × Canais · dossiê de vendas</title>
-<meta name="description" content="Dossiê operacional: como um bot Grok vende em affiliate marketing e real estate no Reddit, X, Instagram, WhatsApp, TikTok, YouTube, LinkedIn, Telegram e Google — com setup técnico, custos e compliance.">
+<title>Grok × Canais · dossiê de vendas em 20 canais</title>
+<meta name="description" content="Dossiê operacional: como um bot Grok vende em affiliate marketing e real estate no Reddit, X, Instagram, WhatsApp, Facebook, TikTok, YouTube, LinkedIn, Telegram, Threads, Bluesky, Nextdoor e Google — com setup técnico, custos e compliance.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body class="home">
@@ -282,18 +291,18 @@ HOME = """<!doctype html>
 </header>
 
 <section class="hero">
-  <p class="eyebrow">DOSSIÊ OPERACIONAL · NOV 2026</p>
-  <h1>Como um bot Grok vende no Reddit<br><em>de verdade</em> — em afiliados e imóveis.</h1>
-  <p class="hero__sub">Meta-pesquisa da plataforma, dois estudos de mercado com números verificados, as 11 rotas do Reddit, o mapa dos 20 canais, o setup técnico de cada API, o motor em Python e dois pilotos com critério de corte.</p>
+  <p class="eyebrow">DOSSIÊ OPERACIONAL · 20 CANAIS · NOV 2026</p>
+  <h1>Como um bot Grok vende<br><em>em qualquer canal</em> — sem perder a conta.</h1>
+  <p class="hero__sub">Dois mercados (afiliados e imóveis), 20 canais mapeados, os 12 setups que fazem o bot publicar, a matemática do CPL por canal e o validador em código que bloqueia ban antes de acontecer.</p>
   <div class="hero__stats">
-    <div><strong>2</strong><span>mercados estudados</span></div>
     <div><strong>20</strong><span>canais mapeados</span></div>
-    <div><strong>11</strong><span>rotas do Reddit</span></div>
-    <div><strong>US$ 95</strong><span>custo mensal multicanal</span></div>
+    <div><strong>2</strong><span>mercados estudados</span></div>
+    <div><strong>11</strong><span>rotas de venda</span></div>
+    <div><strong>12</strong><span>setups técnicos</span></div>
   </div>
   <div class="hero__cta">
-    <a class="btn btn--primary" href="meta.html">Começar pela meta-pesquisa</a>
-    <a class="btn" href="c1.html">Ver o mapa dos canais</a>
+    <a class="btn btn--primary" href="03.html">Começar pelo mapa dos canais</a>
+    <a class="btn" href="00.html">Entender o bot primeiro</a>
   </div>
 </section>
 
@@ -312,23 +321,68 @@ HOME = """<!doctype html>
   <div class="thesis__col">
     <span class="thesis__num">02</span>
     <h2>O que isso não é</h2>
-    <p>Não é fazenda de contas, não é post automático, não é plantar palavra para virar resposta de IA. Cada uma dessas coisas tem retorno decrescente e ban permanente.</p>
+    <p>Não é DM frio, não é auto-connect no LinkedIn, não é postar em grupo de Facebook. Cada uma dessas coisas é <strong>impossível ou ban</strong> — não é questão de opinião.</p>
   </div>
   <div class="thesis__col">
     <span class="thesis__num">03</span>
     <h2>O número que decide</h2>
-    <p>Afiliado: EPC acima de US$ 1 e comissão recorrente. Imobiliário: <strong>78% dos compradores fecham com quem responde primeiro</strong>. Velocidade é o produto.</p>
+    <p>O canal que fecha é a <strong>conversa</strong>, e ela tem janela: 24h no WhatsApp e no Direct. Quem responde dentro dela converte <strong>2–3× mais</strong>.</p>
+  </div>
+</section>
+
+<section class="matrix-strip">
+  <h2>Os 20 canais, em uma linha cada</h2>
+  <div class="matrix-scroll">
+  <table>
+    <thead><tr><th>Canal</th><th>Publica</th><th>DM</th><th>Janela</th><th>Custo de entrada</th><th>Risco</th></tr></thead>
+    <tbody>
+      <tr><td>Reddit</td><td>sim</td><td>não</td><td>—</td><td>grátis (API oficial)</td><td class="r-alto">alto</td></tr>
+      <tr><td>X / Twitter</td><td>sim</td><td>sim</td><td>—</td><td>US$ 0,015/post</td><td class="r-medio">médio</td></tr>
+      <tr><td>Instagram</td><td>sim</td><td>só inbound</td><td>24h</td><td>grátis</td><td class="r-critico">crítico</td></tr>
+      <tr><td>Facebook Page</td><td>sim</td><td>só inbound</td><td>24h</td><td>grátis</td><td class="r-critico">crítico</td></tr>
+      <tr><td>Facebook Groups</td><td class="r-critico">não</td><td class="r-critico">não</td><td>—</td><td class="r-critico">API extinta</td><td class="r-critico">crítico</td></tr>
+      <tr><td>WhatsApp</td><td>template</td><td>sim</td><td>24h</td><td>R$ 0,3217/msg</td><td class="r-critico">crítico</td></tr>
+      <tr><td>TikTok</td><td>sim (audit)</td><td>restrito</td><td>—</td><td>grátis</td><td class="r-alto">alto</td></tr>
+      <tr><td>YouTube</td><td>sim</td><td>não</td><td>—</td><td>grátis (cota)</td><td class="r-medio">médio</td></tr>
+      <tr><td>LinkedIn</td><td>só feed</td><td class="r-critico">proibido</td><td>—</td><td>grátis</td><td class="r-critico">crítico</td></tr>
+      <tr><td>Threads</td><td>sim</td><td>sim</td><td>—</td><td>grátis</td><td class="r-baixo">baixo</td></tr>
+      <tr><td>Bluesky</td><td>sim</td><td>sim</td><td>—</td><td>grátis</td><td class="r-baixo">baixo</td></tr>
+      <tr><td>Telegram</td><td>sim</td><td>sim</td><td>—</td><td>grátis</td><td class="r-baixo">baixo</td></tr>
+      <tr><td>Google Business</td><td>sim</td><td>não</td><td>—</td><td>grátis</td><td class="r-baixo">baixo</td></tr>
+      <tr><td>Nextdoor</td><td>sim</td><td>limitado</td><td>—</td><td>US$ 30–150/ZIP</td><td class="r-medio">médio</td></tr>
+      <tr><td>E-mail</td><td>sim</td><td>—</td><td>—</td><td>US$ 0,05/lead</td><td class="r-alto">alto</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="matrix__foot">A matriz completa, com janela, limite e o que o bot pode fazer em cada um, está em <a href="03.html">Os 20 canais</a>. Os limites estão implementados em <code>src/channels.py</code>.</p>
+</section>
+
+<section class="thesis">
+  <div class="thesis__col">
+    <span class="thesis__num">04</span>
+    <h2>Comece por onde o erro custa menos</h2>
+    <p>Telegram e Reddit permitem errar por texto público. WhatsApp e Meta punem com <strong>restrição de conta</strong>. A ordem de entrada não é preferência — é gestão de risco.</p>
+  </div>
+  <div class="thesis__col">
+    <span class="thesis__num">05</span>
+    <h2>Mídia só com ticket alto</h2>
+    <p>Custo por venda em qualquer canal pago: <strong>US$ 1.600–2.600</strong>. Comissão de afiliado de US$ 99 não paga isso. Comissão de R$ 40 mil de imóvel paga 20 vezes.</p>
+  </div>
+  <div class="thesis__col">
+    <span class="thesis__num">06</span>
+    <h2>O que sobrevive é o ativo</h2>
+    <p>Uma conta de 5 anos vale mais que uma campanha de 3 dias. <strong>Todo canal tem um teto técnico e um teto de tolerância</strong> — opere a 30% do primeiro.</p>
   </div>
 </section>
 
 <footer class="foot foot--home">
-  <p>grok-reddit-ops · dossiê operacional · {year}</p>
-  <p class="foot__warn">Simulações estão rotuladas. Nenhuma cifra é promessa de resultado.</p>
+  <p>grok-channel-ops · dossiê operacional · {year}</p>
+  <p class="foot__warn">Simulações estão rotuladas. Nenhuma cifra é promessa de resultado. Regras e preços verificados em nov/2026 — reconfira antes de operar.</p>
 </footer>
 
 <div class="search-modal" id="searchModal" hidden>
   <div class="search-box">
-    <input id="searchInput" type="search" placeholder="Buscar no dossiê…" autocomplete="off">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: CPL, janela 24h, LGPD)" autocomplete="off">
     <div class="search-results" id="searchResults"></div>
   </div>
 </div>

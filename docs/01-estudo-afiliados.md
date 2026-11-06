@@ -1,6 +1,8 @@
-# ESTUDO 1 — Afiliados: como o Reddit + Grok produzem venda real
+# ESTUDO 1 — Afiliados: como o Grok produz venda real, canal por canal
 
-> **Pergunta deste estudo.** Dá para vender como afiliado usando Reddit como canal principal, com um bot Grok fazendo o trabalho pesado, sem tomar ban e sem depender de sorte? **Resposta curta: sim, mas não no modelo que 95% das pessoas tentam.** Este documento entrega a matemática, as rotas, os roteiros e o ponto exato onde o dinheiro aparece.
+> **Pergunta deste estudo.** Dá para vender como afiliado com um bot Grok fazendo o trabalho pesado, sem tomar ban e sem depender de sorte? **Resposta curta: sim — se você escolher o canal pelo ticket, e não pelo hype.** Este documento entrega a matemática, as 11 rotas, os roteiros e o ponto exato onde o dinheiro aparece.
+>
+> **Nota de escopo (v2).** A v1 deste estudo usava o Reddit como canal único. A v2 mantém o Reddit como **roteiro detalhado** (é onde a intenção fica escrita e indexada, o melhor laboratório) e acrescenta o papel dos outros canais em cada etapa. O mapa completo dos 20 canais está em [`03-mapa-canais.md`](03-mapa-canais.md); o setup técnico, em [`05-setup-tecnico.md`](05-setup-tecnico.md).
 
 ::: meta
 **Mercados cobertos:** EUA (onde o Reddit converte e o dinheiro é em dólar) e Brasil (onde você opera). **Período de dados:** 2025–2026. **Público-alvo:** operador solo ou dupla, capital de até US$ 500, 1–2 h/dia.
@@ -27,6 +29,8 @@
 **Onde a intenção existe de verdade:**
 - **Reddit:** gente escrevendo "estou procurando X, alguém usa?" — intenção explícita, em texto, datada.
 - **X:** gente reclamando em tempo real de uma ferramenta e perguntando alternativa.
+- **YouTube:** comentário em vídeo de review pedindo "qual você recomenda?" — intenção alta, canal quase sem concorrência comercial.
+- **Grupos e fóruns de nicho (Slack, Discord, Telegram):** a intenção circula em conversa, não em busca.
 - **Buscas longtail de comparação:** "X vs Y reddit" — o comprador está pedindo opinião de humano.
 
 O Reddit é o único dos três onde a resposta fica **indexada para sempre** e é **citada por IA**. É por isso que este estudo usa Reddit como base e X como acelerador.
@@ -71,13 +75,13 @@ Compare com e-commerce: AOV US$ 80, comissão 8% = **US$ 6,40 por venda**, uma v
 
 ## 3. Unit economics: a planilha que decide se você continua
 
-### 3.1 Funil canônico do afiliado via Reddit
+### 3.1 Funil canônico do afiliado (com o canal de cada etapa)
 
 ```
-Thread com intenção (1.000 lidas)
+Intenção detectada (1.000 leituras)     ← Reddit · X · YouTube · Threads
         │  3–8% clicam no perfil / link no perfil
         ▼
-Visita ao destino (50)
+Visita ao destino (50)              ← seu site · perfil · bio
         │  18–28% clicam para o merchant (review page → merchant)
         ▼
 Clique no merchant (12)
@@ -86,8 +90,10 @@ Clique no merchant (12)
 Trial (0,4)
         │  20–45% viram pagantes
         ▼
-Pagante (0,12)  ← a cada ~8 threads boas, 1 cliente
+Pagante (0,12)  ← a cada ~8 conversas boas, 1 cliente
 ```
+
+**O canal muda em cada elo.** A intenção pode nascer no Reddit e morrer no Reddit (se você não tiver perfil pronto); ou nascer no X, ser validada no YouTube e fechar no e-mail. O erro do operador solo é tentar fazer o funil inteiro em um canal só.
 
 Com LTV de comissão de US$ 534, o **valor por thread respondida** é ~US$ 67 — mas só se a thread tiver intenção real. Uma thread sem intenção vale US$ 0 independentemente da qualidade da resposta. **É por isso que o scoring é a camada que gera dinheiro, não a redação.**
 
@@ -95,8 +101,8 @@ Com LTV de comissão de US$ 534, o **valor por thread respondida** é ~US$ 67 �
 
 | Variável | Valor | Observação |
 |---|---|---|
-| Threads monitoradas/semana | 200 | 3–5 subs |
-| Threads com intenção real/semana | 18 (9%) | filtro do Scout |
+| Sinais monitorados/semana | 200 (Reddit) + 350 (X) + 40 (YouTube) | 3–5 subs, 3 buscas, 1 canal |
+| Sinais com intenção real/semana | 18 (9% no Reddit) + 6 (2% no X) | filtro do radar |
 | Respostas publicadas/semana | 12 | humano revisa e publica |
 | Cliques no perfil/semana | 40 | 8% das leituras das respostas |
 | Trials/semana | 1,5 | |
@@ -118,11 +124,17 @@ Com LTV de comissão de US$ 534, o **valor por thread respondida** é ~US$ 67 �
 | Quer rodar em sub que proíbe link orgânico | — | **Sim** — anúncio é a via legítima de pagar pelo espaço |
 | CAC orgânico < 30% do LTV | Sim | Escalar com cuidado |
 
-Benchmarks de Reddit Ads 2026 para calibrar: CPC US$ 0,50–4,00 (mediana US$ 1,25–1,85), CPM US$ 3–15 (mediana ~US$ 6,50), mínimo US$ 5/dia, teste real US$ 500–1.500. **Não existe teste válido com US$ 5/dia.**
+Benchmarks para calibrar (2026): **Reddit Ads** CPC US$ 0,50–4,00 (mediana US$ 1,25–1,85), CPM US$ 3–15, mínimo US$ 5/dia, teste real US$ 500–1.500. **Twitter/X Ads** não compensa para ticket baixo. **Meta** CPL US$ 50–75 para B2B SaaS; **LinkedIn** US$ 95–202 — os dois acima do seu LTV de US$ 534.
+
+::: alerta
+**A conta que mata a ideia de mídia para afiliado de baixo ticket:** CPL US$ 50 no Meta ÷ 2% de conversão = **US$ 2.500 por cliente** contra LTV de **US$ 534**. Mídia paga destrói esse modelo. O detalhamento está em [`08-custos-roi.md`](08-custos-roi.md).
+:::
 
 ---
 
-## 4. As rotas do Reddit — todas as formas de vender (mapa completo)
+## 4. As 11 rotas — todas as formas de vender (mapa completo)
+
+As rotas abaixo nasceram no Reddit (é onde cada uma é mais testável e barata), mas **cada uma tem equivalente nos outros canais**. Onde há diferença relevante, está anotado. A comparação consolidada, com o equivalente por canal, está em [`04-rotas-canal.md`](04-rotas-canal.md).
 
 Cada rota tem: como funciona, janela de risco, esforço, retorno esperado e se serve para afiliado ou imobiliária.
 
@@ -352,7 +364,7 @@ Premissas: conversão perfil→trial ~4–6%, trial→pago 30%, ticket US$ 99, c
 
 ::: meta
 **Objetivo:** provar ou matar a tese em 14 dias, gastando ~US$ 10 de API e 1 h/dia.
-**Material:** `grok-reddit-ops` (motor), `P3`/`P4`/`P5` (prompts), `rules.yaml` (regras por sub).
+**Material:** `grok-channel-ops` (motor + validador de canal), `P3`/`P4`/`P5` (prompts), `rules.yaml` (regras por sub), `src/channels.py` (limites dos 20 canais).
 :::
 
 | Fase | Dias | Ações | Entregável | Métrica |

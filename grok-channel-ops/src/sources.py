@@ -8,7 +8,7 @@ não exija mudar o pipeline:
     OAuthSource    -> API oficial do Reddit (OAuth2 client credentials)
 
 Nenhuma fonte raspa HTML do reddit.com: a API pública .json está bloqueada
-desde maio/2026 e o acesso comercial é contratual (ver docs/06-compliance.md).
+desde maio/2026 e o acesso comercial é contratual (ver docs/07-compliance.md).
 """
 
 from __future__ import annotations
@@ -112,7 +112,7 @@ class OAuthSource(RedditSource):
     def __init__(self, cfg: Config):
         self.client_id = os.getenv("REDDIT_CLIENT_ID", "")
         self.client_secret = os.getenv("REDDIT_CLIENT_SECRET", "")
-        self.user_agent = os.getenv("REDDIT_USER_AGENT", "grok-reddit-ops/1.0")
+        self.user_agent = os.getenv("REDDIT_USER_AGENT", "grok-channel-ops/1.0")
         self.subs = cfg.subreddits or ("SaaS",)
         self._token: str | None = None
 

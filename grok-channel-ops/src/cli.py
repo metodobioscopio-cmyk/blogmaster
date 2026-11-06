@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""grok-reddit-ops — copiloto de vendas para Reddit usando a API xAI.
+"""grok-channel-ops — copiloto de vendas para Reddit usando a API xAI.
 
 Camadas:
     radar   -> coleta threads e pontua intenção
@@ -150,7 +150,7 @@ def cmd_weekly(args, cfg) -> int:
 
 
 def cmd_doctor(args, cfg) -> int:
-    print("grok-reddit-ops · diagnóstico\n")
+    print("grok-channel-ops · diagnóstico\n")
     checks = [
         ("API key configurada", bool(cfg.api_key)),
         ("modelo principal", cfg.model),
@@ -229,7 +229,7 @@ def cmd_canais(args, cfg) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="grok-reddit-ops", description=__doc__,
+    p = argparse.ArgumentParser(prog="grok-channel-ops", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
 

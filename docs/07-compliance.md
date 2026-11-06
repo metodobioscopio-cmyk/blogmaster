@@ -1,12 +1,43 @@
-# Riscos, banimentos e defesa — o manual de sobrevivência
+# Compliance e riscos — o manual de sobrevivência (todos os canais)
 
-> **Por que este documento existe.** Todo projeto de bot morre na mesma ordem: primeiro toma erro de política, depois toma ban, depois tenta recorrer e descobre que não há recurso. **Este documento é a lista dos erros que custam a conta — e o procedimento para não cometê-los.**
+> **Por que este documento existe.** Todo projeto de bot morre na mesma ordem: primeiro toma erro de política, depois toma ban, depois tenta recorrer e descobre que não há recurso. **Este documento é a lista dos erros que custam a conta — em cada canal — e o procedimento para não cometê-los.**
 >
-> Ele não é jurídico. É operacional: o que fazer, em que ordem, e o que documentar antes que aconteça.
+> Ele não é jurídico. É operacional: o que fazer, em que ordem, e o que documentar antes que aconteça. Cobre as regras do Reddit (as mais detalhadas, porque é onde há moderador humano lendo), da Meta, do WhatsApp, do LinkedIn, do TikTok e a lei de e-mail nos três mercados.
 
 ::: meta
 **Regra base:** em 2026, a plataforma tem **dados, logs e poder de banimento unilaterais**. A única defesa eficaz é **prevenção documentada** — não contestação posterior.
 :::
+
+---
+
+## 0. Reddit — as três camadas de regra (o caso mais detalhado)
+
+Use esta seção como **modelo mental** para qualquer canal: política global → regra local → aplicação automática.
+
+### Camada 1: política global (sitewide)
+
+| Regra | O que diz | Como se aplica a você |
+|---|---|---|
+| **Spam** | Proíbe postar repetidamente conteúdo próprio, em massa, para ganho financeiro, e uso de bots/IA que facilitem spam | Sem copy-paste entre subs; sem volume automatizado |
+| **Manipulated Content** | Proíbe conteúdo de IA que "se apresenta como gerado por humano"; pede rótulo | Reescreva na sua voz; não finja experiência que não teve |
+| **Impersonation** | Proíbe se passar por outra pessoa/marca | Uma identidade real; sem "cliente fake" |
+| **Disrupting Communities** | Proíbe manipulação de voto e evasão de ban | Nunca peça upvote; nunca crie conta após ban |
+| **Rótulo `[App]`** (política de 25/03/2026) | Conta automatizada em modo permitido deve usar o rótulo | Seu bot não posta — a regra vale para perfis automatizados |
+| **Self-promotion** | Diretriz de ~9:1 | Trate como piso; operadores longevos rodam 19:1 |
+
+**Enforcement (2026):** ~23 mi de views de spam bloqueadas/dia · ~2 mi de votos inautênticos revogados/dia · ~100 mil contas automatizadas removidas/dia.
+
+### Camada 2: regra do subreddit (sempre prevalece)
+
+Em 64 comunidades analisadas: **34% proíbem autopromoção**, **23% permitem só sob 9:1**, **2% acolhem**. Muitas exigem 30+ dias e 100+ karma. Em 2026, `r/SaaS` e `r/startups` endureceram (categoria banida, 1 post/60 dias).
+
+### Camada 3: AutoModerator (a aplicação real)
+
+Remove **silenciosamente**. Regras típicas: karma mínimo, idade da conta, palavras proibidas ("DM", "check my", "free trial"), domínios bloqueados, flair obrigatória.
+
+**Como testar:** abra a thread deslogado. Se seu comentário não aparece, foi removido.
+
+**A tradução para os outros canais:** política global = Platform Terms; regra local = regra do grupo/página (grupos de Facebook, subs, comunidades); aplicação automática = classificador de spam da Meta/TikTok. **A lógica é idêntica; só muda quem julga.**
 
 ---
 

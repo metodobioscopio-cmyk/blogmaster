@@ -1,9 +1,11 @@
-# ESTUDO 2 — Real estate: como o Reddit + Grok produzem venda real
+# ESTUDO 2 — Real estate: como o Grok produz venda real, canal por canal
 
-> **Pergunta deste estudo.** Um corretor ou imobiliária consegue gerar negócio fechado usando Reddit como canal de aquisição e Grok como copiloto, competindo com portais que cobram R$ 40–120 por lead? **Resposta curta: sim — e o motivo não é o Reddit, é a janela dos 5 minutos que o Reddit expõe e os portais escondem.**
+> **Pergunta deste estudo.** Um corretor ou imobiliária consegue gerar negócio fechado usando um bot Grok como copiloto e um mix de canais que não dependa só de portal que cobra R$ 40–120 por lead? **Resposta curta: sim — e o motivo não é a tecnologia, é a janela dos 5 minutos que o portal esconde e o WhatsApp expõe.**
+>
+> **Nota de escopo (v2).** A v1 usava o Reddit como canal principal. A v2 mantém o Reddit como uma das rotas (útil para intenção declarada e para aparecer na busca por IA) e coloca no centro o que o mercado brasileiro realmente usa: **Instagram + WhatsApp**, com Google Business e Nextdoor para os EUA. Comparativo em [`04-rotas-canal.md`](04-rotas-canal.md); setup técnico em [`05-setup-tecnico.md`](05-setup-tecnico.md).
 
 ::: meta
-**Dois trilhos:** EUA (onde o Reddit é grande e o ticket é em dólar) e Brasil/Goiânia (onde você opera e tem vantagem de terreno). **Regras aplicáveis:** TCPA/FTC (EUA), LGPD + COFECI/CRECI + CONAR (Brasil).
+**Dois trilhos:** EUA (ticket em dólar, canais Nextdoor + Google + Meta) e Brasil/Goiânia (onde você opera e tem vantagem de terreno; canais Instagram + WhatsApp + Google Business). **Regras aplicáveis:** TCPA/FTC/Fair Housing (EUA), LGPD + COFECI/CRECI + CONAR (Brasil).
 :::
 
 ---
@@ -33,6 +35,8 @@
 | Corretores ativos no Brasil | ~580 mil (+40% em 5 anos) | COFECI-CRECI, jul/2025 |
 | CPL portais (ZAP/VivaReal/OLX) | **R$ 40–120** | benchmarks 2026 |
 | CPL Meta Ads (médio padrão) | R$ 15–40 | Papo Imobiliário, 2026 |
+| **Sponsorship Nextdoor (EUA)** | US$ 30–150 por ZIP/mês | Nextdoor, 2026 |
+| **Conversão lead→visita com WhatsApp <1 min** | **35%** (vs 15% sem automação) | dados BR, 2026 |
 | CPL Meta (alto padrão/lançamento) | R$ 40–100+ (até R$ 200+) | idem |
 | Conversão média do mercado BR | **1,52%** (estruturadas: 3–4,1%) | OLX/Facilita |
 | Comissão típica de venda | 5–6% | praxe de mercado |
@@ -67,20 +71,23 @@
 ## 2. O funil imobiliário real (e onde ele vaza)
 
 ```
-         Intenção declarada (Reddit/X/Google/portal)
+          Onde a intenção nasce (5 canais, não 1)
                           │
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
-   Portal (lead      Reddit post       Busca Google/IA
-   pago, R$40–120)   "onde investir     "melhor corretor
-        │             em Goiânia?"       Goiânia"
-        │                 │                 │
-        └────────┬────────┴────────┬────────┘
-                 ▼                 ▼
+   ┌──────────┬───────────┼───────────┬──────────┐
+   ▼          ▼           ▼           ▼          ▼
+ Portal    Instagram   Google      Reddit/X   Nextdoor
+ R$40–120  comentário  Maps/GBP    "onde      (EUA,
+ (BR)      → DM        "corretor   investir   vizinho
+           privada     Goiânia"    Goiânia?"  verificado)
+   │          │           │           │          │
+   └──────────┴─────────┬─┴───────────┴──────────┘
+                        ▼
         ┌──────────────────────────────────┐
         │  JANELA DOS 5 MINUTOS            │  ← 78% fecham com quem responde 1º
         │  (o vazamento de 90% do mercado) │
         └───────────────┬──────────────────┘
+                        ▼
+             ★ O canal da janela: WhatsApp / Messenger / DM
                         ▼
                  Qualificação (capacidade de crédito, urgência, bairro)
                         ▼
@@ -149,9 +156,25 @@ O vazamento é sempre o mesmo: **o lead chegou, ninguém respondeu em minutos, o
 
 ---
 
-## 4. As rotas do Reddit para real estate (mapa completo)
+## 4. As 11 rotas para real estate — e onde cada uma vive
 
-Mesmas 11 rotas do Estudo 1, traduzidas para o setor — com o que muda em cada uma.
+Mesmas 11 rotas do Estudo 1, traduzidas para o setor. **O que muda em relação à v1:** cada rota agora tem um **canal preferencial** — nenhuma mora só no Reddit.
+
+| # | Rota | Canal preferencial (BR) | Canal preferencial (EUA) |
+|---|---|---|---|
+| 1 | Comentário de alta intenção | Reddit, X, YouTube | Reddit, Nextdoor |
+| 2 | Post de análise de bairro | Instagram carrossel + Reddit | Nextdoor post + blog |
+| 3 | Educar sem vender | Instagram Reels | YouTube, Nextdoor |
+| 4 | Thread própria / comunidade | Reddit, Threads | Reddit, Facebook Page |
+| 5 | **Perfil como funil** | **Instagram bio + link** | Google Business + Nextdoor |
+| 6 | **DM consentida** | **WhatsApp (janela 24h)** | Messenger, iMessage |
+| 7 | Anúncio pago | Meta Ads, Google Ads | Meta, Google, Nextdoor |
+| 8 | AMA / live | Instagram Live, TikTok Live | Reddit AMA, Nextdoor |
+| 9 | Comunidade própria | grupo de WhatsApp/Telegram | e-mail, Facebook Group (manual) |
+| 10 | Parceria com criador local | creator de bairro no IG | agente parceiro, Nextdoor Fave |
+| 11 | GEO (ser citado por IA) | Reddit, blog, YouTube | Reddit, blog, YouTube |
+
+Os detalhes das rotas 1–11 estão abaixo, com foco no canal onde cada uma performa melhor no Brasil; o equivalente americano está anotado em cada bloco.
 
 ### Rota 1 — Comentário de alta intenção
 Threads-alvo: *"vale a pena comprar em Goiânia?"*, *"Setor Bueno ou Jardim Goiás?"*, *"alguém indica corretor em Goiânia?"*, *"is it a good time to buy?"*, *"how do I find a realtor?"*.
@@ -282,11 +305,12 @@ Como ler: US$ 14 mi ÷ 43 = **ticket médio de US$ 325 mil** — compatível com
 
 | Tarefa | Humano sozinho | Com Grok |
 |---|---|---|
-| Varrer 30 threads/dia em 4 subs | 45 min | 3 min |
+| Varrer 30 threads + 300 posts de X + comentários do IG | 2 h | 4 min |
 | Detectar intenção ("indica corretor", "vale a pena comprar em X") | Perde 60% | Score automático, 0 perda |
 | Calcular m², ITBI, financiamento na resposta | 15 min por resposta, com erro | 30 s, com cálculo verificado |
 | Redigir no tom do sub | 20 min | 2 min + revisão de 3 min |
 | Responder em < 5 min às 23h | Impossível | Alerta no celular + rascunho pronto |
+| Gerar 3 comparativos de bairro com foto e custo total | 2 h | 6 min (Grok Imagine) |
 | Manter registro de consentimento LGPD | Informal | Campo obrigatório no lead card |
 
 **O ganho real não é escrever mais rápido — é não perder a thread que apareceu às 22h47 de um sábado.** No imobiliário, essa thread vale R$ 40 mil.
@@ -298,13 +322,13 @@ Como ler: US$ 14 mi ÷ 43 = **ticket médio de US$ 325 mil** — compatível com
 | Fase | Dias | Ação | Entregável | Métrica |
 |---|---|---|---|---|
 | Setup | 0–1 | Definir 2 bairros foco + 1 segmento (investidor OU primeira compra); levantar m² com fonte | `bairros.md` com 6 números e fonte | Dados conferidos em 2 fontes |
-| Escuta | 2–3 | Radar em 4 subs (r/Goiania, r/investimentos, r/brasil, r/empreendedorismo) + `x_search` por "Goiânia apartamento" | 20 lead cards | ≥ 8 threads de intenção real |
-| Presença | 4–9 | 2 comentários/dia com número, sem oferta; 1 análise de bairro publicada | 12 comentários + 1 post | Zero remoção; ≥ 30 upvotes no post |
-| Conversão | 10–12 | Responder 3 threads de "indica corretor" com CRECI + oferta de comparativo | 3 respostas + registro de consentimento | ≥ 6 DMs iniciadas |
+| Escuta | 2–3 | Radar em 4 subs + `x_search` "Goiânia apartamento" + comentários do próprio IG + reviews do Google | 20 lead cards | ≥ 8 sinais de intenção real |
+| Presença | 4–9 | 2 comentários/dia com número (Reddit), 3 Stories, 1 Reel com Grok Imagine, 1 post no Google Business | 12 comentários + 5 peças | Zero remoção; ≥ 2 mil views no Reel |
+| Conversão | 10–12 | Responder 3 threads de "indica corretor" com CRECI + comentário→DM no Instagram + qualificação no WhatsApp (janela 24h) | 3 respostas + 6 conversas | ≥ 2 visitas agendadas |
 | Leitura | 13–14 | Rodar `P6`; calcular custo por visita agendada | Relatório | ≥ 2 visitas agendadas |
 
 ::: alerta
-**Critério de corte:** se em 14 dias você não tiver **nenhuma** DM vinda do Reddit, o problema é o sub ou a oferta — não a frequência. Troque de bairro/segmento antes de aumentar volume. Se tiver **remoção**, pare e releia `rules.yaml`: você está vendendo em vez de ajudar.
+**Critério de corte:** se em 14 dias você não tiver **nenhuma conversa** aberta em nenhum canal, o problema é a oferta (bairro, preço, posicionamento) — não a frequência. Se tiver **remoção** no Reddit, releia `rules.yaml`. Se o WhatsApp acusar **block rate > 2%**, pare imediatamente: você está mandando mensagem para quem não pediu. Os limites por canal estão em `src/channels.py` e validados por `python3 -m src.cli canais --check whatsapp --hours 30`.
 :::
 
 ---
@@ -326,11 +350,12 @@ Como ler: US$ 14 mi ÷ 43 = **ticket médio de US$ 325 mil** — compatível com
 
 ## 11. Teses finais do Estudo 2
 
-1. **No imobiliário, velocidade vence esperteza.** 78% fecham com quem responde primeiro; o bot existe para você ser esse primeiro.
-2. **Reddit não substitui o portal — substitui o desperdício.** O portal entrega lead que você perde por demora; o Reddit entrega conversa que ninguém está disputando.
-3. **No Brasil, a vantagem é local e de conteúdo.** Quem domina "m² do Setor Bueno com fonte" domina a pesquisa de 2027 — inclusive dentro das IAs.
-4. **O ticket justifica tudo.** R$ 40 mil por venda paga 1 h/dia por um ano. O risco não é custo, é desistir no mês 3.
-5. **Compliance não é freio, é fosso.** Corretor que sabe LGPD/CRECI/CONAR pode fazer conteúdo que os amadores não podem — e isso é vantagem competitiva.
+1. **No imobiliário, velocidade vence esperteza.** 78% fecham com quem responde primeiro; o bot existe para você ser esse primeiro — em qualquer canal.
+2. **O canal que fecha é a conversa, não o feed.** No Brasil é o WhatsApp; nos EUA são Messenger e telefone. Instagram, Nextdoor e Reddit apenas *abrem* a janela.
+3. **Cada mercado tem seu canal de entrada.** BR: Instagram + Google Business. EUA: Nextdoor + Google + Meta. Quem tenta copiar o mix do outro país queima orçamento.
+4. **No Brasil, a vantagem é local e de conteúdo.** Quem domina "m² do Setor Bueno com fonte" domina a pesquisa de 2027 — inclusive dentro das IAs.
+5. **O ticket justifica tudo.** R$ 40 mil por venda paga 1 h/dia por um ano. O risco não é custo, é desistir no mês 3.
+6. **Compliance não é freio, é fosso.** Corretor que sabe LGPD/CRECI/CONAR — e que respeita a janela de 24h — pode fazer o que os amadores não podem, e isso é vantagem competitiva.
 
 ---
 
@@ -343,5 +368,6 @@ Como ler: US$ 14 mi ÷ 43 = **ticket médio de US$ 325 mil** — compatível com
 - COFECI-CRECI (jul/2025) — ~580 mil corretores; Resolução COFECI 1.065/2007.
 - Papo Imobiliário (mai/2026), Credituz (2025), Converta Mais (2026) — CPL BR, CAC, perda por demora.
 - Cases: Callin (43 transações Chicago), Swift Headway (8 min de resposta, +US$ 380k GCI), Business Plus AI (PropertyConnect, resposta 47 min → 1,8 min, +43% conversão), Builder Cog (8% → 14% de conversão).
-- FTC/TCPA (2025–26); LGPD (Lei 13.709/2018); CONAR (2026).
+- FTC/TCPA (2025–26); LGPD (Lei 13.709/2018); CONAR (2026); Fair Housing Act (EUA).
+- Meta (2026) — janela de 24h, política de mensagens e CPL de imobiliário; Nextdoor (2026) — sponsorship US$ 30–150/ZIP; TikTok (2026) — CPL imobiliário US$ 18–38; Google Business Profile API (2026).
 - GEO: Ahrefs (set/2026), Seer Interactive, ConvertMate, AirOps (2026).

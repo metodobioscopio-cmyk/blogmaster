@@ -1,9 +1,9 @@
-# Case: 14 dias, 5 canais, US$ 47 — o que o bot realmente entregou
+# Case: 14 dias, 5 canais, US$ 30 — o que o bot realmente entregou
 
 > **O que este case é.** Uma simulação operacional auditável de um operador solo usando o motor Grok × multicanal por 14 dias, com dois mercados (afiliado SaaS e real estate Goiânia), registrando custo real de API e resultado por canal. **O que este case não é:** prova de resultado. Cada número tem rótulo — `[CITADO]`, `[CALCULADO]` ou `[SIMULADO]`. Nada aqui foi vendido de fato.
 
 ::: meta
-**Por que simular em vez de inventar um case real:** case inventado com número bonito é a praga do mercado de marketing digital. A alternativa honesta é declarar o que é cálculo, o que vem de benchmark citado e o que é projeção. Você pode reexecutar tudo: o motor está em `grok-reddit-ops/`, os prompts em `prompts/`, as regras em `src/channels.py`.
+**Por que simular em vez de inventar um case real:** case inventado com número bonito é a praga do mercado de marketing digital. A alternativa honesta é declarar o que é cálculo, o que vem de benchmark citado e o que é projeção. Você pode reexecutar tudo: o motor está em `grok-channel-ops/`, os prompts em `prompts/`, as regras em `src/channels.py`.
 **Câmbio:** R$ 5,50/US$. **Data da simulação:** novembro/2026.
 :::
 
@@ -174,7 +174,7 @@ Motivo: emoji no header. Reprovação custa 24h. **Faça o template antes de pre
 ```bash
 # 1. infraestrutura (30 min)
 cp .env.example .env        # preencha XAI_API_KEY
-cd grok-reddit-ops
+cd grok-channel-ops
 python3 -m src.cli doctor
 
 # 2. validar as regras antes de conectar qualquer canal

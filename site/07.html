@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Riscos & bans · Grok × Canais</title>
+<title>Compliance · Grok × Canais</title>
 <meta name="description" content="Dossiê operacional multicanal: Grok bot de vendas para affiliate marketing e real estate.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -24,19 +24,22 @@
   <aside class="sidebar" id="sidebar">
     <nav class="nav">
       <span class="nav__label">Dossiê</span>
-      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+      <span class="nav__part"><em>Parte I</em>O fundamento</span>
+<a class="nav__link" href="00.html"><span class="nav__num">00</span>O bot</a>
+<span class="nav__part"><em>Parte II</em>Os dois mercados</span>
 <a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
 <a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
-<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
-<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
-<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
-<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
-<a class="nav__link" href="c1.html"><span class="nav__num">C1</span>Mapa dos canais</a>
-<a class="nav__link" href="c2.html"><span class="nav__num">C2</span>Setup técnico</a>
-<a class="nav__link" href="c3.html"><span class="nav__num">C3</span>Custos &amp; ROI</a>
-<a class="nav__link active" href="c4.html"><span class="nav__num">C4</span>Riscos &amp; bans</a>
-<a class="nav__link" href="c5.html"><span class="nav__num">C5</span>Case 14 dias</a>
-<a class="nav__link" href="motor.html"><span class="nav__num">M</span>Motor em Python</a>
+<span class="nav__part"><em>Parte III</em>Os canais</span>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Os 20 canais</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>As 11 rotas</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Setup técnico</a>
+<span class="nav__part"><em>Parte IV</em>A operação</span>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Playbook</a>
+<a class="nav__link active" href="07.html"><span class="nav__num">07</span>Compliance</a>
+<a class="nav__link" href="08.html"><span class="nav__num">08</span>Custos &amp; ROI</a>
+<a class="nav__link" href="09.html"><span class="nav__num">09</span>Case · 14 dias</a>
+<a class="nav__link" href="10.html"><span class="nav__num">10</span>Plano &amp; piloto</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">M</span>O motor</a>
     </nav>
     <div class="sidebar__foot">
       <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
@@ -45,15 +48,67 @@
 
   <main class="main">
     <article class="doc">
-      <p class="eyebrow">DOC C4 · 12 MIN DE LEITURA</p>
-      <h1 class="doc__title">Riscos, banimentos e defesa — o manual de sobrevivência</h1>
+      <p class="eyebrow">DOC 07 · 14 MIN DE LEITURA</p>
+      <h1 class="doc__title">Compliance e riscos — o manual de sobrevivência (todos os canais)</h1>
       <blockquote>
-<p><strong>Por que este documento existe.</strong> Todo projeto de bot morre na mesma ordem: primeiro toma erro de política, depois toma ban, depois tenta recorrer e descobre que não há recurso. <strong>Este documento é a lista dos erros que custam a conta — e o procedimento para não cometê-los.</strong></p>
-<p>Ele não é jurídico. É operacional: o que fazer, em que ordem, e o que documentar antes que aconteça.</p>
+<p><strong>Por que este documento existe.</strong> Todo projeto de bot morre na mesma ordem: primeiro toma erro de política, depois toma ban, depois tenta recorrer e descobre que não há recurso. <strong>Este documento é a lista dos erros que custam a conta — em cada canal — e o procedimento para não cometê-los.</strong></p>
+<p>Ele não é jurídico. É operacional: o que fazer, em que ordem, e o que documentar antes que aconteça. Cobre as regras do Reddit (as mais detalhadas, porque é onde há moderador humano lendo), da Meta, do WhatsApp, do LinkedIn, do TikTok e a lei de e-mail nos três mercados.</p>
 </blockquote>
 <div class="callout callout--meta" markdown="0"><div class="callout__head"><span class="callout__icon">◷</span><span class="callout__label">Contexto</span></div>
 <div class="callout__body"><p><strong>Regra base:</strong> em 2026, a plataforma tem <strong>dados, logs e poder de banimento unilaterais</strong>. A única defesa eficaz é <strong>prevenção documentada</strong> — não contestação posterior.</p></div></div>
 
+<hr />
+<h2 id="0-reddit-as-tres-camadas-de-regra-o-caso-mais-detalhado">0. Reddit — as três camadas de regra (o caso mais detalhado)<a class="headerlink" href="#0-reddit-as-tres-camadas-de-regra-o-caso-mais-detalhado" title="Permanent link">&para;</a></h2>
+<p>Use esta seção como <strong>modelo mental</strong> para qualquer canal: política global → regra local → aplicação automática.</p>
+<h3 id="camada-1-politica-global-sitewide">Camada 1: política global (sitewide)<a class="headerlink" href="#camada-1-politica-global-sitewide" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>O que diz</th>
+<th>Como se aplica a você</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Spam</strong></td>
+<td>Proíbe postar repetidamente conteúdo próprio, em massa, para ganho financeiro, e uso de bots/IA que facilitem spam</td>
+<td>Sem copy-paste entre subs; sem volume automatizado</td>
+</tr>
+<tr>
+<td><strong>Manipulated Content</strong></td>
+<td>Proíbe conteúdo de IA que "se apresenta como gerado por humano"; pede rótulo</td>
+<td>Reescreva na sua voz; não finja experiência que não teve</td>
+</tr>
+<tr>
+<td><strong>Impersonation</strong></td>
+<td>Proíbe se passar por outra pessoa/marca</td>
+<td>Uma identidade real; sem "cliente fake"</td>
+</tr>
+<tr>
+<td><strong>Disrupting Communities</strong></td>
+<td>Proíbe manipulação de voto e evasão de ban</td>
+<td>Nunca peça upvote; nunca crie conta após ban</td>
+</tr>
+<tr>
+<td><strong>Rótulo <code>[App]</code></strong> (política de 25/03/2026)</td>
+<td>Conta automatizada em modo permitido deve usar o rótulo</td>
+<td>Seu bot não posta — a regra vale para perfis automatizados</td>
+</tr>
+<tr>
+<td><strong>Self-promotion</strong></td>
+<td>Diretriz de ~9:1</td>
+<td>Trate como piso; operadores longevos rodam 19:1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Enforcement (2026):</strong> ~23 mi de views de spam bloqueadas/dia · ~2 mi de votos inautênticos revogados/dia · ~100 mil contas automatizadas removidas/dia.</p>
+<h3 id="camada-2-regra-do-subreddit-sempre-prevalece">Camada 2: regra do subreddit (sempre prevalece)<a class="headerlink" href="#camada-2-regra-do-subreddit-sempre-prevalece" title="Permanent link">&para;</a></h3>
+<p>Em 64 comunidades analisadas: <strong>34% proíbem autopromoção</strong>, <strong>23% permitem só sob 9:1</strong>, <strong>2% acolhem</strong>. Muitas exigem 30+ dias e 100+ karma. Em 2026, <code>r/SaaS</code> e <code>r/startups</code> endureceram (categoria banida, 1 post/60 dias).</p>
+<h3 id="camada-3-automoderator-a-aplicacao-real">Camada 3: AutoModerator (a aplicação real)<a class="headerlink" href="#camada-3-automoderator-a-aplicacao-real" title="Permanent link">&para;</a></h3>
+<p>Remove <strong>silenciosamente</strong>. Regras típicas: karma mínimo, idade da conta, palavras proibidas ("DM", "check my", "free trial"), domínios bloqueados, flair obrigatória.</p>
+<p><strong>Como testar:</strong> abra a thread deslogado. Se seu comentário não aparece, foi removido.</p>
+<p><strong>A tradução para os outros canais:</strong> política global = Platform Terms; regra local = regra do grupo/página (grupos de Facebook, subs, comunidades); aplicação automática = classificador de spam da Meta/TikTok. <strong>A lógica é idêntica; só muda quem julga.</strong></p>
 <hr />
 <h2 id="1-a-tabela-central-dos-riscos">1. A tabela central dos riscos<a class="headerlink" href="#1-a-tabela-central-dos-riscos" title="Permanent link">&para;</a></h2>
 <table>
@@ -682,8 +737,8 @@ RISCO BAIXO (erro técnico)
     </article>
 
     <nav class="pager">
-      <a class="pager__link" href="c3.html"><span class="pager__label">← Anterior</span><span class="pager__title">Custos &amp; ROI</span></a>
-      <a class="pager__link" href="c5.html"><span class="pager__label">Próximo →</span><span class="pager__title">Case 14 dias</span></a>
+      <a class="pager__link" href="06.html"><span class="pager__label">← Anterior</span><span class="pager__title">Playbook</span></a>
+      <a class="pager__link" href="08.html"><span class="pager__label">Próximo →</span><span class="pager__title">Custos &amp; ROI</span></a>
     </nav>
     <footer class="foot">
       <p>grok-reddit-ops · dossiê operacional · 2026</p>
@@ -695,6 +750,12 @@ RISCO BAIXO (erro técnico)
     <span class="toc__label">Nesta página</span>
     <div class="toc">
 <ul>
+<li><a href="#0-reddit-as-tres-camadas-de-regra-o-caso-mais-detalhado">0. Reddit — as três camadas de regra (o caso mais detalhado)</a><ul>
+<li><a href="#camada-1-politica-global-sitewide">Camada 1: política global (sitewide)</a></li>
+<li><a href="#camada-2-regra-do-subreddit-sempre-prevalece">Camada 2: regra do subreddit (sempre prevalece)</a></li>
+<li><a href="#camada-3-automoderator-a-aplicacao-real">Camada 3: AutoModerator (a aplicação real)</a></li>
+</ul>
+</li>
 <li><a href="#1-a-tabela-central-dos-riscos">1. A tabela central dos riscos</a></li>
 <li><a href="#2-os-seis-banimentos-que-realmente-acontecem">2. Os seis banimentos que realmente acontecem</a><ul>
 <li><a href="#21-linkedin-o-ban-mais-rapido-e-mais-definitivo">2.1 LinkedIn — o ban mais rápido e mais definitivo</a></li>
