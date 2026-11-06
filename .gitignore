@@ -1,0 +1,12 @@
+# segredos
+.env
+*.env
+!.env.example
+grok-reddit-ops/.env
+grok-reddit-ops/output/*.jsonl
+grok-reddit-ops/output/drafts/
+__pycache__/
+*.pyc
+.DS_Store
+node_modules/
+.venv/

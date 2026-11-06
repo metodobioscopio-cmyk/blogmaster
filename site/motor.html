@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motor em Python · Grok × Reddit</title>
+<meta name="description" content="Dossiê operacional: Grok bot de vendas para affiliate marketing e real estate via Reddit.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Reddit</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link active" href="motor.html"><span class="nav__num">07</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC 07 · 4 MIN DE LEITURA</p>
+      <h1 class="doc__title">grok-reddit-ops</h1>
+      <p>Copiloto de vendas para Reddit usando a API da xAI (Grok). Transforma threads públicas em <strong>lead cards qualificados</strong> e <strong>rascunhos de resposta</strong>, sempre com revisão humana antes de publicar.</p>
+<blockquote>
+<p><strong>O que este projeto não faz:</strong> não posta, não vota, não cria contas, não manda DM em massa, não raspa o Reddit. A publicação é sempre sua. Essa é a diferença entre um canal que dura anos e uma conta que dura uma semana.</p>
+</blockquote>
+<hr />
+<h2 id="instalacao-30-segundos-zero-dependencias">Instalação (30 segundos, zero dependências)<a class="headerlink" href="#instalacao-30-segundos-zero-dependencias" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">cd grok-reddit-ops
+cp .env.example .env       # opcional: preencha XAI_API_KEY para usar o modelo
+python3 -m src.cli doctor
+</code></pre>
+<p>Requisito: Python 3.10+. Sem <code>pip install</code> — o cliente HTTP usa a biblioteca padrão.</p>
+<hr />
+<h2 id="uso">Uso<a class="headerlink" href="#uso" title="Permanent link">&para;</a></h2>
+<h3 id="1-radar-achar-as-threads-que-importam">1. Radar: achar as threads que importam<a class="headerlink" href="#1-radar-achar-as-threads-que-importam" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash"># demonstração offline, custo zero (dados de exemplo)
+python3 -m src.cli radar --source fixture --limit 12
+
+# com o modelo ligado (usa XAI_API_KEY do .env)
+python3 -m src.cli radar --source fixture --limit 12 --top 8
+
+# analisar uma thread específica que você colou
+python3 -m src.cli radar --source manual --sub r/Goiania --text &quot;Alguém indica corretor no Bueno?&quot;
+</code></pre>
+<p>Saída: <code>output/leads.jsonl</code> + tabela no terminal, ordenada por score.</p>
+<h3 id="2-scribe-redigir-a-resposta">2. Scribe: redigir a resposta<a class="headerlink" href="#2-scribe-redigir-a-resposta" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">python3 -m src.cli scribe --lead output/leads.jsonl --index 0 --save
+</code></pre>
+<p>Saída: rascunho no terminal + <code>output/drafts/draft_00.md</code> com checklist e avisos de compliance.</p>
+<h3 id="3-weekly-decidir-com-numero-nao-com-sensacao">3. Weekly: decidir com número, não com sensação<a class="headerlink" href="#3-weekly-decidir-com-numero-nao-com-sensacao" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">python3 -m src.cli weekly --input output/leads.jsonl \
+  --posts 12 --clicks 45 --conversations 6 --trials 2 --sales 1 --revenue 534
+</code></pre>
+<p>Saída: <code>output/weekly.md</code> com funil, ranking por sub e <strong>veredito</strong> (manter / pivotar / escalar).</p>
+<h3 id="4-doctor-checar-configuracao">4. Doctor: checar configuração<a class="headerlink" href="#4-doctor-checar-configuracao" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">python3 -m src.cli doctor
+</code></pre>
+<hr />
+<h2 id="testes">Testes<a class="headerlink" href="#testes" title="Permanent link">&para;</a></h2>
+<pre><code class="language-bash">python3 tests/test_core.py      # 12 testes, sem pytest
+# ou
+python3 -m pytest tests -q
+</code></pre>
+<p>Os testes cobrem: scoring, parsers, orçamento, guarda-corpo do <code>x_search</code>, pipeline ponta a ponta offline e regras de veredito.</p>
+<hr />
+<h2 id="arquitetura">Arquitetura<a class="headerlink" href="#arquitetura" title="Permanent link">&para;</a></h2>
+<pre><code>src/
+├── cli.py        comandos: radar | scribe | weekly | doctor
+├── config.py     tudo por env (.env), nada hardcoded
+├── grok.py       cliente Responses API + Budget + Usage + JSON tolerante
+├── sources.py    FixtureSource | ManualSource | OAuthSource + parser de rules.yaml
+├── pipeline.py   scoring heurístico, prompts, radar, scribe, guard-rails
+├── report.py     funil, KPIs e veredito go/no-go
+fixtures/         threads de exemplo (afiliados + imobiliário Goiânia)
+prompts/          P1..P7 versionados, prontos para colar no app ou na API
+rules.yaml        regra por subreddit (link permitido, disclosure, tolerância)
+output/           leads.jsonl, weekly.md, drafts/
+</code></pre>
+<h3 id="fluxo">Fluxo<a class="headerlink" href="#fluxo" title="Permanent link">&para;</a></h3>
+<pre><code>fonte (fixture/manual/oauth)
+      ↓
+scoring heurístico  ──►  corte de custo (só chama o modelo se passa do limiar)
+      ↓
+Grok (lead card JSON)  ──►  fila priorizada
+      ↓
+Grok (rascunho)  ──►  checagens automáticas de compliance
+      ↓
+HUMANO reescreve e publica
+      ↓
+weekly.md  ──►  decisão (manter / pivotar / escalar)
+</code></pre>
+<hr />
+<h2 id="controle-de-custo">Controle de custo<a class="headerlink" href="#controle-de-custo" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Alavanca</th>
+<th>Implementação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cascata de modelos</td>
+<td>heurística → <code>grok-4.1-fast</code> → <code>grok-4.3</code></td>
+</tr>
+<tr>
+<td>Orçamento diário</td>
+<td><code>DAILY_BUDGET_USD</code> (padrão US$ 1,00) — o cliente <strong>para</strong> ao estourar</td>
+</tr>
+<tr>
+<td>Teto de <code>x_search</code></td>
+<td><code>X_SEARCH_POSTS_BUDGET</code> (padrão 200 posts/dia)</td>
+</tr>
+<tr>
+<td>Cache de prompt</td>
+<td><code>prompt_cache_key</code> estável no system prompt</td>
+</tr>
+<tr>
+<td>Recorte de contexto</td>
+<td>corpo limitado a 2.000 chars + 5 comentários</td>
+</tr>
+</tbody>
+</table>
+<p>Custo medido na simulação do playbook: <strong>≈ US$ 2,34 por 1.000 threads</strong> (triagem + scoring + redação + web search).</p>
+<hr />
+<h2 id="modos-de-fonte-de-dados">Modos de fonte de dados<a class="headerlink" href="#modos-de-fonte-de-dados" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Modo</th>
+<th>Quando usar</th>
+<th>Requer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fixture</code></td>
+<td>desenvolvimento, demo, treinar o time</td>
+<td>nada</td>
+</tr>
+<tr>
+<td><code>manual</code></td>
+<td>analisar uma thread que você viu</td>
+<td>nada</td>
+</tr>
+<tr>
+<td><code>oauth</code></td>
+<td>operação com a API oficial</td>
+<td><code>REDDIT_CLIENT_ID</code>, <code>REDDIT_CLIENT_SECRET</code> aprovados</td>
+</tr>
+</tbody>
+</table>
+<p>A API oficial do Reddit exige acordo para uso comercial (a tabela pública termina em <strong>março de 2027</strong>). Ver <code>docs/06-compliance.md</code>.</p>
+<hr />
+<h2 id="seguranca-e-compliance-embutidos">Segurança e compliance embutidos<a class="headerlink" href="#seguranca-e-compliance-embutidos" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Regra por sub (<code>rules.yaml</code>): se <code>link_allowed: false</code>, o Scribe <strong>não</strong> coloca link.</li>
+<li>Disclosure obrigatório quando há menção comercial (<code>DISCLOSURE_MODE=strict</code>).</li>
+<li>Bloqueio de linguagem de promessa ("garantido", "renda certa").</li>
+<li>Checklist de 8 itens em todo rascunho.</li>
+<li><code>[VERIFICAR]</code> em todo número que o humano precisa confirmar.</li>
+</ul>
+<hr />
+<h2 id="variaveis-de-ambiente">Variáveis de ambiente<a class="headerlink" href="#variaveis-de-ambiente" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Padrão</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XAI_API_KEY</code></td>
+<td>—</td>
+<td>chave da API xAI (sem ela, roda offline)</td>
+</tr>
+<tr>
+<td><code>XAI_BASE_URL</code></td>
+<td><code>https://api.x.ai/v1</code></td>
+<td>endpoint (compatível OpenAI-style)</td>
+</tr>
+<tr>
+<td><code>GROK_MODEL</code></td>
+<td><code>grok-4.3</code></td>
+<td>modelo principal</td>
+</tr>
+<tr>
+<td><code>GROK_MODEL_FAST</code></td>
+<td><code>grok-4.1-fast</code></td>
+<td>modelo de triagem</td>
+</tr>
+<tr>
+<td><code>REDDIT_SOURCE</code></td>
+<td><code>fixture</code></td>
+<td><code>fixture</code> | <code>manual</code> | <code>oauth</code></td>
+</tr>
+<tr>
+<td><code>MIN_SCORE</code></td>
+<td><code>60</code></td>
+<td>corte de intenção</td>
+</tr>
+<tr>
+<td><code>DAILY_BUDGET_USD</code></td>
+<td><code>1.00</code></td>
+<td>freio de custo</td>
+</tr>
+<tr>
+<td><code>X_SEARCH_POSTS_BUDGET</code></td>
+<td><code>200</code></td>
+<td>teto de posts do X por execução</td>
+</tr>
+<tr>
+<td><code>DAILY_DRAFT_CAP</code></td>
+<td><code>8</code></td>
+<td>rascunhos por dia (anti-overposting)</td>
+</tr>
+<tr>
+<td><code>DISCLOSURE_MODE</code></td>
+<td><code>strict</code></td>
+<td>disclosure obrigatório</td>
+</tr>
+<tr>
+<td><code>SUBREDDITS</code></td>
+<td>—</td>
+<td>lista separada por vírgula (modo oauth)</td>
+</tr>
+<tr>
+<td><code>LANGUAGE</code></td>
+<td><code>pt-BR</code></td>
+<td>idioma das respostas</td>
+</tr>
+<tr>
+<td><code>MARKET</code></td>
+<td><code>br</code></td>
+<td><code>br</code> ou <code>us</code> (muda disclosure e regras)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="limitacoes-conhecidas">Limitações conhecidas<a class="headerlink" href="#limitacoes-conhecidas" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Scoring offline é heurístico.</strong> Bom para triagem, não substitui o modelo. Calibre com 20 threads rotuladas (<code>prompts/P3-radar.md</code>).</li>
+<li><strong>Atribuição é manual.</strong> O bot não vê vendas; você informa os números no <code>weekly</code>.</li>
+<li><strong><code>x_search</code> não está ligado por padrão.</strong> É a ferramenta mais cara (US$ 5/1.000 posts). Ligue quando tiver orçamento e parâmetros definidos.</li>
+<li><strong>Nomes de modelo mudam.</strong> <code>GROK_MODEL</code> existe justamente para você trocar sem editar código.</li>
+<li><strong>Não substitui julgamento.</strong> Um lead card com score 95 numa thread que você não domina continua sendo uma thread que você não deve responder.</li>
+</ol>
+<hr />
+<h2 id="proximos-passos-sugeridos">Próximos passos sugeridos<a class="headerlink" href="#proximos-passos-sugeridos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Prioridade</th>
+<th>O que</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Rodar o piloto de 14 dias (<code>docs/05-plano-90-dias.md</code>)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Rotular 20 threads e calibrar o score</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Ligar <code>x_search</code> com <code>from_date</code> e <code>allowed_x_handles</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Conectar o <code>weekly</code> ao CRM via webhook</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Só então considerar Reddit Ads (<code>prompts/P7-midia.md</code>)</td>
+</tr>
+</tbody>
+</table>
+    </article>
+
+    <nav class="pager">
+      <a class="pager__link" href="06.html"><span class="pager__label">← Anterior</span><span class="pager__title">Compliance</span></a>
+      <span></span>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#instalacao-30-segundos-zero-dependencias">Instalação (30 segundos, zero dependências)</a></li>
+<li><a href="#uso">Uso</a><ul>
+<li><a href="#1-radar-achar-as-threads-que-importam">1. Radar: achar as threads que importam</a></li>
+<li><a href="#2-scribe-redigir-a-resposta">2. Scribe: redigir a resposta</a></li>
+<li><a href="#3-weekly-decidir-com-numero-nao-com-sensacao">3. Weekly: decidir com número, não com sensação</a></li>
+<li><a href="#4-doctor-checar-configuracao">4. Doctor: checar configuração</a></li>
+</ul>
+</li>
+<li><a href="#testes">Testes</a></li>
+<li><a href="#arquitetura">Arquitetura</a><ul>
+<li><a href="#fluxo">Fluxo</a></li>
+</ul>
+</li>
+<li><a href="#controle-de-custo">Controle de custo</a></li>
+<li><a href="#modos-de-fonte-de-dados">Modos de fonte de dados</a></li>
+<li><a href="#seguranca-e-compliance-embutidos">Segurança e compliance embutidos</a></li>
+<li><a href="#variaveis-de-ambiente">Variáveis de ambiente</a></li>
+<li><a href="#limitacoes-conhecidas">Limitações conhecidas</a></li>
+<li><a href="#proximos-passos-sugeridos">Próximos passos sugeridos</a></li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: EPC, LGPD, x_search)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

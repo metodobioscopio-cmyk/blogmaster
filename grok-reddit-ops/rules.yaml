@@ -1,0 +1,146 @@
+# Regras por subreddit — fonte de verdade usada pelo Scribe.
+#
+# ATENÇÃO: regras mudam. Este arquivo foi montado a partir de fontes públicas
+# verificadas em nov/2026. Revise mensalmente e SEMPRE confira o sidebar do sub
+# antes de publicar. Na dúvida, use link_allowed: false (o padrão seguro).
+#
+# Campos:
+#   link_allowed       -> se o sub permite link de conteúdo próprio no comentário/post
+#   disclosure_required-> se menção comercial exige divulgação explícita
+#   promo_tolerance    -> low | medium | high
+#   cadence            -> frequência sugerida de conteúdo promocional
+#   notes              -> o que derruba o post
+
+subreddits:
+  r/AffiliateMarketing:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "1 post/60 dias; comentários diários"
+    notes: "Sem link de afiliado, sem código de referral, sem curso/coaching na bio do post. Tolerância ~10%."
+
+  r/JustStart:
+    link_allowed: true
+    disclosure_required: true
+    promo_tolerance: medium
+    cadence: "1 post/mês"
+    notes: "Aceita 'how I did X' com números reais. Rejeita post sem dado."
+
+  r/SEO:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "somente comentários"
+    notes: "Muito rigoroso. Só conteúdo técnico verificável."
+
+  r/SaaS:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "1 post/60 dias"
+    notes: "Regras endurecidas em 2026; categoria de autopromoção limitada."
+
+  r/Entrepreneur:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "raro"
+    notes: "Conta antiga obrigatória; AutoMod remove conta nova."
+
+  r/SideProject:
+    link_allowed: true
+    disclosure_required: true
+    promo_tolerance: high
+    cadence: "semanal"
+    notes: "Sub designado para lançamento. Ainda assim, escreva como build in public."
+
+  r/SmallBusiness:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "comentários"
+    notes: "Odeia jargão de agência."
+
+  r/RealEstate:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "comentários + 1 post/mês"
+    notes: "Só análise de mercado e experiência. Qualquer 'me chama' é removido."
+
+  r/realestateinvesting:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "1 post/mês"
+    notes: "Exige números reais de deal. Post sem número é ignorado/removido."
+
+  r/FirstTimeHomeBuyer:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "comentários"
+    notes: "Público sensível; empatia primeiro. Venda disfarçada recebe downvote massivo."
+
+  r/realtors:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: medium
+    cadence: "comentários"
+    notes: "Público é o próprio corretor. Ferramentas são bem-vindas se úteis."
+
+  r/investimentos:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "comentários + 1 post/trimestre"
+    notes: "Anti-pump. Dado com fonte vale mais que opinião. Sem 'oportunidade'."
+
+  r/empreendedorismo:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "comentários"
+    notes: "Moderação rigorosa contra spam."
+
+  r/brasilcoders:
+    link_allowed: true
+    disclosure_required: true
+    promo_tolerance: medium
+    cadence: "comentários + 1 post/90 dias"
+    notes: "Público técnico: aceita transparência em build público, rejeita marketing."
+
+  r/StartupsBrasil:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "comentários"
+    notes: "Anti-spam rígida."
+
+  r/Goiania:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: medium
+    cadence: "comentários + 1 post/60 dias"
+    notes: "Sub local: conteúdo de bairro com dado real é bem-vindo; anúncio de imóvel é removido."
+
+  r/brasil:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: low
+    cadence: "somente comentários úteis"
+    notes: "Sub geral e politizado. Nunca promova; use para escuta."
+
+  r/MEI:
+    link_allowed: false
+    disclosure_required: true
+    promo_tolerance: medium
+    cadence: "comentários"
+    notes: "Perguntas simples e recorrentes; responde quem ajuda de verdade."
+
+defaults:
+  link_allowed: false
+  disclosure_required: true
+  promo_tolerance: low
+  cadence: "comentários diários"
+  notes: "Padrão conservador: sem link, com disclosure."

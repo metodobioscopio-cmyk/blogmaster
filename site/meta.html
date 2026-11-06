@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meta-pesquisa · Grok × Reddit</title>
+<meta name="description" content="Dossiê operacional: Grok bot de vendas para affiliate marketing e real estate via Reddit.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Reddit</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link active" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">07</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC 00 · 12 MIN DE LEITURA</p>
+      <h1 class="doc__title">Meta-pesquisa: o que é (e o que não é) um &quot;Grok bot&quot; de vendas</h1>
+      <blockquote>
+<p><strong>Escopo deste documento.</strong> Investigação sobre o estado real da plataforma Grok/xAI em novembro de 2026, o que ela faz melhor do que as alternativas, quanto custa de verdade operá-la e qual arquitetura sobrevive ao contato com as regras do Reddit. É o alicerce dos dois estudos de mercado que vêm depois.</p>
+</blockquote>
+<div class="callout callout--meta" markdown="0"><div class="callout__head"><span class="callout__icon">◷</span><span class="callout__label">Contexto</span></div>
+<div class="callout__body"><p><strong>Verificado em:</strong> 06/11/2026 · <strong>Fontes:</strong> docs.x.ai, pricing público xAI, relatórios trimestrais da Reddit (Q2 2026), política de conteúdo Reddit (mar/2026), FTC 16 CFR 255, CONAR 2026, FCC/TCPA.
+<strong>Regra de leitura:</strong> preços de modelo e de ferramenta mudam a cada trimestre. Trate toda cifra como <em>ordem de grandeza verificada</em>, não como contrato.</p></div></div>
+
+<hr />
+<h2 id="1-definicao-tres-coisas-diferentes-chamadas-grok-bot">1. Definição: três coisas diferentes chamadas "Grok bot"<a class="headerlink" href="#1-definicao-tres-coisas-diferentes-chamadas-grok-bot" title="Permanent link">&para;</a></h2>
+<p>A expressão aparece no mercado com três significados que se confundem. Separar isso é o primeiro passo para não comprar a coisa errada.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>O que é</th>
+<th>O que faz</th>
+<th>Serve para vender?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td><strong>Grok consumidor</strong> (app e web, SuperGrok ~US$ 30/mês)</td>
+<td>Chat, DeepSearch, geração de imagem/vídeo, acesso a X</td>
+<td>Só para pesquisa manual e produção de conteúdo. Não automatiza nada.</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td><strong>Grok Business/Enterprise</strong> (US$ 30/assento/mês; Enterprise sob consulta)</td>
+<td>Grok com SOC 2, RBAC, SSO, sem treino nos seus dados</td>
+<td>Uso interno de equipe: analisar conversas, redigir, resumir. Não posta, não prospecta.</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td><strong>Bot operado por Grok</strong> (o que este dossiê entrega)</td>
+<td>Programa próprio que chama a <strong>API da xAI</strong> com ferramentas (<code>x_search</code>, <code>web_search</code>), pontua intenção de compra, redige resposta e entrega ao humano</td>
+<td><strong>Sim — é o único dos três que gera pipeline.</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Este dossiê trata de <strong>C</strong>. A tese central, que a pesquisa sustenta: <em>o valor não está no modelo, está no encanamento entre o modelo e o lugar onde a conversa de compra acontece.</em> Grok é commodity; o diferencial é o acesso nativo ao X e o custo por token. O Reddit é onde a intenção fica escrita em texto público. O bot é a ponte.</p>
+<hr />
+<h2 id="2-estado-da-plataforma-em-nov2026">2. Estado da plataforma em nov/2026<a class="headerlink" href="#2-estado-da-plataforma-em-nov2026" title="Permanent link">&para;</a></h2>
+<h3 id="21-modelos-e-preco-por-milhao-de-tokens">2.1 Modelos e preço por milhão de tokens<a class="headerlink" href="#21-modelos-e-preco-por-milhao-de-tokens" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Input</th>
+<th>Input em cache</th>
+<th>Output</th>
+<th>Contexto</th>
+<th>Papel na operação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grok-4.6</code> (flagship)</td>
+<td>US$ 2,00</td>
+<td>US$ 0,50</td>
+<td>US$ 6,00</td>
+<td>500K</td>
+<td>Análise de threads longas, due diligence de lead, redação final</td>
+</tr>
+<tr>
+<td><code>grok-4.5</code></td>
+<td>US$ 2,00</td>
+<td>US$ 0,30</td>
+<td>US$ 6,00</td>
+<td>500K</td>
+<td>Alternativa ao 4.6 com cache mais barato</td>
+</tr>
+<tr>
+<td><code>grok-4.3</code></td>
+<td>US$ 1,25</td>
+<td>US$ 0,20</td>
+<td>US$ 2,50</td>
+<td>1M</td>
+<td><strong>Cavalo de batalha</strong>: classificação, redação em volume</td>
+</tr>
+<tr>
+<td><code>grok-4.1-fast</code></td>
+<td>US$ 0,20</td>
+<td>US$ 0,10</td>
+<td>US$ 0,50</td>
+<td>2M</td>
+<td>Triagem bruta de milhares de posts, custo quase zero</td>
+</tr>
+<tr>
+<td><code>grok-build-0.1</code></td>
+<td>US$ 1,00</td>
+<td>US$ 0,20</td>
+<td>US$ 2,00</td>
+<td>256K</td>
+<td>Código do próprio bot</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regras de bolso que saem desses números:</strong></p>
+<ul>
+<li>Acima de <strong>200K tokens de prompt</strong>, a tarifa dobra no 4.6 (US$ 4/US$ 12). Nunca mande a thread inteira "por segurança": recorte.</li>
+<li><strong>Cache de input derruba 75–90% do custo</strong> de um system prompt grande e repetido. Um prompt de operador de 6.000 tokens usado 500 vezes/dia custa US$ 0,60 em vez de US$ 2,40 no 4.3.</li>
+<li>Nomes de modelo mudam rápido (a xAI aposentou o Grok 4 original em mai/2026). <strong>Nunca hardcode o modelo</strong>: exponha <code>GROK_MODEL</code> em variável de ambiente.</li>
+</ul>
+<h3 id="22-ferramentas-server-side-onde-o-custo-de-verdade-mora">2.2 Ferramentas server-side (onde o custo de verdade mora)<a class="headerlink" href="#22-ferramentas-server-side-onde-o-custo-de-verdade-mora" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Ferramenta</th>
+<th>Parâmetro na API</th>
+<th>Preço</th>
+<th>Para que serve na venda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Web Search</td>
+<td><code>web_search</code></td>
+<td>US$ 5 / 1.000 chamadas</td>
+<td>Descobrir preço de concorrente, notícia local, dados de bairro</td>
+</tr>
+<tr>
+<td><strong>X Search</strong></td>
+<td><code>x_search</code></td>
+<td><strong>US$ 5 / 1.000 posts + US$ 10 / 1.000 perfis</strong> (desde 21/09/2026)</td>
+<td>Radar de intenção em tempo real; monitorar concorrentes e criadores</td>
+</tr>
+<tr>
+<td>Code Execution</td>
+<td><code>code_execution</code></td>
+<td>US$ 5 / 1.000 chamadas</td>
+<td>Calcular financiamento, ROI, TCO dentro da conversa</td>
+</tr>
+<tr>
+<td>Collections Search</td>
+<td><code>collections_search</code></td>
+<td>US$ 2,50 / 1.000</td>
+<td>RAG sobre sua base de imóveis/ofertas</td>
+</tr>
+<tr>
+<td>File Attachments</td>
+<td><code>file_attachments</code></td>
+<td>US$ 5 / 1.000</td>
+<td>Ler PDF de contrato, laudo, tabela de comissão</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>A armadilha do custo.</strong> Em setembro de 2026 a xAI mudou a cobrança do <code>x_search</code> de "por chamada" para "por post retornado". Uma única chamada que devolve 100 posts custa US$ 0,50 em vez de US$ 0,005 — <strong>100× mais</strong>. Um bot mal parametrizado que varre 2.000 posts/dia gasta US$ 10/dia só de ferramenta, contra centavos de token. <strong>Parametrizar <code>max_turns</code>, <code>from_date</code> e <code>allowed_x_handles</code> não é otimização: é o que define se a operação existe ou não.</strong></p></div></div>
+
+<h3 id="23-capacidades-que-importam-para-vendas">2.3 Capacidades que importam para vendas<a class="headerlink" href="#23-capacidades-que-importam-para-vendas" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Capacidade</th>
+<th>Existe?</th>
+<th>Como usar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Function calling</td>
+<td>Sim</td>
+<td>O bot chama seu CRM, seu WhatsApp, sua planilha</td>
+</tr>
+<tr>
+<td>Structured outputs</td>
+<td>Sim</td>
+<td>Lead card em JSON validado — não em texto livre</td>
+</tr>
+<tr>
+<td>Reasoning effort (low→xhigh)</td>
+<td>Sim</td>
+<td><code>low</code> para triagem em massa, <code>high</code> para diagnóstico de lead quente</td>
+</tr>
+<tr>
+<td>Citations / tool metadata</td>
+<td>Sim</td>
+<td><strong>Obrigatório</strong> para auditoria: você precisa provar de onde saiu cada afirmação</td>
+</tr>
+<tr>
+<td>Batch API</td>
+<td>Sim</td>
+<td>Rodar scoring noturno de 10 mil threads com desconto</td>
+</tr>
+<tr>
+<td>Rate limits (padrão)</td>
+<td>150 req/s · 7.200 req/min · 50M tokens/min</td>
+<td>Nunca será seu gargalo; o gargalo é a fonte de dados</td>
+</tr>
+<tr>
+<td>Fine-tuning</td>
+<td>Não confirmado</td>
+<td>Não planeje em cima disso</td>
+</tr>
+<tr>
+<td>Conector nativo de Reddit</td>
+<td><strong>Não</strong></td>
+<td><strong>Você traz os dados do Reddit.</strong> Este é o trabalho real.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="24-onde-grok-ganha-e-onde-perde">2.4 Onde Grok ganha e onde perde<a class="headerlink" href="#24-onde-grok-ganha-e-onde-perde" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Dimensão</th>
+<th>Grok</th>
+<th>Alternativa</th>
+<th>Veredito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dados de X em tempo real</td>
+<td>Nativo, com citação</td>
+<td>Nenhum concorrente tem</td>
+<td><strong>Vantagem estrutural</strong> — use</td>
+</tr>
+<tr>
+<td>Custo por token</td>
+<td>4.3 a US$ 1,25/US$ 2,50</td>
+<td>GPT/Claude frontier ~US$ 2–15</td>
+<td><strong>Vantagem</strong> em volume</td>
+</tr>
+<tr>
+<td>Contexto</td>
+<td>2M no 4.1-fast; 1M no 4.3</td>
+<td>200K–1M</td>
+<td><strong>Vantagem</strong> para analisar threads gigantes</td>
+</tr>
+<tr>
+<td>Dados de Reddit</td>
+<td>Nenhum conector</td>
+<td>Também nenhum nativo; APIs pagas existem</td>
+<td><strong>Empate</strong> — você constrói ou paga</td>
+</tr>
+<tr>
+<td>Estabilidade de SKU</td>
+<td>Aposenta modelo rápido</td>
+<td>Ciclos mais lentos</td>
+<td><strong>Risco real</strong> — abstraia o modelo</td>
+</tr>
+<tr>
+<td>Ferramentas de browser/UI</td>
+<td>Limitadas vs Computer Use</td>
+<td>Claude/GPT mais maduros</td>
+<td><strong>Desvantagem</strong> — não dependa</td>
+</tr>
+<tr>
+<td>Governança de conteúdo</td>
+<td>Depende de você</td>
+<td>idem</td>
+<td><strong>Empate</strong> — o risco é seu</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusão do item 2:</strong> Grok é a escolha certa para <em>radar de intenção + redação de resposta em volume</em>, e a escolha errada para <em>automação de postagem</em>. Essa assimetria define a arquitetura inteira da seção 4.</p>
+<hr />
+<h2 id="3-por-que-reddit-grok-e-nao-reddit-chatgpt">3. Por que Reddit + Grok, e não Reddit + ChatGPT<a class="headerlink" href="#3-por-que-reddit-grok-e-nao-reddit-chatgpt" title="Permanent link">&para;</a></h2>
+<p>O Reddit virou infraestrutura de descoberta, não só fórum. Os números de 2026 explicam por que uma conversa enterrada num subreddit de 40 mil membros vale mais hoje do que valia em 2023:</p>
+<table>
+<thead>
+<tr>
+<th>Métrica (Q2 2026)</th>
+<th>Valor</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DAUq global</td>
+<td><strong>130,3 milhões</strong> (+18% a/a)</td>
+<td>Relatório trimestral Reddit</td>
+</tr>
+<tr>
+<td>WAUq global</td>
+<td><strong>514,6 milhões</strong> (+24% a/a)</td>
+<td>Relatório trimestral Reddit</td>
+</tr>
+<tr>
+<td>DAUq EUA</td>
+<td>53,2 milhões</td>
+<td>Relatório trimestral Reddit</td>
+</tr>
+<tr>
+<td>Usuários <strong>deslogados</strong> (chegam por busca)</td>
+<td><strong>77,7 milhões/dia</strong> (+27%)</td>
+<td>Relatório trimestral Reddit</td>
+</tr>
+<tr>
+<td>Posição do reddit.com em visibilidade no Google EUA</td>
+<td><strong>4º domínio</strong></td>
+<td>Sistrix, jul/2026</td>
+</tr>
+<tr>
+<td>Participação nas citações de AI Overviews</td>
+<td><strong>18,5% (2º lugar)</strong></td>
+<td>Ahrefs, set/2026</td>
+</tr>
+<tr>
+<td>Participação nas citações top-10 do Perplexity</td>
+<td><strong>46,7%</strong></td>
+<td>Profound, 2025–26</td>
+</tr>
+</tbody>
+</table>
+<p>Duas consequências que mudam a estratégia:</p>
+<ol>
+<li><strong>O leitor do seu comentário frequentemente não é um redditor.</strong> 60% do tráfego diário chega deslogado, via Google. Um comentário útil de 2022 continua vendendo em 2026 porque é <em>citado por IA</em>.</li>
+<li><strong>IA cita Reddit porque Reddit é opinião humana em texto.</strong> Isso significa que responder bem no Reddit é, hoje, a forma mais barata de aparecer na resposta do ChatGPT/Perplexity/Gemini quando alguém pesquisa "melhor corretor em Goiânia" ou "is [SaaS] worth it". Tráfego vindo de IA converte ~4,4× melhor que orgânico tradicional (Seer Interactive, 2026).</li>
+</ol>
+<p>E por que <strong>Grok</strong> especificamente nesse jogo: a xAI é a única que vende busca no X por API com citação, a US$ 5/1.000 posts. O X é onde a intenção <em>quente</em> aparece primeiro (o comprador reclamando de um portal, o investidor perguntando de bairro, o afiliado pedindo programa). O Reddit é onde a intenção <em>durável</em> fica indexada. O bot usa os dois: X para velocidade, Reddit para permanência.</p>
+<div class="callout callout--nota" markdown="0"><div class="callout__head"><span class="callout__icon">i</span><span class="callout__label">Nota</span></div>
+<div class="callout__body"><p><strong>Honestidade sobre o efeito GEO.</strong> "Otimizar para ser citado por IA" beira manipulação quando feito com contas falsas. A linha ética e legal é simples: <strong>humano real, opinião real, divulgação da relação comercial, sem enxame de contas.</strong> A Reddit bloqueia ~23 milhões de visualizações de spam/dia, remove ~100 mil contas automatizadas/dia e, desde 25/03/2026, exige rótulo <strong>[App]</strong> para conta automatizada. O Cornell study de 2026 mostrou que 13 palavras plantadas num comentário bastam para virar uma recomendação de IA — e que isso é trivial de fazer. Justamente por ser trivial, é o caminho mais rápido para tomar ban e queimar o ativo. Este dossiê usa o efeito GEO <strong>legítimo</strong>: conteúdo verdadeiro que merece ser citado.</p></div></div>
+
+<hr />
+<h2 id="4-arquitetura-do-bot-as-5-camadas">4. Arquitetura do bot: as 5 camadas<a class="headerlink" href="#4-arquitetura-do-bot-as-5-camadas" title="Permanent link">&para;</a></h2>
+<pre><code>┌──────────────────────────────────────────────────────────────────────┐
+│  1. RADAR          x_search · web_search · fonte Reddit · RSS        │
+│     (o que está sendo perguntado AGORA, por quem, onde)              │
+└───────────────────────────────┬──────────────────────────────────────┘
+                                ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  2. SCOUT          scoring de intenção + fit + risco de ban          │
+│     saída: lead card em JSON (não texto livre)                       │
+└───────────────────────────────┬──────────────────────────────────────┘
+                                ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  3. SCRIBE         rascunho de resposta no tom da comunidade         │
+│     + checagem de regra do sub + disclosure automático               │
+└───────────────────────────────┬──────────────────────────────────────┘
+                                ▼
+                    ┌───────────────────────┐
+                    │ 4. HUMANO REVISA      │  ← etapa obrigatória
+                    │ e publica             │
+                    └───────────┬───────────┘
+                                ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│  5. MIRROR         CRM · WhatsApp · atribuição · citações em IA      │
+│     realimenta o Radar com o que virou conversa e o que virou venda   │
+└──────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="41-por-que-o-humano-fica-no-meio-e-nao-e-preciosismo">4.1 Por que o humano fica no meio (e não é preciosismo)<a class="headerlink" href="#41-por-que-o-humano-fica-no-meio-e-nao-e-preciosismo" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Se o bot postar sozinho</th>
+<th>Consequência</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conta nova + link + volume = spam</td>
+<td>Remoção instantânea pelo AutoModerator; shadowban silencioso</td>
+</tr>
+<tr>
+<td>Conta automatizada sem rótulo <code>[App]</code></td>
+<td>Violação da política de 25/03/2026</td>
+</tr>
+<tr>
+<td>Texto de IA apresentado como experiência humana</td>
+<td>Violação de "Manipulated Content"; ban do sub e risco de ban de conta</td>
+</tr>
+<tr>
+<td>Sem disclosure de comissão</td>
+<td>Violação FTC 16 CFR 255 (EUA) e Guia CONAR 2026 (Brasil)</td>
+</tr>
+<tr>
+<td>Erro factual em imóvel/oferta</td>
+<td>Responsabilidade civil e, no Brasil, risco PROCON/CRECI</td>
+</tr>
+</tbody>
+</table>
+<p>O gargalo humano não é limitação — é o <strong>fosso competitivo</strong>. 99% dos concorrentes vão automatizar a postagem, tomar ban e desistir. Quem automatiza <em>pesquisa e redação</em> e mantém o humano na publicação opera indefinidamente.</p>
+<h3 id="42-o-contrato-de-dados-do-reddit-o-ponto-que-derruba-projetos">4.2 O contrato de dados do Reddit (o ponto que derruba projetos)<a class="headerlink" href="#42-o-contrato-de-dados-do-reddit-o-ponto-que-derruba-projetos" title="Permanent link">&para;</a></h3>
+<p>Esta é a parte que ninguém coloca no pitch e que decide a viabilidade técnica:</p>
+<table>
+<thead>
+<tr>
+<th>Via de acesso</th>
+<th>Custo</th>
+<th>Status em nov/2026</th>
+<th>Uso recomendado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API oficial, uso não comercial</td>
+<td>Grátis, 100 QPM</td>
+<td>Ativa, mas <strong>cadastro self-service fechado</strong> e API pública termina em <strong>mar/2027</strong></td>
+<td>Protótipo, validação</td>
+</tr>
+<tr>
+<td>API oficial, uso comercial</td>
+<td>~US$ 0,24 / 1.000 chamadas (sem tabela pública)</td>
+<td>Contrato manual, 2–4 semanas, sem preço self-serve</td>
+<td>Operação séria com volume</td>
+</tr>
+<tr>
+<td><code>.json</code> não autenticado</td>
+<td>Grátis</td>
+<td><strong>403 desde mai/2026</strong></td>
+<td>Não depender</td>
+</tr>
+<tr>
+<td>Provedor terceiro por chamada</td>
+<td>~US$ 0,002/leitura</td>
+<td>Ativo</td>
+<td>MVP rápido, risco de ToS</td>
+</tr>
+<tr>
+<td><strong>Reddit Pro (nativo, grátis)</strong></td>
+<td>US$ 0</td>
+<td>Ativo, Trends só em inglês</td>
+<td>Descoberta de comunidade e keyword</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--decisao" markdown="0"><div class="callout__head"><span class="callout__icon">→</span><span class="callout__label">Decisão</span></div>
+<div class="callout__body"><p><strong>Decisão de arquitetura deste dossiê:</strong> o motor (<code>grok-reddit-ops</code>) funciona em três modos — <code>fixture</code> (dados locais, custo zero, para desenvolver e demonstrar), <code>oauth</code> (API oficial com suas credenciais) e <code>manual</code> (você cola o texto da thread). Nenhum modo raspa o site em violação de termos. Para produção acima de ~150 mil leituras/mês, o caminho é contrato comercial com o Reddit ou provedor licenciado.</p></div></div>
+
+<hr />
+<h2 id="5-custo-real-de-operacao-a-conta-que-decide-o-roi">5. Custo real de operação (a conta que decide o ROI)<a class="headerlink" href="#5-custo-real-de-operacao-a-conta-que-decide-o-roi" title="Permanent link">&para;</a></h2>
+<p>Cenário: operação de 1 pessoa, 3 subreddits, ~200 threads/semana monitoradas, 40 respostas redigidas/semana, 1 varredura diária de X.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Volume/mês</th>
+<th>Custo unitário</th>
+<th>Custo/mês</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Triagem de threads (<code>grok-4.1-fast</code>)</td>
+<td>800 threads × ~1.200 tokens in / 200 out</td>
+<td>US$ 0,20 / US$ 0,50 por M</td>
+<td><strong>US$ 0,27</strong></td>
+</tr>
+<tr>
+<td>Scoring fino de shortlist (<code>grok-4.3</code>)</td>
+<td>160 × 2.500 in / 300 out</td>
+<td>US$ 1,25 / US$ 2,50 por M</td>
+<td><strong>US$ 0,62</strong></td>
+</tr>
+<tr>
+<td>Redação de respostas (<code>grok-4.3</code> + cache)</td>
+<td>160 × 3.000 in (80% cacheado) / 450 out</td>
+<td>idem</td>
+<td><strong>US$ 0,38</strong></td>
+</tr>
+<tr>
+<td><code>web_search</code></td>
+<td>300 chamadas</td>
+<td>US$ 5 / 1.000</td>
+<td><strong>US$ 1,50</strong></td>
+</tr>
+<tr>
+<td><code>x_search</code> (parametrizado)</td>
+<td>3.000 posts/mês</td>
+<td>US$ 5 / 1.000 posts</td>
+<td><strong>US$ 15,00</strong></td>
+</tr>
+<tr>
+<td><strong>Total API</strong></td>
+<td></td>
+<td></td>
+<td><strong>≈ US$ 17,77/mês</strong></td>
+</tr>
+<tr>
+<td>Reddit Ads (opcional, teste)</td>
+<td>US$ 30/dia × 14 dias</td>
+<td>CPC ~US$ 1,25–1,85</td>
+<td><strong>US$ 420 (único)</strong></td>
+</tr>
+<tr>
+<td>Tempo humano</td>
+<td>1–1,5 h/dia</td>
+<td>—</td>
+<td><strong>o custo dominante</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Leitura estratégica:</strong> a API custa <strong>menos que um almoço</strong>. O custo real é tempo humano e, se você usar anúncio, mídia. Isso inverte a pergunta: não é "dá para pagar Grok?", é "dá para pagar 1 hora/dia de julgamento humano?". O bot existe para transformar 3 horas em 45 minutos, não para eliminar a pessoa.</p>
+<div class="callout callout--sim" markdown="0"><div class="callout__head"><span class="callout__icon">≈</span><span class="callout__label">Simulação</span></div>
+<div class="callout__body"><p><strong>Simulação de custo por lead (afiliados):</strong> 40 respostas/semana → ~170/mês. Se 6% gerarem conversa e 1,5% virar cadastro, são ~10 cadastros/mês a US$ 18 de API = <strong>US$ 1,80 por cadastro</strong>. Mesmo triplicando o custo de API, o CPA de topo de funil continua irrelevante. O que quebra a conta é tempo gasto em thread sem intenção — e é exatamente isso que a camada Scout resolve.</p></div></div>
+
+<hr />
+<h2 id="6-limites-riscos-e-o-que-este-bot-nao-faz">6. Limites, riscos e o que este bot <strong>não</strong> faz<a class="headerlink" href="#6-limites-riscos-e-o-que-este-bot-nao-faz" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Risco</th>
+<th>Probabilidade</th>
+<th>Impacto</th>
+<th>Mitigação embutida</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ban de conta por excesso de link</td>
+<td>Alta sem disciplina</td>
+<td>Alto</td>
+<td>Modo "sem link": resposta útil + perfil como destino</td>
+</tr>
+<tr>
+<td>Ban por texto de IA não declarado</td>
+<td>Média</td>
+<td>Alto</td>
+<td>Revisão humana + reescrita em voz própria + checagem de regra do sub</td>
+</tr>
+<tr>
+<td>Mudança de preço/SKU da xAI</td>
+<td>Alta</td>
+<td>Médio</td>
+<td>Modelo e preços em <code>.env</code>; fallback OpenAI-compatible</td>
+</tr>
+<tr>
+<td>Fim da API pública do Reddit (mar/2027)</td>
+<td>Certa</td>
+<td>Médio</td>
+<td>Camada de dados plugável (fixture/oauth/manual/provedor)</td>
+</tr>
+<tr>
+<td>Lead card alucinado</td>
+<td>Média</td>
+<td>Alto</td>
+<td>Structured output + exigência de <code>citations</code> + revisão</td>
+</tr>
+<tr>
+<td>Regra do sub mudar</td>
+<td>Alta</td>
+<td>Médio</td>
+<td><code>rules.yaml</code> por subreddit, revisão mensal</td>
+</tr>
+<tr>
+<td>Vazamento de dado pessoal no CRM</td>
+<td>Baixa</td>
+<td>Altíssimo</td>
+<td>LGPD: base legal, minimização, retenção, criptografia</td>
+</tr>
+</tbody>
+</table>
+<p><strong>O bot não faz:</strong> criar contas, votar, postar sozinho, mandar DM em massa, raspar o Reddit contra os termos, inventar depoimento, comprar lista. Cada um desses itens é, simultaneamente, ban garantido e problema jurídico. A entrega é um <strong>copiloto de vendas</strong>, não um exército de fantasmas.</p>
+<hr />
+<h2 id="7-as-5-conclusoes-da-meta-pesquisa">7. As 5 conclusões da meta-pesquisa<a class="headerlink" href="#7-as-5-conclusoes-da-meta-pesquisa" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Grok é infraestrutura, não produto.</strong> O que você vende é o fluxo: radar → qualificação → rascunho → humano → CRM.</li>
+<li><strong>O custo de token é ruído; o custo de ferramenta e de tempo é o jogo.</strong> Parametrizar <code>x_search</code> vale mais que trocar de modelo.</li>
+<li><strong>Reddit não é canal de mídia, é canal de indexação e confiança.</strong> O retorno vem de comentários que continuam sendo lidos e citados 12 meses depois — não do post da semana.</li>
+<li><strong>A vantagem defensável é a disciplina.</strong> 9:1, disclosure, sem link onde não pode, humano no comando. Chato, auditável e escalável.</li>
+<li><strong>Os dois mercados exigem bots diferentes.</strong> Afiliados: volume alto, ticket baixo, ciclo de dias, otimiza EPC. Imobiliário: volume baixo, ticket altíssimo, ciclo de semanas, otimiza <strong>velocidade de resposta</strong>. Os estudos 1 e 2 tratam cada um com sua própria matemática.</li>
+</ol>
+<hr />
+<h3 id="fontes-principais">Fontes principais<a class="headerlink" href="#fontes-principais" title="Permanent link">&para;</a></h3>
+<ul>
+<li>xAI — docs.x.ai (modelos, <code>x_search</code>, rate limits, pricing), consultado em 06/11/2026.</li>
+<li>xAI — mudança de cobrança do X Search por post/perfil, vigente em 21/09/2026.</li>
+<li>Reddit Inc. — resultados do Q2 2026 (DAUq, WAUq, receita) e política "Humans welcome (bots must wear name tags)", 25/03/2026.</li>
+<li>Sistrix (jul/2026) e Ahrefs (set/2026) — visibilidade e citações em IA.</li>
+<li>Seer Interactive (2025–26) — conversão de tráfego indicado por IA.</li>
+<li>FTC — <em>Guides Concerning the Use of Endorsements and Testimonials</em>, 16 CFR Part 255 (revisão 2023, enforcement em 2026).</li>
+<li>CONAR — <em>Guia de Marketing e Publicidade por Influenciadores Digitais</em>, vigente em 01/06/2026.</li>
+<li>FCC/TCPA — regras de revogação de consentimento (vigentes em 11/04/2025) e status da regra <em>one-to-one</em> (vacada em 24/01/2025).</li>
+</ul>
+    </article>
+
+    <nav class="pager">
+      <span></span>
+      <a class="pager__link" href="01.html"><span class="pager__label">Próximo →</span><span class="pager__title">Estudo 1 · Afiliados</span></a>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#1-definicao-tres-coisas-diferentes-chamadas-grok-bot">1. Definição: três coisas diferentes chamadas "Grok bot"</a></li>
+<li><a href="#2-estado-da-plataforma-em-nov2026">2. Estado da plataforma em nov/2026</a><ul>
+<li><a href="#21-modelos-e-preco-por-milhao-de-tokens">2.1 Modelos e preço por milhão de tokens</a></li>
+<li><a href="#22-ferramentas-server-side-onde-o-custo-de-verdade-mora">2.2 Ferramentas server-side (onde o custo de verdade mora)</a></li>
+<li><a href="#23-capacidades-que-importam-para-vendas">2.3 Capacidades que importam para vendas</a></li>
+<li><a href="#24-onde-grok-ganha-e-onde-perde">2.4 Onde Grok ganha e onde perde</a></li>
+</ul>
+</li>
+<li><a href="#3-por-que-reddit-grok-e-nao-reddit-chatgpt">3. Por que Reddit + Grok, e não Reddit + ChatGPT</a></li>
+<li><a href="#4-arquitetura-do-bot-as-5-camadas">4. Arquitetura do bot: as 5 camadas</a><ul>
+<li><a href="#41-por-que-o-humano-fica-no-meio-e-nao-e-preciosismo">4.1 Por que o humano fica no meio (e não é preciosismo)</a></li>
+<li><a href="#42-o-contrato-de-dados-do-reddit-o-ponto-que-derruba-projetos">4.2 O contrato de dados do Reddit (o ponto que derruba projetos)</a></li>
+</ul>
+</li>
+<li><a href="#5-custo-real-de-operacao-a-conta-que-decide-o-roi">5. Custo real de operação (a conta que decide o ROI)</a></li>
+<li><a href="#6-limites-riscos-e-o-que-este-bot-nao-faz">6. Limites, riscos e o que este bot não faz</a></li>
+<li><a href="#7-as-5-conclusoes-da-meta-pesquisa">7. As 5 conclusões da meta-pesquisa</a><ul>
+<li><a href="#fontes-principais">Fontes principais</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: EPC, LGPD, x_search)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

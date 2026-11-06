@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compliance · Grok × Reddit</title>
+<meta name="description" content="Dossiê operacional: Grok bot de vendas para affiliate marketing e real estate via Reddit.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Reddit</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link active" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">07</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC 06 · 6 MIN DE LEITURA</p>
+      <h1 class="doc__title">Compliance, ética e o que destrói a operação</h1>
+      <blockquote>
+<p>Este documento existe porque <strong>a maior causa de morte de um bot de Reddit não é técnica, é uma remoção</strong>. Aqui estão as regras que realmente são aplicadas, com data de verificação, e o mapa do que é permitido, do que é zona cinzenta e do que é ban na certa.</p>
+</blockquote>
+<hr />
+<h2 id="1-reddit-as-tres-camadas-de-regra">1. Reddit — as três camadas de regra<a class="headerlink" href="#1-reddit-as-tres-camadas-de-regra" title="Permanent link">&para;</a></h2>
+<h3 id="camada-1-politica-global-sitewide">Camada 1: política global (sitewide)<a class="headerlink" href="#camada-1-politica-global-sitewide" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>O que diz</th>
+<th>Como se aplica a você</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Spam</strong></td>
+<td>Proíbe postar repetidamente conteúdo próprio, conteúdo repetitivo em massa para exposição/ganho financeiro, e uso de bots/IA que facilitem proliferação de spam</td>
+<td>Sem copy-paste entre subs; sem volume automatizado</td>
+</tr>
+<tr>
+<td><strong>Manipulated Content</strong></td>
+<td>Proíbe conteúdo gerado por IA que "se apresenta como gerado por humano"; pede rótulo de divulgação de IA</td>
+<td>Reescreva na sua voz; não finja experiência que não teve</td>
+</tr>
+<tr>
+<td><strong>Impersonation</strong></td>
+<td>Proíbe se passar por outra pessoa/marca</td>
+<td>Uma identidade real; sem "cliente fake"</td>
+</tr>
+<tr>
+<td><strong>Disrupting Communities</strong></td>
+<td>Proíbe manipulação de voto, votos coordenados e evasão de ban</td>
+<td>Nunca peça upvote; nunca crie conta após ban</td>
+</tr>
+<tr>
+<td><strong>Rótulo <code>[App]</code></strong> (política de 25/03/2026)</td>
+<td>Conta que usa automação em modo permitido deve usar o rótulo</td>
+<td><strong>Seu bot não posta — então essa regra é sobre monitoramento e perfis automatizados</strong></td>
+</tr>
+<tr>
+<td><strong>Self-promotion</strong></td>
+<td>Diretriz de ~9:1: no máximo ~10% da atividade própria</td>
+<td>Trate como piso; operadores longevos rodam 19:1 ou 95:5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Números de enforcement (2026):</strong> ~23 milhões de views de spam bloqueadas/dia; ~2 milhões de votos inautênticos revogados/dia; ~100 mil contas automatizadas removidas/dia; ~25 mil posts/comentários spam novos detectados/dia.</p>
+<h3 id="camada-2-regra-do-subreddit-sempre-prevalece">Camada 2: regra do subreddit (sempre prevalece)<a class="headerlink" href="#camada-2-regra-do-subreddit-sempre-prevalece" title="Permanent link">&para;</a></h3>
+<p>Dados de 64 comunidades que fundadores usam: <strong>34% proíbem autopromoção</strong>, <strong>23% permitem apenas sob 9:1</strong>, <strong>2% acolhem</strong>. Muitos exigem conta com 30+ dias e 100+ karma. Em 2026, <code>r/SaaS</code> e <code>r/startups</code> endureceram (categoria banida, 1 post/60 dias).</p>
+<p><strong>Regra operacional:</strong> a regra do sub é a lei. Se ela proíbe link, não existe "mas meu caso é diferente". A saída é o perfil (rota 5) ou o anúncio (rota 7).</p>
+<h3 id="camada-3-automoderator-a-aplicacao-real">Camada 3: AutoModerator (a aplicação real)<a class="headerlink" href="#camada-3-automoderator-a-aplicacao-real" title="Permanent link">&para;</a></h3>
+<p>O AutoModerator remove <strong>silenciosamente</strong> — você acha que publicou, e ninguém vê. Regras típicas: karma mínimo, idade da conta, palavras proibidas ("DM", "check my", "free trial"), link domains bloqueados, flair obrigatória.</p>
+<p><strong>Como testar se você foi removido:</strong> abra a thread em janela anônima/deslogado. Se seu comentário não aparece, foi removido.</p>
+<hr />
+<h2 id="2-disclosure-o-que-e-obrigatorio-e-onde">2. Disclosure — o que é obrigatório e onde<a class="headerlink" href="#2-disclosure-o-que-e-obrigatorio-e-onde" title="Permanent link">&para;</a></h2>
+<h3 id="eua-ftc-16-cfr-part-255-revisao-2023-enforcement-pleno-em-2026">EUA — FTC, 16 CFR Part 255 (revisão 2023, enforcement pleno em 2026)<a class="headerlink" href="#eua-ftc-16-cfr-part-255-revisao-2023-enforcement-pleno-em-2026" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>O que fazer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Link de afiliado em texto</td>
+<td>Disclosure <strong>no topo</strong>, antes do link, linguagem simples e inequívoca</td>
+</tr>
+<tr>
+<td>Vídeo</td>
+<td>Divulgação <strong>no vídeo</strong>, em áudio e/ou texto — não só na descrição</td>
+</tr>
+<tr>
+<td>Conteúdo gerado por IA</td>
+<td><strong>Mesma obrigação</strong> de conteúdo humano (explícito desde jul/2026)</td>
+</tr>
+<tr>
+<td>Testemunho/resultado</td>
+<td>Adicionar contexto de que resultados variam; não implicar independência se há comissão</td>
+</tr>
+<tr>
+<td>Redes que recrutam criadores</td>
+<td>Responsabilidade solidária desde 2026</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Frases que funcionam:</strong> <em>"I earn a commission if you buy through this link."</em> / <em>"This is an ad for [Produto], and I get paid if you sign up."</em>
+<strong>Frases que não funcionam:</strong> "partner", "sp", "thanks to [marca]", hashtag perdida no meio de outras, aviso só no rodapé.</p>
+<h3 id="brasil-conar-guia-vigente-em-01062026-lei-153252026">Brasil — CONAR, Guia vigente em 01/06/2026 + Lei 15.325/2026<a class="headerlink" href="#brasil-conar-guia-vigente-em-01062026-lei-153252026" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>O que fazer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Link de afiliado / cupom</td>
+<td><strong>É publicidade.</strong> Identificar com <code>#publi</code>/<code>#publicidade</code> <strong>ou</strong> selo da plataforma</td>
+</tr>
+<tr>
+<td>Posição</td>
+<td><strong>Primeiro plano</strong>, visível sem clicar em "mais"</td>
+</tr>
+<tr>
+<td>Vídeo</td>
+<td>No início ou no momento da recomendação, em texto <strong>e</strong> áudio</td>
+</tr>
+<tr>
+<td>Post de "recebidos"</td>
+<td>Categoria "mensagem ativada": mencionar que o produto veio da marca</td>
+</tr>
+<tr>
+<td>Conteúdo com IA</td>
+<td>Regras valem integralmente</td>
+</tr>
+<tr>
+<td>Responsabilidade</td>
+<td>Anunciante e agência também respondem</td>
+</tr>
+</tbody>
+</table>
+<h3 id="imobiliario-crecicofeci">Imobiliário — CRECI/COFECI<a class="headerlink" href="#imobiliario-crecicofeci" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>Aplicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nome registrado + "corretor de imóveis" + CRECI (PF) / CRECI-J (PJ)</td>
+<td>Bio, posts, anúncios, artes</td>
+</tr>
+<tr>
+<td>Número do CRECI ≥ 25% do tamanho do nome</td>
+<td>Peças publicitárias</td>
+</tr>
+<tr>
+<td>Autorização escrita do proprietário</td>
+<td>Antes de anunciar qualquer imóvel</td>
+</tr>
+<tr>
+<td>Veracidade de metragem, valor, condições</td>
+<td>Sem exceção</td>
+</tr>
+<tr>
+<td>Nome fantasia registrado</td>
+<td>Antes de usar marca</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-contato-e-dados-a-parte-que-gera-processo">3. Contato e dados — a parte que gera processo<a class="headerlink" href="#3-contato-e-dados-a-parte-que-gera-processo" title="Permanent link">&para;</a></h2>
+<h3 id="lgpd-brasil">LGPD (Brasil)<a class="headerlink" href="#lgpd-brasil" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Requisito</th>
+<th>Na prática</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base legal</td>
+<td>Consentimento (art. 7º, I) ou execução de contrato (art. 7º, V)</td>
+</tr>
+<tr>
+<td>Consentimento específico</td>
+<td>Nomear empresa, canal (WhatsApp/e-mail) e forma de saída</td>
+</tr>
+<tr>
+<td>Opt-in rastreável</td>
+<td>Data, hora, origem, texto exato — registrar no CRM</td>
+</tr>
+<tr>
+<td>Lista comprada</td>
+<td><strong>Sem base legal. Não existe uso legítimo.</strong></td>
+</tr>
+<tr>
+<td>Retenção</td>
+<td>Prazo definido; apagar inativo</td>
+</tr>
+<tr>
+<td>Compartilhamento</td>
+<td>Informar parceiros no termo</td>
+</tr>
+<tr>
+<td>Revogação</td>
+<td>Gratuita e imediata</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tcpa-eua-status-em-nov2026">TCPA (EUA) — status em nov/2026<a class="headerlink" href="#tcpa-eua-status-em-nov2026" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consentimento prévio escrito para texto marketing</td>
+<td><strong>Exigido</strong></td>
+</tr>
+<tr>
+<td>Regra <em>one-to-one consent</em></td>
+<td><strong>Vacada</strong> em 24/01/2025 (11º Cir.); nunca entrou em vigor — desconfie de guias que dizem "vale em jan/2026"</td>
+</tr>
+<tr>
+<td>Revogação por qualquer meio razoável</td>
+<td><strong>Ativa</strong> desde 11/04/2025; 10 dias úteis; 7 palavras mínimas</td>
+</tr>
+<tr>
+<td><em>Revocation-all</em> (opt-out vale para todos os canais)</td>
+<td>Adiada para <strong>31/01/2027</strong></td>
+</tr>
+<tr>
+<td>Do Not Call aplicado a texto</td>
+<td>Ativo</td>
+</tr>
+<tr>
+<td>Multa</td>
+<td>US$ 500–1.500 <strong>por mensagem</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Regra dura do inbound:</strong> quem comentou numa thread deu consentimento para você responder <strong>ali</strong>. Não deu consentimento para WhatsApp, e-mail ou DM. A migração de canal exige convite explícito da pessoa ("pode me chamar no zap?") e registro desse convite com data.</p></div></div>
+
+<hr />
+<h2 id="4-zona-cinzenta-o-que-e-tecnicamente-possivel-e-eticamente-indefensavel">4. Zona cinzenta: o que é tecnicamente possível e eticamente indefensável<a class="headerlink" href="#4-zona-cinzenta-o-que-e-tecnicamente-possivel-e-eticamente-indefensavel" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Prática</th>
+<th>Por que parece funcionar</th>
+<th>Por que não fazer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plantar 13 palavras em comentário para virar recomendação de IA</td>
+<td>Estudo de Cornell (2026) mostra que basta 1 comentário</td>
+<td>É manipulação de conteúdo; Reddit caça; o ganho dura semanas e o ban é permanente</td>
+</tr>
+<tr>
+<td>Contas múltiplas "cliente satisfeito"</td>
+<td>Cria prova social falsa</td>
+<td>Violação de impersonation + manipulação; ban em rede</td>
+</tr>
+<tr>
+<td>Pedir upvote em grupo</td>
+<td>Acelera o post</td>
+<td>Voto coordenado = ban de conta e de IP</td>
+</tr>
+<tr>
+<td>Reescrever review de IA como "usei por 6 meses"</td>
+<td>Copy fácil</td>
+<td>Violação de Manipulated Content + FTC (testemunho falso)</td>
+</tr>
+<tr>
+<td>Comprar lista de leads</td>
+<td>Volume imediato</td>
+<td>LGPD sem base legal; TCPA US$ 500–1.500/msg</td>
+</tr>
+<tr>
+<td>Seeded subreddit com 20 threads fake</td>
+<td>Parece comunidade</td>
+<td>Precedente de 2026: comunidades removidas em bloco</td>
+</tr>
+<tr>
+<td>Ferramenta que posta sozinha</td>
+<td>"Escala"</td>
+<td>Automação de postagem sem rótulo + spam = ban; e o texto é sempre pior</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Teste de sanidade (use antes de qualquer tática):</strong> <em>Se um moderador lesse seu histórico completo e seu extrato bancário lado a lado, você teria vergonha?</em> Se sim, não faça.</p>
+<hr />
+<h2 id="5-checklist-de-publicacao-imprima-e-deixe-ao-lado">5. Checklist de publicação (imprima e deixe ao lado)<a class="headerlink" href="#5-checklist-de-publicacao-imprima-e-deixe-ao-lado" title="Permanent link">&para;</a></h2>
+<p><strong>Antes de postar:</strong>
+- [ ] Li a regra do sub <strong>hoje</strong>.
+- [ ] A resposta ajuda mesmo sem a oferta.
+- [ ] Todo número tem fonte e data.
+- [ ] Não estou apresentando texto de IA como experiência pessoal.
+- [ ] Se há menção comercial, o disclosure está visível antes do link.
+- [ ] Não há link onde o sub proíbe.
+- [ ] Não há promessa de renda ou resultado garantido.
+- [ ] Se é imóvel: CRECI visível + autorização do proprietário + dados exatos.
+- [ ] Se vou migrar para WhatsApp: a pessoa pediu, e eu registrei.</p>
+<p><strong>Depois de postar:</strong>
+- [ ] Abri deslogado para confirmar que não fui removido.
+- [ ] Respondi todos os comentários nas primeiras 2 h.
+- [ ] Registrei no painel (resposta, clique, conversa).
+- [ ] Marquei a thread para revisitar em 7 dias.</p>
+<hr />
+<h2 id="6-plano-de-crise-quando-a-conta-toma-remocao-ou-ban">6. Plano de crise (quando a conta toma remoção ou ban)<a class="headerlink" href="#6-plano-de-crise-quando-a-conta-toma-remocao-ou-ban" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>Primeira ação</th>
+<th>Segunda ação</th>
+<th>O que <strong>não</strong> fazer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comentário removido</td>
+<td>Ler a regra citada</td>
+<td>Reescrever e, se injusto, modmail educado</td>
+<td>Repostar igual</td>
+</tr>
+<tr>
+<td>Ban de sub</td>
+<td>Aceitar; não discutir</td>
+<td>Pedir desculpa por modmail, uma vez</td>
+<td>Criar conta nova para burlar</td>
+</tr>
+<tr>
+<td>Shadowban (sem views)</td>
+<td>Testar deslogado</td>
+<td>Pausar 30 dias, remover links, reduzir volume</td>
+<td>Continuar postando (agrava)</td>
+</tr>
+<tr>
+<td>Ban de conta</td>
+<td>Avaliar o que causou</td>
+<td>Recomeçar com outra identidade <strong>real</strong> e outra estratégia</td>
+<td>Voltar com o mesmo comportamento</td>
+</tr>
+<tr>
+<td>Reclamação pública no sub</td>
+<td>Responder em público, sem defensiva, corrigindo o fato</td>
+<td>Oferecer solução</td>
+<td>Apagar e fugir (piora)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ativo insubstituível = conta com histórico.</strong> É por isso que a estratégia do dossiê sacrifica velocidade em troca de longevidade. Uma conta de 2 anos com 3 mil karma vale mais que 10 contas novas que durarão 4 dias.</p>
+<hr />
+<h2 id="7-o-que-este-dossie-deliberadamente-nao-ensina">7. O que este dossiê deliberadamente <strong>não</strong> ensina<a class="headerlink" href="#7-o-que-este-dossie-deliberadamente-nao-ensina" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Criar fazenda de contas.</li>
+<li>Automatizar postagem/voto em massa.</li>
+<li>Raspar o Reddit contra os termos.</li>
+<li>Plantar recomendação para IA.</li>
+<li>Inventar depoimento ou resultado.</li>
+<li>Comprar seguidores, karma ou lista.</li>
+<li>"Contornar" regra de sub com sinônimo.</li>
+</ol>
+<p>Não é pudor: cada item acima tem <strong>retorno decrescente e risco crescente</strong>. A conta que sobrevive é o ativo; a tática que a queima é passivo.</p>
+    </article>
+
+    <nav class="pager">
+      <a class="pager__link" href="05.html"><span class="pager__label">← Anterior</span><span class="pager__title">Plano &amp; piloto</span></a>
+      <a class="pager__link" href="motor.html"><span class="pager__label">Próximo →</span><span class="pager__title">Motor em Python</span></a>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#1-reddit-as-tres-camadas-de-regra">1. Reddit — as três camadas de regra</a><ul>
+<li><a href="#camada-1-politica-global-sitewide">Camada 1: política global (sitewide)</a></li>
+<li><a href="#camada-2-regra-do-subreddit-sempre-prevalece">Camada 2: regra do subreddit (sempre prevalece)</a></li>
+<li><a href="#camada-3-automoderator-a-aplicacao-real">Camada 3: AutoModerator (a aplicação real)</a></li>
+</ul>
+</li>
+<li><a href="#2-disclosure-o-que-e-obrigatorio-e-onde">2. Disclosure — o que é obrigatório e onde</a><ul>
+<li><a href="#eua-ftc-16-cfr-part-255-revisao-2023-enforcement-pleno-em-2026">EUA — FTC, 16 CFR Part 255 (revisão 2023, enforcement pleno em 2026)</a></li>
+<li><a href="#brasil-conar-guia-vigente-em-01062026-lei-153252026">Brasil — CONAR, Guia vigente em 01/06/2026 + Lei 15.325/2026</a></li>
+<li><a href="#imobiliario-crecicofeci">Imobiliário — CRECI/COFECI</a></li>
+</ul>
+</li>
+<li><a href="#3-contato-e-dados-a-parte-que-gera-processo">3. Contato e dados — a parte que gera processo</a><ul>
+<li><a href="#lgpd-brasil">LGPD (Brasil)</a></li>
+<li><a href="#tcpa-eua-status-em-nov2026">TCPA (EUA) — status em nov/2026</a></li>
+</ul>
+</li>
+<li><a href="#4-zona-cinzenta-o-que-e-tecnicamente-possivel-e-eticamente-indefensavel">4. Zona cinzenta: o que é tecnicamente possível e eticamente indefensável</a></li>
+<li><a href="#5-checklist-de-publicacao-imprima-e-deixe-ao-lado">5. Checklist de publicação (imprima e deixe ao lado)</a></li>
+<li><a href="#6-plano-de-crise-quando-a-conta-toma-remocao-ou-ban">6. Plano de crise (quando a conta toma remoção ou ban)</a></li>
+<li><a href="#7-o-que-este-dossie-deliberadamente-nao-ensina">7. O que este dossiê deliberadamente não ensina</a></li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: EPC, LGPD, x_search)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

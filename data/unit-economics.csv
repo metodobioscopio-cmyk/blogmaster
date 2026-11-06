@@ -1,0 +1,11 @@
+vertical,modelo,cenario,leads_ou_threads_mes,conversao_pct,ticket,comissao_pct,receita_mes,observacao
+afiliados,saas_recorrente,conservador,170,0.012,99,0.30,605,"~2 pagantes/mes x US$99 x 30%, com LTV acumulado no mes 12"
+afiliados,saas_recorrente,base,170,0.020,99,0.30,1000,"~3.4 pagantes/mes no mesmo volume"
+afiliados,ecommerce_fisico,base,170,0.025,80,0.08,27,"mesmo esforco retorna ~4% do SaaS"
+afiliados,hospedagem_fixo,conservador,170,0.010,200,1.00,340,"comissao fixa por venda"
+imobiliario,goiania_medio_padrao,conservador,25,0.020,818000,0.05,20450,"1 venda a cada 2 meses"
+imobiliario,goiania_medio_padrao,base,25,0.030,818000,0.05,30675,"1 venda a cada 6 semanas"
+imobiliario,goiania_alto_padrao,base,18,0.020,1500000,0.05,15000,"1 venda a cada 3 meses neste volume"
+imobiliario,eua_medio,conservador,30,0.015,405400,0.025,6081,"comissao do lado do agente, por mes em media"
+portal_zap_vivareal,lead_pago,base,50,0.015,818000,0.05,30675,"sem descontar midia de R$40-120 por lead"
+portal_zap_vivareal,lead_pago,conservador,50,0.010,818000,0.05,20450,"receita bruta; midia consome R$2.000-6.000"

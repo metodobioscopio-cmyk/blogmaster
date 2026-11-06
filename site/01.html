@@ -1,0 +1,938 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudo 1 · Afiliados · Grok × Reddit</title>
+<meta name="description" content="Dossiê operacional: Grok bot de vendas para affiliate marketing e real estate via Reddit.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Reddit</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link active" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">07</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC 01 · 19 MIN DE LEITURA</p>
+      <h1 class="doc__title">ESTUDO 1 — Afiliados: como o Reddit + Grok produzem venda real</h1>
+      <blockquote>
+<p><strong>Pergunta deste estudo.</strong> Dá para vender como afiliado usando Reddit como canal principal, com um bot Grok fazendo o trabalho pesado, sem tomar ban e sem depender de sorte? <strong>Resposta curta: sim, mas não no modelo que 95% das pessoas tentam.</strong> Este documento entrega a matemática, as rotas, os roteiros e o ponto exato onde o dinheiro aparece.</p>
+</blockquote>
+<div class="callout callout--meta" markdown="0"><div class="callout__head"><span class="callout__icon">◷</span><span class="callout__label">Contexto</span></div>
+<div class="callout__body"><p><strong>Mercados cobertos:</strong> EUA (onde o Reddit converte e o dinheiro é em dólar) e Brasil (onde você opera). <strong>Período de dados:</strong> 2025–2026. <strong>Público-alvo:</strong> operador solo ou dupla, capital de até US$ 500, 1–2 h/dia.</p></div></div>
+
+<hr />
+<h2 id="1-o-tamanho-do-jogo-e-por-que-o-afiliado-mediano-perde">1. O tamanho do jogo e por que o afiliado mediano perde<a class="headerlink" href="#1-o-tamanho-do-jogo-e-por-que-o-afiliado-mediano-perde" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Valor 2026</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mercado global de afiliados</td>
+<td>~US$ 20 bi</td>
+<td>estimativas de mercado 2026</td>
+</tr>
+<tr>
+<td>Comissão média (SaaS)</td>
+<td><strong>24,16%</strong></td>
+<td>Rewardful, 2026</td>
+</tr>
+<tr>
+<td>Pagamento médio por comissão</td>
+<td><strong>US$ 14,10</strong></td>
+<td>Rewardful, 2026</td>
+</tr>
+<tr>
+<td>Conversão referral→venda (rede)</td>
+<td><strong>0,8%</strong></td>
+<td>Rewardful, 2026</td>
+</tr>
+<tr>
+<td>Afiliados que geram ≥1 venda</td>
+<td><strong>1,28%</strong></td>
+<td>Rewardful, 2026</td>
+</tr>
+<tr>
+<td>Conversão média e-commerce afiliado</td>
+<td>1–3% (forte: &gt;3–5%)</td>
+<td>benchmarks 2026</td>
+</tr>
+<tr>
+<td>EPC médio (agregado)</td>
+<td>US$ 0,45–1,50</td>
+<td>benchmarks 2026</td>
+</tr>
+<tr>
+<td>EPC em SaaS</td>
+<td>US$ 1,20–3,50 (forte &gt;US$ 2)</td>
+<td>StackedReview 2026</td>
+</tr>
+<tr>
+<td>Ticket médio de programa</td>
+<td>US$ 111–130</td>
+<td>Rewardful, 2026</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A leitura fria:</strong> 98,7% dos afiliados não vendem nada. Não é falta de inteligência: é que a maioria escolhe tráfego que nunca teve intenção. Cupom, listicle genérico e "melhores ferramentas de 2026" competem com mil sites idênticos e com o próprio Google resumindo a resposta.</p>
+<p><strong>Onde a intenção existe de verdade:</strong>
+- <strong>Reddit:</strong> gente escrevendo "estou procurando X, alguém usa?" — intenção explícita, em texto, datada.
+- <strong>X:</strong> gente reclamando em tempo real de uma ferramenta e perguntando alternativa.
+- <strong>Buscas longtail de comparação:</strong> "X vs Y reddit" — o comprador está pedindo opinião de humano.</p>
+<p>O Reddit é o único dos três onde a resposta fica <strong>indexada para sempre</strong> e é <strong>citada por IA</strong>. É por isso que este estudo usa Reddit como base e X como acelerador.</p>
+<hr />
+<h2 id="2-segmentacao-onde-o-dinheiro-esta-em-2026">2. Segmentação: onde o dinheiro está em 2026<a class="headerlink" href="#2-segmentacao-onde-o-dinheiro-esta-em-2026" title="Permanent link">&para;</a></h2>
+<h3 id="21-por-vertical-eua-global">2.1 Por vertical (EUA / global)<a class="headerlink" href="#21-por-vertical-eua-global" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Vertical</th>
+<th>Comissão típica</th>
+<th>EPC forte</th>
+<th>Ciclo de decisão</th>
+<th>Adequação ao Reddit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SaaS B2B</strong> (CRM, SEO, automação)</td>
+<td>20–40% recorrente, até 50%</td>
+<td>US$ 1,50–3,50</td>
+<td>2–8 semanas</td>
+<td><strong>Altíssima</strong> — subs técnicos com threads de comparação</td>
+</tr>
+<tr>
+<td><strong>Finanças/seguros</strong> (CPA)</td>
+<td>US$ 75–300 por conversão</td>
+<td>US$ 1,00–2,80</td>
+<td>dias</td>
+<td>Média — moderação hostil, exige compliance</td>
+</tr>
+<tr>
+<td><strong>Hospedagem/dev tools</strong></td>
+<td>US$ 50–450 fixo</td>
+<td>US$ 1,00+</td>
+<td>dias</td>
+<td>Alta — público dev, intolerante a marketing</td>
+</tr>
+<tr>
+<td><strong>Educação/cursos</strong></td>
+<td>20–50%</td>
+<td>alto em lançamento</td>
+<td>dias–semanas</td>
+<td>Média — r/JustStart e r/Entrepreneur toleram story</td>
+</tr>
+<tr>
+<td><strong>E-commerce físico</strong></td>
+<td>5–15%</td>
+<td>US$ 0,15–0,65</td>
+<td>horas</td>
+<td>Baixa — Reddit odeia link de loja</td>
+</tr>
+<tr>
+<td><strong>Alto ticket digital</strong> (mentoria, B2B info)</td>
+<td>30–60%</td>
+<td>variável</td>
+<td>1–4 semanas</td>
+<td>Baixa — cheiro de golpe, modera agressivo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-a-escolha-recomendada-e-por-que">2.2 A escolha recomendada (e por quê)<a class="headerlink" href="#22-a-escolha-recomendada-e-por-que" title="Permanent link">&para;</a></h3>
+<div class="callout callout--decisao" markdown="0"><div class="callout__head"><span class="callout__icon">→</span><span class="callout__label">Decisão</span></div>
+<div class="callout__body"><p><strong>Foco primário: SaaS B2B / ferramentas de IA com comissão recorrente.</strong>
+Motivos: (1) comissão recorrente transforma 1 cliente em fluxo de caixa; (2) o comprador B2B pesquisa em Reddit antes de assinar; (3) ticket alto dilui o custo de aquisição; (4) você pode responder sem link, porque a ferramenta é <em>nomeável</em>; (5) LTV permite pagar mídia depois.
+<strong>Foco secundário: hospedagem/dev tools</strong> (comissão fixa alta, decisão rápida) como "primeiro dólar" para validar o fluxo.
+<strong>Evitar no começo:</strong> e-commerce físico (comissão baixa + hostilidade), finanças/seguro (compliance pesado), info-produto de alto ticket (risco reputacional).</p></div></div>
+
+<h3 id="23-matematica-de-uma-comissao-recorrente-por-que-muda-tudo">2.3 Matemática de uma comissão recorrente (por que muda tudo)<a class="headerlink" href="#23-matematica-de-uma-comissao-recorrente-por-que-muda-tudo" title="Permanent link">&para;</a></h3>
+<p>Ferramenta a US$ 99/mês, comissão 30%, retenção média 18 meses:</p>
+<pre><code>1 cliente = 99 × 0,30 × 18 = US$ 534,60 de LTV de comissão
+10 clientes = US$ 5.346
+100 clientes = US$ 53.460 (fluxo, não pico)
+</code></pre>
+<p>Compare com e-commerce: AOV US$ 80, comissão 8% = <strong>US$ 6,40 por venda</strong>, uma vez. É preciso 84 vendas para igualar <strong>um</strong> cliente SaaS. Isso define onde colocar o esforço.</p>
+<hr />
+<h2 id="3-unit-economics-a-planilha-que-decide-se-voce-continua">3. Unit economics: a planilha que decide se você continua<a class="headerlink" href="#3-unit-economics-a-planilha-que-decide-se-voce-continua" title="Permanent link">&para;</a></h2>
+<h3 id="31-funil-canonico-do-afiliado-via-reddit">3.1 Funil canônico do afiliado via Reddit<a class="headerlink" href="#31-funil-canonico-do-afiliado-via-reddit" title="Permanent link">&para;</a></h3>
+<pre><code>Thread com intenção (1.000 lidas)
+        │  3–8% clicam no perfil / link no perfil
+        ▼
+Visita ao destino (50)
+        │  18–28% clicam para o merchant (review page → merchant)
+        ▼
+Clique no merchant (12)
+        │  2–5% iniciam trial (SaaS)
+        ▼
+Trial (0,4)
+        │  20–45% viram pagantes
+        ▼
+Pagante (0,12)  ← a cada ~8 threads boas, 1 cliente
+</code></pre>
+<p>Com LTV de comissão de US$ 534, o <strong>valor por thread respondida</strong> é ~US$ 67 — mas só se a thread tiver intenção real. Uma thread sem intenção vale US$ 0 independentemente da qualidade da resposta. <strong>É por isso que o scoring é a camada que gera dinheiro, não a redação.</strong></p>
+<h3 id="32-cenario-base-operador-solo-90-dias">3.2 Cenário base (operador solo, 90 dias)<a class="headerlink" href="#32-cenario-base-operador-solo-90-dias" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Valor</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Threads monitoradas/semana</td>
+<td>200</td>
+<td>3–5 subs</td>
+</tr>
+<tr>
+<td>Threads com intenção real/semana</td>
+<td>18 (9%)</td>
+<td>filtro do Scout</td>
+</tr>
+<tr>
+<td>Respostas publicadas/semana</td>
+<td>12</td>
+<td>humano revisa e publica</td>
+</tr>
+<tr>
+<td>Cliques no perfil/semana</td>
+<td>40</td>
+<td>8% das leituras das respostas</td>
+</tr>
+<tr>
+<td>Trials/semana</td>
+<td>1,5</td>
+<td></td>
+</tr>
+<tr>
+<td>Pagantes/mês</td>
+<td>2–4</td>
+<td>conservador</td>
+</tr>
+<tr>
+<td>Comissão mensal acumulada ao mês 3</td>
+<td>US$ 300–700</td>
+<td>recorrente</td>
+</tr>
+<tr>
+<td>Custo API/mês</td>
+<td>US$ 18</td>
+<td></td>
+</tr>
+<tr>
+<td>Custo Reddit Ads (opcional)</td>
+<td>US$ 0–420</td>
+<td>só após validar orgânico</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--sim" markdown="0"><div class="callout__head"><span class="callout__icon">≈</span><span class="callout__label">Simulação</span></div>
+<div class="callout__body"><p><strong>Projeção de 12 meses (rotulada como projeção, não promessa).</strong> Mantendo 4 pagantes novos/mês, churn de 3% e ticket de US$ 99 a 30%, a base chega a <strong>~35 clientes ativos no mês 12 → US$ 1.046/mês recorrentes</strong> de comissão. Se dobrar o volume de subs e adicionar um segundo programa, chega perto de <strong>US$ 2.000/mês</strong>. Isto é um negócio de R$ 5–11 mil/mês, não de R$ 100 mil. Quem promete mais está vendendo curso.</p></div></div>
+
+<h3 id="33-quando-o-anuncio-passa-a-fazer-sentido">3.3 Quando o anúncio passa a fazer sentido<a class="headerlink" href="#33-quando-o-anuncio-passa-a-fazer-sentido" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Situação</th>
+<th>Orgânico basta?</th>
+<th>Anúncio?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 50 respostas publicadas</td>
+<td>Sim</td>
+<td><strong>Não</strong> — você ainda não sabe o que converte</td>
+</tr>
+<tr>
+<td>Já tem 1 oferta validada e 5+ vendas</td>
+<td>Sim, mas teto baixo</td>
+<td><strong>Sim</strong>, US$ 30–50/dia em Conversation Ads</td>
+</tr>
+<tr>
+<td>Quer rodar em sub que proíbe link orgânico</td>
+<td>—</td>
+<td><strong>Sim</strong> — anúncio é a via legítima de pagar pelo espaço</td>
+</tr>
+<tr>
+<td>CAC orgânico &lt; 30% do LTV</td>
+<td>Sim</td>
+<td>Escalar com cuidado</td>
+</tr>
+</tbody>
+</table>
+<p>Benchmarks de Reddit Ads 2026 para calibrar: CPC US$ 0,50–4,00 (mediana US$ 1,25–1,85), CPM US$ 3–15 (mediana ~US$ 6,50), mínimo US$ 5/dia, teste real US$ 500–1.500. <strong>Não existe teste válido com US$ 5/dia.</strong></p>
+<hr />
+<h2 id="4-as-rotas-do-reddit-todas-as-formas-de-vender-mapa-completo">4. As rotas do Reddit — todas as formas de vender (mapa completo)<a class="headerlink" href="#4-as-rotas-do-reddit-todas-as-formas-de-vender-mapa-completo" title="Permanent link">&para;</a></h2>
+<p>Cada rota tem: como funciona, janela de risco, esforço, retorno esperado e se serve para afiliado ou imobiliária.</p>
+<h3 id="rota-1-comentario-de-alta-intencao-resposta-ancora">Rota 1 — Comentário de alta intenção ("resposta-âncora")<a class="headerlink" href="#rota-1-comentario-de-alta-intencao-resposta-ancora" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> Você monitora threads com pergunta explícita de compra ("looking for a tool that does X", "is Y worth it?", "alternatives to Z?"). Responde com valor real — critérios, prós/contras, armadilhas — e <strong>menciona a ferramenta em uma frase, com disclosure</strong>, sem link (ou com link só se a regra do sub permitir).</p>
+<p><strong>Regra de ouro.</strong> A resposta precisa ser útil <strong>mesmo se a pessoa nunca clicar em nada</strong>. Se você remover sua menção e a resposta ficar inútil, é anúncio disfarçado e vai ser removido.</p>
+<p><strong>Risco:</strong> baixo/médio · <strong>Esforço:</strong> 20 min/dia · <strong>Retorno:</strong> o mais alto e o mais consistente · <strong>Serve:</strong> afiliado e imobiliária.</p>
+<p>Exemplo de estrutura (não copie literalmente; adapte ao seu caso):</p>
+<blockquote>
+<p>Contexto: já usei as três. O que muda de verdade entre elas é [critério 1] e [critério 2] — o resto é cosmético.
+- Se seu caso é [A], vai de [X] porque [razão concreta].
+- Se é [B], [Y] resolve melhor, mas cobra por [limitação].
+- [Z] é a que eu uso hoje; <strong>sou afiliado dela, então peso isso na leitura</strong> — o motivo real é [razão técnica].
+Teste gratuito resolve em um dia: pegue as duas e rode a mesma tarefa.</p>
+</blockquote>
+<p><strong>Por que funciona:</strong> entrega o critério de decisão, admite o interesse, e deixa a escolha com a pessoa.</p>
+<hr />
+<h3 id="rota-2-post-de-caso-com-numeros-o-post-que-vira-citacao">Rota 2 — Post de caso com números ("o post que vira citação")<a class="headerlink" href="#rota-2-post-de-caso-com-numeros-o-post-que-vira-citacao" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> Um post longo (1.200–2.000 palavras) contando um resultado com números verificáveis: custo, tempo, erro, o que faria diferente. Título específico, não genérico.</p>
+<p>Formatos que sobrevivem em 2026: <code>"Como reduzi X de A para B em N dias (planilha e números dentro)"</code>, <code>"Analisei 40 threads sobre [tema] — o que os dados dizem"</code>, <code>"Gastei US$ 300 testando [categoria]: os 3 critérios que importam"</code>.</p>
+<p><strong>Risco:</strong> médio (moderador lê o post inteiro) · <strong>Esforço:</strong> 4–6 h por post · <strong>Retorno:</strong> alto e duradouro (indexa, é citado por IA, gera DM) · <strong>Serve:</strong> ambos. É a rota com <strong>maior efeito GEO</strong>: 44,2% das citações de LLM vêm do primeiro 30% do texto.</p>
+<p><strong>Regra:</strong> números reais. Um post com números inventados é destruído nos comentários em 2 horas — e o Reddit tem memória.</p>
+<hr />
+<h3 id="rota-3-educar-sem-citar-produto-pre-venda-por-autoridade">Rota 3 — Educar sem citar produto ("pré-venda por autoridade")<a class="headerlink" href="#rota-3-educar-sem-citar-produto-pre-venda-por-autoridade" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> Você responde 20–30 threads com puro valor, sem mencionar nada. Perfil tem bio e link. A pessoa curiosa clica. É o modelo 9:1 puro.</p>
+<p><strong>Risco:</strong> baixíssimo · <strong>Esforço:</strong> 15 min/dia · <strong>Retorno:</strong> médio, lento (60–90 dias para compor) · <strong>Serve:</strong> ambos, e é <strong>obrigatório como base</strong> para as outras rotas funcionarem.</p>
+<p><strong>Por que é base e não opção:</strong> mods checam histórico antes de aprovar qualquer post promocional. Sem histórico, seu post bom morre na fila.</p>
+<hr />
+<h3 id="rota-4-thread-propria-em-sub-permissivo-rsideproject-rroastmystartup-weekly-threads">Rota 4 — Thread própria em sub permissivo (r/SideProject, r/roastmystartup, weekly threads)<a class="headerlink" href="#rota-4-thread-propria-em-sub-permissivo-rsideproject-rroastmystartup-weekly-threads" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> Subs e threads designadas para divulgação ("Share Your SaaS", "Feedback Friday", "Self-Promo Saturday"). É o <strong>único lugar onde link é bem-vindo</strong> — e lá a concorrência é alta, então a oferta precisa ser específica.</p>
+<p><strong>Risco:</strong> baixo · <strong>Esforço:</strong> 30 min/semana · <strong>Retorno:</strong> baixo/médio, mas é onde você testa copy sem queimar conta · <strong>Serve:</strong> afiliado (produto próprio) e prestador de serviço.</p>
+<hr />
+<h3 id="rota-5-perfil-como-funil-a-rota-mais-subestimada">Rota 5 — Perfil como funil (a rota mais subestimada)<a class="headerlink" href="#rota-5-perfil-como-funil-a-rota-mais-subestimada" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> O <code>u/seunome</code> é público, indexável e aceita bio + links + posts de perfil. Quem lê um comentário bom clica no nome. O perfil vira uma landing page sem violar regra de sub nenhuma.</p>
+<p><strong>O que colocar:</strong> 1 linha de quem você é + prova concreta + 1 link (hub com suas reviews/roteiros) + 3 posts de perfil com o melhor conteúdo. Nada de "DM me".</p>
+<p><strong>Risco:</strong> zero · <strong>Esforço:</strong> 2 h uma vez · <strong>Retorno:</strong> multiplica todas as outras rotas · <strong>Serve:</strong> ambos.</p>
+<hr />
+<h3 id="rota-6-dm-consentida-so-apos-convite-publico">Rota 6 — DM consentida (só após convite público)<a class="headerlink" href="#rota-6-dm-consentida-so-apos-convite-publico" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> A pessoa escreve "me manda?" / "DM me" no comentário. Aí sim você manda uma mensagem curta, pessoal, com o que ela pediu. Nunca antes disso.</p>
+<p>Dados de campo: em um caso documentado de 2026, <strong>26 DMs frios → 13 cadastros (50%)</strong>, mas com abordagem personalizada e thread recente (&lt;48 h). Em massa, a taxa cai para &lt;20% e a conta é denunciada.</p>
+<p><strong>Risco:</strong> alto se não solicitado · <strong>Esforço:</strong> baixo · <strong>Retorno:</strong> alto por conversa · <strong>Regra:</strong> <strong>só sob convite</strong>.</p>
+<hr />
+<h3 id="rota-7-reddit-ads-a-via-legitima-de-comprar-atencao">Rota 7 — Reddit Ads (a via legítima de comprar atenção)<a class="headerlink" href="#rota-7-reddit-ads-a-via-legitima-de-comprar-atencao" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> Promoted Posts, Conversation Ads (dentro da thread, a mais nativa), Lead Gen Ads, Product Ads, Max Campaigns (beta, US$ 20/dia), AMA Ads.</p>
+<table>
+<thead>
+<tr>
+<th>Formato</th>
+<th>CPC típico</th>
+<th>CTR</th>
+<th>Melhor uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Promoted Post imagem</td>
+<td>US$ 0,75–2,00</td>
+<td>1,5–3,0%</td>
+<td>Oferta clara, topo de funil</td>
+</tr>
+<tr>
+<td><strong>Conversation Ad</strong></td>
+<td>US$ 0,75–2,50</td>
+<td><strong>2,0–4,0%</strong></td>
+<td>Meio de funil, alta intenção</td>
+</tr>
+<tr>
+<td>Carrossel</td>
+<td>US$ 0,80–2,50</td>
+<td>1,0–2,0%</td>
+<td>Comparação, prova</td>
+</tr>
+<tr>
+<td>Free-form (texto longo)</td>
+<td>US$ 0,50–2,00</td>
+<td>1,0–2,5%</td>
+<td>Storytelling, público técnico</td>
+</tr>
+<tr>
+<td>Lead Gen Ad (form nativo)</td>
+<td>CPL US$ 15–120</td>
+<td>—</td>
+<td>Captura sem sair do Reddit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Risco:</strong> nenhum de ban · <strong>Esforço:</strong> setup 3 h · <strong>Retorno:</strong> previsível e escalável · <strong>Serve:</strong> ambos — no imobiliário, é a rota de maior volume.</p>
+<hr />
+<h3 id="rota-8-ama-qa-com-especialista">Rota 8 — AMA / Q&amp;A com especialista<a class="headerlink" href="#rota-8-ama-qa-com-especialista" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> AMA (Ask Me Anything) em sub relevante, com credencial real. Não é palco de venda: é prova de competência. O retorno vem nos DMs e nas citações posteriores.
+<strong>Risco:</strong> médio (AMA ruim é pior que não fazer) · <strong>Esforço:</strong> 6 h + 3 h ao vivo · <strong>Retorno:</strong> picos de autoridade · <strong>Serve:</strong> imobiliária (corretor especialista em bairro) e afiliado (operador com números reais).</p>
+<hr />
+<h3 id="rota-9-subreddit-proprio-so-com-tracao">Rota 9 — Subreddit próprio (só com tração)<a class="headerlink" href="#rota-9-subreddit-proprio-so-com-tracao" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> Criar comunidade de nicho geográfico (ex.: <code>r/GoianiaImoveis</code>). Você é mod, define regras, gera pauta.
+<strong>Risco:</strong> alto de parecer "seeded community" (a Reddit derrubou 4 comunidades de teste de uma empresa em 2026 por conteúdo semeado) · <strong>Esforço:</strong> alto e contínuo · <strong>Retorno:</strong> altíssimo se pegar · <strong>Veredito:</strong> <strong>não faça antes de 6 meses de reputação real.</strong> Sem massa crítica, é um cemitério.</p>
+<hr />
+<h3 id="rota-10-parceria-com-criador-do-proprio-sub-co-marketing">Rota 10 — Parceria com criador do próprio sub (co-marketing)<a class="headerlink" href="#rota-10-parceria-com-criador-do-proprio-sub-co-marketing" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> Achar quem já tem audiência no sub (post recorrente, comentário com centenas de upvotes) e propor: ele publica a análise, você dá os dados/oferta. Pagamento por resultado, não por post.
+<strong>Risco:</strong> baixo · <strong>Esforço:</strong> médio · <strong>Retorno:</strong> rápido · <strong>Serve:</strong> ambos. É a rota mais ignorada e uma das mais eficientes.</p>
+<hr />
+<h3 id="rota-11-conteudo-para-ia-citar-geo-legitimo">Rota 11 — Conteúdo para IA citar (GEO legítimo)<a class="headerlink" href="#rota-11-conteudo-para-ia-citar-geo-legitimo" title="Permanent link">&para;</a></h3>
+<p><strong>Como funciona.</strong> Escrever respostas e posts com estrutura que LLMs extraem: resposta direta nos primeiros 30%, dados com fonte, listas comparativas, linguagem definida. O Reddit é 2º maior fonte de citações em AI Overviews (18,5%).</p>
+<p><strong>Dado que justifica:</strong> tráfego indicado por IA converte ~4,4× melhor que orgânico; ChatGPT 15,9%, Perplexity 10,5% de conversão contra 1,76% do orgânico tradicional.
+<strong>Risco:</strong> zero (é só conteúdo bom) · <strong>Esforço:</strong> embutido nas rotas 1–2 · <strong>Retorno:</strong> composto, crescente · <strong>Serve:</strong> ambos.</p>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>A linha vermelha do GEO.</strong> Existe uma prática de plantar 13 palavras em comentário para virar recomendação de IA. É eficaz, é trivial e é <strong>exatamente o que a Reddit está caçando</strong>: 23 milhões de views de spam bloqueadas/dia, 2 milhões de votos inautênticos revogados/dia, e política <code>[App]</code> desde mar/2026. O ganho dura semanas; o ban é permanente e o ativo (conta com histórico) é insubstituível. <strong>Não faça.</strong></p></div></div>
+
+<hr />
+<h2 id="5-mapa-de-subreddits-onde-jogar-cada-rota">5. Mapa de subreddits: onde jogar cada rota<a class="headerlink" href="#5-mapa-de-subreddits-onde-jogar-cada-rota" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Subreddit</th>
+<th>Tamanho</th>
+<th>Tolerância a promo</th>
+<th>Melhor rota</th>
+<th>O que postar</th>
+<th>Frequência segura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r/AffiliateMarketing</td>
+<td>~285K</td>
+<td><strong>Baixa</strong> (10%, sem link/ref)</td>
+<td>1, 3, 4</td>
+<td>Comparativo de programas, erro de iniciante</td>
+<td>1 post/60 dias + comentários</td>
+</tr>
+<tr>
+<td>r/JustStart</td>
+<td>~179K</td>
+<td><strong>Média</strong></td>
+<td>2, 4</td>
+<td>"Como fiz X" com números, build in public</td>
+<td>1 post/mês</td>
+</tr>
+<tr>
+<td>r/SEO</td>
+<td>~498K</td>
+<td><strong>Muito baixa</strong></td>
+<td>1, 3</td>
+<td>Dado técnico, teste</td>
+<td>comentários apenas</td>
+</tr>
+<tr>
+<td>r/SaaS</td>
+<td>~380K</td>
+<td>Média/baixa</td>
+<td>2, 4</td>
+<td>Teardown, pricing, churn</td>
+<td>1 post/60 dias</td>
+</tr>
+<tr>
+<td>r/Entrepreneur</td>
+<td>~3M</td>
+<td>Baixa</td>
+<td>2, 3</td>
+<td>Lição com número</td>
+<td>raro</td>
+</tr>
+<tr>
+<td>r/SideProject</td>
+<td>grande</td>
+<td><strong>Alta</strong></td>
+<td>4</td>
+<td>Lançamento, demo</td>
+<td>semanal</td>
+</tr>
+<tr>
+<td>r/marketing</td>
+<td>grande</td>
+<td>Baixa</td>
+<td>1, 3</td>
+<td>Tática replicável</td>
+<td>comentários</td>
+</tr>
+<tr>
+<td>r/smallbusiness</td>
+<td>grande</td>
+<td>Baixa</td>
+<td>1, 3</td>
+<td>Ferramenta que resolve dor específica</td>
+<td>comentários</td>
+</tr>
+<tr>
+<td>r/digitalnomad / r/freelance</td>
+<td>médio</td>
+<td>Média</td>
+<td>1, 3</td>
+<td>Operação remota, ferramenta</td>
+<td>comentários</td>
+</tr>
+<tr>
+<td>r/DataHoarder, r/devops, r/sysadmin</td>
+<td>médio/grande</td>
+<td><strong>Muito baixa</strong></td>
+<td>1, 3</td>
+<td>Solução técnica real</td>
+<td>comentários</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Regras de ouro (verificadas em nov/2026):</strong> 34% dos subs que fundadores usam <strong>proíbem</strong> autopromoção; 23% permitem só sob 9:1; 2% acolhem. Muitos exigem 100+ karma e 30 dias de conta. r/SaaS e r/startups endureceram em 2026 (categoria banida, 1 post/60 dias).</p>
+<div class="callout callout--nota" markdown="0"><div class="callout__head"><span class="callout__icon">i</span><span class="callout__label">Nota</span></div>
+<div class="callout__body"><p><strong>Brasil:</strong> r/empreendedorismo (~185K), r/brasilcoders (~92K), r/investimentos (~320K), r/StartupsBrasil (~67K), r/Contabilidade, r/PequenoNegocio, r/MEI. Reddit BR tem ~20–24 milhões de usuários/mês (estimativas divergem: 19,9M em DataReportal, 22,5M em outras fontes) e cresceu ~27–60% em 2 anos. Menor volume, <strong>muito menos concorrência</strong> e zero conteúdo bom de afiliado em português. Para afiliado que vende SaaS global, o sub em inglês ainda é o mercado principal; o BR serve para authority e para produto local.</p></div></div>
+
+<hr />
+<h2 id="6-tom-e-formato-o-que-o-reddit-aceita-em-2026">6. Tom e formato: o que o Reddit aceita em 2026<a class="headerlink" href="#6-tom-e-formato-o-que-o-reddit-aceita-em-2026" title="Permanent link">&para;</a></h2>
+<p><strong>O que ganha upvote:</strong> primeira pessoa, número específico, admissão de erro, lista curta, pergunta no fim, "editei para adicionar" (sinal de honestidade), planilha/print.</p>
+<p><strong>O que é destruído:</strong> título em CAIXA ALTA, emoji em excesso, "Game changer", "DM me", link no primeiro parágrafo, contador de dinheiro, promessa de retorno, texto que parece press release, resposta que não endereça a pergunta feita.</p>
+<p><strong>Comprimento:</strong> comentário útil 120–250 palavras; post de caso 1.200–2.000 palavras; acima de 2.000 palavras, publique como post de perfil e linke.</p>
+<p><strong>Disclosure afiliado (EUA, FTC 16 CFR 255):</strong> precisa ser <strong>clara e conspícua</strong>, antes do link, na mesma tela, linguagem simples: <em>"I earn a commission if you sign up through my link."</em> Enterrar no rodapé, usar "partner"/"sponsor" vago, ou hashtag perdida não vale. Desde jul/2026 a regra cobre explicitamente <strong>conteúdo gerado por IA</strong> e responsabiliza solidariamente quem recruta tráfego.</p>
+<p><strong>Disclosure Brasil (CONAR, vigente 01/06/2026):</strong> link de afiliado e cupom <strong>são publicidade</strong>. Exige identificação ostensiva em primeiro plano (<code>#publi</code>/<code>#publicidade</code> ou selo da plataforma), sem clique em "mais". Anunciante e agência também respondem. A Lei 15.325/2026 reforça o dever de sinalizar.</p>
+<hr />
+<h2 id="7-o-papel-do-grok-no-funil-de-afiliado-tarefa-por-tarefa">7. O papel do Grok no funil de afiliado (tarefa por tarefa)<a class="headerlink" href="#7-o-papel-do-grok-no-funil-de-afiliado-tarefa-por-tarefa" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>O que o humano faz</th>
+<th>O que o Grok faz</th>
+<th>Prompt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Escolher nicho</td>
+<td>Decide com base em LTV e acesso</td>
+<td>Mapeia 20 programas, comissão, cookie, EPC e reputação</td>
+<td><code>P1-nicho.md</code></td>
+</tr>
+<tr>
+<td>Achar subs</td>
+<td>Valida regra no sidebar</td>
+<td>Lista subs por intenção e tolerância, com riscos</td>
+<td><code>P2-subs.md</code></td>
+</tr>
+<tr>
+<td>Monitorar</td>
+<td>—</td>
+<td>Radar diário de threads + score 0–100</td>
+<td><code>P3-radar.md</code></td>
+</tr>
+<tr>
+<td>Qualificar</td>
+<td>Aprova/descarta em 15 s</td>
+<td>Gera lead card JSON com motivo, oferta, ângulo</td>
+<td><code>P4-leadcard.md</code></td>
+</tr>
+<tr>
+<td>Redigir</td>
+<td>Reescreve na própria voz</td>
+<td>Rascunho no tom do sub + disclosure + checagem de regra</td>
+<td><code>P5-scribe.md</code></td>
+</tr>
+<tr>
+<td>Publicar</td>
+<td><strong>Humano publica</strong></td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Medir</td>
+<td>Lê o painel semanal</td>
+<td>Consolida cliques, trials, receita, EPC por sub</td>
+<td><code>P6-atribuicao.md</code></td>
+</tr>
+<tr>
+<td>Escalar</td>
+<td>Decide mídia</td>
+<td>Calcula CAC/LTV e ponto de equilíbrio do anúncio</td>
+<td><code>P7-midia.md</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Divisão de trabalho que funciona:</strong> o Grok produz <strong>80% do texto, 100% do rastreamento e 0% da decisão</strong>. O humano produz <strong>100% do julgamento e da assinatura</strong>.</p>
+<hr />
+<h2 id="8-case-trilha-completa-com-numeros-e-fontes-separadas">8. CASE — trilha completa, com números e fontes separadas<a class="headerlink" href="#8-case-trilha-completa-com-numeros-e-fontes-separadas" title="Permanent link">&para;</a></h2>
+<h3 id="81-casos-reais-publicados-com-fonte">8.1 Casos reais publicados (com fonte)<a class="headerlink" href="#81-casos-reais-publicados-com-fonte" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>O que fizeram</th>
+<th>Resultado declarado</th>
+<th>Como ler com ceticismo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Marca de cozinha DTC</strong></td>
+<td>1º AMA em sub de culinária, + follow-ups</td>
+<td><strong>US$ 52 mil</strong> em 6 meses, CAC de US$ 45 → US$ 11, AOV 34% maior</td>
+<td>Números de agência; AMA bem-sucedido exige produto com fãs</td>
+</tr>
+<tr>
+<td><strong>SaaS B2B de analytics</strong></td>
+<td>87 posts/comentários, 4 subs, 90 dias, US$ 4,2 mil de teste</td>
+<td>47.128 sessões, <strong>312 MQLs</strong>, 41 clientes, CAC US$ 89 vs US$ 237 no Google</td>
+<td>O mais crível: tem meta, orçamento, atribuição por UTM</td>
+</tr>
+<tr>
+<td><strong>Firm de cibersegurança</strong></td>
+<td>Thread semanal de ameaças</td>
+<td>+340% de leads qualificados, CPL US$ 180 → 22, 2 deals de US$ 120k ARR</td>
+<td>Lead B2B de nicho; ciclo longo, difícil atribuir</td>
+</tr>
+<tr>
+<td><strong>Newsletter de finanças</strong></td>
+<td>Posts mensais com dado próprio</td>
+<td>200 → 5.100 assinantes em 5 meses, abertura 52%</td>
+<td>Verificável por terceiros (Substack)</td>
+</tr>
+<tr>
+<td><strong>App de meditação</strong></td>
+<td>Post viral em r/apps</td>
+<td>11 mil instalações em 72 h, CPI US$ 0 vs US$ 3,50</td>
+<td>Pico irrepetível; 50–80/mês residual 8 meses depois</td>
+</tr>
+<tr>
+<td><strong>Agente imobiliário (Chicago)</strong></td>
+<td>18 meses em r/FirstTimeHomeBuyer + sub local</td>
+<td><strong>43 transações, US$ 14 mi</strong> de volume</td>
+<td>Case de fornecedor de leads; volume plausível para 18 meses</td>
+</tr>
+<tr>
+<td><strong>Narrative Nooks (EdTech)</strong></td>
+<td>Monitor + comentário em thread de alta intenção</td>
+<td>139 leads, US$ 980 em 30 dias, 30 clientes</td>
+<td>Ticket baixo; mostra o valor da velocidade de resposta</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Padrão comum aos que funcionaram:</strong> (1) um sub principal, não dez; (2) cadência de meses, não semanas; (3) alguém respondendo em horas, não dias; (4) oferta que a comunidade já pedia.</p>
+<h3 id="82-simulacao-financeira-do-operador-solo-transparente">8.2 Simulação financeira do operador solo (transparente)<a class="headerlink" href="#82-simulacao-financeira-do-operador-solo-transparente" title="Permanent link">&para;</a></h3>
+<div class="callout callout--sim" markdown="0"><div class="callout__head"><span class="callout__icon">≈</span><span class="callout__label">Simulação</span></div>
+<div class="callout__body"><p><strong>Rótulo: SIMULAÇÃO.</strong> Não é resultado obtido. Premissas explícitas, todas conservadoras e ajustáveis na planilha <code>data/unit-economics.csv</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Mês</th>
+<th>Respostas publicadas</th>
+<th>Cliques perfil</th>
+<th>Trials</th>
+<th>Pagantes novos</th>
+<th>Base ativa</th>
+<th>Comissão US$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>20</td>
+<td>45</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>45</td>
+<td>110</td>
+<td>5</td>
+<td>1</td>
+<td>1</td>
+<td>30</td>
+</tr>
+<tr>
+<td>3</td>
+<td>50</td>
+<td>140</td>
+<td>7</td>
+<td>3</td>
+<td>4</td>
+<td>118</td>
+</tr>
+<tr>
+<td>4</td>
+<td>50</td>
+<td>150</td>
+<td>8</td>
+<td>3</td>
+<td>7</td>
+<td>203</td>
+</tr>
+<tr>
+<td>5</td>
+<td>50</td>
+<td>155</td>
+<td>8</td>
+<td>4</td>
+<td>11</td>
+<td>316</td>
+</tr>
+<tr>
+<td>6</td>
+<td>50</td>
+<td>160</td>
+<td>9</td>
+<td>4</td>
+<td>14</td>
+<td>425</td>
+</tr>
+<tr>
+<td>9</td>
+<td>50</td>
+<td>165</td>
+<td>9</td>
+<td>4</td>
+<td>25</td>
+<td>734</td>
+</tr>
+<tr>
+<td>12</td>
+<td>55</td>
+<td>180</td>
+<td>10</td>
+<td>5</td>
+<td>35</td>
+<td>1.046</td>
+</tr>
+</tbody>
+</table>
+<p>Premissas: conversão perfil→trial ~4–6%, trial→pago 30%, ticket US$ 99, comissão 30% (US$ 29,70 por cliente/mês), churn 3%/mês, base calculada mês a mês com churn composto. <strong>O que quebra a projeção:</strong> em ~60% dos casos a conversão fica 50% abaixo por resposta genérica e thread sem intenção. <strong>O que melhora:</strong> um segundo programa com EPC maior dobra a receita sem dobrar o trabalho.</p></div></div>
+
+<h3 id="83-o-caminho-real-passo-a-passo-o-que-fazer-na-segunda-feira">8.3 O caminho real, passo a passo (o que fazer na segunda-feira)<a class="headerlink" href="#83-o-caminho-real-passo-a-passo-o-que-fazer-na-segunda-feira" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Dia 1</strong> — Escolha 1 nicho e 2 programas (1 recorrente + 1 fixo). Cadastre-se, pegue link e cookie. Anote EPC alvo.</li>
+<li><strong>Dia 1–3</strong> — Rode <code>P1</code> e <code>P2</code> no Grok. Saída: 6 subs, regra de cada um, 3 ângulos.</li>
+<li><strong>Dia 4–30</strong> — <strong>Só comentário, zero link, zero menção.</strong> Meta: 100+ karma e 3 subs onde você é reconhecido. Rode o radar todo dia (15 min).</li>
+<li><strong>Dia 31</strong> — Publique o primeiro post de caso (rota 2) em sub de tolerância média. Números reais.</li>
+<li><strong>Dia 32–60</strong> — Ative menções com disclosure (1 a cada 10 contribuições). Comece a medir clique no perfil e trial.</li>
+<li><strong>Dia 61</strong> — Revise EPC por sub. Mate o sub que não converteu; dobre o que converteu.</li>
+<li><strong>Dia 61–90</strong> — Se ≥5 pagantes: teste Reddit Ads US$ 30/dia em Conversation Ad. Se &lt;5: volte ao passo 3 e melhore as respostas; não gaste em mídia.</li>
+<li><strong>Dia 90</strong> — Decisão go/no-go: EPC ≥ US$ 1 ou CAC orgânico &lt; 30% do LTV? Se sim, escale. Se não, mude de oferta, não de canal.</li>
+</ol>
+<hr />
+<h2 id="9-piloto-de-14-dias-executavel-hoje-com-criterio-de-corte">9. Piloto de 14 dias (executável hoje, com critério de corte)<a class="headerlink" href="#9-piloto-de-14-dias-executavel-hoje-com-criterio-de-corte" title="Permanent link">&para;</a></h2>
+<div class="callout callout--meta" markdown="0"><div class="callout__head"><span class="callout__icon">◷</span><span class="callout__label">Contexto</span></div>
+<div class="callout__body"><p><strong>Objetivo:</strong> provar ou matar a tese em 14 dias, gastando ~US$ 10 de API e 1 h/dia.
+<strong>Material:</strong> <code>grok-reddit-ops</code> (motor), <code>P3</code>/<code>P4</code>/<code>P5</code> (prompts), <code>rules.yaml</code> (regras por sub).</p></div></div>
+
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Dias</th>
+<th>Ações</th>
+<th>Entregável</th>
+<th>Métrica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>0–1</td>
+<td>Criar conta Reddit "limpa" (se não tiver), escolher nicho + 2 programas, rodar <code>P1</code>/<code>P2</code></td>
+<td><code>nicho.md</code>, <code>subs.md</code></td>
+<td>6 subs mapeados, regra lida</td>
+</tr>
+<tr>
+<td>Observação</td>
+<td>2–3</td>
+<td>Rodar radar em fixture/manual; calibrar score; <strong>não postar nada</strong></td>
+<td>20 lead cards; 10 threads escolhidas</td>
+<td>Precisão do score ≥ 70%</td>
+</tr>
+<tr>
+<td>Presença</td>
+<td>4–8</td>
+<td>2 comentários/dia puramente úteis, sem menção</td>
+<td>10 comentários; karma inicial</td>
+<td>Karma &gt; 20, zero remoção</td>
+</tr>
+<tr>
+<td>Conversão</td>
+<td>9–12</td>
+<td>3 comentários com menção + disclosure; 1 post de caso curto</td>
+<td>3 respostas com disclosure; 1 post</td>
+<td>Cliques no perfil ≥ 10</td>
+</tr>
+<tr>
+<td>Leitura</td>
+<td>13–14</td>
+<td>Rodar <code>P6</code>; preencher painel</td>
+<td>Relatório semanal</td>
+<td>Trials ≥ 1 · Custo/lead ≤ US$ 5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Critérios de corte (duros):</strong> se em 14 dias você tiver (a) qualquer remoção por regra, <strong>pare e reescreva o tom</strong>; (b) zero clique no perfil em 10 comentários, <strong>o problema é a oferta ou o sub</strong>, não o volume; (c) score do bot acertando &lt;60%, <strong>recalibre o prompt com 20 exemplos rotulados à mão</strong>.</p>
+<hr />
+<h2 id="10-erros-que-custam-a-conta-e-o-dinheiro">10. Erros que custam a conta (e o dinheiro)<a class="headerlink" href="#10-erros-que-custam-a-conta-e-o-dinheiro" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Erro</th>
+<th>O que acontece</th>
+<th>Correção</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Link em toda resposta</td>
+<td>Filtro de spam do AutoMod; shadowban</td>
+<td>Zero link no primeiro mês; perfil como destino</td>
+</tr>
+<tr>
+<td>Copiar/colar o mesmo texto em 5 subs</td>
+<td>Remoção por "mass-posting"</td>
+<td>Reescrever por sub, sempre</td>
+</tr>
+<tr>
+<td>Usar IA sem reescrever</td>
+<td>Detectado como "AI presented as human"</td>
+<td>Reescrever na sua voz, erros humanos inclusive</td>
+</tr>
+<tr>
+<td>Múltiplas contas</td>
+<td>Ban de IP/conta, sem apelação</td>
+<td>Uma conta, uma pessoa</td>
+</tr>
+<tr>
+<td>Postar em sub grande sem histórico</td>
+<td>Remoção e ban do sub</td>
+<td>2 semanas de comentários antes</td>
+</tr>
+<tr>
+<td>Prometer renda</td>
+<td>Remoção + exposição pública</td>
+<td>Compartilhar processo, nunca retorno garantido</td>
+</tr>
+<tr>
+<td>Ignorar a regra do sub</td>
+<td>Ban imediato, irreversível na prática</td>
+<td><code>rules.yaml</code> + checagem no Scribe</td>
+</tr>
+<tr>
+<td>Escalar antes de validar</td>
+<td>Queima orçamento de anúncio</td>
+<td>Só mídia com ≥5 vendas orgânicas</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11-teses-finais-do-estudo-1">11. Teses finais do Estudo 1<a class="headerlink" href="#11-teses-finais-do-estudo-1" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Afiliado no Reddit é jogo de oferta + intenção, não de volume de post.</strong> 8 threads certas por mês valem mais que 200 comentários genéricos.</li>
+<li><strong>Recorrência é o único modelo que compensa o esforço.</strong> US$ 6,40 por venda é hobby; US$ 534 por cliente é negócio.</li>
+<li><strong>A rota que mais rende é a mais chata:</strong> comentário útil, sem link, com constância — e o perfil fazendo a venda.</li>
+<li><strong>Grok vale por 15 minutos por dia economizados e por achar threads que você não acharia.</strong> O resto é disciplina humana.</li>
+<li><strong>O teto realista do operador solo é R$ 5–10 mil/mês em 12 meses.</strong> Acima disso exige equipe, segundo programa e mídia paga — e aí o jogo muda de novo.</li>
+</ol>
+<hr />
+<h3 id="fontes-do-estudo-1">Fontes do Estudo 1<a class="headerlink" href="#fontes-do-estudo-1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Rewardful (2026) — comissão média 24,16%, payout US$ 14,10, conversão 0,8%, 1,28% dos afiliados vendem.</li>
+<li>Dollarpocket / AffNinja / StackedReview / IREV (2026) — benchmarks de CVR, EPC e comissão por nicho.</li>
+<li>PartnerStack, Impact, CJ, ShareASale (2026) — estruturas de comissão recorrente.</li>
+<li>Reddit Inc. (Q2 2026) — DAUq/WAUq; Reddit Ads Help (2026) — formatos, mínimo de US$ 5/dia.</li>
+<li>Benchmarks Reddit Ads 2026 — CPC, CPM, CTR por formato.</li>
+<li>Cases: MediaFast (7 cases), Elevated Magazines (SaaS 90 dias), Superside, ReplyAgent, Subreddit Signals, ReddiReach, OneUp.</li>
+<li>FTC 16 CFR 255 (2023, enforcement 2026); CONAR Guia 2026 (vigente 01/06/2026); Lei 15.325/2026.</li>
+<li>Regras de subreddit: MediaFast/ThreadOtter/oneup (r/AffiliateMarketing, r/JustStart, r/SEO), verificadas em 2026.</li>
+</ul>
+    </article>
+
+    <nav class="pager">
+      <a class="pager__link" href="meta.html"><span class="pager__label">← Anterior</span><span class="pager__title">Meta-pesquisa</span></a>
+      <a class="pager__link" href="02.html"><span class="pager__label">Próximo →</span><span class="pager__title">Estudo 2 · Real estate</span></a>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#1-o-tamanho-do-jogo-e-por-que-o-afiliado-mediano-perde">1. O tamanho do jogo e por que o afiliado mediano perde</a></li>
+<li><a href="#2-segmentacao-onde-o-dinheiro-esta-em-2026">2. Segmentação: onde o dinheiro está em 2026</a><ul>
+<li><a href="#21-por-vertical-eua-global">2.1 Por vertical (EUA / global)</a></li>
+<li><a href="#22-a-escolha-recomendada-e-por-que">2.2 A escolha recomendada (e por quê)</a></li>
+<li><a href="#23-matematica-de-uma-comissao-recorrente-por-que-muda-tudo">2.3 Matemática de uma comissão recorrente (por que muda tudo)</a></li>
+</ul>
+</li>
+<li><a href="#3-unit-economics-a-planilha-que-decide-se-voce-continua">3. Unit economics: a planilha que decide se você continua</a><ul>
+<li><a href="#31-funil-canonico-do-afiliado-via-reddit">3.1 Funil canônico do afiliado via Reddit</a></li>
+<li><a href="#32-cenario-base-operador-solo-90-dias">3.2 Cenário base (operador solo, 90 dias)</a></li>
+<li><a href="#33-quando-o-anuncio-passa-a-fazer-sentido">3.3 Quando o anúncio passa a fazer sentido</a></li>
+</ul>
+</li>
+<li><a href="#4-as-rotas-do-reddit-todas-as-formas-de-vender-mapa-completo">4. As rotas do Reddit — todas as formas de vender (mapa completo)</a><ul>
+<li><a href="#rota-1-comentario-de-alta-intencao-resposta-ancora">Rota 1 — Comentário de alta intenção ("resposta-âncora")</a></li>
+<li><a href="#rota-2-post-de-caso-com-numeros-o-post-que-vira-citacao">Rota 2 — Post de caso com números ("o post que vira citação")</a></li>
+<li><a href="#rota-3-educar-sem-citar-produto-pre-venda-por-autoridade">Rota 3 — Educar sem citar produto ("pré-venda por autoridade")</a></li>
+<li><a href="#rota-4-thread-propria-em-sub-permissivo-rsideproject-rroastmystartup-weekly-threads">Rota 4 — Thread própria em sub permissivo (r/SideProject, r/roastmystartup, weekly threads)</a></li>
+<li><a href="#rota-5-perfil-como-funil-a-rota-mais-subestimada">Rota 5 — Perfil como funil (a rota mais subestimada)</a></li>
+<li><a href="#rota-6-dm-consentida-so-apos-convite-publico">Rota 6 — DM consentida (só após convite público)</a></li>
+<li><a href="#rota-7-reddit-ads-a-via-legitima-de-comprar-atencao">Rota 7 — Reddit Ads (a via legítima de comprar atenção)</a></li>
+<li><a href="#rota-8-ama-qa-com-especialista">Rota 8 — AMA / Q&amp;A com especialista</a></li>
+<li><a href="#rota-9-subreddit-proprio-so-com-tracao">Rota 9 — Subreddit próprio (só com tração)</a></li>
+<li><a href="#rota-10-parceria-com-criador-do-proprio-sub-co-marketing">Rota 10 — Parceria com criador do próprio sub (co-marketing)</a></li>
+<li><a href="#rota-11-conteudo-para-ia-citar-geo-legitimo">Rota 11 — Conteúdo para IA citar (GEO legítimo)</a></li>
+</ul>
+</li>
+<li><a href="#5-mapa-de-subreddits-onde-jogar-cada-rota">5. Mapa de subreddits: onde jogar cada rota</a></li>
+<li><a href="#6-tom-e-formato-o-que-o-reddit-aceita-em-2026">6. Tom e formato: o que o Reddit aceita em 2026</a></li>
+<li><a href="#7-o-papel-do-grok-no-funil-de-afiliado-tarefa-por-tarefa">7. O papel do Grok no funil de afiliado (tarefa por tarefa)</a></li>
+<li><a href="#8-case-trilha-completa-com-numeros-e-fontes-separadas">8. CASE — trilha completa, com números e fontes separadas</a><ul>
+<li><a href="#81-casos-reais-publicados-com-fonte">8.1 Casos reais publicados (com fonte)</a></li>
+<li><a href="#82-simulacao-financeira-do-operador-solo-transparente">8.2 Simulação financeira do operador solo (transparente)</a></li>
+<li><a href="#83-o-caminho-real-passo-a-passo-o-que-fazer-na-segunda-feira">8.3 O caminho real, passo a passo (o que fazer na segunda-feira)</a></li>
+</ul>
+</li>
+<li><a href="#9-piloto-de-14-dias-executavel-hoje-com-criterio-de-corte">9. Piloto de 14 dias (executável hoje, com critério de corte)</a></li>
+<li><a href="#10-erros-que-custam-a-conta-e-o-dinheiro">10. Erros que custam a conta (e o dinheiro)</a></li>
+<li><a href="#11-teses-finais-do-estudo-1">11. Teses finais do Estudo 1</a><ul>
+<li><a href="#fontes-do-estudo-1">Fontes do Estudo 1</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: EPC, LGPD, x_search)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

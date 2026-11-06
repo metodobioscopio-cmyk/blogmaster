@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playbook Grok · Grok × Reddit</title>
+<meta name="description" content="Dossiê operacional: Grok bot de vendas para affiliate marketing e real estate via Reddit.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Reddit</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link active" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">07</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC 03 · 7 MIN DE LEITURA</p>
+      <h1 class="doc__title">Playbook Grok — operação, prompts e controle de custo</h1>
+      <blockquote>
+<p>Manual de campo do bot. Não é teoria: cada seção corresponde a um arquivo do motor <code>grok-reddit-ops</code> e a um prompt versionado em <code>prompts/</code>. Se você seguir na ordem, termina com um radar rodando e um relatório semanal na mão.</p>
+</blockquote>
+<hr />
+<h2 id="1-setup-em-20-minutos">1. Setup em 20 minutos<a class="headerlink" href="#1-setup-em-20-minutos" title="Permanent link">&para;</a></h2>
+<h3 id="11-pre-requisitos">1.1 Pré-requisitos<a class="headerlink" href="#11-pre-requisitos" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Como obter</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XAI_API_KEY</code></td>
+<td>console.x.ai → API Keys</td>
+<td>Novos usuários costumam receber créditos promocionais; confirme no painel</td>
+</tr>
+<tr>
+<td>Python 3.10+</td>
+<td>já instalado na maioria dos ambientes</td>
+<td>sem dependências externas no modo fixture</td>
+</tr>
+<tr>
+<td>Fonte de dados do Reddit</td>
+<td><code>fixture</code> (grátis) · <code>oauth</code> (API oficial) · <code>manual</code> (colar texto)</td>
+<td>ver seção 2</td>
+</tr>
+<tr>
+<td>Conta Reddit com histórico</td>
+<td>30+ dias, 100+ karma</td>
+<td><strong>sem isso, nada funciona</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-instalacao">1.2 Instalação<a class="headerlink" href="#12-instalacao" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">cd grok-reddit-ops
+cp .env.example .env          # preencha XAI_API_KEY
+python -m src.cli radar --source fixture --limit 12
+python -m src.cli weekly --input output/leads.jsonl
+</code></pre>
+<p>O primeiro comando já produz lead cards usando dados de exemplo — sem gastar um centavo de API. É assim que você calibra antes de ligar o modelo.</p>
+<h3 id="13-variaveis-de-ambiente">1.3 Variáveis de ambiente<a class="headerlink" href="#13-variaveis-de-ambiente" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Padrão</th>
+<th>Para que serve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XAI_API_KEY</code></td>
+<td>—</td>
+<td>autenticação</td>
+</tr>
+<tr>
+<td><code>GROK_MODEL</code></td>
+<td><code>grok-4.3</code></td>
+<td>cavalo de batalha; troque sem mexer no código</td>
+</tr>
+<tr>
+<td><code>GROK_MODEL_FAST</code></td>
+<td><code>grok-4.1-fast</code></td>
+<td>triagem volumosa</td>
+</tr>
+<tr>
+<td><code>X_SEARCH_POSTS_BUDGET</code></td>
+<td><code>200</code></td>
+<td><strong>teto diário de posts do X</strong> (controle de custo)</td>
+</tr>
+<tr>
+<td><code>REDDIT_SOURCE</code></td>
+<td><code>fixture</code></td>
+<td><code>fixture</code> | <code>oauth</code> | <code>manual</code></td>
+</tr>
+<tr>
+<td><code>MIN_SCORE</code></td>
+<td><code>60</code></td>
+<td>corte de intenção</td>
+</tr>
+<tr>
+<td><code>DAILY_DRAFT_CAP</code></td>
+<td><code>8</code></td>
+<td>máximo de rascunhos/dia (evita overposting)</td>
+</tr>
+<tr>
+<td><code>DISCLOSURE_MODE</code></td>
+<td><code>strict</code></td>
+<td>injeta disclosure obrigatório no Scribe</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-a-camada-de-dados-tres-modos-uma-interface">2. A camada de dados: três modos, uma interface<a class="headerlink" href="#2-a-camada-de-dados-tres-modos-uma-interface" title="Permanent link">&para;</a></h2>
+<pre><code>RedditSource (interface)
+├── FixtureSource   → lê fixtures/threads.json (desenvolvimento, demo, testes)
+├── OAuthSource     → API oficial do Reddit (PRAW/HTTP OAuth), respeita limite
+└── ManualSource    → você cola o texto da thread, o bot analisa
+</code></pre>
+<p><strong>Por que isso importa:</strong> a API pública do Reddit termina em março de 2027 e o cadastro self-service já está fechado. Um bot que depende de scraping morre nessa data. Um bot com interface plugável troca de fonte em uma linha.</p>
+<pre><code class="language-python"># trocar a fonte não muda nada no resto do pipeline
+source = get_source(os.getenv(&quot;REDDIT_SOURCE&quot;, &quot;fixture&quot;))
+threads = source.fetch(subreddits=SUBS, since_hours=48, limit=40)
+</code></pre>
+<hr />
+<h2 id="3-as-sete-tarefas-e-seus-prompts">3. As sete tarefas e seus prompts<a class="headerlink" href="#3-as-sete-tarefas-e-seus-prompts" title="Permanent link">&para;</a></h2>
+<p>Cada prompt é um arquivo em <code>prompts/</code>. Todos exigem saída estruturada e citação. Versione-os: mudança de prompt é mudança de produto.</p>
+<h3 id="p1-nichomd-escolher-o-que-vender"><code>P1-nicho.md</code> — escolher o que vender<a class="headerlink" href="#p1-nichomd-escolher-o-que-vender" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> seu perfil (tempo, capital, experiência).
+<strong>Saída:</strong> 5 nichos ranqueados com comissão, LTV estimado, dificuldade de moderação no Reddit e veredito.
+<strong>Critério de sucesso:</strong> você consegue dizer em uma frase por que o nicho nº 1 paga suas contas em 12 meses.</p>
+<h3 id="p2-subsmd-mapear-comunidades"><code>P2-subs.md</code> — mapear comunidades<a class="headerlink" href="#p2-subsmd-mapear-comunidades" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> nicho + idioma + país.
+<strong>Saída:</strong> tabela com sub, tamanho, tolerância a promo, regra citada, rota recomendada, risco.
+<strong>Regra embutida:</strong> se o prompt não conseguir citar a regra do sub, ele deve marcar <code>needs_manual_check: true</code>. Nunca invente regra.</p>
+<h3 id="p3-radarmd-achar-intencao"><code>P3-radar.md</code> — achar intenção<a class="headerlink" href="#p3-radarmd-achar-intencao" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> lote de threads (título, sub, texto, idade, score, comentários).
+<strong>Saída:</strong> para cada thread, <code>intent_score</code> 0–100 + <code>intent_type</code> + <code>buying_stage</code> + <code>reason</code>.
+<strong>Definição operacional de intenção (embutida no prompt):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Score</th>
+<th>Sinal</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>80–100</td>
+<td>Pergunta explícita de compra/recomendação, recente (&lt; 24 h), sem resposta boa</td>
+<td>Responder hoje</td>
+</tr>
+<tr>
+<td>60–79</td>
+<td>Dor clara, sem pedido explícito</td>
+<td>Comentar com valor, sem oferta</td>
+</tr>
+<tr>
+<td>40–59</td>
+<td>Tema adjacente</td>
+<td>Só se sobrar tempo</td>
+</tr>
+<tr>
+<td>0–39</td>
+<td>Desabafo, notícia, humor</td>
+<td>Ignorar</td>
+</tr>
+</tbody>
+</table>
+<h3 id="p4-leadcardmd-qualificar"><code>P4-leadcard.md</code> — qualificar<a class="headerlink" href="#p4-leadcardmd-qualificar" title="Permanent link">&para;</a></h3>
+<p><strong>Saída (JSON, validado):</strong></p>
+<pre><code class="language-json">{
+  &quot;thread_id&quot;: &quot;...&quot;, &quot;subreddit&quot;: &quot;...&quot;, &quot;url&quot;: &quot;...&quot;,
+  &quot;intent_score&quot;: 87, &quot;intent_type&quot;: &quot;recommendation_request&quot;,
+  &quot;buying_stage&quot;: &quot;solution_aware&quot;,
+  &quot;persona&quot;: &quot;investidor iniciante, 32-45, renda 10-20k&quot;,
+  &quot;pain&quot;: &quot;não sabe se compra agora ou espera juros caírem&quot;,
+  &quot;offer_fit&quot;: &quot;alto&quot;, &quot;angle&quot;: &quot;comparar custo de esperar vs. comprar&quot;,
+  &quot;risk_flags&quot;: [&quot;thread antiga? não&quot;, &quot;sub proíbe link: sim&quot;],
+  &quot;citations&quot;: [&quot;https://reddit.com/r/.../...&quot;],
+  &quot;needs_human_facts&quot;: [&quot;m² atualizado do bairro&quot;, &quot;taxa de juros vigente&quot;]
+}
+</code></pre>
+<p><strong>Por que JSON e não texto:</strong> você consegue filtrar, somar, deduplicar, jogar no CRM e medir precisão. Texto livre não escala.</p>
+<h3 id="p5-scribemd-redigir"><code>P5-scribe.md</code> — redigir<a class="headerlink" href="#p5-scribemd-redigir" title="Permanent link">&para;</a></h3>
+<p><strong>Regras embutidas no prompt:</strong>
+1. Responder a pergunta <strong>na primeira frase</strong> (44% das citações de IA vêm do primeiro 30% do texto).
+2. Máximo 250 palavras em comentário; 1.500 em post.
+3. Sem superlativos, sem emoji, sem "game changer", sem CAIXA ALTA.
+4. Incluir disclosure se houver menção comercial (<code>DISCLOSURE_MODE=strict</code>).
+5. Se a regra do sub proíbe link → <code>link_allowed: false</code> e destino é o perfil.
+6. Marcar <code>[VERIFICAR]</code> em qualquer número que o humano precise confirmar.
+7. Nunca inventar experiência pessoal — o humano reescreve em primeira pessoa.</p>
+<h3 id="p6-atribuicaomd-medir"><code>P6-atribuicao.md</code> — medir<a class="headerlink" href="#p6-atribuicaomd-medir" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> CSV de cliques, trials, vendas + log de respostas.
+<strong>Saída:</strong> EPC por sub, por ângulo, por tipo de thread; custo por lead; ranking de respostas que geraram clique.
+<strong>Regra:</strong> se uma métrica não muda uma decisão, não colete.</p>
+<h3 id="p7-midiamd-decidir-anuncio"><code>P7-midia.md</code> — decidir anúncio<a class="headerlink" href="#p7-midiamd-decidir-anuncio" title="Permanent link">&para;</a></h3>
+<p><strong>Entrada:</strong> LTV, CAC atual, volume de leads, orçamento.
+<strong>Saída:</strong> veredito go/no-go, budget diário sugerido, formato recomendado e critério de corte em 14 dias.</p>
+<hr />
+<h2 id="4-controle-de-custo-a-parte-que-salva-o-projeto">4. Controle de custo (a parte que salva o projeto)<a class="headerlink" href="#4-controle-de-custo-a-parte-que-salva-o-projeto" title="Permanent link">&para;</a></h2>
+<h3 id="41-as-quatro-alavancas">4.1 As quatro alavancas<a class="headerlink" href="#41-as-quatro-alavancas" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Alavanca</th>
+<th>Efeito</th>
+<th>Como implementar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cache de system prompt</strong></td>
+<td>−75 a −90% de input</td>
+<td>Prompt fixo grande + <code>prompt_cache_key</code> estável</td>
+</tr>
+<tr>
+<td><strong>Modelo em cascata</strong></td>
+<td>−80%</td>
+<td>fast para triagem → 4.3 para shortlist → 4.6 só no topo</td>
+</tr>
+<tr>
+<td><strong>Recorte de contexto</strong></td>
+<td>−50 a −95%</td>
+<td>mandar título + 1.500 chars + top 5 comentários, nunca a thread inteira</td>
+</tr>
+<tr>
+<td><strong>Teto de <code>x_search</code></strong></td>
+<td>−90%</td>
+<td><code>X_SEARCH_POSTS_BUDGET</code> diário + <code>from_date</code> + <code>allowed_x_handles</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-simulacao-de-custo-por-1000-threads">4.2 Simulação de custo por 1.000 threads<a class="headerlink" href="#42-simulacao-de-custo-por-1000-threads" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>Modelo</th>
+<th>Tokens in</th>
+<th>Tokens out</th>
+<th>Custo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Triagem</td>
+<td>4.1-fast</td>
+<td>1.000 × 1.200 = 1,2M</td>
+<td>200K</td>
+<td><strong>US$ 0,34</strong></td>
+</tr>
+<tr>
+<td>Scoring</td>
+<td>4.3</td>
+<td>160 × 2.500 = 400K</td>
+<td>48K</td>
+<td><strong>US$ 0,62</strong></td>
+</tr>
+<tr>
+<td>Redação</td>
+<td>4.3 (cache 80%)</td>
+<td>160 × 3.000 = 480K</td>
+<td>72K</td>
+<td><strong>US$ 0,38</strong></td>
+</tr>
+<tr>
+<td>Web search</td>
+<td>—</td>
+<td>200 chamadas</td>
+<td>—</td>
+<td><strong>US$ 1,00</strong></td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>≈ US$ 2,34 / 1.000 threads</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Ou seja: <strong>meio centavo por thread analisada.</strong> O erro clássico não é gastar com modelo — é mandar 40 mil tokens por thread por preguiça de recortar.</p>
+<h3 id="43-guard-rails-no-codigo">4.3 Guard-rails no código<a class="headerlink" href="#43-guard-rails-no-codigo" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python"># src/budget.py
+class Budget:
+    def __init__(self, daily_usd=1.00, daily_x_posts=200): ...
+    def can_spend(self, estimated_usd: float) -&gt; bool: ...
+    def charge(self, usage) -&gt; None: ...   # lê usage do response
+</code></pre>
+<p>Se o orçamento estourar, o bot <strong>para e avisa</strong> em vez de continuar gastando. Um bot que não tem freio é um cartão de crédito com API.</p>
+<hr />
+<h2 id="5-qualidade-como-saber-se-o-bot-esta-certo">5. Qualidade: como saber se o bot está certo<a class="headerlink" href="#5-qualidade-como-saber-se-o-bot-esta-certo" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Teste</th>
+<th>O que mede</th>
+<th>Meta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Precisão do score</strong></td>
+<td>20 threads rotuladas à mão vs. saída do bot</td>
+<td>≥ 70% de concordância</td>
+</tr>
+<tr>
+<td><strong>Recall de intenção</strong></td>
+<td>threads de compra que o bot deixou passar</td>
+<td>≤ 20%</td>
+</tr>
+<tr>
+<td><strong>Factualidade</strong></td>
+<td>números nas respostas conferidos na fonte</td>
+<td>100% (não é meta, é requisito)</td>
+</tr>
+<tr>
+<td><strong>Tom</strong></td>
+<td>resposta parece humana daquele sub?</td>
+<td>revisão cega de 5 respostas</td>
+</tr>
+<tr>
+<td><strong>Regra</strong></td>
+<td><code>link_allowed</code> correto por sub</td>
+<td>100% (checagem contra <code>rules.yaml</code>)</td>
+</tr>
+<tr>
+<td><strong>Custo</strong></td>
+<td>US$/thread</td>
+<td>&lt; US$ 0,01</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Como rotular 20 threads em 15 minutos:</strong> leia só o título e o primeiro parágrafo; marque 1 (compraria hoje), 0,5 (dor, sem pedido), 0 (irrelevante). Compare com a saída. Ajuste o prompt citando os 3 casos em que errou — isso vale mais que 10 regras novas.</p>
+<hr />
+<h2 id="6-rag-proprio-a-base-que-ninguem-tem">6. RAG próprio: a base que ninguém tem<a class="headerlink" href="#6-rag-proprio-a-base-que-ninguem-tem" title="Permanent link">&para;</a></h2>
+<p>O diferencial do bot imobiliário não é o modelo, é a <strong>base local</strong>:</p>
+<pre><code>data/kb/
+├── bairros/goiania-bueno.md        # m², valorização, aluguel/m², IPTU, escolas
+├── bairros/goiania-marista.md
+├── financiamento/tabela-2026.md    # taxas, entrada, MIP/DFI, seguro
+├── custos/itbi-escritura-go.md     # alíquotas, cartório
+└── ofertas/programa-x.md           # comissão, cookie, requisitos (afiliados)
+</code></pre>
+<p>Cada arquivo tem: <strong>fonte, data de coleta, responsável</strong>. O retriever é simples (TF-IDF ou embeddings) e o prompt exige que a resposta cite o arquivo. Sem isso, o modelo inventa m² — e um m² errado no Reddit destrói a credibilidade em um comentário.</p>
+<hr />
+<h2 id="7-integracao-com-o-resto-da-stack">7. Integração com o resto da stack<a class="headerlink" href="#7-integracao-com-o-resto-da-stack" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Destino</th>
+<th>Como</th>
+<th>Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Planilha / Google Sheets</strong></td>
+<td>CSV em <code>output/weekly.csv</code></td>
+<td>simplicidade radical; todo mundo sabe abrir</td>
+</tr>
+<tr>
+<td><strong>CRM</strong> (HubSpot, Pipedrive, Follow Up Boss)</td>
+<td>webhook ou export</td>
+<td>atribuição por origem "reddit"</td>
+</tr>
+<tr>
+<td><strong>WhatsApp</strong></td>
+<td>link <code>wa.me</code> no perfil, <strong>nunca</strong> na thread</td>
+<td>compliance LGPD/TCPA</td>
+</tr>
+<tr>
+<td><strong>Telegram/Slack</strong></td>
+<td>alerta quando <code>intent_score ≥ 85</code></td>
+<td>resposta em minutos</td>
+</tr>
+<tr>
+<td><strong>Notion</strong></td>
+<td>base de conteúdo e calendário editorial</td>
+<td>opcional</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-rotina-diaria-de-45-minutos-o-formato-que-sobrevive">8. Rotina diária de 45 minutos (o formato que sobrevive)<a class="headerlink" href="#8-rotina-diaria-de-45-minutos-o-formato-que-sobrevive" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Minuto</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–5</td>
+<td>Rodar radar; ler os 5 cards de score mais alto</td>
+</tr>
+<tr>
+<td>5–20</td>
+<td>Responder 2 threads (rascunho do bot + sua reescrita de 3 min)</td>
+</tr>
+<tr>
+<td>20–30</td>
+<td>3 comentários puramente úteis, sem menção (rota 3)</td>
+</tr>
+<tr>
+<td>30–35</td>
+<td>1 comentário em thread de ontem que você deixou pendente</td>
+</tr>
+<tr>
+<td>35–40</td>
+<td>Registrar no painel: publicado, removido, clique</td>
+</tr>
+<tr>
+<td>40–45</td>
+<td>Ver 1 thread nova do X search e anotar 1 insight de oferta</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Semana:</strong> 1 post de caso ou análise (4 h em um dia só). <strong>Mês:</strong> 1 revisão de <code>rules.yaml</code> e 1 calibração de score.</p>
+<hr />
+<h2 id="9-sinais-de-que-o-bot-esta-te-prejudicando-pare-imediatamente">9. Sinais de que o bot está te prejudicando (pare imediatamente)<a class="headerlink" href="#9-sinais-de-que-o-bot-esta-te-prejudicando-pare-imediatamente" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Sinal</th>
+<th>Diagnóstico</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Remoções começaram a aparecer</td>
+<td>Tom virou anúncio</td>
+<td>Voltar para rota 3 por 30 dias</td>
+</tr>
+<tr>
+<td>Upvotes caíram no mesmo sub</td>
+<td>A comunidade te reconheceu como vendedor</td>
+<td>Trocar sub ou mudar de ângulo</td>
+</tr>
+<tr>
+<td>Conta com "shadowban" (posts sem views)</td>
+<td>Link repetido / volume</td>
+<td>Testar com conta deslogada; pausar 30 dias</td>
+</tr>
+<tr>
+<td>Zero clique no perfil com 20 respostas</td>
+<td>Oferta errada ou sub errado</td>
+<td>Trocar a oferta antes de trocar o volume</td>
+</tr>
+<tr>
+<td>Custo por lead subiu muito</td>
+<td><code>x_search</code> descontrolado ou contexto inflado</td>
+<td>Aplicar as 4 alavancas da seção 4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-checklist-de-conformidade-antes-de-publicar">10. Checklist de conformidade antes de publicar<a class="headerlink" href="#10-checklist-de-conformidade-antes-de-publicar" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[ ] Li a regra do sub hoje (não a do mês passado).</li>
+<li>[ ] Se há menção comercial, o disclosure está <strong>na mesma tela</strong>, antes do link.</li>
+<li>[ ] Não há link onde o sub proíbe.</li>
+<li>[ ] Todo número tem fonte e data.</li>
+<li>[ ] Não estou apresentando texto de IA como experiência pessoal — reescrevi.</li>
+<li>[ ] Não há promessa de renda/resultado.</li>
+<li>[ ] Se é imóvel: CRECI visível, autorização do proprietário, dados exatos.</li>
+<li>[ ] Se é lead: registro de consentimento e canal de saída.</li>
+<li>[ ] A resposta seria útil mesmo sem a oferta.</li>
+</ul>
+    </article>
+
+    <nav class="pager">
+      <a class="pager__link" href="02.html"><span class="pager__label">← Anterior</span><span class="pager__title">Estudo 2 · Real estate</span></a>
+      <a class="pager__link" href="04.html"><span class="pager__label">Próximo →</span><span class="pager__title">Rotas do Reddit</span></a>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#1-setup-em-20-minutos">1. Setup em 20 minutos</a><ul>
+<li><a href="#11-pre-requisitos">1.1 Pré-requisitos</a></li>
+<li><a href="#12-instalacao">1.2 Instalação</a></li>
+<li><a href="#13-variaveis-de-ambiente">1.3 Variáveis de ambiente</a></li>
+</ul>
+</li>
+<li><a href="#2-a-camada-de-dados-tres-modos-uma-interface">2. A camada de dados: três modos, uma interface</a></li>
+<li><a href="#3-as-sete-tarefas-e-seus-prompts">3. As sete tarefas e seus prompts</a><ul>
+<li><a href="#p1-nichomd-escolher-o-que-vender">P1-nicho.md — escolher o que vender</a></li>
+<li><a href="#p2-subsmd-mapear-comunidades">P2-subs.md — mapear comunidades</a></li>
+<li><a href="#p3-radarmd-achar-intencao">P3-radar.md — achar intenção</a></li>
+<li><a href="#p4-leadcardmd-qualificar">P4-leadcard.md — qualificar</a></li>
+<li><a href="#p5-scribemd-redigir">P5-scribe.md — redigir</a></li>
+<li><a href="#p6-atribuicaomd-medir">P6-atribuicao.md — medir</a></li>
+<li><a href="#p7-midiamd-decidir-anuncio">P7-midia.md — decidir anúncio</a></li>
+</ul>
+</li>
+<li><a href="#4-controle-de-custo-a-parte-que-salva-o-projeto">4. Controle de custo (a parte que salva o projeto)</a><ul>
+<li><a href="#41-as-quatro-alavancas">4.1 As quatro alavancas</a></li>
+<li><a href="#42-simulacao-de-custo-por-1000-threads">4.2 Simulação de custo por 1.000 threads</a></li>
+<li><a href="#43-guard-rails-no-codigo">4.3 Guard-rails no código</a></li>
+</ul>
+</li>
+<li><a href="#5-qualidade-como-saber-se-o-bot-esta-certo">5. Qualidade: como saber se o bot está certo</a></li>
+<li><a href="#6-rag-proprio-a-base-que-ninguem-tem">6. RAG próprio: a base que ninguém tem</a></li>
+<li><a href="#7-integracao-com-o-resto-da-stack">7. Integração com o resto da stack</a></li>
+<li><a href="#8-rotina-diaria-de-45-minutos-o-formato-que-sobrevive">8. Rotina diária de 45 minutos (o formato que sobrevive)</a></li>
+<li><a href="#9-sinais-de-que-o-bot-esta-te-prejudicando-pare-imediatamente">9. Sinais de que o bot está te prejudicando (pare imediatamente)</a></li>
+<li><a href="#10-checklist-de-conformidade-antes-de-publicar">10. Checklist de conformidade antes de publicar</a></li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: EPC, LGPD, x_search)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

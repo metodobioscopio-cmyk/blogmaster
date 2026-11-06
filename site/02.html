@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudo 2 · Real estate · Grok × Reddit</title>
+<meta name="description" content="Dossiê operacional: Grok bot de vendas para affiliate marketing e real estate via Reddit.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Reddit</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link active" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">07</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC 02 · 15 MIN DE LEITURA</p>
+      <h1 class="doc__title">ESTUDO 2 — Real estate: como o Reddit + Grok produzem venda real</h1>
+      <blockquote>
+<p><strong>Pergunta deste estudo.</strong> Um corretor ou imobiliária consegue gerar negócio fechado usando Reddit como canal de aquisição e Grok como copiloto, competindo com portais que cobram R$ 40–120 por lead? <strong>Resposta curta: sim — e o motivo não é o Reddit, é a janela dos 5 minutos que o Reddit expõe e os portais escondem.</strong></p>
+</blockquote>
+<div class="callout callout--meta" markdown="0"><div class="callout__head"><span class="callout__icon">◷</span><span class="callout__label">Contexto</span></div>
+<div class="callout__body"><p><strong>Dois trilhos:</strong> EUA (onde o Reddit é grande e o ticket é em dólar) e Brasil/Goiânia (onde você opera e tem vantagem de terreno). <strong>Regras aplicáveis:</strong> TCPA/FTC (EUA), LGPD + COFECI/CRECI + CONAR (Brasil).</p></div></div>
+
+<hr />
+<h2 id="1-a-economia-brutal-do-setor-o-que-justifica-qualquer-esforco">1. A economia brutal do setor (o que justifica qualquer esforço)<a class="headerlink" href="#1-a-economia-brutal-do-setor-o-que-justifica-qualquer-esforco" title="Permanent link">&para;</a></h2>
+<h3 id="11-estados-unidos">1.1 Estados Unidos<a class="headerlink" href="#11-estados-unidos" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Valor 2026</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agentes NAR</td>
+<td><strong>1.438.569</strong> (pico foi 1,6 mi em out/2022)</td>
+<td>NAR Monthly Membership, jun/2026</td>
+</tr>
+<tr>
+<td>Licenças ativas totais</td>
+<td>&gt; 3 milhões</td>
+<td>ARELLO</td>
+</tr>
+<tr>
+<td>Renda mediana do agente</td>
+<td>US$ 59.200</td>
+<td>NAR 2026</td>
+</tr>
+<tr>
+<td>Comissão total média</td>
+<td><strong>5,46%–5,70%</strong></td>
+<td>Clever (set/2026); dados de mercado</td>
+</tr>
+<tr>
+<td>Preço mediano de venda</td>
+<td>US$ 405.400</td>
+<td>dados 2026</td>
+</tr>
+<tr>
+<td>Comissão média por transação</td>
+<td><strong>~US$ 23.000</strong></td>
+<td>cálculo sobre a mediana</td>
+</tr>
+<tr>
+<td>Compradores que usam agente</td>
+<td>88%</td>
+<td>NAR</td>
+</tr>
+<tr>
+<td>Vendedores que usam agente</td>
+<td>91%</td>
+<td>NAR</td>
+</tr>
+<tr>
+<td>Previsão de vendas existentes 2026</td>
+<td><strong>+14%</strong></td>
+<td>NAR, nov/2025</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A conta que importa:</strong> uma transação média paga ~US$ 23.000 de comissão total. O lado do agente é ~US$ 11.000. Um único cliente fechado no ano paga qualquer investimento de marketing que você fizer neste dossiê — dez vezes.</p>
+<h3 id="12-brasil-goiania">1.2 Brasil / Goiânia<a class="headerlink" href="#12-brasil-goiania" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Valor 2026</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Corretores ativos no Brasil</td>
+<td>~580 mil (+40% em 5 anos)</td>
+<td>COFECI-CRECI, jul/2025</td>
+</tr>
+<tr>
+<td>CPL portais (ZAP/VivaReal/OLX)</td>
+<td><strong>R$ 40–120</strong></td>
+<td>benchmarks 2026</td>
+</tr>
+<tr>
+<td>CPL Meta Ads (médio padrão)</td>
+<td>R$ 15–40</td>
+<td>Papo Imobiliário, 2026</td>
+</tr>
+<tr>
+<td>CPL Meta (alto padrão/lançamento)</td>
+<td>R$ 40–100+ (até R$ 200+)</td>
+<td>idem</td>
+</tr>
+<tr>
+<td>Conversão média do mercado BR</td>
+<td><strong>1,52%</strong> (estruturadas: 3–4,1%)</td>
+<td>OLX/Facilita</td>
+</tr>
+<tr>
+<td>Comissão típica de venda</td>
+<td>5–6%</td>
+<td>praxe de mercado</td>
+</tr>
+<tr>
+<td><strong>Goiânia — vendas Q1/2026</strong></td>
+<td><strong>+12,7%</strong> vs. +4,1% nacional</td>
+<td>Ademi-GO</td>
+</tr>
+<tr>
+<td>Goiânia — m² médio Q1/2026</td>
+<td><strong>R$ 10.914/m²</strong> (+3,6%)</td>
+<td>Ademi-GO</td>
+</tr>
+<tr>
+<td>Goiânia — m² 1º sem/2026</td>
+<td><strong>R$ 11.681/m²</strong> (+7,4% no ano; +105% em 5 anos)</td>
+<td>Ademi-GO, set/2026</td>
+</tr>
+<tr>
+<td>Goiânia — Marista</td>
+<td>~R$ 13.462–14.000/m²</td>
+<td>Ademi-GO / Jornal Opção</td>
+</tr>
+<tr>
+<td>Goiânia — Bueno+Marista na oferta</td>
+<td>31,8% dos imóveis à venda</td>
+<td>Ademi-GO</td>
+</tr>
+<tr>
+<td>Goiânia — lançamentos</td>
+<td>+16% no Q1/2026</td>
+<td>Ademi-GO</td>
+</tr>
+<tr>
+<td>CPL Goiânia (referência)</td>
+<td>R$ 18–50</td>
+<td>Papo Imobiliário, 2026</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Leitura de terreno:</strong> Goiânia cresce 3× a média nacional em vendas, com m² a R$ 11,7 mil e valorização de 105% em 5 anos. Um apartamento médio de 70 m² vale ~R$ 818 mil. Comissão de 5% = <strong>~R$ 41 mil por transação</strong>. O CPL local (R$ 18–50) é baixo comparado ao ticket — o gargalo <strong>não é gerar lead, é responder e qualificar</strong>.</p>
+<h3 id="13-a-estatistica-que-rege-tudo">1.3 A estatística que rege tudo<a class="headerlink" href="#13-a-estatistica-que-rege-tudo" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compradores que fecham com o <strong>primeiro</strong> agente que responde</td>
+<td><strong>78%</strong></td>
+<td>NAR 2025</td>
+</tr>
+<tr>
+<td>Probabilidade de qualificar respondendo em 5 min vs. 30 min</td>
+<td><strong>21×</strong></td>
+<td>MIT/InsideSales</td>
+</tr>
+<tr>
+<td>Queda de conversão após 5 min de atraso</td>
+<td>~391%</td>
+<td>MIT/InsideSales</td>
+</tr>
+<tr>
+<td>Tempo médio de resposta do agente americano</td>
+<td><strong>917 minutos (15 h)</strong></td>
+<td>Inman 2025</td>
+</tr>
+<tr>
+<td>Tempo mediano (28 mil agentes analisados)</td>
+<td>47 minutos; pior quartil &gt; 3 h</td>
+<td>Tom Ferry</td>
+</tr>
+<tr>
+<td>Leads que chegam fora do horário comercial</td>
+<td><strong>52%</strong></td>
+<td>dados de mercado 2026</td>
+</tr>
+<tr>
+<td>Conversão 24/7 vs. 9–5</td>
+<td><strong>2,4×</strong></td>
+<td>dados de operadores 2026</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--decisao" markdown="0"><div class="callout__head"><span class="callout__icon">→</span><span class="callout__label">Decisão</span></div>
+<div class="callout__body"><p><strong>Tese central do Estudo 2.</strong> No imobiliário, o Reddit não serve primariamente para "gerar lead". Serve para (a) <strong>capturar intenção declarada em texto público</strong> que os portais não enxergam, (b) <strong>provar competência</strong> antes do primeiro contato, e (c) <strong>aparecer na resposta da IA</strong> quando alguém pesquisa o bairro. O bot Grok existe para garantir uma coisa: <strong>que nenhuma dessas conversas esfrie antes de você responder.</strong> Velocidade é o produto.</p></div></div>
+
+<hr />
+<h2 id="2-o-funil-imobiliario-real-e-onde-ele-vaza">2. O funil imobiliário real (e onde ele vaza)<a class="headerlink" href="#2-o-funil-imobiliario-real-e-onde-ele-vaza" title="Permanent link">&para;</a></h2>
+<pre><code>         Intenção declarada (Reddit/X/Google/portal)
+                          │
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
+   Portal (lead      Reddit post       Busca Google/IA
+   pago, R$40–120)   &quot;onde investir     &quot;melhor corretor
+        │             em Goiânia?&quot;       Goiânia&quot;
+        │                 │                 │
+        └────────┬────────┴────────┬────────┘
+                 ▼                 ▼
+        ┌──────────────────────────────────┐
+        │  JANELA DOS 5 MINUTOS            │  ← 78% fecham com quem responde 1º
+        │  (o vazamento de 90% do mercado) │
+        └───────────────┬──────────────────┘
+                        ▼
+                 Qualificação (capacidade de crédito, urgência, bairro)
+                        ▼
+                 Visita agendada  (10–20% dos leads)
+                        ▼
+                 Proposta → Crédito → Escritura
+                        ▼
+                 FECHAMENTO  (1,5–4% do lead bruto)
+</code></pre>
+<p><strong>Onde o dinheiro morre, em números brasileiros:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cenário</th>
+<th>Leads/mês</th>
+<th>Conversão</th>
+<th>Vendas</th>
+<th>Vendas perdidas por atraso</th>
+<th>Prejuízo/mês</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Corretor autônomo (locação)</td>
+<td>80</td>
+<td>5%</td>
+<td>4</td>
+<td>0,7 locação</td>
+<td><strong>R$ 1.296</strong></td>
+</tr>
+<tr>
+<td>Imobiliária pequena (5–10 corretores)</td>
+<td>200</td>
+<td>2%</td>
+<td>4</td>
+<td>1,2 venda</td>
+<td><strong>R$ 21.000</strong></td>
+</tr>
+<tr>
+<td>Imobiliária média (20–30)</td>
+<td>600</td>
+<td>2%</td>
+<td>12</td>
+<td>3,6 vendas</td>
+<td><strong>R$ 63.000</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>(Premissa: 30% das vendas que não aconteceram teriam acontecido se a resposta chegasse em minutos. É a premissa conservadora de mercado — as perdas reais medidas em operações com resposta acima de 4 h são maiores.)</em></p>
+<p>O vazamento é sempre o mesmo: <strong>o lead chegou, ninguém respondeu em minutos, o concorrente respondeu.</strong></p>
+<hr />
+<h2 id="3-unit-economics-imobiliario-os-dois-trilhos">3. Unit economics imobiliário: os dois trilhos<a class="headerlink" href="#3-unit-economics-imobiliario-os-dois-trilhos" title="Permanent link">&para;</a></h2>
+<h3 id="31-eua-quando-o-reddit-substitui-o-portal">3.1 EUA — quando o Reddit substitui o portal<a class="headerlink" href="#31-eua-quando-o-reddit-substitui-o-portal" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Portal (Zillow/Realtor)</th>
+<th>Reddit + Grok</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPL</td>
+<td>US$ 120–200 (blended US$ 448 no estudo First Page Sage)</td>
+<td>~US$ 0 de mídia; US$ 18/mês de API</td>
+</tr>
+<tr>
+<td>Exclusividade</td>
+<td>Lead compartilhado com 3–5 agentes</td>
+<td>Você é o único que respondeu</td>
+</tr>
+<tr>
+<td>Intenção</td>
+<td>Alta, mas disputada em segundos</td>
+<td>Média, mas <strong>sem concorrência na thread</strong></td>
+</tr>
+<tr>
+<td>Volume previsível</td>
+<td>Sim</td>
+<td>Não no início</td>
+</tr>
+<tr>
+<td>Custo de tempo</td>
+<td>Baixo</td>
+<td><strong>Alto</strong> (1–1,5 h/dia)</td>
+</tr>
+<tr>
+<td>Escala</td>
+<td>Ilimitada com dinheiro</td>
+<td>Limitada por reputação e sub</td>
+</tr>
+<tr>
+<td>Atribuição</td>
+<td>Rastreável</td>
+<td>Difícil (boca a boca, DM, perfil)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cálculo de ponto de equilíbrio (EUA):</strong> comissão média de US$ 11.000 por lado. Se o esforço de 1,5 h/dia por 6 meses gerar <strong>1 cliente fechado</strong>, o retorno por hora trabalhada é ~US$ 20 — e o cliente tende a indicar. Com <strong>3 clientes</strong>, é o melhor canal da operação. O risco não é o custo, é a paciência.</p>
+<h3 id="32-brasil-goiania-a-conta-do-corretor">3.2 Brasil / Goiânia — a conta do corretor<a class="headerlink" href="#32-brasil-goiania-a-conta-do-corretor" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Valor</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ticket médio (apartamento 70 m²)</td>
+<td>R$ 818.000</td>
+<td>m² R$ 11.681 (Ademi-GO)</td>
+</tr>
+<tr>
+<td>Comissão (5%)</td>
+<td><strong>R$ 40.900</strong></td>
+<td>sobre o VGV</td>
+</tr>
+<tr>
+<td>CPL portal</td>
+<td>R$ 40–120</td>
+<td>ZAP/VivaReal/OLX</td>
+</tr>
+<tr>
+<td>CPL Reddit + Grok</td>
+<td>R$ ~0 + R$ 100/mês de API</td>
+<td>custo dominante é tempo</td>
+</tr>
+<tr>
+<td>Taxa de conversão alvo</td>
+<td>2–4%</td>
+<td>acima da média de 1,52%</td>
+</tr>
+<tr>
+<td>Leads necessários para 1 venda</td>
+<td>25–50</td>
+<td></td>
+</tr>
+<tr>
+<td>Custo por venda via portal</td>
+<td><strong>R$ 2.000–6.000</strong></td>
+<td>50 leads × R$ 40–120 (a 2% de conversão)</td>
+</tr>
+<tr>
+<td>Custo por venda via Reddit</td>
+<td><strong>R$ 100 + tempo</strong></td>
+<td>se converter 1 em 25</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--sim" markdown="0"><div class="callout__head"><span class="callout__icon">≈</span><span class="callout__label">Simulação</span></div>
+<div class="callout__body"><p><strong>Simulação Goiânia (rótulo: projeção, não resultado).</strong> Corretor solo, 1 h/dia, 2 subs locais + r/investimentos. Meta conservadora: <strong>1 fechamento a cada 90 dias</strong> por esse canal. R$ 40.900 por trimestre = <strong>R$ 13.600/mês de comissão gerada</strong>, contra R$ 100 de API e ~45 h/mês de trabalho. Mesmo com 50% de erro na premissa, ainda são R$ 6.800/mês. <strong>Comparação:</strong> para gerar o mesmo por portal, a R$ 80/lead e 2% de conversão, são necessários <strong>50 leads por venda — R$ 4.000 de mídia por venda</strong> (R$ 1.000–6.000 na faixa de R$ 40–120/lead). O portal exige volume constante e pago todo mês; o Reddit compõe.</p></div></div>
+
+<h3 id="33-onde-o-reddit-e-fraco-no-imobiliario-e-voce-precisa-saber">3.3 Onde o Reddit é fraco no imobiliário (e você precisa saber)<a class="headerlink" href="#33-onde-o-reddit-e-fraco-no-imobiliario-e-voce-precisa-saber" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Limitação</th>
+<th>Impacto</th>
+<th>Contorno</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Volume baixo em sub local (Goiânia tem sub pequeno)</td>
+<td>Poucos leads/mês</td>
+<td>Combinar com r/investimentos, r/brasil e grupos de WhatsApp/Instagram</td>
+</tr>
+<tr>
+<td>Reddit BR é nicho</td>
+<td>Público não é o comprador médio de imóvel</td>
+<td>Usar para <em>investidor</em> e <em>comprador técnico</em>, não para primeira compra popular</td>
+</tr>
+<tr>
+<td>Ciclo longo (3–9 meses)</td>
+<td>Caixa demora</td>
+<td>Usar rota de locação e indicação para caixa curto</td>
+</tr>
+<tr>
+<td>Atribuição fraca</td>
+<td>Difícil provar ROI</td>
+<td>Perguntar "como me achou?" no primeiro contato + UTM no link do perfil</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-as-rotas-do-reddit-para-real-estate-mapa-completo">4. As rotas do Reddit para real estate (mapa completo)<a class="headerlink" href="#4-as-rotas-do-reddit-para-real-estate-mapa-completo" title="Permanent link">&para;</a></h2>
+<p>Mesmas 11 rotas do Estudo 1, traduzidas para o setor — com o que muda em cada uma.</p>
+<h3 id="rota-1-comentario-de-alta-intencao">Rota 1 — Comentário de alta intenção<a class="headerlink" href="#rota-1-comentario-de-alta-intencao" title="Permanent link">&para;</a></h3>
+<p>Threads-alvo: <em>"vale a pena comprar em Goiânia?"</em>, <em>"Setor Bueno ou Jardim Goiás?"</em>, <em>"alguém indica corretor em Goiânia?"</em>, <em>"is it a good time to buy?"</em>, <em>"how do I find a realtor?"</em>.
+<strong>O que responder:</strong> análise de bairro com número (m², valorização, aluguel por m², IPTU), custo real de transação (ITBI, escritura, condomínio), e <strong>só então</strong> "sou corretor aqui, CRECI X — se quiser, te mando 3 comparativos do bairro".
+<strong>Nunca:</strong> "me chama no DM" sem ser perguntado.</p>
+<h3 id="rota-2-post-de-analise-de-bairro-a-rota-mais-forte-no-brasil">Rota 2 — Post de análise de bairro (a rota mais forte no Brasil)<a class="headerlink" href="#rota-2-post-de-analise-de-bairro-a-rota-mais-forte-no-brasil" title="Permanent link">&para;</a></h3>
+<p>Formato: <code>"Analisei o m² de 6 bairros de Goiânia em 2026 — planilha e fontes"</code>. Entrega dado que ninguém entrega, com fonte (Ademi-GO, FipeZAP), e vira <strong>citação permanente</strong> — inclusive em respostas de IA.
+Efeito GEO: é o conteúdo que responde "onde investir em Goiânia" em 2027 sem você estar presente.</p>
+<h3 id="rota-3-educar-sem-vender">Rota 3 — Educar sem vender<a class="headerlink" href="#rota-3-educar-sem-vender" title="Permanent link">&para;</a></h3>
+<p>Responder 20 threads de financiamento, ITBI, documentação, distrato, locação. Zero menção. Perfil com CRECI e link. Constrói a reputação que permite as rotas 2 e 8.</p>
+<h3 id="rota-4-sub-permissivo-weekly-thread">Rota 4 — Sub permissivo / weekly thread<a class="headerlink" href="#rota-4-sub-permissivo-weekly-thread" title="Permanent link">&para;</a></h3>
+<p><code>r/Goiania</code> (quando houver thread de indicações), <code>r/brasil</code>, <code>r/investimentos</code> (sem link; só análise). Lançar o "relatório de bairro" como conteúdo, não como anúncio.</p>
+<h3 id="rota-5-perfil-como-funil">Rota 5 — Perfil como funil<a class="headerlink" href="#rota-5-perfil-como-funil" title="Permanent link">&para;</a></h3>
+<p>Bio: <code>Corretor de imóveis em Goiânia · CRECI-GO 000000 · Análises de bairro com fonte · [link]</code>. Três posts fixos: análise de bairro, guia de financiamento, tour de imóvel.</p>
+<h3 id="rota-6-dm-consentida">Rota 6 — DM consentida<a class="headerlink" href="#rota-6-dm-consentida" title="Permanent link">&para;</a></h3>
+<p>Só quando a pessoa pede. Primeira mensagem entrega <strong>o que ela pediu</strong> (3 comparativos), não um pitch. Segunda mensagem só depois de resposta.</p>
+<h3 id="rota-7-reddit-ads-a-rota-de-volume">Rota 7 — Reddit Ads (a rota de volume)<a class="headerlink" href="#rota-7-reddit-ads-a-rota-de-volume" title="Permanent link">&para;</a></h3>
+<p>Para imobiliária, é a via mais previsível: Conversation Ads em threads de bairro e financiamento, Lead Gen Ads com formulário nativo. Orçamento realista de teste: US$ 500–1.500 (ou R$ 3–8 mil) por 30–45 dias. Meta: CPL abaixo do portal (R$ 40–120).</p>
+<h3 id="rota-8-ama-de-especialista">Rota 8 — AMA de especialista<a class="headerlink" href="#rota-8-ama-de-especialista" title="Permanent link">&para;</a></h3>
+<p><code>"Sou corretor em Goiânia há X anos, especialista em Setor Bueno/Marista — AMA sobre comprar em 2026"</code>. Exige credencial real e respostas com número. Gera pico de autoridade e DMs qualificadas.</p>
+<h3 id="rota-9-subreddit-proprio">Rota 9 — Subreddit próprio<a class="headerlink" href="#rota-9-subreddit-proprio" title="Permanent link">&para;</a></h3>
+<p><strong>Não recomendado</strong> no curto prazo: mercado local pequeno + risco de "seeded community". Só depois de 6–12 meses de reputação e com pauta real.</p>
+<h3 id="rota-10-parceria-com-criador-local">Rota 10 — Parceria com criador local<a class="headerlink" href="#rota-10-parceria-com-criador-local" title="Permanent link">&para;</a></h3>
+<p>Quem já tem audiência no sub/cidade (blogueiro de bairro, investidor que posta números). Proposta: ele publica a análise com seus dados; você paga por lead fechado, não por post.</p>
+<h3 id="rota-11-geo-ser-citado-pela-ia">Rota 11 — GEO (ser citado pela IA)<a class="headerlink" href="#rota-11-geo-ser-citado-pela-ia" title="Permanent link">&para;</a></h3>
+<p>Estruturar todas as análises com resposta direta no início, tabela de m² por bairro, fonte e data. Quando alguém perguntar ao ChatGPT "qual o m² do Setor Bueno", a resposta vem do seu conteúdo. <strong>Isso é o ativo de 2027.</strong></p>
+<hr />
+<h2 id="5-o-que-muda-no-imobiliario-compliance-e-parte-do-produto">5. O que muda no imobiliário: compliance é parte do produto<a class="headerlink" href="#5-o-que-muda-no-imobiliario-compliance-e-parte-do-produto" title="Permanent link">&para;</a></h2>
+<h3 id="51-brasil-crecicofeci-resolucao-10652007-e-correlatas">5.1 Brasil — CRECI/COFECI (Resolução 1.065/2007 e correlatas)<a class="headerlink" href="#51-brasil-crecicofeci-resolucao-10652007-e-correlatas" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>O que exige</th>
+<th>Como aplicar no conteúdo do Reddit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificação</td>
+<td>Nome registrado + "corretor de imóveis" + número CRECI (PF) ou CRECI-J (PJ)</td>
+<td>Na bio e em <strong>todo anúncio</strong> de imóvel</td>
+</tr>
+<tr>
+<td>Proporção</td>
+<td>Número do CRECI ≥ 25% do tamanho do nome</td>
+<td>Em posts patrocinados e artes</td>
+</tr>
+<tr>
+<td>Autorização</td>
+<td>Permissão escrita do proprietário para anunciar</td>
+<td>Nunca publicar imóvel sem ela</td>
+</tr>
+<tr>
+<td>Veracidade</td>
+<td>Metragem, valor, condições exatos</td>
+<td>Análise de bairro com fonte evita promessa</td>
+</tr>
+<tr>
+<td>Nome fantasia</td>
+<td>Registrado no CRECI</td>
+<td>Antes de usar marca</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-brasil-lgpd">5.2 Brasil — LGPD<a class="headerlink" href="#52-brasil-lgpd" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Requisito</th>
+<th>Aplicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Base legal por uso</td>
+<td>Consentimento (art. 7º, I) ou execução de contrato (art. 7º, V)</td>
+</tr>
+<tr>
+<td>Consentimento específico</td>
+<td>Nomear a empresa, o canal (WhatsApp/e-mail) e como sair</td>
+</tr>
+<tr>
+<td>Opt-in rastreável</td>
+<td>Guardar data, hora, origem e texto do consentimento</td>
+</tr>
+<tr>
+<td>Lista comprada</td>
+<td><strong>Sem base legal. Não use.</strong></td>
+</tr>
+<tr>
+<td>Retenção</td>
+<td>Apagar dado de lead inativo após prazo definido</td>
+</tr>
+<tr>
+<td>Compartilhamento</td>
+<td>Informar parceiros (cartório, financeira) no termo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-brasil-conar-vigente-01062026">5.3 Brasil — CONAR (vigente 01/06/2026)<a class="headerlink" href="#53-brasil-conar-vigente-01062026" title="Permanent link">&para;</a></h3>
+<p>Link de afiliado/indicação remunerada <strong>é publicidade</strong>. Identificação ostensiva em primeiro plano (<code>#publi</code>/<code>#publicidade</code>), não no fim da legenda. Anunciante e agência respondem solidariamente. Conteúdo feito com IA segue as mesmas regras.</p>
+<h3 id="54-eua-tcpa-o-erro-mais-caro-do-setor">5.4 EUA — TCPA (o erro mais caro do setor)<a class="headerlink" href="#54-eua-tcpa-o-erro-mais-caro-do-setor" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>Status em nov/2026</th>
+<th>Consequência</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consentimento prévio por escrito para texto marketing</td>
+<td><strong>Exigido</strong></td>
+<td>US$ 500–1.500 <strong>por mensagem</strong></td>
+</tr>
+<tr>
+<td>Regra <em>one-to-one consent</em></td>
+<td><strong>Vacada</strong> em 24/01/2025 (11º Circuito), nunca entrou em vigor</td>
+<td>Não confie em guias que dizem "vale em jan/2026"</td>
+</tr>
+<tr>
+<td>Revogação de consentimento</td>
+<td><strong>Ativa</strong> desde 11/04/2025: qualquer meio razoável, 10 dias úteis, 7 palavras mínimas (STOP, QUIT, END, REVOKE, OPT-OUT, CANCEL, UNSUBSCRIBE)</td>
+<td>Multa por descumprimento</td>
+</tr>
+<tr>
+<td><em>Revocation-all</em> (opt-out vale para todos os canais)</td>
+<td>Adiada para <strong>31/01/2027</strong></td>
+<td>Prepare o sistema já</td>
+</tr>
+<tr>
+<td>Do Not Call em texto</td>
+<td>Ativo</td>
+<td>Checar antes de enviar</td>
+</tr>
+<tr>
+<td>Registro de consentimento</td>
+<td>Timestamp, IP, página, texto</td>
+<td>Sua única defesa</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>A regra de ouro do imobiliário:</strong> o Reddit <strong>não é</strong> canal de prospecção ativa. É canal de <strong>inbound</strong>. Quem chega até você pelo Reddit deu consentimento implícito para responder <em>na thread</em>, mas <strong>não</strong> para receber WhatsApp. A primeira mensagem fora da plataforma exige convite explícito ("me chama no WhatsApp") e registro desse convite.</p></div></div>
+
+<hr />
+<h2 id="6-googleia-como-coroa-da-estrategia-o-multiplicador">6. Google/IA como coroa da estratégia (o multiplicador)<a class="headerlink" href="#6-googleia-como-coroa-da-estrategia-o-multiplicador" title="Permanent link">&para;</a></h2>
+<p>O comprador imobiliário de 2026 pesquisa em três lugares: Google (com AI Overviews), portais e <strong>Reddit</strong>. Como o Reddit é a 2ª fonte mais citada em AI Overviews, conteúdo imobiliário bem feito no Reddit aparece na resposta que o comprador lê antes de abrir o portal.</p>
+<table>
+<thead>
+<tr>
+<th>Dado GEO aplicado ao imobiliário</th>
+<th>Implicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>83% das citações de AI Overview vêm de fora do top 10 orgânico</td>
+<td>Você não precisa ranquear no Google; precisa ser útil e citável</td>
+</tr>
+<tr>
+<td>Só 30% das marcas aparecem consistentemente em respostas de IA</td>
+<td>Consistência (postar sempre) bate volume (postar muito uma vez)</td>
+</tr>
+<tr>
+<td>Tráfego de IA converte 4,4× melhor que orgânico</td>
+<td>O clique que vem da IA é altamente qualificado</td>
+</tr>
+<tr>
+<td>44,2% das citações de LLM vêm do primeiro 30% do texto</td>
+<td><strong>Responda a pergunta no primeiro parágrafo</strong></td>
+</tr>
+<tr>
+<td>Páginas com 5–7 estatísticas têm +20% de chance de citação</td>
+<td>Toda análise de bairro precisa de 5–7 números</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-o-case-chicago-real-citado-goiania-simulado-transparente">7. O case: Chicago (real, citado) + Goiânia (simulado, transparente)<a class="headerlink" href="#7-o-case-chicago-real-citado-goiania-simulado-transparente" title="Permanent link">&para;</a></h2>
+<h3 id="71-case-real-citado">7.1 Case real citado<a class="headerlink" href="#71-case-real-citado" title="Permanent link">&para;</a></h3>
+<p><strong>Sarah Henderson, corretora em Chicago</strong> — 18 meses respondendo em <code>r/FirstTimeHomeBuyer</code> e no sub local de Chicago. Resultado declarado pelo fornecedor de leads que publicou o case: <strong>43 transações, US$ 14 milhões em volume</strong>.</p>
+<p>Como ler: US$ 14 mi ÷ 43 = <strong>ticket médio de US$ 325 mil</strong> — compatível com o mercado de Chicago. 43 transações em 18 meses = 2,4/mês. É plausível, mas <strong>é case de fornecedor</strong> (interesse comercial na história). O padrão que importa: <strong>um sub principal + 18 meses + especialização em primeira compra</strong>.</p>
+<h3 id="72-case-simulado-goiania-6-meses-rotulo-simulacao">7.2 Case simulado — Goiânia, 6 meses (rótulo: SIMULAÇÃO)<a class="headerlink" href="#72-case-simulado-goiania-6-meses-rotulo-simulacao" title="Permanent link">&para;</a></h3>
+<div class="callout callout--sim" markdown="0"><div class="callout__head"><span class="callout__icon">≈</span><span class="callout__label">Simulação</span></div>
+<div class="callout__body"><p><strong>Premissas:</strong> corretor solo, CRECI-GO ativo, 1 h/dia, foco Setor Bueno/Marista/Jardim Goiás, ticket R$ 818 mil, comissão 5%, 1 fechamento a cada 90 dias a partir do mês 4.</p>
+<table>
+<thead>
+<tr>
+<th>Mês</th>
+<th>Comentários</th>
+<th>Posts de análise</th>
+<th>DMs recebidas</th>
+<th>Visitas</th>
+<th>Propostas</th>
+<th>Vendas</th>
+<th>Comissão R$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>22</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>40</td>
+<td>1</td>
+<td>5</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>40</td>
+<td>1</td>
+<td>8</td>
+<td>3</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>40</td>
+<td>1</td>
+<td>11</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+<td>40.900</td>
+</tr>
+<tr>
+<td>5</td>
+<td>40</td>
+<td>2</td>
+<td>12</td>
+<td>5</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>6</td>
+<td>40</td>
+<td>2</td>
+<td>15</td>
+<td>6</td>
+<td>3</td>
+<td>1</td>
+<td>40.900</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>222</strong></td>
+<td><strong>7</strong></td>
+<td><strong>53</strong></td>
+<td><strong>20</strong></td>
+<td><strong>8</strong></td>
+<td><strong>2</strong></td>
+<td><strong>81.800</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Custo total do período:</strong> R$ 600 de API + ~90 h de trabalho. <strong>Receita:</strong> R$ 81.800. <strong>Retorno por hora:</strong> ~R$ 900.
+<strong>O que quebra a simulação:</strong> resposta lenta (&gt; 24 h), análise sem fonte (destruída nos comentários), post de imóvel em sub que proíbe. <strong>O que melhora:</strong> parceria com um criador local (rota 10) dobra as DMs sem dobrar o tempo.</p></div></div>
+
+<hr />
+<h2 id="8-o-bot-imobiliario-o-que-ele-faz-que-um-humano-nao-faz">8. O bot imobiliário: o que ele faz que um humano não faz<a class="headerlink" href="#8-o-bot-imobiliario-o-que-ele-faz-que-um-humano-nao-faz" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Humano sozinho</th>
+<th>Com Grok</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Varrer 30 threads/dia em 4 subs</td>
+<td>45 min</td>
+<td>3 min</td>
+</tr>
+<tr>
+<td>Detectar intenção ("indica corretor", "vale a pena comprar em X")</td>
+<td>Perde 60%</td>
+<td>Score automático, 0 perda</td>
+</tr>
+<tr>
+<td>Calcular m², ITBI, financiamento na resposta</td>
+<td>15 min por resposta, com erro</td>
+<td>30 s, com cálculo verificado</td>
+</tr>
+<tr>
+<td>Redigir no tom do sub</td>
+<td>20 min</td>
+<td>2 min + revisão de 3 min</td>
+</tr>
+<tr>
+<td>Responder em &lt; 5 min às 23h</td>
+<td>Impossível</td>
+<td>Alerta no celular + rascunho pronto</td>
+</tr>
+<tr>
+<td>Manter registro de consentimento LGPD</td>
+<td>Informal</td>
+<td>Campo obrigatório no lead card</td>
+</tr>
+</tbody>
+</table>
+<p><strong>O ganho real não é escrever mais rápido — é não perder a thread que apareceu às 22h47 de um sábado.</strong> No imobiliário, essa thread vale R$ 40 mil.</p>
+<hr />
+<h2 id="9-piloto-de-14-dias-para-imobiliariacorretor">9. Piloto de 14 dias para imobiliária/corretor<a class="headerlink" href="#9-piloto-de-14-dias-para-imobiliariacorretor" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Dias</th>
+<th>Ação</th>
+<th>Entregável</th>
+<th>Métrica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>0–1</td>
+<td>Definir 2 bairros foco + 1 segmento (investidor OU primeira compra); levantar m² com fonte</td>
+<td><code>bairros.md</code> com 6 números e fonte</td>
+<td>Dados conferidos em 2 fontes</td>
+</tr>
+<tr>
+<td>Escuta</td>
+<td>2–3</td>
+<td>Radar em 4 subs (r/Goiania, r/investimentos, r/brasil, r/empreendedorismo) + <code>x_search</code> por "Goiânia apartamento"</td>
+<td>20 lead cards</td>
+<td>≥ 8 threads de intenção real</td>
+</tr>
+<tr>
+<td>Presença</td>
+<td>4–9</td>
+<td>2 comentários/dia com número, sem oferta; 1 análise de bairro publicada</td>
+<td>12 comentários + 1 post</td>
+<td>Zero remoção; ≥ 30 upvotes no post</td>
+</tr>
+<tr>
+<td>Conversão</td>
+<td>10–12</td>
+<td>Responder 3 threads de "indica corretor" com CRECI + oferta de comparativo</td>
+<td>3 respostas + registro de consentimento</td>
+<td>≥ 6 DMs iniciadas</td>
+</tr>
+<tr>
+<td>Leitura</td>
+<td>13–14</td>
+<td>Rodar <code>P6</code>; calcular custo por visita agendada</td>
+<td>Relatório</td>
+<td>≥ 2 visitas agendadas</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Critério de corte:</strong> se em 14 dias você não tiver <strong>nenhuma</strong> DM vinda do Reddit, o problema é o sub ou a oferta — não a frequência. Troque de bairro/segmento antes de aumentar volume. Se tiver <strong>remoção</strong>, pare e releia <code>rules.yaml</code>: você está vendendo em vez de ajudar.</p></div></div>
+
+<hr />
+<h2 id="10-erros-que-custam-caro-no-imobiliario">10. Erros que custam caro no imobiliário<a class="headerlink" href="#10-erros-que-custam-caro-no-imobiliario" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Erro</th>
+<th>Custo</th>
+<th>Correção</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anunciar imóvel sem autorização do dono</td>
+<td>Autuação CRECI + risco jurídico</td>
+<td>Contrato de intermediação assinado antes</td>
+</tr>
+<tr>
+<td>Postar sem CRECI</td>
+<td>Autuação</td>
+<td>CRECI na bio, no post e na arte</td>
+</tr>
+<tr>
+<td>Responder thread antiga (2 anos)</td>
+<td>Esforço perdido</td>
+<td>Filtrar por <code>from_date</code> (≤ 7 dias)</td>
+</tr>
+<tr>
+<td>Falar de bairro sem fonte</td>
+<td>Perde credibilidade em 1 comentário</td>
+<td>Sempre citar Ademi-GO/FipeZAP + data</td>
+</tr>
+<tr>
+<td>Pedir WhatsApp na thread</td>
+<td>Remoção por spam</td>
+<td>Ofertar o comparativo na thread; conversa migra quando o usuário pede</td>
+</tr>
+<tr>
+<td>Mandar mensagem sem opt-in</td>
+<td>LGPD (BR) / TCPA US$ 500–1.500 por msg (EUA)</td>
+<td>Registrar convite explícito</td>
+</tr>
+<tr>
+<td>Usar lista comprada</td>
+<td>Sem base legal + multa</td>
+<td>Nunca</td>
+</tr>
+<tr>
+<td>Ignorar o sub local</td>
+<td>Ban</td>
+<td><code>rules.yaml</code> por sub, revisão mensal</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11-teses-finais-do-estudo-2">11. Teses finais do Estudo 2<a class="headerlink" href="#11-teses-finais-do-estudo-2" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>No imobiliário, velocidade vence esperteza.</strong> 78% fecham com quem responde primeiro; o bot existe para você ser esse primeiro.</li>
+<li><strong>Reddit não substitui o portal — substitui o desperdício.</strong> O portal entrega lead que você perde por demora; o Reddit entrega conversa que ninguém está disputando.</li>
+<li><strong>No Brasil, a vantagem é local e de conteúdo.</strong> Quem domina "m² do Setor Bueno com fonte" domina a pesquisa de 2027 — inclusive dentro das IAs.</li>
+<li><strong>O ticket justifica tudo.</strong> R$ 40 mil por venda paga 1 h/dia por um ano. O risco não é custo, é desistir no mês 3.</li>
+<li><strong>Compliance não é freio, é fosso.</strong> Corretor que sabe LGPD/CRECI/CONAR pode fazer conteúdo que os amadores não podem — e isso é vantagem competitiva.</li>
+</ol>
+<hr />
+<h3 id="fontes-do-estudo-2">Fontes do Estudo 2<a class="headerlink" href="#fontes-do-estudo-2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>NAR (2025–26) — membros (1.438.569), renda mediana, previsão +14%, 88%/91% de uso de agente; Inman 2025 (917 min); Tom Ferry (47 min); MIT/InsideSales (21×, 391%).</li>
+<li>Clever Real Estate (set/2026), Real Estate Agent Near Me (2026), Inman (mar/2026) — comissões 5,46–5,70%.</li>
+<li>Ademi-GO (Q1/2026 e 1º sem/2026) — vendas +12,7%, m² R$ 10.914 e R$ 11.681, lançamentos +16%; Jornal Opção (set/2026).</li>
+<li>FipeZAP / AEVO (2026) — m² Goiânia R$ 8,3–8,4 mil (metodologia distinta da Ademi).</li>
+<li>COFECI-CRECI (jul/2025) — ~580 mil corretores; Resolução COFECI 1.065/2007.</li>
+<li>Papo Imobiliário (mai/2026), Credituz (2025), Converta Mais (2026) — CPL BR, CAC, perda por demora.</li>
+<li>Cases: Callin (43 transações Chicago), Swift Headway (8 min de resposta, +US$ 380k GCI), Business Plus AI (PropertyConnect, resposta 47 min → 1,8 min, +43% conversão), Builder Cog (8% → 14% de conversão).</li>
+<li>FTC/TCPA (2025–26); LGPD (Lei 13.709/2018); CONAR (2026).</li>
+<li>GEO: Ahrefs (set/2026), Seer Interactive, ConvertMate, AirOps (2026).</li>
+</ul>
+    </article>
+
+    <nav class="pager">
+      <a class="pager__link" href="01.html"><span class="pager__label">← Anterior</span><span class="pager__title">Estudo 1 · Afiliados</span></a>
+      <a class="pager__link" href="03.html"><span class="pager__label">Próximo →</span><span class="pager__title">Playbook Grok</span></a>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#1-a-economia-brutal-do-setor-o-que-justifica-qualquer-esforco">1. A economia brutal do setor (o que justifica qualquer esforço)</a><ul>
+<li><a href="#11-estados-unidos">1.1 Estados Unidos</a></li>
+<li><a href="#12-brasil-goiania">1.2 Brasil / Goiânia</a></li>
+<li><a href="#13-a-estatistica-que-rege-tudo">1.3 A estatística que rege tudo</a></li>
+</ul>
+</li>
+<li><a href="#2-o-funil-imobiliario-real-e-onde-ele-vaza">2. O funil imobiliário real (e onde ele vaza)</a></li>
+<li><a href="#3-unit-economics-imobiliario-os-dois-trilhos">3. Unit economics imobiliário: os dois trilhos</a><ul>
+<li><a href="#31-eua-quando-o-reddit-substitui-o-portal">3.1 EUA — quando o Reddit substitui o portal</a></li>
+<li><a href="#32-brasil-goiania-a-conta-do-corretor">3.2 Brasil / Goiânia — a conta do corretor</a></li>
+<li><a href="#33-onde-o-reddit-e-fraco-no-imobiliario-e-voce-precisa-saber">3.3 Onde o Reddit é fraco no imobiliário (e você precisa saber)</a></li>
+</ul>
+</li>
+<li><a href="#4-as-rotas-do-reddit-para-real-estate-mapa-completo">4. As rotas do Reddit para real estate (mapa completo)</a><ul>
+<li><a href="#rota-1-comentario-de-alta-intencao">Rota 1 — Comentário de alta intenção</a></li>
+<li><a href="#rota-2-post-de-analise-de-bairro-a-rota-mais-forte-no-brasil">Rota 2 — Post de análise de bairro (a rota mais forte no Brasil)</a></li>
+<li><a href="#rota-3-educar-sem-vender">Rota 3 — Educar sem vender</a></li>
+<li><a href="#rota-4-sub-permissivo-weekly-thread">Rota 4 — Sub permissivo / weekly thread</a></li>
+<li><a href="#rota-5-perfil-como-funil">Rota 5 — Perfil como funil</a></li>
+<li><a href="#rota-6-dm-consentida">Rota 6 — DM consentida</a></li>
+<li><a href="#rota-7-reddit-ads-a-rota-de-volume">Rota 7 — Reddit Ads (a rota de volume)</a></li>
+<li><a href="#rota-8-ama-de-especialista">Rota 8 — AMA de especialista</a></li>
+<li><a href="#rota-9-subreddit-proprio">Rota 9 — Subreddit próprio</a></li>
+<li><a href="#rota-10-parceria-com-criador-local">Rota 10 — Parceria com criador local</a></li>
+<li><a href="#rota-11-geo-ser-citado-pela-ia">Rota 11 — GEO (ser citado pela IA)</a></li>
+</ul>
+</li>
+<li><a href="#5-o-que-muda-no-imobiliario-compliance-e-parte-do-produto">5. O que muda no imobiliário: compliance é parte do produto</a><ul>
+<li><a href="#51-brasil-crecicofeci-resolucao-10652007-e-correlatas">5.1 Brasil — CRECI/COFECI (Resolução 1.065/2007 e correlatas)</a></li>
+<li><a href="#52-brasil-lgpd">5.2 Brasil — LGPD</a></li>
+<li><a href="#53-brasil-conar-vigente-01062026">5.3 Brasil — CONAR (vigente 01/06/2026)</a></li>
+<li><a href="#54-eua-tcpa-o-erro-mais-caro-do-setor">5.4 EUA — TCPA (o erro mais caro do setor)</a></li>
+</ul>
+</li>
+<li><a href="#6-googleia-como-coroa-da-estrategia-o-multiplicador">6. Google/IA como coroa da estratégia (o multiplicador)</a></li>
+<li><a href="#7-o-case-chicago-real-citado-goiania-simulado-transparente">7. O case: Chicago (real, citado) + Goiânia (simulado, transparente)</a><ul>
+<li><a href="#71-case-real-citado">7.1 Case real citado</a></li>
+<li><a href="#72-case-simulado-goiania-6-meses-rotulo-simulacao">7.2 Case simulado — Goiânia, 6 meses (rótulo: SIMULAÇÃO)</a></li>
+</ul>
+</li>
+<li><a href="#8-o-bot-imobiliario-o-que-ele-faz-que-um-humano-nao-faz">8. O bot imobiliário: o que ele faz que um humano não faz</a></li>
+<li><a href="#9-piloto-de-14-dias-para-imobiliariacorretor">9. Piloto de 14 dias para imobiliária/corretor</a></li>
+<li><a href="#10-erros-que-custam-caro-no-imobiliario">10. Erros que custam caro no imobiliário</a></li>
+<li><a href="#11-teses-finais-do-estudo-2">11. Teses finais do Estudo 2</a><ul>
+<li><a href="#fontes-do-estudo-2">Fontes do Estudo 2</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: EPC, LGPD, x_search)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
