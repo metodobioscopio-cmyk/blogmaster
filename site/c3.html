@@ -1,0 +1,927 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custos & ROI · Grok × Canais</title>
+<meta name="description" content="Dossiê operacional multicanal: Grok bot de vendas para affiliate marketing e real estate.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Canais</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link" href="c1.html"><span class="nav__num">C1</span>Mapa dos canais</a>
+<a class="nav__link" href="c2.html"><span class="nav__num">C2</span>Setup técnico</a>
+<a class="nav__link active" href="c3.html"><span class="nav__num">C3</span>Custos &amp; ROI</a>
+<a class="nav__link" href="c4.html"><span class="nav__num">C4</span>Riscos &amp; bans</a>
+<a class="nav__link" href="c5.html"><span class="nav__num">C5</span>Case 14 dias</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">M</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC C3 · 11 MIN DE LEITURA</p>
+      <h1 class="doc__title">Custos, CPL e ROI — a matemática de cada canal</h1>
+      <blockquote>
+<p><strong>Pergunta deste documento.</strong> Quanto custa operar o bot em cada canal, quanto custa o lead que ele traz, e em quanto tempo o dinheiro volta? <strong>Resposta curta: o custo do bot é US$ 95–175/mês; o custo do lead varia de US$ 0 (orgânico disciplinado) a US$ 300 (LinkedIn qualificado); e o único canal que se paga no primeiro mês é o orgânico com intenção declarada.</strong></p>
+</blockquote>
+<div class="callout callout--meta" markdown="0"><div class="callout__head"><span class="callout__icon">◷</span><span class="callout__label">Contexto</span></div>
+<div class="callout__body"><p><strong>Regra de leitura:</strong> nenhum número aqui é "o CPL do canal". CPL é resultado de oferta × criativo × qualificação. Os valores abaixo são <strong>faixas de benchmark 2026</strong> para dimensionar decisão, não promessa de resultado.
+<strong>Moeda:</strong> US$ por padrão; valores em R$ marcados. Câmbio de referência usado: R$ 5,50/US$.</p></div></div>
+
+<hr />
+<h2 id="1-o-custo-de-operar-o-bot-o-denominador-que-quase-ninguem-calcula">1. O custo de operar o bot (o denominador que quase ninguém calcula)<a class="headerlink" href="#1-o-custo-de-operar-o-bot-o-denominador-que-quase-ninguem-calcula" title="Permanent link">&para;</a></h2>
+<p>Antes de comparar CPL, você precisa saber quanto custa <strong>rodar</strong> a máquina:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Faixa mensal</th>
+<th>Tipo</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xAI API (redação + classificação)</td>
+<td>US$ 15–25</td>
+<td>variável</td>
+<td>~US$ 2,34/1.000 threads (Estudo 1)</td>
+</tr>
+<tr>
+<td>X API (radar + posts)</td>
+<td>US$ 20–35</td>
+<td>variável</td>
+<td>US$ 0,005/leitura; US$ 0,20/post com link</td>
+</tr>
+<tr>
+<td>Grok Bot (plano Premium)</td>
+<td>US$ 30</td>
+<td>fixo</td>
+<td>inclui créditos de X API</td>
+</tr>
+<tr>
+<td>WhatsApp (1.000 marketing)</td>
+<td>R$ 322 ≈ US$ 58</td>
+<td>variável</td>
+<td>R$ 0,3217/msg</td>
+</tr>
+<tr>
+<td>WhatsApp (serviço)</td>
+<td>US$ 0–13</td>
+<td>variável</td>
+<td>1.000 grátis/mês</td>
+</tr>
+<tr>
+<td>Vídeo (Grok Imagine 720p)</td>
+<td>US$ 0–42</td>
+<td>variável</td>
+<td>US$ 0,14/s; 15s = US$ 2,10</td>
+</tr>
+<tr>
+<td>Orquestrador (n8n self-host)</td>
+<td>US$ 0</td>
+<td>—</td>
+<td>ou US$ 29 em SaaS</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>US$ 95–175</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>O que isso significa:</strong> o piso operacional é <strong>~US$ 100/mês</strong>. Para um afiliado com comissão de US$ 29,70/mês por cliente (US$ 99 × 30%), o <strong>break-even é 4 clientes ativos</strong>. Para real estate em Goiânia com comissão de R$ 40.900 por venda, <strong>meia venda paga 5 anos de operação</strong>.</p>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>O custo que explode silenciosamente:</strong> postar no X <strong>com link</strong>. São US$ 0,20 contra US$ 0,015 — 13×. Um calendário de 3 posts com link por dia custa US$ 18/mês; o mesmo calendário sem link custa US$ 1,35. Em 12 meses, a diferença é de US$ 200 — mais que um ano de API de redação.</p></div></div>
+
+<hr />
+<h2 id="2-cpl-por-canal-os-numeros-de-2026-lado-a-lado">2. CPL por canal: os números de 2026 lado a lado<a class="headerlink" href="#2-cpl-por-canal-os-numeros-de-2026-lado-a-lado" title="Permanent link">&para;</a></h2>
+<h3 id="21-comparacao-direta-mesmo-comprador-b2b-saas-e-imobiliario">2.1 Comparação direta (mesmo comprador: B2B SaaS e imobiliário)<a class="headerlink" href="#21-comparacao-direta-mesmo-comprador-b2b-saas-e-imobiliario" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>CPL baixo</th>
+<th>CPL mediano</th>
+<th>CPL alto</th>
+<th>CPL qualificado</th>
+<th>Qualidade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reddit Ads</td>
+<td>US$ 15</td>
+<td><strong>US$ 17–40</strong></td>
+<td>US$ 120</td>
+<td>US$ 40–80</td>
+<td>alta (pesquisa ativa)</td>
+</tr>
+<tr>
+<td>TikTok Ads</td>
+<td>US$ 15</td>
+<td><strong>US$ 18–38</strong></td>
+<td>US$ 60</td>
+<td>US$ 50–90</td>
+<td>média</td>
+</tr>
+<tr>
+<td>Meta (imob.)</td>
+<td>US$ 35</td>
+<td><strong>US$ 35–65</strong></td>
+<td>US$ 100</td>
+<td><strong>US$ 150–300</strong></td>
+<td>baixa→média</td>
+</tr>
+<tr>
+<td>Meta (B2B SaaS)</td>
+<td>US$ 50</td>
+<td><strong>US$ 50–75</strong></td>
+<td>US$ 145</td>
+<td>US$ 120–200</td>
+<td>média</td>
+</tr>
+<tr>
+<td>Google Search (B2B)</td>
+<td>US$ 80</td>
+<td><strong>US$ 100</strong></td>
+<td>US$ 524</td>
+<td>US$ 150–300</td>
+<td>muito alta</td>
+</tr>
+<tr>
+<td>LinkedIn</td>
+<td>US$ 68</td>
+<td><strong>US$ 95–202</strong></td>
+<td>US$ 350</td>
+<td>US$ 250–450</td>
+<td>muito alta</td>
+</tr>
+<tr>
+<td>E-mail (lista própria)</td>
+<td>US$ 0,01</td>
+<td><strong>US$ 0,05</strong></td>
+<td>US$ 0,50</td>
+<td>—</td>
+<td>depende da lista</td>
+</tr>
+<tr>
+<td>Reddit orgânico + Grok</td>
+<td>~US$ 0</td>
+<td><strong>US$ 0</strong></td>
+<td>—</td>
+<td>US$ 0</td>
+<td>máxima</td>
+</tr>
+<tr>
+<td>Nextdoor (sponsorship)</td>
+<td>—</td>
+<td><strong>~US$ 100/ZIP/mês</strong></td>
+<td>—</td>
+<td>—</td>
+<td>alta (vizinho verificado)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-a-tabela-que-importa-custo-por-venda-nao-por-lead">2.2 A tabela que importa: custo por <strong>venda</strong>, não por lead<a class="headerlink" href="#22-a-tabela-que-importa-custo-por-venda-nao-por-lead" title="Permanent link">&para;</a></h3>
+<p>CPL é vaidade. O que decide orçamento é <strong>custo por aquisição</strong> (CPA):</p>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>CPL</th>
+<th>Conversão lead→venda</th>
+<th>CPA</th>
+<th>Ticket necessário p/ pagar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reddit orgânico</td>
+<td>US$ 0</td>
+<td>2–5%</td>
+<td>~US$ 0</td>
+<td>qualquer</td>
+</tr>
+<tr>
+<td>E-mail</td>
+<td>US$ 0,05</td>
+<td>2,4–4,1%</td>
+<td><strong>US$ 1,20–2,10</strong></td>
+<td>qualquer</td>
+</tr>
+<tr>
+<td>Reddit Ads</td>
+<td>US$ 25</td>
+<td>1–3%</td>
+<td>US$ 833–2.500</td>
+<td>alto</td>
+</tr>
+<tr>
+<td>TikTok Ads</td>
+<td>US$ 28</td>
+<td>1–2%</td>
+<td>US$ 1.400–2.800</td>
+<td>alto</td>
+</tr>
+<tr>
+<td>Meta (imob.)</td>
+<td>US$ 50</td>
+<td>2–3%</td>
+<td>US$ 1.667–2.500</td>
+<td>comissão &gt; US$ 5k</td>
+</tr>
+<tr>
+<td>Google Search</td>
+<td>US$ 100</td>
+<td>4–6%</td>
+<td>US$ 1.667–2.500</td>
+<td>comissão &gt; US$ 5k</td>
+</tr>
+<tr>
+<td>LinkedIn</td>
+<td>US$ 130</td>
+<td>5–8%</td>
+<td>US$ 1.625–2.600</td>
+<td>LTV &gt; US$ 8k</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A conclusão que reorganiza o orçamento:</strong> em custo <strong>por venda</strong>, e-mail e Reddit orgânico empatam em primeiro lugar por motivos opostos — e-mail porque o lead é barato, Reddit porque o lead é grátis. Os canais pagos todos empatam em US$ 1.600–2.600 por venda. <strong>Ou seja: pagar por mídia só faz sentido quando o ticket &gt; US$ 5.000.</strong></p>
+<div class="callout callout--decisao" markdown="0"><div class="callout__head"><span class="callout__icon">→</span><span class="callout__label">Decisão</span></div>
+<div class="callout__body"><p><strong>Regra de ouro do orçamento:</strong> se a sua comissão por venda é <strong>menor que US$ 1.500</strong>, você <strong>não pode</strong> comprar mídia nesses canais. Sobra orgânico (Reddit, TikTok, Threads, Bluesky, YouTube) + e-mail. É exatamente o caso do afiliado de SaaS de US$ 99/mês — e é por isso que o Estudo 1 dizia "orgânico primeiro".</p></div></div>
+
+<hr />
+<h2 id="3-unit-economics-dos-dois-mercados-recalculado-com-dados-de-canal">3. Unit economics dos dois mercados (recalculado com dados de canal)<a class="headerlink" href="#3-unit-economics-dos-dois-mercados-recalculado-com-dados-de-canal" title="Permanent link">&para;</a></h2>
+<h3 id="31-afiliado-saas-canal-organico">3.1 Afiliado / SaaS — canal orgânico<a class="headerlink" href="#31-afiliado-saas-canal-organico" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Valor</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preço do SaaS</td>
+<td>US$ 99/mês</td>
+<td>Estudo 1</td>
+</tr>
+<tr>
+<td>Comissão</td>
+<td>30% → <strong>US$ 29,70/mês</strong></td>
+<td>programa</td>
+</tr>
+<tr>
+<td>Retenção média</td>
+<td>18 meses</td>
+<td>premissa rotulada</td>
+</tr>
+<tr>
+<td>LTV por cliente</td>
+<td><strong>US$ 534</strong></td>
+<td>29,70 × 18</td>
+</tr>
+<tr>
+<td>Custo de aquisição (orgânico)</td>
+<td><strong>~US$ 0</strong></td>
+<td>tempo humano</td>
+</tr>
+<tr>
+<td>Custo da operação/mês</td>
+<td>US$ 100</td>
+<td>seção 1</td>
+</tr>
+<tr>
+<td>Clientes para break-even</td>
+<td><strong>4</strong></td>
+<td>100 ÷ 29,70</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Com CAC ~zero e LTV US$ 534, o negócio é limitado por tempo, não por capital.</strong> O gargalo é quantas conversas qualificadas você consegue ter por semana. É por isso que o motor prioriza <strong>radar</strong> (encontrar intenção) sobre <strong>publicação</strong> (volume).</p>
+<p><strong>Se você adicionar mídia:</strong> CPL US$ 25 (Reddit) × 2% = US$ 1.250 por cliente, contra LTV de US$ 534. <strong>Prejuízo de US$ 716 por cliente.</strong> Mídia paga <strong>destrói</strong> esse modelo. Toda a tese do Estudo 1 depende de orgânico.</p>
+<h3 id="32-real-estate-goiania-br">3.2 Real estate — Goiânia (BR)<a class="headerlink" href="#32-real-estate-goiania-br" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Valor</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ticket médio</td>
+<td>R$ 818.000</td>
+<td>Estudo 2</td>
+</tr>
+<tr>
+<td>Comissão</td>
+<td>5% → <strong>R$ 40.900</strong></td>
+<td>mercado</td>
+</tr>
+<tr>
+<td>Leads por venda</td>
+<td>50</td>
+<td>Estudo 2</td>
+</tr>
+<tr>
+<td>Custo de mídia por venda</td>
+<td>R$ 2.000–6.000</td>
+<td>Estudo 2</td>
+</tr>
+<tr>
+<td>Custo de mídia por lead</td>
+<td>R$ 40–120</td>
+<td>derivado</td>
+</tr>
+<tr>
+<td><strong>Canal orgânico (Instagram+WhatsApp)</strong></td>
+<td><strong>R$ 322/mês</strong></td>
+<td>1.000 msgs marketing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>O ponto central:</strong> com comissão de R$ 40.900 e 50 leads por venda, <strong>cada lead vale R$ 818</strong>. Você pode pagar até R$ 818 por lead e ainda empatar. A mídia a R$ 40–120/lead é <strong>lucrativa por 7×</strong>. Isto é o oposto exato do afiliado de SaaS.</p>
+<blockquote>
+<p><strong>Insight estrutural:</strong> o mesmo bot, o mesmo stack e o mesmo custo de US$ 100/mês geram retornos de 100× diferentes conforme o ticket. <strong>Real estate suporta mídia; SaaS de US$ 99 não.</strong> Escolher o mercado é a decisão de maior alavancagem de todo o projeto.</p>
+</blockquote>
+<h3 id="33-real-estate-eua">3.3 Real estate — EUA<a class="headerlink" href="#33-real-estate-eua" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Valor</th>
+<th>Fonte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Preço mediano de imóvel</td>
+<td>US$ 420.000</td>
+<td>premissa</td>
+</tr>
+<tr>
+<td>Comissão (lado do comprador)</td>
+<td>2,5% → <strong>US$ 10.500</strong></td>
+<td>mercado pós-NAR settlement</td>
+</tr>
+<tr>
+<td>Leads por venda</td>
+<td>30–60</td>
+<td>benchmark</td>
+</tr>
+<tr>
+<td>CPL Meta</td>
+<td>US$ 35–65</td>
+<td>seção 2</td>
+</tr>
+<tr>
+<td>CPL Nextdoor</td>
+<td>~US$ 100/ZIP/mês</td>
+<td>sponsorships</td>
+</tr>
+<tr>
+<td><strong>Custo por venda (Meta)</strong></td>
+<td><strong>US$ 1.050–5.850</strong></td>
+<td>30–60 × CPL</td>
+</tr>
+<tr>
+<td><strong>Margem por venda</strong></td>
+<td><strong>US$ 4.650–9.450</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Nos EUA, o imobiliário tem a mesma matemática favorável do Brasil, com CPL maior e ticket maior. <strong>É o mercado onde o bot tem o melhor ROI por hora de operação.</strong></p>
+<hr />
+<h2 id="4-roi-comparado-os-quatro-cenarios">4. ROI comparado: os quatro cenários<a class="headerlink" href="#4-roi-comparado-os-quatro-cenarios" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Cenário</th>
+<th>Investimento/mês</th>
+<th>Vendas/mês (premissa)</th>
+<th>Receita/mês</th>
+<th>ROI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. Afiliado orgânico</strong></td>
+<td>US$ 100</td>
+<td>3 novos clientes</td>
+<td>US$ 89,10 MRR</td>
+<td>−11% no mês 1; <strong>+934% no mês 12</strong> (35 clientes)</td>
+</tr>
+<tr>
+<td><strong>B. Afiliado com mídia</strong></td>
+<td>US$ 1.100</td>
+<td>0,8 clientes (US$ 1.250 CPA)</td>
+<td>US$ 23,76</td>
+<td><strong>−98%</strong> — não faça</td>
+</tr>
+<tr>
+<td><strong>C. Imobiliário BR orgânico</strong></td>
+<td>R$ 322</td>
+<td>0,4 venda</td>
+<td>R$ 16.360</td>
+<td><strong>+4.980%</strong></td>
+</tr>
+<tr>
+<td><strong>D. Imobiliário BR com mídia</strong></td>
+<td>R$ 6.000</td>
+<td>1,5 vendas</td>
+<td>R$ 61.350</td>
+<td><strong>+922%</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Cenário B é o erro mais comum do mercado.</strong> Afiliado de produto de baixo ticket comprando tráfego frio. A conta nunca fecha: o CPA (US$ 1.250) é 2,3× o LTV (US$ 534). Se você vê alguém vendendo "curso de tráfego pago para afiliado de SaaS", essa é a matemática que ele não mostra.</p></div></div>
+
+<hr />
+<h2 id="5-payback-e-o-ponto-de-virada">5. Payback e o ponto de virada<a class="headerlink" href="#5-payback-e-o-ponto-de-virada" title="Permanent link">&para;</a></h2>
+<h3 id="51-quando-o-investimento-volta">5.1 Quando o investimento volta<a class="headerlink" href="#51-quando-o-investimento-volta" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Payback</th>
+<th>Por quê</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reddit orgânico</td>
+<td><strong>imediato</strong></td>
+<td>custo marginal zero</td>
+</tr>
+<tr>
+<td>E-mail</td>
+<td><strong>1–2 meses</strong></td>
+<td>lista própria, custo fixo baixo</td>
+</tr>
+<tr>
+<td>WhatsApp</td>
+<td><strong>1 venda</strong></td>
+<td>R$ 322/mês vs R$ 40.900/venda</td>
+</tr>
+<tr>
+<td>Instagram orgânico</td>
+<td><strong>2–3 meses</strong></td>
+<td>tempo de construção de audiência</td>
+</tr>
+<tr>
+<td>TikTok orgânico</td>
+<td><strong>3–6 meses</strong></td>
+<td>algoritmo premia consistência</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td><strong>6–12 meses</strong></td>
+<td>busca compõe devagar</td>
+</tr>
+<tr>
+<td>Meta Ads</td>
+<td><strong>1–3 meses</strong></td>
+<td>se a oferta estiver pronta</td>
+</tr>
+<tr>
+<td>Google Search</td>
+<td><strong>1–2 meses</strong></td>
+<td>intenção já existe</td>
+</tr>
+<tr>
+<td>LinkedIn Ads</td>
+<td><strong>3–6 meses</strong></td>
+<td>CPL alto exige volume</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-o-ponto-de-virada-real">5.2 O ponto de virada real<a class="headerlink" href="#52-o-ponto-de-virada-real" title="Permanent link">&para;</a></h3>
+<p>O gráfico mental que você precisa ter:</p>
+<pre><code>custo
+  │                     ╭──── mídia paga (linear, sobe com volume)
+  │              ╭──────╯
+  │      ╭───────╯
+  │  ╭───╯ ← orgânico (fixo: US$100/mês)
+  │──╯
+  └──────────────────────────────────► volume de leads
+       ↑              ↑
+    break-even     ponto onde mídia
+    do orgânico    passa a ser mais barata
+</code></pre>
+<p><strong>O orgânico tem custo fixo e retorno linear; a mídia tem custo linear e retorno linear.</strong> Em volume baixo, orgânico ganha sempre. Em volume muito alto, mídia ganha — porque o orgânico satura (você não pode responder 500 threads por dia com uma pessoa).</p>
+<p><strong>Ponto de saturação do orgânico com bot:</strong> ~40–60 conversas qualificadas/mês por operador. Acima disso, ou você contrata, ou começa a pagar mídia.</p>
+<hr />
+<h2 id="6-custos-por-canal-em-detalhe">6. Custos por canal, em detalhe<a class="headerlink" href="#6-custos-por-canal-em-detalhe" title="Permanent link">&para;</a></h2>
+<h3 id="61-x-o-mais-caro-por-acao">6.1 X — o mais caro por ação<a class="headerlink" href="#61-x-o-mais-caro-por-acao" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Operação</th>
+<th>Custo unitário</th>
+<th>Volume/mês</th>
+<th>Custo/mês</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Radar (50 posts × 3×/dia)</td>
+<td>US$ 0,005</td>
+<td>4.500</td>
+<td><strong>US$ 22,50</strong></td>
+</tr>
+<tr>
+<td>Post sem link</td>
+<td>US$ 0,015</td>
+<td>60</td>
+<td>US$ 0,90</td>
+</tr>
+<tr>
+<td>Post com link</td>
+<td>US$ 0,20</td>
+<td>60</td>
+<td><strong>US$ 12,00</strong></td>
+</tr>
+<tr>
+<td>DM</td>
+<td>US$ 0,015</td>
+<td>100</td>
+<td>US$ 1,50</td>
+</tr>
+<tr>
+<td><strong>Total realista</strong></td>
+<td></td>
+<td></td>
+<td><strong>US$ 25–37</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Otimização:</strong> radar 2×/dia em vez de 3× economiza US$ 7,50/mês. Link na resposta em vez do post economiza US$ 11,10/mês. Juntas: <strong>−50% no custo do X</strong> sem perder alcance.</p>
+<h3 id="62-whatsapp-o-mais-previsivel">6.2 WhatsApp — o mais previsível<a class="headerlink" href="#62-whatsapp-o-mais-previsivel" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Preço BR</th>
+<th>Volume</th>
+<th>Custo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Marketing</td>
+<td>R$ 0,3217</td>
+<td>1.000</td>
+<td>R$ 321,70</td>
+</tr>
+<tr>
+<td>Utility</td>
+<td>R$ 0,035</td>
+<td>500</td>
+<td>R$ 17,50</td>
+</tr>
+<tr>
+<td>Serviço (após 1.000 grátis)</td>
+<td>R$ 0,035</td>
+<td>2.000</td>
+<td>R$ 35,00</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td></td>
+<td><strong>R$ 374,20 ≈ US$ 68</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nota:</strong> marketing <strong>não tem desconto por volume</strong> no Brasil. Utility e authentication têm desconto de até 25% em tiers. Planeje o custo de marketing como linear.</p>
+<h3 id="63-conteudo-em-video-grok-imagine-o-custo-marginal-mais-alto">6.3 Conteúdo em vídeo (Grok Imagine) — o custo marginal mais alto<a class="headerlink" href="#63-conteudo-em-video-grok-imagine-o-custo-marginal-mais-alto" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Formato</th>
+<th>Duração</th>
+<th>Resolução</th>
+<th>Custo por peça</th>
+<th>30 peças/mês</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reel/Short</td>
+<td>15s</td>
+<td>720p</td>
+<td>US$ 2,10</td>
+<td><strong>US$ 63</strong></td>
+</tr>
+<tr>
+<td>Reel/Short</td>
+<td>15s</td>
+<td>1080p</td>
+<td>US$ 3,75</td>
+<td>US$ 112,50</td>
+</tr>
+<tr>
+<td>Vídeo longo</td>
+<td>60s (4×15s)</td>
+<td>720p</td>
+<td>US$ 8,40</td>
+<td>US$ 252</td>
+</tr>
+<tr>
+<td>Imagem de capa</td>
+<td>—</td>
+<td>1K</td>
+<td>US$ 0,02</td>
+<td>US$ 0,60</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A leitura:</strong> gerar 30 Reels por mês com IA custa <strong>US$ 63</strong> — menos que 1 lead de Meta. Se você produz 30 vídeos/mês manualmente, são 40–60 horas de trabalho. <strong>É aqui que o bot tem o maior retorno por dólar.</strong></p>
+<h3 id="64-comparacao-de-custo-por-peca-de-conteudo">6.4 Comparação de "custo por peça de conteúdo"<a class="headerlink" href="#64-comparacao-de-custo-por-peca-de-conteudo" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Custo por peça</th>
+<th>Tempo humano</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agência de conteúdo</td>
+<td>US$ 150–600</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Freelancer</td>
+<td>US$ 50–150</td>
+<td>0,5h de briefing</td>
+</tr>
+<tr>
+<td>Você mesmo, sem IA</td>
+<td>US$ 0</td>
+<td>3–5h</td>
+</tr>
+<tr>
+<td>Você + Grok (texto)</td>
+<td><strong>US$ 0,01</strong></td>
+<td>10 min de revisão</td>
+</tr>
+<tr>
+<td>Você + Grok Imagine (vídeo)</td>
+<td><strong>US$ 2,10</strong></td>
+<td>10 min de revisão</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-o-que-medir-e-o-que-ignorar">7. O que medir (e o que ignorar)<a class="headerlink" href="#7-o-que-medir-e-o-que-ignorar" title="Permanent link">&para;</a></h2>
+<h3 id="71-as-sete-metricas-que-decidem">7.1 As sete métricas que decidem<a class="headerlink" href="#71-as-sete-metricas-que-decidem" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Como calcular</th>
+<th>Meta 2026</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Custo por conversa qualificada</strong></td>
+<td>custo total ÷ conversas ≥70</td>
+<td>&lt; US$ 5</td>
+</tr>
+<tr>
+<td><strong>Taxa de resposta na janela de 24h</strong></td>
+<td>respondidas dentro de 24h ÷ recebidas</td>
+<td>&gt; 90%</td>
+</tr>
+<tr>
+<td><strong>Conversão conversa→reunião</strong></td>
+<td>reuniões ÷ conversas</td>
+<td>20–35%</td>
+</tr>
+<tr>
+<td><strong>Conversão reunião→venda</strong></td>
+<td>vendas ÷ reuniões</td>
+<td>15–30%</td>
+</tr>
+<tr>
+<td><strong>CAC</strong></td>
+<td>custo total ÷ vendas</td>
+<td>&lt; 1/3 do LTV</td>
+</tr>
+<tr>
+<td><strong>Payback</strong></td>
+<td>CAC ÷ margem mensal</td>
+<td>&lt; 3 meses</td>
+</tr>
+<tr>
+<td><strong>Custo por 1.000 impressões orgânicas</strong></td>
+<td>custo ÷ (impressões/1.000)</td>
+<td>&lt; US$ 2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-as-metricas-de-vaidade-ignore">7.2 As métricas de vaidade (ignore)<a class="headerlink" href="#72-as-metricas-de-vaidade-ignore" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Por que ignorar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Seguidores</td>
+<td>não compra; 10 mil seguidores frios valem menos que 50 leads</td>
+</tr>
+<tr>
+<td>Curtidas</td>
+<td>sinal fraco de intenção</td>
+</tr>
+<tr>
+<td>Alcance</td>
+<td>sem contexto de conversão, não diz nada</td>
+</tr>
+<tr>
+<td>Taxa de abertura de e-mail (não ajustada)</td>
+<td>inflada por Apple MPP em 15–40%</td>
+</tr>
+<tr>
+<td>CPL bruto</td>
+<td>esconde a qualidade; use custo por <strong>lead qualificado</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--dica" markdown="0"><div class="callout__head"><span class="callout__icon">•</span><span class="callout__label">Dica</span></div>
+<div class="callout__body"><p><strong>Substitua "CPL" por "custo por conversa qualificada" em todos os seus relatórios.</strong> É a única métrica que não pode ser inflada por lead ruim. Um CPL de US$ 5 com 2% de qualificação custa US$ 250 por conversa; um CPL de US$ 50 com 40% de qualificação custa US$ 125. O segundo parece pior e é 2× melhor.</p></div></div>
+
+<hr />
+<h2 id="8-cenario-de-12-meses-o-plano-financeiro">8. Cenário de 12 meses (o plano financeiro)<a class="headerlink" href="#8-cenario-de-12-meses-o-plano-financeiro" title="Permanent link">&para;</a></h2>
+<p>Operador solo, afiliado SaaS + real estate BR, começando do zero:</p>
+<table>
+<thead>
+<tr>
+<th>Mês</th>
+<th>Custo acumulado</th>
+<th>Clientes afiliado</th>
+<th>Vendas imob.</th>
+<th>Receita acumulada</th>
+<th>Saldo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>US$ 100</td>
+<td>1</td>
+<td>0</td>
+<td>US$ 29,70</td>
+<td>−US$ 70</td>
+</tr>
+<tr>
+<td>3</td>
+<td>US$ 300</td>
+<td>5</td>
+<td>0</td>
+<td>US$ 445</td>
+<td>+US$ 145</td>
+</tr>
+<tr>
+<td>6</td>
+<td>US$ 600</td>
+<td>15</td>
+<td>1 (R$ 40.900)</td>
+<td>US$ 7.900</td>
+<td><strong>+US$ 7.300</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td>US$ 900</td>
+<td>25</td>
+<td>2</td>
+<td>US$ 16.340</td>
+<td>+US$ 15.440</td>
+</tr>
+<tr>
+<td>12</td>
+<td>US$ 1.200</td>
+<td>35</td>
+<td>3</td>
+<td>US$ 25.200</td>
+<td><strong>+US$ 24.000</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>Premissas: 3 clientes novos/mês a partir do mês 2 (churn 3%); 1 venda imobiliária a cada 4 meses; câmbio R$ 5,50. <strong>Simulação, não previsão.</strong></em></p>
+<p><strong>O ponto de virada está no mês 2–3.</strong> Antes disso, o projeto é investimento; depois, é caixa. Quem desiste no mês 2 desiste exatamente no ponto de inflexão.</p>
+<hr />
+<h2 id="9-cinco-numeros-para-levar-para-a-reuniao">9. Cinco números para levar para a reunião<a class="headerlink" href="#9-cinco-numeros-para-levar-para-a-reuniao" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>US$ 95–175/mês</strong> — custo total de operar o stack multicanal.</li>
+<li><strong>US$ 0,01 vs US$ 2,10</strong> — custo de uma peça de conteúdo em texto vs vídeo gerado.</li>
+<li><strong>US$ 1.600–2.600</strong> — custo por venda em qualquer canal pago. Só compensa com ticket &gt; US$ 5.000.</li>
+<li><strong>R$ 818</strong> — valor de um único lead imobiliário em Goiânia (comissão ÷ 50 leads).</li>
+<li><strong>7×</strong> — quanto a mídia imobiliária é lucrativa (R$ 818 de valor vs R$ 40–120 de custo por lead), contra <strong>0,4×</strong> do afiliado de SaaS (LTV US$ 534 vs CPA US$ 1.250).</li>
+</ol>
+<blockquote>
+<p><strong>A tese financeira do dossiê:</strong> o bot é caro por ação e barato por resultado. Ele só faz sentido onde o ticket justifica — e onde a operação é orgânica, disciplinada e medida por conversa qualificada, não por CPL.</p>
+</blockquote>
+    </article>
+
+    <nav class="pager">
+      <a class="pager__link" href="c2.html"><span class="pager__label">← Anterior</span><span class="pager__title">Setup técnico</span></a>
+      <a class="pager__link" href="c4.html"><span class="pager__label">Próximo →</span><span class="pager__title">Riscos &amp; bans</span></a>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#1-o-custo-de-operar-o-bot-o-denominador-que-quase-ninguem-calcula">1. O custo de operar o bot (o denominador que quase ninguém calcula)</a></li>
+<li><a href="#2-cpl-por-canal-os-numeros-de-2026-lado-a-lado">2. CPL por canal: os números de 2026 lado a lado</a><ul>
+<li><a href="#21-comparacao-direta-mesmo-comprador-b2b-saas-e-imobiliario">2.1 Comparação direta (mesmo comprador: B2B SaaS e imobiliário)</a></li>
+<li><a href="#22-a-tabela-que-importa-custo-por-venda-nao-por-lead">2.2 A tabela que importa: custo por venda, não por lead</a></li>
+</ul>
+</li>
+<li><a href="#3-unit-economics-dos-dois-mercados-recalculado-com-dados-de-canal">3. Unit economics dos dois mercados (recalculado com dados de canal)</a><ul>
+<li><a href="#31-afiliado-saas-canal-organico">3.1 Afiliado / SaaS — canal orgânico</a></li>
+<li><a href="#32-real-estate-goiania-br">3.2 Real estate — Goiânia (BR)</a></li>
+<li><a href="#33-real-estate-eua">3.3 Real estate — EUA</a></li>
+</ul>
+</li>
+<li><a href="#4-roi-comparado-os-quatro-cenarios">4. ROI comparado: os quatro cenários</a></li>
+<li><a href="#5-payback-e-o-ponto-de-virada">5. Payback e o ponto de virada</a><ul>
+<li><a href="#51-quando-o-investimento-volta">5.1 Quando o investimento volta</a></li>
+<li><a href="#52-o-ponto-de-virada-real">5.2 O ponto de virada real</a></li>
+</ul>
+</li>
+<li><a href="#6-custos-por-canal-em-detalhe">6. Custos por canal, em detalhe</a><ul>
+<li><a href="#61-x-o-mais-caro-por-acao">6.1 X — o mais caro por ação</a></li>
+<li><a href="#62-whatsapp-o-mais-previsivel">6.2 WhatsApp — o mais previsível</a></li>
+<li><a href="#63-conteudo-em-video-grok-imagine-o-custo-marginal-mais-alto">6.3 Conteúdo em vídeo (Grok Imagine) — o custo marginal mais alto</a></li>
+<li><a href="#64-comparacao-de-custo-por-peca-de-conteudo">6.4 Comparação de "custo por peça de conteúdo"</a></li>
+</ul>
+</li>
+<li><a href="#7-o-que-medir-e-o-que-ignorar">7. O que medir (e o que ignorar)</a><ul>
+<li><a href="#71-as-sete-metricas-que-decidem">7.1 As sete métricas que decidem</a></li>
+<li><a href="#72-as-metricas-de-vaidade-ignore">7.2 As métricas de vaidade (ignore)</a></li>
+</ul>
+</li>
+<li><a href="#8-cenario-de-12-meses-o-plano-financeiro">8. Cenário de 12 meses (o plano financeiro)</a></li>
+<li><a href="#9-cinco-numeros-para-levar-para-a-reuniao">9. Cinco números para levar para a reunião</a></li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: CPL, LGPD, janela 24h)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

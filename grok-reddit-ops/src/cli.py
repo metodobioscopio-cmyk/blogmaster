@@ -13,6 +13,8 @@ Uso:
     python -m src.cli radar  --source manual --text "..." --sub r/Goiania
     python -m src.cli scribe --lead output/leads.jsonl --index 0
     python -m src.cli weekly --input output/leads.jsonl
+    python -m src.cli canais
+    python -m src.cli canais --check instagram_dm --cold
     python -m src.cli doctor
 """
 
@@ -27,6 +29,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from src.channels import (                              # noqa: E402
+    CHANNELS,
+    ChannelViolation,
+    channel_matrix,
+    estimate_cost,
+    validate_channel_post,
+)
 from src.config import load_config                      # noqa: E402
 from src.grok import GrokClient, GrokError              # noqa: E402
 from src.sources import get_source                      # noqa: E402
@@ -161,6 +170,64 @@ def cmd_doctor(args, cfg) -> int:
     return 0
 
 
+def cmd_canais(args, cfg) -> int:
+    if args.check:
+        canal = args.check
+        if canal not in CHANNELS:
+            print(f"[canais] desconhecido: {canal}", file=sys.stderr)
+            print("  válidos: " + ", ".join(sorted(CHANNELS)), file=sys.stderr)
+            return 1
+        payload: dict = {}
+        if args.text:
+            payload["text"] = args.text
+        if args.link:
+            payload["has_link"] = True
+            payload["link"] = args.link
+        if args.cold:
+            payload["cold"] = True
+        if args.hours is not None:
+            payload["hours_since_inbound"] = args.hours
+            payload["promotional"] = True
+        if args.tested:
+            payload["audited"] = True
+        try:
+            res = validate_channel_post(canal, payload)
+        except ChannelViolation as exc:
+            _print({
+                "ok": False,
+                "canal": canal,
+                "regra": exc.rule,
+                "problema": exc.message,
+                "correcao": exc.fix,
+            })
+            return 3
+        ch = CHANNELS[canal]
+        _print({
+            "ok": True,
+            "canal": canal,
+            "checks": res.checks,
+            "custo_estimado_usd": estimate_cost(canal, payload),
+            "janela_horas": ch.window_hours,
+            "limite": ch.publish_limit,
+            "docs": ch.docs,
+        })
+        return 0
+
+    rows = channel_matrix()
+    if args.json:
+        _print(rows)
+        return 0
+    cab = f"{'CANAL':<18}{'PUBLICA':<9}{'DM':<6}{'JANELA':<8}{'RISCO':<9}LIMITE"
+    print(cab)
+    print("-" * len(cab))
+    for r in rows:
+        print(f"{r['canal']:<18}{r['publica']:<9}{r['dm']:<6}"
+              f"{r['janela_h']:<8}{r['risco']:<9}{r['limite']}")
+    print(f"\n{len(rows)} canais · detalhe em docs/07 e docs/08")
+    print("use:  python3 -m src.cli canais --check <canal> [--text ...] [--link ...] [--cold]")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="grok-reddit-ops", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -192,6 +259,18 @@ def build_parser() -> argparse.ArgumentParser:
     w.add_argument("--revenue", type=float, default=0.0)
     w.set_defaults(func=cmd_weekly)
 
+    c = sub.add_parser("canais", help="matriz de canais e validador de publicação")
+    c.add_argument("--check", metavar="CANAL", default=None,
+                   help="valida um payload contra as regras do canal")
+    c.add_argument("--text", default=None, help="texto a validar")
+    c.add_argument("--link", default=None, help="URL presente no post")
+    c.add_argument("--cold", action="store_true", help="simula DM fria")
+    c.add_argument("--hours", type=float, default=None,
+                   help="horas desde o último inbound (testa janela de 24h)")
+    c.add_argument("--tested", action="store_true", help="simula app TikTok auditado")
+    c.add_argument("--json", action="store_true")
+    c.set_defaults(func=cmd_canais)
+
     d = sub.add_parser("doctor", help="checa configuração")
     d.set_defaults(func=cmd_doctor)
     return p
@@ -202,6 +281,9 @@ def main(argv=None) -> int:
     cfg = load_config(ROOT)
     try:
         return args.func(args, cfg)
+    except ChannelViolation as exc:
+        print(f"[bloqueado] {exc}", file=sys.stderr)
+        return 3
     except GrokError as exc:
         print(f"[erro] {exc}", file=sys.stderr)
         return 2

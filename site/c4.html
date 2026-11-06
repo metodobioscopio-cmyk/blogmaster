@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Riscos & bans · Grok × Canais</title>
+<meta name="description" content="Dossiê operacional multicanal: Grok bot de vendas para affiliate marketing e real estate.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Canais</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link" href="c1.html"><span class="nav__num">C1</span>Mapa dos canais</a>
+<a class="nav__link" href="c2.html"><span class="nav__num">C2</span>Setup técnico</a>
+<a class="nav__link" href="c3.html"><span class="nav__num">C3</span>Custos &amp; ROI</a>
+<a class="nav__link active" href="c4.html"><span class="nav__num">C4</span>Riscos &amp; bans</a>
+<a class="nav__link" href="c5.html"><span class="nav__num">C5</span>Case 14 dias</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">M</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC C4 · 12 MIN DE LEITURA</p>
+      <h1 class="doc__title">Riscos, banimentos e defesa — o manual de sobrevivência</h1>
+      <blockquote>
+<p><strong>Por que este documento existe.</strong> Todo projeto de bot morre na mesma ordem: primeiro toma erro de política, depois toma ban, depois tenta recorrer e descobre que não há recurso. <strong>Este documento é a lista dos erros que custam a conta — e o procedimento para não cometê-los.</strong></p>
+<p>Ele não é jurídico. É operacional: o que fazer, em que ordem, e o que documentar antes que aconteça.</p>
+</blockquote>
+<div class="callout callout--meta" markdown="0"><div class="callout__head"><span class="callout__icon">◷</span><span class="callout__label">Contexto</span></div>
+<div class="callout__body"><p><strong>Regra base:</strong> em 2026, a plataforma tem <strong>dados, logs e poder de banimento unilaterais</strong>. A única defesa eficaz é <strong>prevenção documentada</strong> — não contestação posterior.</p></div></div>
+
+<hr />
+<h2 id="1-a-tabela-central-dos-riscos">1. A tabela central dos riscos<a class="headerlink" href="#1-a-tabela-central-dos-riscos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Ação que derruba a conta</th>
+<th>Gravidade</th>
+<th>Defesa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LinkedIn</strong></td>
+<td>qualquer automação de sessão (auto-connect, auto-DM, scraper)</td>
+<td><strong>crítica — ban definitivo, sem recurso</strong></td>
+<td>não automatizar; §8.2</td>
+</tr>
+<tr>
+<td><strong>Meta (IG/FB)</strong></td>
+<td>DM frio / mensagem fora da janela sem tag</td>
+<td><strong>alta — restrição de messaging na Page</strong></td>
+<td>validar janela antes de enviar</td>
+</tr>
+<tr>
+<td><strong>Meta (IG/FB)</strong></td>
+<td>compartilhar senha com ferramenta não oficial</td>
+<td>alta — desativação de conta</td>
+<td>só API oficial (Platform Terms 6.a.iii)</td>
+</tr>
+<tr>
+<td><strong>WhatsApp</strong></td>
+<td>disparo sem opt-in / template não aprovado / taxa de block alta</td>
+<td><strong>crítica — número banido, irrecuperável</strong></td>
+<td>opt-in com data + segmentação</td>
+</tr>
+<tr>
+<td><strong>WhatsApp</strong></td>
+<td>comprar lista</td>
+<td>crítica</td>
+<td>nunca</td>
+</tr>
+<tr>
+<td><strong>X</strong></td>
+<td>post idêntico em massa / reply automatizado indiscriminado</td>
+<td>alta — suspensão</td>
+<td>variar copy, responder só com contexto</td>
+</tr>
+<tr>
+<td><strong>Reddit</strong></td>
+<td>post promocional disfarçado / ban evasion</td>
+<td><strong>crítica — ban de IP e shadowban</strong></td>
+<td>disclosure + regra do sub</td>
+</tr>
+<tr>
+<td><strong>Reddit</strong></td>
+<td>criar conta nova após ban</td>
+<td>crítica</td>
+<td>não fazer</td>
+</tr>
+<tr>
+<td><strong>TikTok</strong></td>
+<td>app não auditado postando</td>
+<td>média — conteúdo privado</td>
+<td>audit antes</td>
+</tr>
+<tr>
+<td><strong>TikTok</strong></td>
+<td>automação de follow/like/DM</td>
+<td>alta</td>
+<td>não fazer</td>
+</tr>
+<tr>
+<td><strong>YouTube</strong></td>
+<td>comentar em vídeos de terceiros para prospectar</td>
+<td>média — strike no canal</td>
+<td>só responder no próprio canal</td>
+</tr>
+<tr>
+<td><strong>Facebook Groups</strong></td>
+<td>tentar automatizar</td>
+<td><strong>impossível</strong> — API extinta</td>
+<td>manual</td>
+</tr>
+<tr>
+<td><strong>E-mail</strong></td>
+<td>sem unsubscribe / sem endereço físico</td>
+<td><strong>legal — US$ 53.088 por e-mail</strong></td>
+<td>CAN-SPAM completo</td>
+</tr>
+<tr>
+<td><strong>E-mail</strong></td>
+<td>sem base legal na UE</td>
+<td><strong>legal — €20M ou 4%</strong></td>
+<td>LIA documentada + Art. 14</td>
+</tr>
+<tr>
+<td><strong>E-mail</strong></td>
+<td>sem opt-out no BR</td>
+<td>legal — 2% da receita, teto R$ 50M</td>
+<td>LGPD art. 18</td>
+</tr>
+<tr>
+<td><strong>Google Business</strong></td>
+<td>edições em massa</td>
+<td>baixa — 10 edições/min</td>
+<td>throttle</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-os-seis-banimentos-que-realmente-acontecem">2. Os seis banimentos que realmente acontecem<a class="headerlink" href="#2-os-seis-banimentos-que-realmente-acontecem" title="Permanent link">&para;</a></h2>
+<h3 id="21-linkedin-o-ban-mais-rapido-e-mais-definitivo">2.1 LinkedIn — o ban mais rápido e mais definitivo<a class="headerlink" href="#21-linkedin-o-ban-mais-rapido-e-mais-definitivo" title="Permanent link">&para;</a></h3>
+<p><strong>O que acontece:</strong> você conecta uma ferramenta de automação. Ela faz login com seu usuário e senha. Em 2 a 10 dias, a conta é restringida com "atividade incomum" e pede documento. Muitas vezes não volta.</p>
+<p><strong>Como a LinkedIn detecta:</strong> fingerprint do navegador, cadência de requisições (humano não clica 200 perfis/hora), IP do datacenter, ausência de eventos de mouse, padrão de mensagens idênticas.</p>
+<p><strong>Por que não há recurso:</strong> você violou a <strong>Seção 8.2 do User Agreement</strong> no momento do login automatizado. A hiQ v. LinkedIn foi decidida por <strong>quebra de contrato</strong> — a LinkedIn venceu. Não existe "uso legítimo" de scraping de perfis.</p>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Não existe ferramenta "segura" para LinkedIn outbound.</strong> Todas operam com sua sessão autenticada — o que é exatamente o que §8.2 proíbe. Se um fornecedor diz "somos compatíveis com os termos", ele está mentindo ou usando a API de parceiro (que <strong>não</strong> permite envio de mensagens para não-conexões).</p></div></div>
+
+<p><strong>O que fazer no lugar:</strong>
+- Publicar no feed (permitido, via API para o próprio perfil).
+- Responder quem te procurou (manual).
+- Usar o Sales Navigator como <strong>fonte de pesquisa</strong> e enviar o convite à mão (10–20/dia, com nota).
+- Usar o LinkedIn Ads se precisar de volume (CPL US$ 95–202).</p>
+<h3 id="22-whatsapp-o-numero-que-nao-volta">2.2 WhatsApp — o número que não volta<a class="headerlink" href="#22-whatsapp-o-numero-que-nao-volta" title="Permanent link">&para;</a></h3>
+<p><strong>O que acontece:</strong> você importa uma lista de 5.000 contatos e dispara. Em 24–72h, o número é <strong>banido</strong> e o WABA é restrito. O número <strong>nunca mais</strong> pode ser usado no WhatsApp — nem no app comum.</p>
+<p><strong>Os três gatilhos:</strong>
+1. <strong>Taxa de bloqueio (block rate) acima de ~2%</strong> — usuários que recebem e bloqueiam.
+2. <strong>Denúncias</strong> — "reportar e bloquear" é um toque.
+3. <strong>Template reprovado</strong> usado mesmo assim, ou categoria errada (marketing enviado como utility).</p>
+<p><strong>A defesa que funciona:</strong></p>
+<pre><code>1. Opt-in explícito, com data, hora, origem e IP — guardado
+2. Mensagem de confirmação (&quot;responda SIM para receber ofertas&quot;)
+3. Segmentação: nunca a lista inteira, sempre o subgrupo relevante
+4. Frequência: máximo 4 mensagens de marketing/mês por contato
+5. Monitorar block rate semanalmente; acima de 1%, parar e revisar
+6. Botão de saída em toda mensagem (&quot;responda SAIR&quot;)
+</code></pre>
+<h3 id="23-reddit-o-shadowban-silencioso">2.3 Reddit — o shadowban silencioso<a class="headerlink" href="#23-reddit-o-shadowban-silencioso" title="Permanent link">&para;</a></h3>
+<p><strong>O que acontece:</strong> você não recebe erro. Seus posts simplesmente <strong>não aparecem</strong> para ninguém além de você. É o shadowban — e é a punição mais comum e mais difícil de detectar.</p>
+<p><strong>Como detectar:</strong> abra o post em uma janela anônima. Se não aparecer, está shadowbanned.</p>
+<p><strong>Os gatilhos:</strong>
+- Link para o mesmo domínio repetidamente (especialmente domínio próprio).
+- Post promocional sem disclosure.
+- Conta nova postando em sub grande (filtro automático de karma/idade).
+- Ban evasion (nova conta após ban).</p>
+<p><strong>A defesa:</strong>
+- 9:1 (nove contribuições úteis para cada menção comercial).
+- Disclosure na primeira linha quando for comercial.
+- Ler as regras do sub e postar só onde é permitido.
+- Nunca criar conta nova após ban.</p>
+<h3 id="24-x-a-suspensao-por-automacao-agressiva">2.4 X — a suspensão por "automação agressiva"<a class="headerlink" href="#24-x-a-suspensao-por-automacao-agressiva" title="Permanent link">&para;</a></h3>
+<p><strong>O que acontece:</strong> replies automatizados a menções, follows em massa, ou posts idênticos em sequência. A conta é suspensa temporariamente, depois permanentemente.</p>
+<p><strong>A defesa:</strong>
+- Responder só a posts onde há contexto real (não "todo post com a palavra X").
+- Variar a copy — nunca a mesma resposta duas vezes.
+- Limite autoimposto: ≤ 20 respostas/dia, ≤ 5 posts/dia.
+- Não usar o mesmo texto em múltiplas contas.</p>
+<h3 id="25-instagrammessenger-a-restricao-de-messaging">2.5 Instagram/Messenger — a restrição de messaging<a class="headerlink" href="#25-instagrammessenger-a-restricao-de-messaging" title="Permanent link">&para;</a></h3>
+<p><strong>O que acontece:</strong> você manda fora da janela de 24h, ou usa a API para algo que parece spam. A Page perde a capacidade de enviar mensagens por 24h a 30 dias. Em casos graves, a conta é desativada.</p>
+<p><strong>A defesa:</strong> a validação em código (seção 4) — o erro acontece <strong>antes</strong> da chamada de API, não depois.</p>
+<h3 id="26-e-mail-a-multa-que-chega-6-meses-depois">2.6 E-mail — a multa que chega 6 meses depois<a class="headerlink" href="#26-e-mail-a-multa-que-chega-6-meses-depois" title="Permanent link">&para;</a></h3>
+<p><strong>O que acontece:</strong> você compra uma lista, dispara, e 6 meses depois recebe uma notificação da FTC (EUA) ou de uma autoridade de proteção de dados (UE/BR).</p>
+<table>
+<thead>
+<tr>
+<th>Regime</th>
+<th>Multa</th>
+<th>Requisito central</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CAN-SPAM</strong> (EUA)</td>
+<td><strong>US$ 53.088 por e-mail</strong> (ajuste FTC 2026)</td>
+<td>opt-out funcional, endereço físico, unsubscribe em 10 dias úteis</td>
+</tr>
+<tr>
+<td><strong>GDPR</strong> (UE)</td>
+<td><strong>€20M ou 4% do faturamento global</strong></td>
+<td>base legal (LIA documentada), informar origem dos dados (Art. 14), objeção imediata</td>
+</tr>
+<tr>
+<td><strong>LGPD</strong> (BR)</td>
+<td><strong>2% da receita, teto R$ 50M</strong></td>
+<td>legítimo interesse B2B, opt-out, resposta em 15 dias</td>
+</tr>
+<tr>
+<td><strong>CASL</strong> (Canadá)</td>
+<td>até CAD 10M</td>
+<td>consentimento explícito (implícito dura 2 anos)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>CAN-SPAM não distingue B2B de B2C.</strong> Um e-mail frio para o <code>contato@empresa.com</code> está sujeito à mesma regra de um e-mail para consumidor. O que muda entre os regimes é a <strong>base legal</strong>, não a obrigação de parar de mandar quando pedem.</p></div></div>
+
+<p><strong>O rodapé mínimo (todos os regimes, um só formato):</strong></p>
+<pre><code>[EMPRESA LTDA] · CNPJ 00.000.000/0001-00
+[Rua, número, cidade, estado, CEP, país]     ← endereço físico: obrigatório CAN-SPAM
+Você recebeu porque [origem dos dados + data].
+Para não receber mais: [link de unsubscribe em 1 clique]
+Responder &quot;SAIR&quot; também funciona. Processamos em até 10 dias úteis.
+</code></pre>
+<hr />
+<h2 id="3-o-que-e-legal-mas-ainda-assim-derruba-a-conta">3. O que é legal mas ainda assim derruba a conta<a class="headerlink" href="#3-o-que-e-legal-mas-ainda-assim-derruba-a-conta" title="Permanent link">&para;</a></h2>
+<p>Existe uma zona cinzenta onde você está tecnicamente dentro dos termos e a plataforma te pune mesmo assim. <strong>Ela é maior do que a zona proibida.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Prática</th>
+<th>Status legal</th>
+<th>Status prático</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Postar o mesmo conteúdo em 5 canais no mesmo minuto</td>
+<td>permitido</td>
+<td>alcance reduzido (duplicata)</td>
+</tr>
+<tr>
+<td>50 posts/dia no Instagram via API</td>
+<td>permitido</td>
+<td>flagged como spam</td>
+</tr>
+<tr>
+<td>Seguir 500 contas/dia no X (manual)</td>
+<td>permitido</td>
+<td>rate limit + reputação</td>
+</tr>
+<tr>
+<td>Responder 198 comentários/dia no YouTube</td>
+<td>permitido (cota)</td>
+<td>flagged se todos forem "confira meu link"</td>
+</tr>
+<tr>
+<td>Enviar 1.000 templates de marketing/mês no WhatsApp</td>
+<td>permitido (pago)</td>
+<td>block rate &gt; 2% = ban</td>
+</tr>
+<tr>
+<td>Comentar em 100 posts de desconhecidos no Reddit</td>
+<td>permitido pelo ToS</td>
+<td>ban do sub por regra local</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A lição:</strong> a política da plataforma é o <strong>piso</strong>, não o teto. O teto é o que o algoritmo e os moderadores toleram. Opere a 30% do limite técnico.</p>
+<hr />
+<h2 id="4-defesa-em-codigo-o-validador-de-canal">4. Defesa em código: o validador de canal<a class="headerlink" href="#4-defesa-em-codigo-o-validador-de-canal" title="Permanent link">&para;</a></h2>
+<p>O <code>src/channels.py</code> do repositório implementa as regras acima como <strong>bloqueio executável</strong>. Ele roda <strong>antes</strong> de qualquer chamada de API.</p>
+<pre><code class="language-python">from src.channels import validate_channel_post, ChannelViolation
+
+# 1. DM frio no Instagram → bloqueado
+validate_channel_post(&quot;instagram_dm&quot;, {&quot;cold&quot;: True})
+# ChannelViolation: COLD_DM_META — peça que a pessoa escreva primeiro
+
+# 2. Post no X com link → bloqueado se o orçamento de link estourou
+validate_channel_post(&quot;x_post&quot;, {&quot;text&quot;: &quot;…&quot;, &quot;has_link&quot;: True})
+# ChannelViolation: X_LINK_BUDGET — use link na resposta (US$ 0,015 vs US$ 0,20)
+
+# 3. Mensagem promocional fora da janela de 24h → bloqueado
+validate_channel_post(&quot;whatsapp&quot;, {&quot;promotional&quot;: True, &quot;hours_since_inbound&quot;: 30})
+# ChannelViolation: WINDOW_24H — use template aprovado ou espere a pessoa escrever
+
+# 4. LinkedIn outbound → bloqueado sempre
+validate_channel_post(&quot;linkedin_dm&quot;, {&quot;automated&quot;: True})
+# ChannelViolation: LINKEDIN_TOS_8_2 — não existe rota oficial
+</code></pre>
+<p><strong>As 14 regras implementadas:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>Canal</th>
+<th>Bloqueia quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COLD_DM_META</code></td>
+<td>IG, Messenger</td>
+<td>tentativa de mensagem sem inbound</td>
+</tr>
+<tr>
+<td><code>WINDOW_24H</code></td>
+<td>IG, Messenger, WhatsApp</td>
+<td>promocional após 24h sem tag</td>
+</tr>
+<tr>
+<td><code>HUMAN_AGENT_AUTOMATED</code></td>
+<td>IG, Messenger</td>
+<td>bot usando tag HUMAN_AGENT</td>
+</tr>
+<tr>
+<td><code>PRIVATE_REPLY_ONCE</code></td>
+<td>IG, Messenger</td>
+<td>2ª DM privada no mesmo comentário</td>
+</tr>
+<tr>
+<td><code>LINKEDIN_TOS_8_2</code></td>
+<td>LinkedIn</td>
+<td>qualquer DM/connect automatizado</td>
+</tr>
+<tr>
+<td><code>FB_GROUPS_DEAD</code></td>
+<td>Facebook Groups</td>
+<td>qualquer publicação via API</td>
+</tr>
+<tr>
+<td><code>TIKTOK_UNAUDITED</code></td>
+<td>TikTok</td>
+<td>post sem audit aprovado</td>
+</tr>
+<tr>
+<td><code>TIKTOK_DM_REGION</code></td>
+<td>TikTok</td>
+<td>DM para conta UE/UK/CH</td>
+</tr>
+<tr>
+<td><code>X_LINK_BUDGET</code></td>
+<td>X</td>
+<td>post com link acima do orçamento</td>
+</tr>
+<tr>
+<td><code>X_POST_LIMIT</code></td>
+<td>X</td>
+<td>&gt; 5 posts/dia ou &gt; 20 respostas/dia</td>
+</tr>
+<tr>
+<td><code>YOUTUBE_QUOTA</code></td>
+<td>YouTube</td>
+<td>&gt; 198 respostas/dia</td>
+</tr>
+<tr>
+<td><code>IG_PUBLISH_LIMIT</code></td>
+<td>Instagram</td>
+<td>&gt; 50 posts/24h</td>
+</tr>
+<tr>
+<td><code>THREADS_LIMIT</code></td>
+<td>Threads</td>
+<td>&gt; 250 posts ou 1.000 respostas/24h</td>
+</tr>
+<tr>
+<td><code>TELEGRAM_RATE</code></td>
+<td>Telegram</td>
+<td>&gt; 1 msg/s no mesmo chat</td>
+</tr>
+<tr>
+<td><code>EMAIL_NO_UNSUB</code></td>
+<td>E-mail</td>
+<td>falta unsubscribe ou endereço físico</td>
+</tr>
+<tr>
+<td><code>DISCLOSURE_MISSING</code></td>
+<td>todos</td>
+<td>link comercial sem aviso de afiliação</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-procedimento-de-crise-o-que-fazer-em-cada-cenario">5. Procedimento de crise: o que fazer em cada cenário<a class="headerlink" href="#5-procedimento-de-crise-o-que-fazer-em-cada-cenario" title="Permanent link">&para;</a></h2>
+<h3 id="51-conta-restrita">5.1 Conta restrita<a class="headerlink" href="#51-conta-restrita" title="Permanent link">&para;</a></h3>
+<pre><code>HORA 0   pare TODAS as automações daquele canal imediatamente
+HORA 0   registre print da tela de restrição + horário
+HORA 1   identifique a ação que disparou (log do orquestrador)
+HORA 2   remova a causa (token, ferramenta, agendamento)
+DIA 1    apele pelo canal oficial, com: o que aconteceu, o que foi corrigido
+DIA 3    se não houver resposta, escale (formulário de suporte / parceiro)
+DIA 7    se não voltar: migre o canal. Não crie conta nova.
+</code></pre>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Nunca crie conta nova após ban.</strong> É "ban evasion" — a punição passa a ser de IP/dispositivo e derruba também as contas saudáveis ligadas ao mesmo pagamento ou telefone.</p></div></div>
+
+<h3 id="52-numero-de-whatsapp-banido">5.2 Número de WhatsApp banido<a class="headerlink" href="#52-numero-de-whatsapp-banido" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Não tente recriar o WABA com o mesmo número.</strong> É permanentemente inelegível.</li>
+<li>Use um número novo, <strong>outro perfil de uso</strong> (não replique a mesma lista).</li>
+<li>Antes de voltar: audite a lista (quantos pediram opt-out? qual o block rate histórico?).</li>
+<li>Reconstrua com opt-in <strong>duplo</strong> e volume de 10% do anterior na primeira semana.</li>
+</ol>
+<h3 id="53-post-viral-negativo">5.3 Post viral negativo<a class="headerlink" href="#53-post-viral-negativo" title="Permanent link">&para;</a></h3>
+<pre><code>1. NÃO apague o post (apagar amplifica)
+2. Responda em 1 hora, público, sem defensiva, com o fato
+3. Se houver erro: reconheça e diga o que será feito
+4. Se for ataque coordenado: não alimente; uma resposta, depois silêncio
+5. Registre tudo (para o caso de precisar de suporte da plataforma)
+</code></pre>
+<hr />
+<h2 id="6-compliance-por-mercado">6. Compliance por mercado<a class="headerlink" href="#6-compliance-por-mercado" title="Permanent link">&para;</a></h2>
+<h3 id="61-brasil">6.1 Brasil<a class="headerlink" href="#61-brasil" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>O que exige</th>
+<th>Onde aparece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LGPD</strong></td>
+<td>base legal, opt-out, resposta a titular em 15 dias</td>
+<td>e-mail, WhatsApp, CRM</td>
+</tr>
+<tr>
+<td><strong>CONAR Guia 12/05/2026</strong></td>
+<td>identificação de publicidade, inclusive por IA</td>
+<td>todo conteúdo com link comercial</td>
+</tr>
+<tr>
+<td><strong>CRECI Res. 1.065/2007</strong></td>
+<td>oferta imobiliária precisa de CRECI do responsável</td>
+<td>Instagram, WhatsApp, GBP</td>
+</tr>
+<tr>
+<td><strong>CDC</strong></td>
+<td>informação clara, sem publicidade enganosa</td>
+<td>todos</td>
+</tr>
+<tr>
+<td><strong>Marco Civil</strong></td>
+<td>guarda de logs</td>
+<td>infraestrutura</td>
+</tr>
+</tbody>
+</table>
+<p><strong>O rodapé de imobiliário no Brasil:</strong></p>
+<pre><code>Corretor responsável: [Nome] — CRECI [UF] [número]
+Imóvel sujeito a disponibilidade. Valores e condições em [data].
+Este conteúdo é informativo e não constitui oferta vinculante.
+</code></pre>
+<h3 id="62-estados-unidos">6.2 Estados Unidos<a class="headerlink" href="#62-estados-unidos" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>O que exige</th>
+<th>Onde aparece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FTC 16 CFR 255</strong></td>
+<td>disclosure clara e destacada de material connection</td>
+<td>todo post de afiliado</td>
+</tr>
+<tr>
+<td><strong>TCPA</strong></td>
+<td>consentimento escrito prévio para SMS/WhatsApp</td>
+<td>mensagens móveis</td>
+</tr>
+<tr>
+<td><strong>CAN-SPAM</strong></td>
+<td>opt-out, endereço físico</td>
+<td>e-mail</td>
+</tr>
+<tr>
+<td><strong>Fair Housing Act</strong></td>
+<td>nunca segmentar anúncio por raça, religião, origem, família</td>
+<td>Meta Ads, Google Ads</td>
+</tr>
+<tr>
+<td><strong>State license</strong></td>
+<td>divulgar licença imobiliária do estado</td>
+<td>todo material</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Fair Housing é o risco específico de imobiliário nos EUA.</strong> Segmentar "famílias com crianças" ou "pessoas de [religião]" no Meta Ads é violação federal — mesmo que a intenção seja "ajustar o anúncio". A defesa: segmentar por <strong>geografia e comportamento de busca</strong>, nunca por atributo protegido. E deixar o Meta entregar (Advantage+) reduz o risco, porque a plataforma assume a segmentação.</p></div></div>
+
+<h3 id="63-uniao-europeia">6.3 União Europeia<a class="headerlink" href="#63-uniao-europeia" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Regra</th>
+<th>O que exige</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GDPR</strong></td>
+<td>base legal, LIA documentada, Art. 14 (origem dos dados), objeção imediata</td>
+</tr>
+<tr>
+<td><strong>ePrivacy</strong></td>
+<td>consentimento para cookies e marketing eletrônico em muitos Estados</td>
+</tr>
+<tr>
+<td><strong>Alemanha/Itália</strong></td>
+<td>tratar e-mail B2B como opt-in (não vale legítimo interesse para prospecção)</td>
+</tr>
+<tr>
+<td><strong>DSA</strong></td>
+<td>identificação de conteúdo publicitário</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-o-disclosure-a-unica-regra-que-vale-em-todo-canal">7. O disclosure: a única regra que vale em todo canal<a class="headerlink" href="#7-o-disclosure-a-unica-regra-que-vale-em-todo-canal" title="Permanent link">&para;</a></h2>
+<p>Toda plataforma, todo país e toda política exigem a mesma coisa: <strong>a pessoa precisa saber que você ganha dinheiro se ela comprar.</strong></p>
+<h3 id="71-formato-por-canal">7.1 Formato por canal<a class="headerlink" href="#71-formato-por-canal" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Como fazer</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reddit</td>
+<td>primeira linha do comentário</td>
+<td>"Sou afiliado do [produto]. Uso há 8 meses e pago a licença com comissão."</td>
+</tr>
+<tr>
+<td>X</td>
+<td>no post ou na resposta com link</td>
+<td>"link de afiliado"</td>
+</tr>
+<tr>
+<td>Instagram</td>
+<td>primeira linha da legenda + hashtag</td>
+<td>"#publi" ou "link de afiliado na bio"</td>
+</tr>
+<tr>
+<td>WhatsApp</td>
+<td>primeira mensagem comercial</td>
+<td>"Oi! Sou assistente do [nome]. Trabalho com [empresa] e posso ganhar comissão."</td>
+</tr>
+<tr>
+<td>YouTube</td>
+<td>verbal no vídeo + descrição</td>
+<td>"os links abaixo são de afiliado"</td>
+</tr>
+<tr>
+<td>E-mail</td>
+<td>rodapé + linha antes do link</td>
+<td>"Este e-mail contém links de afiliado"</td>
+</tr>
+<tr>
+<td>Blog</td>
+<td>antes do primeiro link</td>
+<td>"Este artigo contém links de afiliado"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-o-teste-de-tres-perguntas">7.2 O teste de três perguntas<a class="headerlink" href="#72-o-teste-de-tres-perguntas" title="Permanent link">&para;</a></h3>
+<p>Antes de publicar qualquer coisa comercial, responda:</p>
+<ol>
+<li><strong>Uma pessoa lendo rapidamente saberia que você ganha com aquilo?</strong></li>
+<li><strong>O aviso está antes do link, não depois?</strong></li>
+<li><strong>Se você removesse o aviso, a recomendação pareceria neutra?</strong></li>
+</ol>
+<p>Se qualquer resposta for "não", "não" ou "sim" → reescreva.</p>
+<hr />
+<h2 id="8-checklist-de-sobrevivencia-cole-na-parede">8. Checklist de sobrevivência (cole na parede)<a class="headerlink" href="#8-checklist-de-sobrevivencia-cole-na-parede" title="Permanent link">&para;</a></h2>
+<pre><code>ANTES DE QUALQUER CANAL NOVO
+[ ] li a policy de mensagens (não a de publicação)
+[ ] sei qual é a janela de resposta
+[ ] sei o custo por mensagem
+[ ] sei o que causa ban (não o que é permitido)
+[ ] tenho log de custo por ação
+
+ANTES DE QUALQUER DISPARO
+[ ] tenho opt-in com data e origem
+[ ] tem unsubscribe em 1 clique
+[ ] tem endereço físico (e-mail) ou CRECI (imobiliário BR)
+[ ] a lista foi segmentada (não é &quot;todos&quot;)
+[ ] block rate histórico &lt; 1%
+
+ANTES DE QUALQUER AUTOMAÇÃO
+[ ] existe API oficial para isso? (se não, não faça)
+[ ] isso vai contra §8.2 do LinkedIn? (se sim, não faça)
+[ ] o bot está identificado como bot?
+[ ] há aprovação humana para publicação?
+[ ] está a 30% do limite técnico?
+
+QUANDO ALGO DER ERRADO
+[ ] parei as automações
+[ ] registrei evidência
+[ ] não criei conta nova
+[ ] apelei pelo canal oficial
+[ ] documentei a causa para o próximo
+</code></pre>
+<hr />
+<h2 id="9-a-hierarquia-de-risco-o-que-priorizar">9. A hierarquia de risco (o que priorizar)<a class="headerlink" href="#9-a-hierarquia-de-risco-o-que-priorizar" title="Permanent link">&para;</a></h2>
+<pre><code>RISCO CRÍTICO (perde o ativo inteiro, sem recurso)
+  1. LinkedIn automatizado
+  2. WhatsApp sem opt-in / block rate alto
+  3. Reddit ban evasion
+  4. E-mail sem compliance (multa)
+
+RISCO ALTO (perde o canal por semanas)
+  5. Meta fora da janela de 24h
+  6. X automação agressiva
+  7. TikTok automação de engajamento
+
+RISCO MÉDIO (perde alcance)
+  8. YouTube prospecção em comentários
+  9. Conteúdo duplicado em massa
+  10. Edições em massa no GBP
+
+RISCO BAIXO (erro técnico)
+  11. Estouro de cota
+  12. Token expirado
+  13. Rate limit 429
+</code></pre>
+<p><strong>A regra de alocação de atenção:</strong> 80% do esforço de compliance nos 4 primeiros. Os outros 9 são resolvidos por código (é o que o <code>channels.py</code> faz).</p>
+<hr />
+<h2 id="10-o-principio-final">10. O princípio final<a class="headerlink" href="#10-o-principio-final" title="Permanent link">&para;</a></h2>
+<div class="callout callout--decisao" markdown="0"><div class="callout__head"><span class="callout__icon">→</span><span class="callout__label">Decisão</span></div>
+<div class="callout__body"><p><strong>Você não está construindo um bot que posta. Está construindo um ativo que sobrevive.</strong></p>
+<p>A conta de 5 anos com 20 mil seguidores vale mais que a campanha de 3 dias com 200 mil impressões — e a segunda é o que derruba a primeira. Toda decisão de automação tem uma pergunta embutida: <strong>"isso protege ou expõe o ativo?"</strong> Quando a resposta for "expõe", a resposta é não — mesmo que funcione hoje.</p></div></div>
+
+<p><strong>Os três testes antes de qualquer automação nova:</strong></p>
+<ol>
+<li><strong>Teste da API:</strong> existe endpoint oficial? Se não, não faça.</li>
+<li><strong>Teste da janela:</strong> a mensagem só vai para quem pediu, dentro do prazo permitido? Se não, não faça.</li>
+<li><strong>Teste do arrependimento:</strong> se isso aparecer no print de um jornalista, você consegue explicar? Se não, não faça.</li>
+</ol>
+    </article>
+
+    <nav class="pager">
+      <a class="pager__link" href="c3.html"><span class="pager__label">← Anterior</span><span class="pager__title">Custos &amp; ROI</span></a>
+      <a class="pager__link" href="c5.html"><span class="pager__label">Próximo →</span><span class="pager__title">Case 14 dias</span></a>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#1-a-tabela-central-dos-riscos">1. A tabela central dos riscos</a></li>
+<li><a href="#2-os-seis-banimentos-que-realmente-acontecem">2. Os seis banimentos que realmente acontecem</a><ul>
+<li><a href="#21-linkedin-o-ban-mais-rapido-e-mais-definitivo">2.1 LinkedIn — o ban mais rápido e mais definitivo</a></li>
+<li><a href="#22-whatsapp-o-numero-que-nao-volta">2.2 WhatsApp — o número que não volta</a></li>
+<li><a href="#23-reddit-o-shadowban-silencioso">2.3 Reddit — o shadowban silencioso</a></li>
+<li><a href="#24-x-a-suspensao-por-automacao-agressiva">2.4 X — a suspensão por "automação agressiva"</a></li>
+<li><a href="#25-instagrammessenger-a-restricao-de-messaging">2.5 Instagram/Messenger — a restrição de messaging</a></li>
+<li><a href="#26-e-mail-a-multa-que-chega-6-meses-depois">2.6 E-mail — a multa que chega 6 meses depois</a></li>
+</ul>
+</li>
+<li><a href="#3-o-que-e-legal-mas-ainda-assim-derruba-a-conta">3. O que é legal mas ainda assim derruba a conta</a></li>
+<li><a href="#4-defesa-em-codigo-o-validador-de-canal">4. Defesa em código: o validador de canal</a></li>
+<li><a href="#5-procedimento-de-crise-o-que-fazer-em-cada-cenario">5. Procedimento de crise: o que fazer em cada cenário</a><ul>
+<li><a href="#51-conta-restrita">5.1 Conta restrita</a></li>
+<li><a href="#52-numero-de-whatsapp-banido">5.2 Número de WhatsApp banido</a></li>
+<li><a href="#53-post-viral-negativo">5.3 Post viral negativo</a></li>
+</ul>
+</li>
+<li><a href="#6-compliance-por-mercado">6. Compliance por mercado</a><ul>
+<li><a href="#61-brasil">6.1 Brasil</a></li>
+<li><a href="#62-estados-unidos">6.2 Estados Unidos</a></li>
+<li><a href="#63-uniao-europeia">6.3 União Europeia</a></li>
+</ul>
+</li>
+<li><a href="#7-o-disclosure-a-unica-regra-que-vale-em-todo-canal">7. O disclosure: a única regra que vale em todo canal</a><ul>
+<li><a href="#71-formato-por-canal">7.1 Formato por canal</a></li>
+<li><a href="#72-o-teste-de-tres-perguntas">7.2 O teste de três perguntas</a></li>
+</ul>
+</li>
+<li><a href="#8-checklist-de-sobrevivencia-cole-na-parede">8. Checklist de sobrevivência (cole na parede)</a></li>
+<li><a href="#9-a-hierarquia-de-risco-o-que-priorizar">9. A hierarquia de risco (o que priorizar)</a></li>
+<li><a href="#10-o-principio-final">10. O princípio final</a></li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: CPL, LGPD, janela 24h)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

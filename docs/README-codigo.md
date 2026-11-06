@@ -1,6 +1,6 @@
 # grok-reddit-ops
 
-Copiloto de vendas para Reddit usando a API da xAI (Grok). Transforma threads públicas em **lead cards qualificados** e **rascunhos de resposta**, sempre com revisão humana antes de publicar.
+Copiloto de vendas multicanal usando a API da xAI (Grok). Transforma threads públicas em **lead cards qualificados** e **rascunhos de resposta**, e valida cada publicação contra as regras do canal antes de qualquer chamada de API. Sempre com revisão humana antes de publicar.
 
 > **O que este projeto não faz:** não posta, não vota, não cria contas, não manda DM em massa, não raspa o Reddit. A publicação é sempre sua. Essa é a diferença entre um canal que dura anos e uma conta que dura uma semana.
 
@@ -19,6 +19,32 @@ Requisito: Python 3.10+. Sem `pip install` — o cliente HTTP usa a biblioteca p
 ---
 
 ## Uso
+
+### 0. Canais: a matriz e o validador que evita ban
+
+```bash
+python3 -m src.cli canais                     # 20 canais, janela, limite, risco
+
+# testa um payload ANTES de publicar (exit code 3 quando bloqueia)
+python3 -m src.cli canais --check instagram_dm --cold        # COLD_DM_META
+python3 -m src.cli canais --check linkedin_dm                # LINKEDIN_TOS_8_2
+python3 -m src.cli canais --check whatsapp --hours 30        # WINDOW_24H
+python3 -m src.cli canais --check tiktok --text "oi"         # TIKTOK_UNAUDITED
+python3 -m src.cli canais --check x_post --text "oi"         # ok, US$ 0,015
+```
+
+Em código:
+
+```python
+from src.channels import validate_channel_post, ChannelViolation, estimate_cost
+
+try:
+    validate_channel_post("whatsapp", {"promotional": True,
+                                       "hours_since_inbound": 30,
+                                       "template_name": "promo_v1"})
+except ChannelViolation as e:
+    print(e.rule, e.message, e.fix)   # WINDOW_24H ...
+```
 
 ### 1. Radar: achar as threads que importam
 
@@ -68,7 +94,7 @@ python3 tests/test_core.py      # 12 testes, sem pytest
 python3 -m pytest tests -q
 ```
 
-Os testes cobrem: scoring, parsers, orçamento, guarda-corpo do `x_search`, pipeline ponta a ponta offline e regras de veredito.
+Os testes cobrem: scoring, parsers, orçamento, guarda-corpo do `x_search`, pipeline ponta a ponta offline, regras de veredito **e as 18 regras do validador multicanal** (cold DM, janela de 24h, LinkedIn §8.2, cota do YouTube, disclosure, compliance de e-mail).
 
 ---
 
@@ -76,14 +102,16 @@ Os testes cobrem: scoring, parsers, orçamento, guarda-corpo do `x_search`, pipe
 
 ```
 src/
-├── cli.py        comandos: radar | scribe | weekly | doctor
+├── cli.py        comandos: radar | scribe | weekly | canais | doctor
 ├── config.py     tudo por env (.env), nada hardcoded
 ├── grok.py       cliente Responses API + Budget + Usage + JSON tolerante
 ├── sources.py    FixtureSource | ManualSource | OAuthSource + parser de rules.yaml
 ├── pipeline.py   scoring heurístico, prompts, radar, scribe, guard-rails
 ├── report.py     funil, KPIs e veredito go/no-go
+├── channels.py   registry dos 20 canais + validate_channel_post (sem rede)
 fixtures/         threads de exemplo (afiliados + imobiliário Goiânia)
-prompts/          P1..P7 versionados, prontos para colar no app ou na API
+prompts/          P1..P12 versionados (P8 adaptador, P9 WhatsApp, P10 repurposing,
+                  P11 radar multicanal, P12 auditoria)
 rules.yaml        regra por subreddit (link permitido, disclosure, tolerância)
 output/           leads.jsonl, weekly.md, drafts/
 ```

@@ -13,6 +13,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+from src.channels import (                            # noqa: E402
+    CHANNELS,
+    ChannelViolation,
+    channel_matrix,
+    estimate_cost,
+    validate_channel_post,
+)
 from src.config import Config                          # noqa: E402
 from src.grok import Budget, Usage, parse_json_loose   # noqa: E402
 from src.pipeline import (                             # noqa: E402
@@ -145,6 +152,173 @@ def test_fixtures_carregam():
     data = json.loads((ROOT / "fixtures" / "threads.json").read_text(encoding="utf-8"))
     assert len(data) >= 8
     assert all("title" in t and "subreddit" in t for t in data)
+
+
+# ---------------------------------------------------------------------------
+# canais.py — o validador que impede o ban
+# ---------------------------------------------------------------------------
+
+
+def _bloqueia(canal, payload, regra):
+    """Auxiliar: espera ChannelViolation com a regra dada."""
+    try:
+        validate_channel_post(canal, payload)
+    except ChannelViolation as exc:
+        assert exc.rule == regra, f"esperado {regra}, obtido {exc.rule}"
+        assert exc.fix, "violação sem correção acionável"
+        return
+    raise AssertionError(f"{canal} deveria bloquear com {regra}")
+
+
+def test_registry_tem_os_20_canais():
+    assert len(CHANNELS) == 20
+    for canal in ("x_post", "instagram_dm", "whatsapp", "tiktok",
+                  "youtube", "linkedin_dm", "threads", "bluesky", "gbp"):
+        assert canal in CHANNELS
+    assert len(channel_matrix()) == 20
+
+
+def test_cold_dm_meta_bloqueado():
+    _bloqueia("instagram_dm", {"cold": True}, "COLD_DM_META")
+    _bloqueia("messenger", {"cold_dm": True}, "COLD_DM_META")
+    _bloqueia("whatsapp", {"cold": True}, "COLD_DM_META")
+
+
+def test_linkedin_automatizado_sempre_bloqueado():
+    _bloqueia("linkedin_dm", {"automated": True}, "LINKEDIN_TOS_8_2")
+    _bloqueia("linkedin_dm", {}, "LINKEDIN_TOS_8_2")
+
+
+def test_facebook_groups_esta_morto():
+    _bloqueia("facebook_groups", {"text": "oi"}, "FB_GROUPS_DEAD")
+
+
+def test_janela_24h_bloqueia_promocional():
+    _bloqueia("whatsapp", {"promotional": True, "hours_since_inbound": 30,
+                           "template_name": "promo"}, "WINDOW_24H")
+    _bloqueia("instagram_dm", {"promotional": True, "hours_since_inbound": 25},
+              "WINDOW_24H")
+
+
+def test_dentro_da_janela_passa():
+    r = validate_channel_post("instagram_dm", {"promotional": True,
+                                               "hours_since_inbound": 3})
+    assert r.ok
+    r = validate_channel_post("whatsapp", {"promotional": True,
+                                           "hours_since_inbound": 1,
+                                           "template_name": "promo_v1"})
+    assert r.ok
+
+
+def test_human_agent_manual_passa_automatizado_nao():
+    r = validate_channel_post("messenger", {
+        "promotional": True, "hours_since_inbound": 100,
+        "tag": "HUMAN_AGENT", "automated": False})
+    assert r.ok, "humano respondendo em 7 dias é permitido"
+    _bloqueia("messenger", {"promotional": True, "hours_since_inbound": 100,
+                            "tag": "HUMAN_AGENT", "automated": True},
+              "HUMAN_AGENT_AUTOMATED")
+
+
+def test_private_reply_uma_vez_por_comentario():
+    _bloqueia("instagram_dm", {"private_replies_to_same_comment": 1},
+              "PRIVATE_REPLY_ONCE")
+
+
+def test_x_orcamento_de_link():
+    _bloqueia("x_post", {"text": "confira", "has_link": True,
+                         "link_budget_remaining": 0}, "X_LINK_BUDGET")
+    r = validate_channel_post("x_post", {"text": "confira", "has_link": True,
+                                         "link_budget_remaining": 3,
+                                         "disclosure": "link de afiliado"})
+    assert r.ok
+
+
+def test_x_limite_de_posts():
+    _bloqueia("x_post", {"text": "oi", "posts_today": 5}, "X_POST_LIMIT")
+    _bloqueia("x_reply", {"text": "oi", "posts_today": 20}, "X_POST_LIMIT")
+
+
+def test_tiktok_sem_audit_e_regiao_de_dm():
+    _bloqueia("tiktok", {"text": "oi"}, "TIKTOK_UNAUDITED")
+    _bloqueia("tiktok", {"text": "oi", "audited": True, "dm": True,
+                         "region": "DE"}, "TIKTOK_DM_REGION")
+    r = validate_channel_post("tiktok", {"text": "oi", "audited": True})
+    assert r.ok
+
+
+def test_limites_de_publicacao():
+    _bloqueia("instagram_post", {"text": "oi", "daily_count": 50},
+              "IG_PUBLISH_LIMIT")
+    _bloqueia("threads", {"text": "oi", "daily_count": 250}, "THREADS_LIMIT")
+    _bloqueia("youtube", {"text": "oi", "daily_count": 198}, "YOUTUBE_QUOTA")
+
+
+def test_youtube_nao_prospecta_em_video_de_terceiro():
+    _bloqueia("youtube", {"text": "confira meu link",
+                          "third_party_video": True}, "YOUTUBE_THIRD_PARTY")
+    r = validate_channel_post("youtube", {"text": "boa pergunta!",
+                                          "third_party_video": False})
+    assert r.ok
+
+
+def test_email_compliance_em_tres_camadas():
+    _bloqueia("email", {"text": "oi"}, "EMAIL_NO_UNSUB")
+    _bloqueia("email", {"text": "oi", "unsubscribe_url": "https://x/u"},
+              "EMAIL_NO_ADDRESS")
+    _bloqueia("email", {"text": "oi", "unsubscribe_url": "https://x/u",
+                        "physical_address": "Rua X, 1, Goiânia/GO"},
+              "EMAIL_NO_BASIS")
+    r = validate_channel_post("email", {
+        "text": "oi", "unsubscribe_url": "https://x/u",
+        "physical_address": "Rua X, 1, Goiânia/GO",
+        "consent_basis": "opt_in"})
+    assert r.ok
+
+
+def test_disclosure_obrigatorio_antes_do_link():
+    _bloqueia("instagram_post", {"text": "veja o imóvel",
+                                 "has_link": True}, "DISCLOSURE_MISSING")
+    r = validate_channel_post("instagram_post", {
+        "text": "veja o imóvel #publi", "has_link": True,
+        "disclosure": True})
+    assert r.ok
+
+
+def test_texto_longo_demais():
+    _bloqueia("bluesky", {"text": "x" * 301}, "TEXT_TOO_LONG")
+    _bloqueia("x_post", {"text": "x" * 281}, "TEXT_TOO_LONG")
+
+
+def test_custo_estimado_por_canal():
+    assert estimate_cost("x_post", {"text": "oi"}) == 0.015
+    assert estimate_cost("x_post", {"text": "oi", "has_link": True}) == 0.20
+    assert estimate_cost("whatsapp", {"promotional": True,
+                                      "template_name": "t"}) == 0.0625
+    assert estimate_cost("whatsapp", {}) == 0.0068
+    assert estimate_cost("telegram", {"text": "oi"}) == 0.0
+
+
+def test_canal_saudavel_passa():
+    for canal, payload in (
+        ("telegram", {"text": "bom dia"}),
+        ("threads", {"text": "nota rápida"}),
+        ("bluesky", {"text": "teste"}),
+        ("gbp", {"text": "novo horário de atendimento"}),
+        ("facebook_page", {"text": "post da página"}),
+        ("linkedin_post", {"text": "conteúdo próprio"}),
+    ):
+        assert validate_channel_post(canal, payload).ok, canal
+
+
+def test_canal_desconhecido_estoura():
+    try:
+        validate_channel_post("orkut", {"text": "oi"})
+    except KeyError as exc:
+        assert "orkut" in str(exc)
+        return
+    raise AssertionError("deveria estourar KeyError")
+
 
 
 def _run_all() -> int:

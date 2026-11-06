@@ -31,8 +31,17 @@ PAGES = [
     ("06-compliance.md", "06", "Compliance", "Reddit, FTC, CONAR, CRECI, LGPD e TCPA"),
 ]
 
+# Fase 2 — expansão multicanal (numeração própria para não renumerar a Fase 1)
+CHANNEL_PAGES = [
+    ("07-canais-2026.md", "C1", "Mapa dos canais", "Onde o bot vende, o que é permitido e quanto custa em 2026"),
+    ("08-setup-tecnico.md", "C2", "Setup técnico", "As 12 configs que fazem o bot publicar sem tomar ban"),
+    ("09-custos-roi.md", "C3", "Custos & ROI", "CPL, custo por venda e payback por canal"),
+    ("10-riscos-compliance.md", "C4", "Riscos & bans", "Os 6 banimentos reais e a defesa em código"),
+    ("11-case-multicanal.md", "C5", "Case 14 dias", "5 canais, US$ 47 e 9 conversas — o que funcionou"),
+]
+
 EXTRA_PAGES = [
-    ("README-codigo.md", "07", "Motor em Python", "grok-reddit-ops: instalação, uso e arquitetura"),
+    ("README-codigo.md", "M", "Motor em Python", "grok-reddit-ops: instalação, uso e arquitetura"),
 ]
 
 CALLOUT_LABELS = {
@@ -96,7 +105,9 @@ def build() -> None:
     SITE.mkdir(parents=True, exist_ok=True)
     (SITE / "assets").mkdir(exist_ok=True)
 
-    pages = PAGES + [p for p in EXTRA_PAGES if (DOCS / p[0]).exists()]
+    pages = (PAGES
+             + [p for p in CHANNEL_PAGES if (DOCS / p[0]).exists()]
+             + [p for p in EXTRA_PAGES if (DOCS / p[0]).exists()])
     built = []
     search_index = []
 
@@ -109,8 +120,8 @@ def build() -> None:
         # remove o H1 do topo: ele já é renderizado como título da página
         raw_body = re.sub(r"\A\s*#\s+.*?\n", "", raw, count=1)
         body, toc = render(raw_body)
-        out_name = f"{num}.html" if num != "00" else "meta.html"
-        if num == "07":
+        out_name = f"{num.lower()}.html" if num != "00" else "meta.html"
+        if num == "M":
             out_name = "motor.html"
         mins = reading_time(raw)
 
@@ -136,7 +147,7 @@ def build() -> None:
         prev_p = built[i - 1] if i > 0 else None
         next_p = built[i + 1] if i + 1 < len(built) else None
         html_out = TEMPLATE.format(
-            title=f"{page['title']} · Grok × Reddit",
+            title=f"{page['title']} · Grok × Canais",
             nav=nav_html(built, page["num"]),
             toc=page["toc"],
             content=page["body"],
@@ -193,7 +204,7 @@ TEMPLATE = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
-<meta name="description" content="Dossiê operacional: Grok bot de vendas para affiliate marketing e real estate via Reddit.">
+<meta name="description" content="Dossiê operacional multicanal: Grok bot de vendas para affiliate marketing e real estate.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -202,7 +213,7 @@ TEMPLATE = """<!doctype html>
   <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
   <a class="brand" href="index.html">
     <span class="brand__mark">G</span>
-    <span class="brand__text">Grok <span>×</span> Reddit</span>
+    <span class="brand__text">Grok <span>×</span> Canais</span>
   </a>
   <div class="topbar__right">
     <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
@@ -245,7 +256,7 @@ TEMPLATE = """<!doctype html>
 
 <div class="search-modal" id="searchModal" hidden>
   <div class="search-box">
-    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: EPC, LGPD, x_search)" autocomplete="off">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: CPL, LGPD, janela 24h)" autocomplete="off">
     <div class="search-results" id="searchResults"></div>
   </div>
 </div>
@@ -260,29 +271,29 @@ HOME = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grok × Reddit · dossiê de vendas</title>
-<meta name="description" content="Meta-pesquisa e dois estudos de mercado sobre usar Grok e Reddit para vender em affiliate marketing e real estate.">
+<title>Grok × Canais · dossiê de vendas</title>
+<meta name="description" content="Dossiê operacional: como um bot Grok vende em affiliate marketing e real estate no Reddit, X, Instagram, WhatsApp, TikTok, YouTube, LinkedIn, Telegram e Google — com setup técnico, custos e compliance.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body class="home">
 <header class="topbar">
-  <a class="brand" href="index.html"><span class="brand__mark">G</span><span class="brand__text">Grok <span>×</span> Reddit</span></a>
+  <a class="brand" href="index.html"><span class="brand__mark">G</span><span class="brand__text">Grok <span>×</span> Canais</span></a>
   <div class="topbar__right"><button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button></div>
 </header>
 
 <section class="hero">
   <p class="eyebrow">DOSSIÊ OPERACIONAL · NOV 2026</p>
   <h1>Como um bot Grok vende no Reddit<br><em>de verdade</em> — em afiliados e imóveis.</h1>
-  <p class="hero__sub">Meta-pesquisa da plataforma, dois estudos de mercado com números verificados, as 11 rotas do Reddit, o motor em Python e um piloto de 14 dias com critério de corte.</p>
+  <p class="hero__sub">Meta-pesquisa da plataforma, dois estudos de mercado com números verificados, as 11 rotas do Reddit, o mapa dos 20 canais, o setup técnico de cada API, o motor em Python e dois pilotos com critério de corte.</p>
   <div class="hero__stats">
     <div><strong>2</strong><span>mercados estudados</span></div>
+    <div><strong>20</strong><span>canais mapeados</span></div>
     <div><strong>11</strong><span>rotas do Reddit</span></div>
-    <div><strong>US$ 18</strong><span>custo mensal de API</span></div>
-    <div><strong>14</strong><span>dias de piloto</span></div>
+    <div><strong>US$ 95</strong><span>custo mensal multicanal</span></div>
   </div>
   <div class="hero__cta">
     <a class="btn btn--primary" href="meta.html">Começar pela meta-pesquisa</a>
-    <a class="btn" href="01.html">Ir direto ao Estudo 1</a>
+    <a class="btn" href="c1.html">Ver o mapa dos canais</a>
   </div>
 </section>
 

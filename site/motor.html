@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Motor em Python · Grok × Reddit</title>
-<meta name="description" content="Dossiê operacional: Grok bot de vendas para affiliate marketing e real estate via Reddit.">
+<title>Motor em Python · Grok × Canais</title>
+<meta name="description" content="Dossiê operacional multicanal: Grok bot de vendas para affiliate marketing e real estate.">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
   <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
   <a class="brand" href="index.html">
     <span class="brand__mark">G</span>
-    <span class="brand__text">Grok <span>×</span> Reddit</span>
+    <span class="brand__text">Grok <span>×</span> Canais</span>
   </a>
   <div class="topbar__right">
     <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
@@ -31,7 +31,12 @@
 <a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
 <a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
 <a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
-<a class="nav__link active" href="motor.html"><span class="nav__num">07</span>Motor em Python</a>
+<a class="nav__link" href="c1.html"><span class="nav__num">C1</span>Mapa dos canais</a>
+<a class="nav__link" href="c2.html"><span class="nav__num">C2</span>Setup técnico</a>
+<a class="nav__link" href="c3.html"><span class="nav__num">C3</span>Custos &amp; ROI</a>
+<a class="nav__link" href="c4.html"><span class="nav__num">C4</span>Riscos &amp; bans</a>
+<a class="nav__link" href="c5.html"><span class="nav__num">C5</span>Case 14 dias</a>
+<a class="nav__link active" href="motor.html"><span class="nav__num">M</span>Motor em Python</a>
     </nav>
     <div class="sidebar__foot">
       <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
@@ -40,9 +45,9 @@
 
   <main class="main">
     <article class="doc">
-      <p class="eyebrow">DOC 07 · 4 MIN DE LEITURA</p>
+      <p class="eyebrow">DOC M · 5 MIN DE LEITURA</p>
       <h1 class="doc__title">grok-reddit-ops</h1>
-      <p>Copiloto de vendas para Reddit usando a API da xAI (Grok). Transforma threads públicas em <strong>lead cards qualificados</strong> e <strong>rascunhos de resposta</strong>, sempre com revisão humana antes de publicar.</p>
+      <p>Copiloto de vendas multicanal usando a API da xAI (Grok). Transforma threads públicas em <strong>lead cards qualificados</strong> e <strong>rascunhos de resposta</strong>, e valida cada publicação contra as regras do canal antes de qualquer chamada de API. Sempre com revisão humana antes de publicar.</p>
 <blockquote>
 <p><strong>O que este projeto não faz:</strong> não posta, não vota, não cria contas, não manda DM em massa, não raspa o Reddit. A publicação é sempre sua. Essa é a diferença entre um canal que dura anos e uma conta que dura uma semana.</p>
 </blockquote>
@@ -55,6 +60,26 @@ python3 -m src.cli doctor
 <p>Requisito: Python 3.10+. Sem <code>pip install</code> — o cliente HTTP usa a biblioteca padrão.</p>
 <hr />
 <h2 id="uso">Uso<a class="headerlink" href="#uso" title="Permanent link">&para;</a></h2>
+<h3 id="0-canais-a-matriz-e-o-validador-que-evita-ban">0. Canais: a matriz e o validador que evita ban<a class="headerlink" href="#0-canais-a-matriz-e-o-validador-que-evita-ban" title="Permanent link">&para;</a></h3>
+<pre><code class="language-bash">python3 -m src.cli canais                     # 20 canais, janela, limite, risco
+
+# testa um payload ANTES de publicar (exit code 3 quando bloqueia)
+python3 -m src.cli canais --check instagram_dm --cold        # COLD_DM_META
+python3 -m src.cli canais --check linkedin_dm                # LINKEDIN_TOS_8_2
+python3 -m src.cli canais --check whatsapp --hours 30        # WINDOW_24H
+python3 -m src.cli canais --check tiktok --text &quot;oi&quot;         # TIKTOK_UNAUDITED
+python3 -m src.cli canais --check x_post --text &quot;oi&quot;         # ok, US$ 0,015
+</code></pre>
+<p>Em código:</p>
+<pre><code class="language-python">from src.channels import validate_channel_post, ChannelViolation, estimate_cost
+
+try:
+    validate_channel_post(&quot;whatsapp&quot;, {&quot;promotional&quot;: True,
+                                       &quot;hours_since_inbound&quot;: 30,
+                                       &quot;template_name&quot;: &quot;promo_v1&quot;})
+except ChannelViolation as e:
+    print(e.rule, e.message, e.fix)   # WINDOW_24H ...
+</code></pre>
 <h3 id="1-radar-achar-as-threads-que-importam">1. Radar: achar as threads que importam<a class="headerlink" href="#1-radar-achar-as-threads-que-importam" title="Permanent link">&para;</a></h3>
 <pre><code class="language-bash"># demonstração offline, custo zero (dados de exemplo)
 python3 -m src.cli radar --source fixture --limit 12
@@ -84,18 +109,20 @@ python3 -m src.cli radar --source manual --sub r/Goiania --text &quot;Alguém in
 # ou
 python3 -m pytest tests -q
 </code></pre>
-<p>Os testes cobrem: scoring, parsers, orçamento, guarda-corpo do <code>x_search</code>, pipeline ponta a ponta offline e regras de veredito.</p>
+<p>Os testes cobrem: scoring, parsers, orçamento, guarda-corpo do <code>x_search</code>, pipeline ponta a ponta offline, regras de veredito <strong>e as 18 regras do validador multicanal</strong> (cold DM, janela de 24h, LinkedIn §8.2, cota do YouTube, disclosure, compliance de e-mail).</p>
 <hr />
 <h2 id="arquitetura">Arquitetura<a class="headerlink" href="#arquitetura" title="Permanent link">&para;</a></h2>
 <pre><code>src/
-├── cli.py        comandos: radar | scribe | weekly | doctor
+├── cli.py        comandos: radar | scribe | weekly | canais | doctor
 ├── config.py     tudo por env (.env), nada hardcoded
 ├── grok.py       cliente Responses API + Budget + Usage + JSON tolerante
 ├── sources.py    FixtureSource | ManualSource | OAuthSource + parser de rules.yaml
 ├── pipeline.py   scoring heurístico, prompts, radar, scribe, guard-rails
 ├── report.py     funil, KPIs e veredito go/no-go
+├── channels.py   registry dos 20 canais + validate_channel_post (sem rede)
 fixtures/         threads de exemplo (afiliados + imobiliário Goiânia)
-prompts/          P1..P7 versionados, prontos para colar no app ou na API
+prompts/          P1..P12 versionados (P8 adaptador, P9 WhatsApp, P10 repurposing,
+                  P11 radar multicanal, P12 auditoria)
 rules.yaml        regra por subreddit (link permitido, disclosure, tolerância)
 output/           leads.jsonl, weekly.md, drafts/
 </code></pre>
@@ -305,7 +332,7 @@ weekly.md  ──►  decisão (manter / pivotar / escalar)
     </article>
 
     <nav class="pager">
-      <a class="pager__link" href="06.html"><span class="pager__label">← Anterior</span><span class="pager__title">Compliance</span></a>
+      <a class="pager__link" href="c5.html"><span class="pager__label">← Anterior</span><span class="pager__title">Case 14 dias</span></a>
       <span></span>
     </nav>
     <footer class="foot">
@@ -320,6 +347,7 @@ weekly.md  ──►  decisão (manter / pivotar / escalar)
 <ul>
 <li><a href="#instalacao-30-segundos-zero-dependencias">Instalação (30 segundos, zero dependências)</a></li>
 <li><a href="#uso">Uso</a><ul>
+<li><a href="#0-canais-a-matriz-e-o-validador-que-evita-ban">0. Canais: a matriz e o validador que evita ban</a></li>
 <li><a href="#1-radar-achar-as-threads-que-importam">1. Radar: achar as threads que importam</a></li>
 <li><a href="#2-scribe-redigir-a-resposta">2. Scribe: redigir a resposta</a></li>
 <li><a href="#3-weekly-decidir-com-numero-nao-com-sensacao">3. Weekly: decidir com número, não com sensação</a></li>
@@ -345,7 +373,7 @@ weekly.md  ──►  decisão (manter / pivotar / escalar)
 
 <div class="search-modal" id="searchModal" hidden>
   <div class="search-box">
-    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: EPC, LGPD, x_search)" autocomplete="off">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: CPL, LGPD, janela 24h)" autocomplete="off">
     <div class="search-results" id="searchResults"></div>
   </div>
 </div>

@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup técnico · Grok × Canais</title>
+<meta name="description" content="Dossiê operacional multicanal: Grok bot de vendas para affiliate marketing e real estate.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <a class="brand" href="index.html">
+    <span class="brand__mark">G</span>
+    <span class="brand__text">Grok <span>×</span> Canais</span>
+  </a>
+  <div class="topbar__right">
+    <button class="search-btn" id="searchBtn">Buscar <kbd>/</kbd></button>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <nav class="nav">
+      <span class="nav__label">Dossiê</span>
+      <a class="nav__link" href="meta.html"><span class="nav__num">00</span>Meta-pesquisa</a>
+<a class="nav__link" href="01.html"><span class="nav__num">01</span>Estudo 1 · Afiliados</a>
+<a class="nav__link" href="02.html"><span class="nav__num">02</span>Estudo 2 · Real estate</a>
+<a class="nav__link" href="03.html"><span class="nav__num">03</span>Playbook Grok</a>
+<a class="nav__link" href="04.html"><span class="nav__num">04</span>Rotas do Reddit</a>
+<a class="nav__link" href="05.html"><span class="nav__num">05</span>Plano &amp; piloto</a>
+<a class="nav__link" href="06.html"><span class="nav__num">06</span>Compliance</a>
+<a class="nav__link" href="c1.html"><span class="nav__num">C1</span>Mapa dos canais</a>
+<a class="nav__link active" href="c2.html"><span class="nav__num">C2</span>Setup técnico</a>
+<a class="nav__link" href="c3.html"><span class="nav__num">C3</span>Custos &amp; ROI</a>
+<a class="nav__link" href="c4.html"><span class="nav__num">C4</span>Riscos &amp; bans</a>
+<a class="nav__link" href="c5.html"><span class="nav__num">C5</span>Case 14 dias</a>
+<a class="nav__link" href="motor.html"><span class="nav__num">M</span>Motor em Python</a>
+    </nav>
+    <div class="sidebar__foot">
+      <p>Dados verificados em nov/2026.<br>Preços de API e regras mudam — reconfira antes de operar.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="doc">
+      <p class="eyebrow">DOC C2 · 18 MIN DE LEITURA</p>
+      <h1 class="doc__title">Setup técnico — como setar o Grok Bot em cada canal</h1>
+      <blockquote>
+<p><strong>Este é o documento "mão na massa".</strong> Cada seção tem: o que você precisa ter antes, os passos exatos, o código real que funciona, e o erro que vai te travar se você não souber. Todo código é copiável e roda com Python 3.11 + <code>requests</code>.</p>
+<p><strong>Tempo total de setup completo:</strong> ~4 horas. <strong>Tempo para o primeiro canal funcionando (Telegram ou X):</strong> 25 minutos.</p>
+</blockquote>
+<div class="callout callout--meta" markdown="0"><div class="callout__head"><span class="callout__icon">◷</span><span class="callout__label">Contexto</span></div>
+<div class="callout__body"><p><strong>Credenciais necessárias no <code>.env</code></strong> — todas as chaves usadas neste documento estão no <code>.env.example</code> do repositório. Nunca comite o <code>.env</code>.
+<strong>Ordem recomendada:</strong> Telegram (valida o fluxo) → X (valida o radar) → WhatsApp (valida a conversa) → Instagram → YouTube → os demais.</p></div></div>
+
+<hr />
+<h2 id="0-antes-de-comecar-a-arquitetura-de-tres-camadas">0. Antes de começar: a arquitetura de três camadas<a class="headerlink" href="#0-antes-de-comecar-a-arquitetura-de-tres-camadas" title="Permanent link">&para;</a></h2>
+<pre><code>CAMADA 1 — CÉREBRO (xAI)
+    Grok via API (chat, busca web, X) ou Grok Bot (agente autônomo)
+         ↓ escreve, classifica, decide
+CAMADA 2 — ORQUESTRADOR (seu código ou n8n/MCP)
+    fila → valida regra do canal → aprova → publica
+         ↓ chama APIs oficiais
+CAMADA 3 — CANAIS (APIs oficiais de cada rede)
+    X · Meta · WhatsApp · TikTok · YouTube · Telegram · GBP
+</code></pre>
+<p><strong>A regra que não se quebra:</strong> a camada 2 <strong>sempre</strong> passa pelo validador de canal (<code>src/channels.py</code>) antes de publicar. É ele que impede o bot de violar janela de 24h, mandar DM frio ou estourar cota.</p>
+<pre><code class="language-python"># o padrão de uso, presente em todo este documento
+from src.channels import validate_channel_post, ChannelViolation
+
+try:
+    validate_channel_post(&quot;instagram_dm&quot;, {&quot;cold&quot;: True})
+except ChannelViolation as e:
+    print(e.rule, e.fix)   # → COLD_DM_META &quot;peça que a pessoa escreva primeiro&quot;
+</code></pre>
+<hr />
+<h2 id="1-grok-bot-o-agente-que-executa-e-o-que-ele-substitui">1. Grok Bot: o agente que executa (e o que ele substitui)<a class="headerlink" href="#1-grok-bot-o-agente-que-executa-e-o-que-ele-substitui" title="Permanent link">&para;</a></h2>
+<p><strong>O que é:</strong> produto da xAI em beta desde 11/08/2026. Cada conta ganha <strong>um computador Linux persistente na nuvem</strong> com navegador, terminal e sistema de arquivos. Você cria "Bots" nomeados, cada um com uma função, que rodam <strong>Routines</strong> (agendadas ou disparadas por evento) e voltam pedindo aprovação.</p>
+<p><strong>O que isso muda na prática:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Antes (2025)</th>
+<th>Agora (Grok Bot, 2026)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>você escreve o script de cada canal</td>
+<td>o bot usa o navegador nos sites sem API</td>
+</tr>
+<tr>
+<td>cron + servidor próprio</td>
+<td>Routines nativas, sem servidor</td>
+</tr>
+<tr>
+<td>OAuth de cada plataforma na mão</td>
+<td>conectores + MCP com um clique</td>
+</tr>
+<tr>
+<td>você revisa post por post</td>
+<td>aprovações configuráveis por ação</td>
+</tr>
+</tbody>
+</table>
+<h3 id="11-setup-30-minutos">1.1 Setup (30 minutos)<a class="headerlink" href="#11-setup-30-minutos" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Passo</th>
+<th>O que fazer</th>
+<th>Detalhe que trava</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Assine <strong>The X Subscription Premium (US$ 30/mês)</strong> ou tenha SuperGrok/Cursor pago</td>
+<td>Grok Bot <strong>não</strong> existe no plano Free ou Plus</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Instale o app (macOS, Windows, Linux, iOS, Android) e entre com a conta que vai ser <strong>dona</strong> dos bots</td>
+<td>decida o dono antes de conectar ferramentas</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Crie <strong>1 bot focado</strong>: nome + uma responsabilidade + limites escritos no prompt</td>
+<td>um bot por função; não crie o "bot faz-tudo"</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Abra <strong>Plugins → Marketplace</strong> e instale os conectores que precisa</td>
+<td>Gmail, Google Calendar, X e Composio são os primeiros</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Ensine a tarefa com <strong>Teach a Task</strong> (faça uma vez, ele grava como skill)</td>
+<td>mais rápido que escrever 40 linhas de prompt</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Crie a <strong>Routine</strong>: intervalo ou gatilho (mensagem no Slack, evento no GitHub)</td>
+<td>cada bot aceita até 50 routines</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Configure <strong>aprovações obrigatórias</strong> para: publicar, enviar mensagem, apagar, comprar</td>
+<td>sem isso o bot age sozinho — e a conta é sua</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Limites reais do Grok Bot em nov/2026:</strong> está em <strong>beta</strong>; não há seletor de modelo (a xAI escolhe); alguns sites bloqueiam automação ou pedem CAPTCHA — e <strong>CAPTCHA/2FA continuam com você</strong>. Ele não é um "postador mágico": ele é um operador que usa o navegador quando não existe conector. Onde existe API oficial, <strong>use a API</strong> — é mais confiável e mais barato.</p></div></div>
+
+<h3 id="12-o-prompt-do-bot-de-vendas-cole-isto">1.2 O prompt do bot de vendas (cole isto)<a class="headerlink" href="#12-o-prompt-do-bot-de-vendas-cole-isto" title="Permanent link">&para;</a></h3>
+<pre><code class="language-text">Você é o &quot;Radar&quot;, bot de aquisição da [EMPRESA] em [MERCADO].
+
+FUNÇÃO: encontrar e qualificar intenção de compra; nunca fechar sozinho.
+
+FAÇA:
+- monitorar X, Reddit e Google por termos de dor: [LISTA]
+- classificar cada post em 0-100 de intenção; só acima de 70 vira lead
+- rascunhar resposta com disclosure (sou fundador/afiliado) antes de qualquer link
+- registrar tudo em leads.jsonl com url, autor, score, motivo
+
+NÃO FAÇA NUNCA:
+- publicar, comentar, curtir ou enviar DM sem minha aprovação explícita
+- criar conta em qualquer plataforma
+- se passar por pessoa; sempre dizer que é assistente virtual
+- mandar mensagem fora da janela de 24h da Meta ou para quem não escreveu primeiro
+- scrapear LinkedIn (viola §8.2) ou grupos do Facebook (API extinta)
+
+QUANDO TIVER DÚVIDA: me pergunte e pare.
+</code></pre>
+<p><strong>Por que o "não faça" é a parte mais importante:</strong> um agente com navegador pode clicar em "criar conta" e "enviar" sozinho. O prompt sem esses limites é o que faz a conta principal cair.</p>
+<hr />
+<h2 id="2-telegram-o-teste-de-10-minutos">2. Telegram — o teste de 10 minutos<a class="headerlink" href="#2-telegram-o-teste-de-10-minutos" title="Permanent link">&para;</a></h2>
+<p><strong>Por que começar aqui:</strong> custo zero, sem aprovação de app, sem cota. Valida todo o fluxo (redação → aprovação → envio) antes de você encostar em plataforma com política rígida.</p>
+<h3 id="21-criar-o-bot">2.1 Criar o bot<a class="headerlink" href="#21-criar-o-bot" title="Permanent link">&para;</a></h3>
+<ol>
+<li>No Telegram, fale com <strong>@BotFather</strong> → <code>/newbot</code> → dê nome e username (precisa terminar em <code>bot</code>).</li>
+<li>Copie o token: <code>7123456789:AAF...</code> → <code>.env</code> como <code>TELEGRAM_BOT_TOKEN</code>.</li>
+<li>Descubra seu chat id: mande uma mensagem para o bot, depois acesse
+   <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code> e leia <code>result[0].message.chat.id</code>.</li>
+<li>Guarde em <code>TELEGRAM_CHAT_ID</code>.</li>
+</ol>
+<h3 id="22-publicar-e-ler">2.2 Publicar e ler<a class="headerlink" href="#22-publicar-e-ler" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import os, requests, time
+
+BASE = f&quot;https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}&quot;
+
+def enviar(chat_id: str, texto: str) -&gt; dict:
+    r = requests.post(f&quot;{BASE}/sendMessage&quot;, json={
+        &quot;chat_id&quot;: chat_id,
+        &quot;text&quot;: texto,
+        &quot;parse_mode&quot;: &quot;HTML&quot;,
+        &quot;disable_web_page_preview&quot;: False,
+    }, timeout=30)
+    if r.status_code == 429:                      # rate limit
+        espera = r.json()[&quot;parameters&quot;][&quot;retry_after&quot;]
+        time.sleep(espera)
+        return enviar(chat_id, texto)
+    r.raise_for_status()
+    return r.json()
+
+enviar(os.environ[&quot;TELEGRAM_CHAT_ID&quot;], &quot;Teste do Radar ✅&quot;)
+</code></pre>
+<h3 id="23-limites-que-voce-vai-encontrar">2.3 Limites que você vai encontrar<a class="headerlink" href="#23-limites-que-voce-vai-encontrar" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Limite</th>
+<th>Valor</th>
+<th>Consequência</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mensagens por segundo, por chat</td>
+<td>1</td>
+<td>mandar 2 seguidas derruba a 2ª com 429</td>
+</tr>
+<tr>
+<td>Mensagens por minuto, por grupo</td>
+<td>20</td>
+<td>acima disso o bot é silenciado</td>
+</tr>
+<tr>
+<td>Envio em massa</td>
+<td>~30/s</td>
+<td>para listas grandes</td>
+</tr>
+<tr>
+<td>Tamanho da mensagem</td>
+<td>4.096 caracteres</td>
+<td>acima, divida</td>
+</tr>
+<tr>
+<td>Upload de arquivo</td>
+<td>50 MB</td>
+<td>vídeo grande vai por link</td>
+</tr>
+<tr>
+<td>Broadcast pago</td>
+<td>até 1.000/s a 0,1 Star/msg</td>
+<td>exige ≥100k Stars em saldo e ≥100k MAU</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--dica" markdown="0"><div class="callout__head"><span class="callout__icon">•</span><span class="callout__label">Dica</span></div>
+<div class="callout__body"><p><code>429</code> sempre traz <code>retry_after</code> em segundos. <strong>Sempre</strong> respeite esse número; usar <code>sleep(1)</code> fixo gera bloqueio progressivo. O <code>enviar()</code> acima já faz isso.</p></div></div>
+
+<hr />
+<h2 id="3-x-twitter-o-radar-de-intencao">3. X (Twitter) — o radar de intenção<a class="headerlink" href="#3-x-twitter-o-radar-de-intencao" title="Permanent link">&para;</a></h2>
+<p><strong>Modelo de cobrança em 2026:</strong> pay-per-use por crédito. Não existe mais o plano Basic de US$ 200 nem o Pro de US$ 5.000 (aposentados em 2026). Novas contas ganham <strong>20.000 créditos</strong> iniciais.</p>
+<h3 id="31-rate-card-o-que-cada-acao-custa">3.1 Rate card (o que cada ação custa)<a class="headerlink" href="#31-rate-card-o-que-cada-acao-custa" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Ação</th>
+<th>Custo</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Publicar post de texto</td>
+<td>US$ 0,015</td>
+<td><strong>US$ 0,20 se contiver URL</strong></td>
+</tr>
+<tr>
+<td>Ler post de terceiro</td>
+<td>US$ 0,005</td>
+<td>a base do radar</td>
+</tr>
+<tr>
+<td>Ler post próprio</td>
+<td>US$ 0,001</td>
+<td>barato</td>
+</tr>
+<tr>
+<td>Ler perfil/followers/trend</td>
+<td>US$ 0,010</td>
+<td></td>
+</tr>
+<tr>
+<td>Enviar DM</td>
+<td>US$ 0,015</td>
+<td></td>
+</tr>
+<tr>
+<td>Responder post (summoned reply)</td>
+<td>US$ 0,010</td>
+<td></td>
+</tr>
+<tr>
+<td>Teto de leitura</td>
+<td>3.000.000 posts/mês</td>
+<td>acima disso, planeje Enterprise (~US$ 42k+/mês)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>O link custa 13 vezes mais.</strong> Post com URL = US$ 0,20; sem URL = US$ 0,015. Se você publica 5 posts com link por dia, são <strong>US$ 30/mês</strong> só nisso. <strong>Padrão recomendado:</strong> post principal sem URL, link na resposta ou na bio. Economia de 92%.</p></div></div>
+
+<h3 id="32-criar-o-app-e-publicar">3.2 Criar o app e publicar<a class="headerlink" href="#32-criar-o-app-e-publicar" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Acesse <code>console.x.ai</code> → crie a API key → <code>.env</code> como <code>XAI_API_KEY</code>.</li>
+<li>Para postar no X <strong>pelo bot</strong>, conecte a conta em <strong>Grok Bot → Plugins → X</strong> (a partir de 29/08/2026 o conector é nativo e <strong>assinantes pagos recebem créditos de X API inclusos</strong>).</li>
+<li>Alternativa programática: app em <code>developer.x.com</code>, OAuth 2.0 com escopos <code>tweet.read tweet.write users.read offline.access</code>.</li>
+</ol>
+<pre><code class="language-python">import os, requests
+
+def postar_x(texto: str, tem_link: bool = False) -&gt; dict:
+    &quot;&quot;&quot;Posta no X via API v2. NUNCA coloque link no post principal.&quot;&quot;&quot;
+    assert len(texto) &lt;= 280, &quot;acima de 280 o X rejeita (ou use Premium)&quot;
+    if tem_link:
+        print(&quot;AVISO: post com link custa US$ 0,20 (13x). Considere link na resposta.&quot;)
+    r = requests.post(
+        &quot;https://api.x.com/2/tweets&quot;,
+        headers={&quot;Authorization&quot;: f&quot;Bearer {os.environ['X_USER_TOKEN']}&quot;,
+                 &quot;Content-Type&quot;: &quot;application/json&quot;},
+        json={&quot;text&quot;: texto},
+        timeout=30,
+    )
+    r.raise_for_status()
+    return r.json()          # {&quot;data&quot;: {&quot;id&quot;: &quot;...&quot;, &quot;text&quot;: &quot;...&quot;}}
+</code></pre>
+<h3 id="33-o-radar-de-intencao-o-uso-que-da-dinheiro">3.3 O radar de intenção (o uso que dá dinheiro)<a class="headerlink" href="#33-o-radar-de-intencao-o-uso-que-da-dinheiro" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">QUERIES = [
+    '(indicação OR &quot;alguém conhece&quot;) (corretor OR imobiliária) (Goiânia OR Anápolis) -is:retweet',
+    '(&quot;preciso de&quot; OR &quot;procuro&quot;) (ferramenta OR SaaS) (afiliado OR &quot;programa de afiliados&quot;) -is:retweet lang:pt',
+    '(odiei OR &quot;não funciona&quot;) (portal OR zap OR vivareal) -is:retweet',
+]
+
+def radar(limite: int = 50) -&gt; list[dict]:
+    &quot;&quot;&quot;Custo: US$ 0,005 por post lido. 50 posts = US$ 0,25.&quot;&quot;&quot;
+    achados = []
+    for q in QUERIES:
+        r = requests.get(
+            &quot;https://api.x.com/2/tweets/search/recent&quot;,
+            headers={&quot;Authorization&quot;: f&quot;Bearer {os.environ['X_BEARER_TOKEN']}&quot;},
+            params={&quot;query&quot;: q, &quot;max_results&quot;: min(limite, 100),
+                    &quot;tweet.fields&quot;: &quot;author_id,created_at,public_metrics,lang&quot;},
+            timeout=30,
+        )
+        if r.status_code == 429:
+            break
+        achados.extend(r.json().get(&quot;data&quot;, []))
+    return achados
+</code></pre>
+<p><strong>Custo de rodar o radar 3× por dia, 50 posts cada:</strong> 150 leituras × US$ 0,005 = <strong>US$ 0,75/dia ≈ US$ 22/mês</strong>. É o custo mais alto do stack — e ainda assim 1/3 do CPL da Meta.</p>
+<hr />
+<h2 id="4-whatsapp-cloud-api-onde-a-venda-fecha-no-brasil">4. WhatsApp Cloud API — onde a venda fecha no Brasil<a class="headerlink" href="#4-whatsapp-cloud-api-onde-a-venda-fecha-no-brasil" title="Permanent link">&para;</a></h2>
+<h3 id="41-o-que-voce-precisa-antes">4.1 O que você precisa antes<a class="headerlink" href="#41-o-que-voce-precisa-antes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Requisito</th>
+<th>Detalhe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conta Meta Business verificada</td>
+<td>CNPJ + documento; leva de 1 a 5 dias</td>
+</tr>
+<tr>
+<td>Número de telefone</td>
+<td><strong>não pode estar ativo no WhatsApp comum</strong></td>
+</tr>
+<tr>
+<td>Nome de exibição aprovado</td>
+<td>sem "casa", "promo", emoji</td>
+</tr>
+<tr>
+<td>BSP ou conexão direta</td>
+<td>direto (grátis + fee) ou via BSP (fee + markup de US$ 0,003–0,010)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-setup-1-hora-depois-de-aprovado">4.2 Setup (1 hora depois de aprovado)<a class="headerlink" href="#42-setup-1-hora-depois-de-aprovado" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>developers.facebook.com</code> → <strong>Create App</strong> → tipo <strong>Business</strong>.</li>
+<li>Adicione o produto <strong>WhatsApp</strong> → crie/associe o WABA (WhatsApp Business Account).</li>
+<li>Registre o número e gere o <strong>token permanente</strong> (System User) → <code>WA_TOKEN</code>.</li>
+<li>Anote <code>WA_PHONE_NUMBER_ID</code> (não é o número; é o ID).</li>
+<li>Configure o webhook com uma URL pública HTTPS e um <code>verify_token</code> seu.</li>
+</ol>
+<h3 id="43-enviar-template-fora-da-janela-e-texto-livre-dentro">4.3 Enviar template (fora da janela) e texto livre (dentro)<a class="headerlink" href="#43-enviar-template-fora-da-janela-e-texto-livre-dentro" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import os, requests
+
+WA = &quot;https://graph.facebook.com/v21.0&quot;
+H = {&quot;Authorization&quot;: f&quot;Bearer {os.environ['WA_TOKEN']}&quot;}
+PID = os.environ[&quot;WA_PHONE_NUMBER_ID&quot;]
+
+def enviar_template(para: str, nome: str, variaveis: list[str]) -&gt; dict:
+    &quot;&quot;&quot;Marketing/utility. Custa R$0,3217 (marketing) ou R$0,035 (utility) no BR.
+    Só para quem deu opt-in explícito.&quot;&quot;&quot;
+    r = requests.post(f&quot;{WA}/{PID}/messages&quot;, headers=H, json={
+        &quot;messaging_product&quot;: &quot;whatsapp&quot;,
+        &quot;to&quot;: para,
+        &quot;type&quot;: &quot;template&quot;,
+        &quot;template&quot;: {
+            &quot;name&quot;: nome,
+            &quot;language&quot;: {&quot;code&quot;: &quot;pt_BR&quot;},
+            &quot;components&quot;: [{&quot;type&quot;: &quot;body&quot;, &quot;parameters&quot;:
+                            [{&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: v} for v in variaveis]}],
+        },
+    }, timeout=30)
+    r.raise_for_status()
+    return r.json()
+
+def enviar_texto(para: str, texto: str) -&gt; dict:
+    &quot;&quot;&quot;Só dentro da janela de 24h aberta por mensagem do cliente.
+    Serviço: 1.000 respostas grátis/mês, depois R$0,035.&quot;&quot;&quot;
+    r = requests.post(f&quot;{WA}/{PID}/messages&quot;, headers=H, json={
+        &quot;messaging_product&quot;: &quot;whatsapp&quot;, &quot;to&quot;: para,
+        &quot;type&quot;: &quot;text&quot;, &quot;text&quot;: {&quot;body&quot;: texto[:4096], &quot;preview_url&quot;: False},
+    }, timeout=30)
+    r.raise_for_status()
+    return r.json()
+</code></pre>
+<h3 id="44-o-fluxo-de-qualificacao-imobiliaria-o-que-converte">4.4 O fluxo de qualificação imobiliária (o que converte)<a class="headerlink" href="#44-o-fluxo-de-qualificacao-imobiliaria-o-que-converte" title="Permanent link">&para;</a></h3>
+<pre><code>Lead chega (portal, anúncio Click-to-WhatsApp, link na bio)
+  ↓ &lt;1 min: resposta automática com quick reply
+  &quot;Para te mandar as opções certas: comprar ou alugar?&quot;  [Comprar] [Alugar]
+  ↓
+  &quot;Qual região e faixa de valor?&quot;  → 3 opções
+  ↓
+  &quot;Quer financiar? Já tem entrada?&quot;  → sim/não/parcial
+  ↓
+  [BOT ENTREGA O KIT: 3 imóveis + custo total + 1 pergunta]
+  ↓
+  [HUMANO ASSUME] agenda visita
+</code></pre>
+<p><strong>Por que responder em &lt;1 minuto importa:</strong> conversão lead→visita de <strong>35%</strong> contra <strong>15%</strong> sem automação. E 78% dos leads imobiliários esperam resposta em menos de 30 minutos.</p>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Custo escondido:</strong> desde 01/10/2026 até o <strong>serviço</strong> é cobrado no Brasil (R$ 0,035), com <strong>1.000 respostas grátis por número/mês</strong>. Se sua operação recebe 3.000 mensagens/mês, o custo de serviço é R$ 70/mês — trivial. O que dói é <strong>marketing</strong>: 3.000 disparos = R$ 965. Nunca dispare marketing sem segmentar.</p></div></div>
+
+<hr />
+<h2 id="5-instagram-facebook-page-a-conversa-que-vende">5. Instagram + Facebook Page — a conversa que vende<a class="headerlink" href="#5-instagram-facebook-page-a-conversa-que-vende" title="Permanent link">&para;</a></h2>
+<h3 id="51-pre-requisitos">5.1 Pré-requisitos<a class="headerlink" href="#51-pre-requisitos" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Instagram</th>
+<th>Facebook Page</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tipo de conta</td>
+<td><strong>Business ou Creator</strong> (pessoal não publica via API)</td>
+<td>Page (não perfil)</td>
+</tr>
+<tr>
+<td>App Meta</td>
+<td>mesmo app, produto <strong>Instagram Graph API</strong></td>
+<td>produto <strong>Messenger</strong></td>
+</tr>
+<tr>
+<td>Permissões</td>
+<td><code>instagram_basic</code>, <code>instagram_content_publish</code>, <code>instagram_manage_messages</code></td>
+<td><code>pages_messaging</code>, <code>pages_manage_posts</code></td>
+</tr>
+<tr>
+<td>App Review</td>
+<td>necessário só para <strong>contas de terceiros</strong></td>
+<td>idem</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-publicar-no-instagram-fluxo-de-3-passos">5.2 Publicar no Instagram (fluxo de 3 passos)<a class="headerlink" href="#52-publicar-no-instagram-fluxo-de-3-passos" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import os, time, requests
+
+IG = &quot;https://graph.instagram.com/v21.0&quot;
+TOKEN = os.environ[&quot;IG_TOKEN&quot;]
+UID = os.environ[&quot;IG_USER_ID&quot;]
+
+def publicar_reels(video_url: str, legenda: str) -&gt; str:
+    &quot;&quot;&quot;3 passos: criar container → aguardar transcodificação → publicar.&quot;&quot;&quot;
+    c = requests.post(f&quot;{IG}/{UID}/media&quot;, data={
+        &quot;media_type&quot;: &quot;REELS&quot;, &quot;video_url&quot;: video_url,
+        &quot;caption&quot;: legenda[:2200], &quot;access_token&quot;: TOKEN,
+    }, timeout=30).json()
+    cid = c[&quot;id&quot;]
+
+    for _ in range(40):                       # até ~10 min de processamento
+        st = requests.get(f&quot;{IG}/{cid}&quot;, params={
+            &quot;fields&quot;: &quot;status_code&quot;, &quot;access_token&quot;: TOKEN}, timeout=30).json()
+        if st.get(&quot;status_code&quot;) == &quot;FINISHED&quot;:
+            break
+        if st.get(&quot;status_code&quot;) == &quot;ERROR&quot;:
+            raise RuntimeError(f&quot;transcodificação falhou: {st}&quot;)
+        time.sleep(15)
+
+    p = requests.post(f&quot;{IG}/{UID}/media_publish&quot;, data={
+        &quot;creation_id&quot;: cid, &quot;access_token&quot;: TOKEN}, timeout=30).json()
+    return p[&quot;id&quot;]
+</code></pre>
+<h3 id="53-responder-na-janela-de-24h-o-que-da-dinheiro">5.3 Responder na janela de 24h (o que dá dinheiro)<a class="headerlink" href="#53-responder-na-janela-de-24h-o-que-da-dinheiro" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">def responder_dm(igsid: str, texto: str) -&gt; dict:
+    &quot;&quot;&quot;Só vale se a pessoa te escreveu nas últimas 24h.
+    validate_channel_post barra o resto antes de chegar aqui.&quot;&quot;&quot;
+    r = requests.post(f&quot;{IG}/{UID}/messages&quot;,
+        params={&quot;access_token&quot;: TOKEN},
+        json={&quot;recipient&quot;: {&quot;id&quot;: igsid},
+              &quot;message&quot;: {&quot;text&quot;: texto[:1000]}},   # limite: 1.000 bytes
+        timeout=30)
+    r.raise_for_status()
+    return r.json()
+</code></pre>
+<h3 id="54-responder-comentario-com-1-dm-privada">5.4 Responder comentário com 1 DM privada<a class="headerlink" href="#54-responder-comentario-com-1-dm-privada" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">def dm_privada_de_comentario(comment_id: str, texto: str) -&gt; dict:
+    &quot;&quot;&quot;Permitido: 1 mensagem por comentário, dentro de 7 dias.
+    Limite: 750 chamadas/hora por conta.&quot;&quot;&quot;
+    r = requests.post(f&quot;{IG}/{UID}/messages&quot;,
+        params={&quot;access_token&quot;: TOKEN},
+        json={&quot;recipient&quot;: {&quot;comment_id&quot;: comment_id},
+              &quot;message&quot;: {&quot;text&quot;: texto}},
+        timeout=30)
+    r.raise_for_status()
+    return r.json()
+</code></pre>
+<div class="callout callout--alerta" markdown="0"><div class="callout__head"><span class="callout__icon">!</span><span class="callout__label">Atenção</span></div>
+<div class="callout__body"><p><strong>Três proibições que derrubam contas:</strong>
+1. <strong>DM frio</strong> — a API não tem rota para isso; tentar via navegador é spam e suspensão.
+2. <strong>Automation fora da janela</strong> — depois de 24h só o humano envia (tag HUMAN_AGENT, 7 dias).
+3. <strong>Automação de curtir/seguir/comentar</strong> — política de plataforma, ban automático.</p></div></div>
+
+<hr />
+<h2 id="6-tiktok-publicar-sem-virar-conta-fantasma">6. TikTok — publicar sem virar conta fantasma<a class="headerlink" href="#6-tiktok-publicar-sem-virar-conta-fantasma" title="Permanent link">&para;</a></h2>
+<h3 id="61-o-passo-que-ninguem-faz-e-todo-mundo-precisa">6.1 O passo que ninguém faz e todo mundo precisa<a class="headerlink" href="#61-o-passo-que-ninguem-faz-e-todo-mundo-precisa" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>O que acontece</th>
+<th>Prazo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Criar app em <code>developers.tiktok.com</code></td>
+<td>produto <strong>Content Posting API</strong></td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>2. Adicionar escopo <code>video.publish</code></td>
+<td>OAuth 2.0 do criador</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>3. <strong>Passar no audit</strong></td>
+<td>sem isso, <strong>todo post via API fica privado</strong></td>
+<td>dias a semanas</td>
+</tr>
+<tr>
+<td>4. Verificar domínio para <code>PULL_FROM_URL</code></td>
+<td>DNS TXT ou arquivo</td>
+<td>10 min</td>
+</tr>
+</tbody>
+</table>
+<p>Se você pular a etapa 3, recebe o erro <code>unaudited_client_can_only_post_to_private_accounts</code> e acha que o código está errado. <strong>Não está.</strong></p>
+<h3 id="62-publicar">6.2 Publicar<a class="headerlink" href="#62-publicar" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import os, requests
+
+def publicar_tiktok(video_url: str, titulo: str) -&gt; dict:
+    &quot;&quot;&quot;Limite: 6 req/min por token; ~15 posts/dia por criador.&quot;&quot;&quot;
+    r = requests.post(
+        &quot;https://open.tiktokapis.com/v2/post/publish/video/init/&quot;,
+        headers={&quot;Authorization&quot;: f&quot;Bearer {os.environ['TIKTOK_TOKEN']}&quot;,
+                 &quot;Content-Type&quot;: &quot;application/json; charset=UTF-8&quot;},
+        json={&quot;post_info&quot;: {
+                &quot;title&quot;: titulo[:2200],
+                &quot;privacy_level&quot;: &quot;PUBLIC_TO_EVERYONE&quot;,
+                &quot;disable_comment&quot;: False},
+              &quot;source_info&quot;: {&quot;source&quot;: &quot;PULL_FROM_URL&quot;,
+                              &quot;video_url&quot;: video_url}},
+        timeout=30,
+    )
+    r.raise_for_status()
+    return r.json()      # {&quot;data&quot;: {&quot;publish_id&quot;: &quot;...&quot;}}
+</code></pre>
+<h3 id="63-business-suite-sem-codigo-auto-mensagens">6.3 Business Suite (sem código) — auto-mensagens<a class="headerlink" href="#63-business-suite-sem-codigo-auto-mensagens" title="Permanent link">&para;</a></h3>
+<p>Disponível para conta <strong>Business com Advanced Access</strong> ou Verified Business. Quatro tipos: welcome, keyword reply (match exato), FAQ, prompts. Limites de texto: welcome 250 caracteres, keyword 500. <strong>A moderação leva de 1 a 5 dias úteis</strong> — planeje antes de lançar campanha.</p>
+<hr />
+<h2 id="7-youtube-autoridade-de-longo-prazo">7. YouTube — autoridade de longo prazo<a class="headerlink" href="#7-youtube-autoridade-de-longo-prazo" title="Permanent link">&para;</a></h2>
+<p><strong>Cota:</strong> 10.000 unidades/dia, reset à meia-noite do Pacífico.</p>
+<table>
+<thead>
+<tr>
+<th>Operação</th>
+<th>Custo em unidades</th>
+<th>Quantas por dia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>commentThreads.list</code></td>
+<td>1</td>
+<td>~10.000</td>
+</tr>
+<tr>
+<td><code>comments.insert</code> (responder)</td>
+<td><strong>50</strong></td>
+<td><strong>~198</strong></td>
+</tr>
+<tr>
+<td><code>search.list</code></td>
+<td>cota própria</td>
+<td>~100 chamadas</td>
+</tr>
+<tr>
+<td><code>videos.insert</code> (upload)</td>
+<td>cota própria</td>
+<td>~100 vídeos</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">import os, requests
+
+YT = &quot;https://www.googleapis.com/youtube/v3&quot;
+
+def responder_comentario(parent_id: str, texto: str) -&gt; dict:
+    &quot;&quot;&quot;50 unidades de 10.000 → no máximo ~198 respostas/dia.&quot;&quot;&quot;
+    r = requests.post(f&quot;{YT}/comments&quot;, params={&quot;part&quot;: &quot;snippet&quot;},
+        headers={&quot;Authorization&quot;: f&quot;Bearer {os.environ['YT_ACCESS_TOKEN']}&quot;},
+        json={&quot;snippet&quot;: {&quot;parentId&quot;: parent_id, &quot;textOriginal&quot;: texto[:10000]}},
+        timeout=30)
+    if r.status_code == 403:
+        raise RuntimeError(&quot;cota esgotada — reset à meia-noite do Pacífico&quot;)
+    r.raise_for_status()
+    return r.json()
+</code></pre>
+<p><strong>Regra dura:</strong> responder comentários <strong>do seu canal</strong> é permitido e recomendado. Comentar em vídeos de terceiros para prospectar é spam e derruba o canal.</p>
+<hr />
+<h2 id="8-google-business-profile-a-vitrine-local">8. Google Business Profile — a vitrine local<a class="headerlink" href="#8-google-business-profile-a-vitrine-local" title="Permanent link">&para;</a></h2>
+<h3 id="81-setup">8.1 Setup<a class="headerlink" href="#81-setup" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>console.cloud.google.com</code> → projeto → habilite <strong>Business Profile Performance API</strong> e <strong>My Business Account Management API</strong>.</li>
+<li>Crie credenciais OAuth 2.0 (tipo "Desktop") → salve <code>client_id</code>/<code>client_secret</code>.</li>
+<li>Faça o fluxo OAuth com escopo <code>https://www.googleapis.com/auth/business.manage</code>.</li>
+<li>Descubra o <code>locationId</code>: <code>GET /v1/accounts</code> → <code>GET /v1/accounts/{id}/locations</code>.</li>
+</ol>
+<h3 id="82-publicar-post-local">8.2 Publicar post local<a class="headerlink" href="#82-publicar-post-local" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import os, requests
+
+def postar_gbp(account_id: str, location_id: str, texto: str,
+               botao_url: str | None = None) -&gt; dict:
+    &quot;&quot;&quot;1.500 caracteres, 1 imagem, expira em ~7 dias.
+    Limite: 10 edições/min por perfil (não aumentável).&quot;&quot;&quot;
+    corpo = {&quot;languageCode&quot;: &quot;pt-BR&quot;, &quot;summary&quot;: texto[:1500],
+             &quot;topicType&quot;: &quot;STANDARD&quot;}
+    if botao_url:
+        corpo[&quot;callToAction&quot;] = {&quot;actionType&quot;: &quot;LEARN_MORE&quot;, &quot;url&quot;: botao_url}
+    r = requests.post(
+        f&quot;https://mybusiness.googleapis.com/v4/accounts/{account_id}&quot;
+        f&quot;/locations/{location_id}/localPosts&quot;,
+        headers={&quot;Authorization&quot;: f&quot;Bearer {os.environ['GBP_TOKEN']}&quot;},
+        json=corpo, timeout=30)
+    r.raise_for_status()
+    return r.json()
+</code></pre>
+<p><strong>Limites que pegam:</strong> 300 req/min na maioria dos endpoints, criação de local 300/dia, updates 10.000/dia, mas <strong>10 edições/min por perfil</strong> — e esse não sobe. <strong>Sem analytics por post</strong>: só por local.</p>
+<hr />
+<h2 id="9-threads-e-bluesky-teste-em-20-minutos">9. Threads e Bluesky — teste em 20 minutos<a class="headerlink" href="#9-threads-e-bluesky-teste-em-20-minutos" title="Permanent link">&para;</a></h2>
+<h3 id="91-threads-2-chamadas">9.1 Threads (2 chamadas)<a class="headerlink" href="#91-threads-2-chamadas" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import os, requests
+
+T = &quot;https://graph.threads.com/v1.0&quot;
+TOK = os.environ[&quot;THREADS_TOKEN&quot;]; UID = os.environ[&quot;THREADS_USER_ID&quot;]
+
+def postar_threads(texto: str) -&gt; str:
+    &quot;&quot;&quot;500 caracteres. Limite: 250 posts + 1.000 respostas/24h.&quot;&quot;&quot;
+    c = requests.post(f&quot;{T}/{UID}/threads&quot;,
+        params={&quot;media_type&quot;: &quot;TEXT&quot;, &quot;text&quot;: texto[:500], &quot;access_token&quot;: TOK},
+        timeout=30).json()
+    p = requests.post(f&quot;{T}/{UID}/threads_publish&quot;,
+        params={&quot;creation_id&quot;: c[&quot;id&quot;], &quot;access_token&quot;: TOK}, timeout=30).json()
+    return p[&quot;id&quot;]
+
+def cota_threads() -&gt; dict:
+    return requests.get(f&quot;{T}/{UID}/threads_publishing_limit&quot;,
+        params={&quot;fields&quot;: &quot;quota_usage,config,reply_quota_usage&quot;,
+                &quot;access_token&quot;: TOK}, timeout=30).json()
+</code></pre>
+<h3 id="92-bluesky-at-protocol">9.2 Bluesky (AT Protocol)<a class="headerlink" href="#92-bluesky-at-protocol" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import os, requests
+
+def postar_bluesky(texto: str) -&gt; dict:
+    &quot;&quot;&quot;Sem App Review. Limite: 5.000 pontos/hora (post = 3 pontos).&quot;&quot;&quot;
+    ses = requests.post(&quot;https://bsky.social/xrpc/com.atproto.server.createSession&quot;,
+        json={&quot;identifier&quot;: os.environ[&quot;BSKY_HANDLE&quot;],
+              &quot;password&quot;: os.environ[&quot;BSKY_APP_PASSWORD&quot;]}, timeout=30).json()
+    return requests.post(&quot;https://bsky.social/xrpc/com.atproto.repo.createRecord&quot;,
+        headers={&quot;Authorization&quot;: f&quot;Bearer {ses['accessJwt']}&quot;},
+        json={&quot;repo&quot;: ses[&quot;did&quot;], &quot;collection&quot;: &quot;app.bsky.feed.post&quot;,
+              &quot;record&quot;: {&quot;text&quot;: texto[:300],
+                         &quot;createdAt&quot;: &quot;2026-11-06T12:00:00.000Z&quot;}},
+        timeout=30).json()
+</code></pre>
+<div class="callout callout--dica" markdown="0"><div class="callout__head"><span class="callout__icon">•</span><span class="callout__label">Dica</span></div>
+<div class="callout__body"><p>Bluesky usa <strong>App Password</strong>, não a senha da conta. Gere em Settings → App Passwords. A senha principal <strong>nunca</strong> vai em código.</p></div></div>
+
+<hr />
+<h2 id="10-orquestracao-n8n-ou-mcp">10. Orquestração: n8n ou MCP<a class="headerlink" href="#10-orquestracao-n8n-ou-mcp" title="Permanent link">&para;</a></h2>
+<p>Você tem duas rotas para ligar o cérebro aos canais sem escrever tudo do zero.</p>
+<table>
+<thead>
+<tr>
+<th>Rota</th>
+<th>Como funciona</th>
+<th>Melhor para</th>
+<th>Custo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>n8n</strong></td>
+<td>nó <code>lmChatXAiGrok</code> + nós HTTP por canal</td>
+<td>quem já tem n8n, quer visual e self-host</td>
+<td>grátis (self-host)</td>
+</tr>
+<tr>
+<td><strong>MCP</strong></td>
+<td>servidor MCP expõe "publicar no canal X" como ferramenta</td>
+<td>Grok Bot, Claude, qualquer agente</td>
+<td>US$ 0–29/mês</td>
+</tr>
+<tr>
+<td><strong>API unificada</strong></td>
+<td>1 chamada publica em 9 plataformas</td>
+<td>velocidade de integração</td>
+<td>US$ 24–39/mês</td>
+</tr>
+</tbody>
+</table>
+<h3 id="101-n8n-o-fluxo-minimo">10.1 n8n — o fluxo mínimo<a class="headerlink" href="#101-n8n-o-fluxo-minimo" title="Permanent link">&para;</a></h3>
+<pre><code>[Cron 06:00] → [lmChatXAiGrok: gerar 3 ângulos] → [Code: validate_channel_post]
+   → [IF aprovado] → [HTTP: publicar] → [Google Sheets: registrar]
+   → [IF reprovado] → [Slack: pedir aprovação humana]
+</code></pre>
+<p><strong>Credencial:</strong> uma única credencial xAI no nó <code>lmChatXAiGrok</code> (9 parâmetros; catálogo atualizado em 16/09/2026).</p>
+<h3 id="102-mcp-o-padrao-que-funciona">10.2 MCP — o padrão que funciona<a class="headerlink" href="#102-mcp-o-padrao-que-funciona" title="Permanent link">&para;</a></h3>
+<p>O Grok Bot aceita <strong>MCP server customizado</strong>: Plugins → add custom MCP server → cole a URL HTTPS pública → faça login ou use uma chave. Padrão usado pela maioria dos servidores: <strong>HTTP Streamable + Bearer token</strong>.</p>
+<pre><code># arquivo de configuração conceitual (o formato varia por host)
+{
+  &quot;mcpServers&quot;: {
+    &quot;canais&quot;: {
+      &quot;url&quot;: &quot;https://seu-servidor.com/mcp&quot;,
+      &quot;headers&quot;: { &quot;Authorization&quot;: &quot;Bearer ${MCP_TOKEN}&quot; }
+    }
+  }
+}
+</code></pre>
+<p><strong>Ferramentas que o servidor deve expor</strong> (nada a mais):</p>
+<table>
+<thead>
+<tr>
+<th>Ferramenta</th>
+<th>Entrada</th>
+<th>Saída</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>listar_canais</code></td>
+<td>—</td>
+<td>canais e limites vigentes</td>
+</tr>
+<tr>
+<td><code>validar_post</code></td>
+<td>canal + payload</td>
+<td>ok / violação + correção</td>
+</tr>
+<tr>
+<td><code>enfileirar</code></td>
+<td>canal + payload</td>
+<td>id da fila</td>
+</tr>
+<tr>
+<td><code>status_fila</code></td>
+<td>id</td>
+<td>pendente/aprovado/publicado/erro</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nunca exponha</strong> <code>publicar_direto</code> sem aprovação. A ferramenta mais perigosa do seu servidor é a que não pede confirmação.</p>
+<h3 id="103-a-camada-paga-se-quiser-velocidade">10.3 A camada paga (se quiser velocidade)<a class="headerlink" href="#103-a-camada-paga-se-quiser-velocidade" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Serviço</th>
+<th>Preço</th>
+<th>O que resolve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blotato</td>
+<td>US$ 29/mês (20 contas)</td>
+<td>9 plataformas + geração de imagem/vídeo + MCP com 14 ferramentas</td>
+</tr>
+<tr>
+<td>PostEverywhere</td>
+<td>US$ 29/mês</td>
+<td>9 plataformas via API</td>
+</tr>
+<tr>
+<td>Upload-Post</td>
+<td>US$ 24/mês</td>
+<td>9 plataformas</td>
+</tr>
+<tr>
+<td>Metricool</td>
+<td>US$ 35 (API: US$ 77)</td>
+<td>agendamento + analytics</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trade-off honesto:</strong> US$ 29/mês economiza ~20 horas de integração. Mas você <strong>não</strong> escapa da política de cada plataforma — a camada paga só remove o trabalho de OAuth, não a regra da janela de 24h.</p>
+<hr />
+<h2 id="11-checklist-de-esta-tudo-setado">11. Checklist de "está tudo setado"<a class="headerlink" href="#11-checklist-de-esta-tudo-setado" title="Permanent link">&para;</a></h2>
+<pre><code>INFRAESTRUTURA
+[ ] .env com todas as chaves (nunca comitado)
+[ ] src/channels.py importado no orquestrador
+[ ] fila de aprovação humana antes de qualquer publicação
+[ ] log de custo por ação (X cobra por post — precisa de contador)
+
+CANAL A CANAL
+[ ] Telegram: bot criado, chat_id salvo, teste enviado
+[ ] X: app criado, créditos checados, conta conectada no Grok Bot
+[ ] WhatsApp: WABA aprovado, número registrado, template aprovado
+[ ] Instagram: conta Business, token de 60 dias renovado, janela testada
+[ ] Facebook Page: página (não perfil), Messenger conectado
+[ ] TikTok: app criado, AUDIT APROVADO (senão post sai privado)
+[ ] YouTube: OAuth, cota conferida, resposta de comentário testada
+[ ] GBP: OAuth, locationId descoberto, post de teste publicado
+[ ] Threads/Bluesky: teste de publicação
+
+COMPLIANCE
+[ ] disclosure visível antes de qualquer link
+[ ] opt-in registrado (com data e origem) para WhatsApp/e-mail
+[ ] bot nunca se passa por humano
+[ ] LinkedIn: zero automação
+[ ] Facebook Groups: zero automação (API extinta)
+</code></pre>
+<hr />
+<h2 id="12-erros-que-custam-caro-e-como-reconhecer">12. Erros que custam caro (e como reconhecer)<a class="headerlink" href="#12-erros-que-custam-caro-e-como-reconhecer" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Sintoma</th>
+<th>Causa</th>
+<th>Correção</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unaudited_client_can_only_post_to_private_accounts</code></td>
+<td>app TikTok sem audit</td>
+<td>submeter ao audit antes de postar</td>
+</tr>
+<tr>
+<td><code>(#10) outside the allowed window</code></td>
+<td>Meta: mensagem fora das 24h</td>
+<td>usar template ou esperar a pessoa escrever</td>
+</tr>
+<tr>
+<td><code>429 retry_after</code> no Telegram</td>
+<td>1 msg/s por chat</td>
+<td>respeitar <code>retry_after</code></td>
+</tr>
+<tr>
+<td><code>quotaExceeded</code> no YouTube</td>
+<td>10.000 unidades/dia</td>
+<td>reset à meia-noite do Pacífico</td>
+</tr>
+<tr>
+<td>post no IG sai sem erro mas não aparece</td>
+<td>conta pessoal, não Business</td>
+<td>converter para Business/Creator</td>
+</tr>
+<tr>
+<td>conta de X com cobrança inesperada</td>
+<td>post com URL (US$ 0,20)</td>
+<td>tirar link do post principal</td>
+</tr>
+<tr>
+<td>WhatsApp não entrega</td>
+<td>template não aprovado ou opt-out</td>
+<td>reenviar para aprovação</td>
+</tr>
+<tr>
+<td><code>409</code> no canal X (créditos)</td>
+<td>saldo de pay-per-use acabou</td>
+<td>recarregar ou pausar a fila</td>
+</tr>
+<tr>
+<td>LinkedIn: restrição de conta</td>
+<td>automação de sessão</td>
+<td>remover ferramenta; §8.2</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="13-quanto-custa-manter-tudo-ligado-mensal">13. Quanto custa manter tudo ligado (mensal)<a class="headerlink" href="#13-quanto-custa-manter-tudo-ligado-mensal" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Custo</th>
+<th>Natureza</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>xAI API (redação + radar)</td>
+<td>US$ 15–25</td>
+<td>variável</td>
+</tr>
+<tr>
+<td>X API (leitura + posts)</td>
+<td>US$ 20–35</td>
+<td>variável — cuidado com link</td>
+</tr>
+<tr>
+<td>WhatsApp (marketing 1.000 msg)</td>
+<td>R$ 322 (~US$ 58)</td>
+<td>variável</td>
+</tr>
+<tr>
+<td>WhatsApp (serviço)</td>
+<td>R$ 0–70</td>
+<td>quase grátis</td>
+</tr>
+<tr>
+<td>Grok Bot</td>
+<td>US$ 30</td>
+<td>fixo (plano Premium)</td>
+</tr>
+<tr>
+<td>n8n self-host</td>
+<td>US$ 0</td>
+<td>fixo</td>
+</tr>
+<tr>
+<td>Orquestrador pago (opcional)</td>
+<td>US$ 29</td>
+<td>fixo</td>
+</tr>
+<tr>
+<td><strong>Total realista</strong></td>
+<td><strong>US$ 95–175/mês</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Comparado a: um único lead de real estate nos EUA (US$ 35–65) ou um lead qualificado (US$ 150–300). <strong>O stack inteiro custa menos que 2 leads qualificados por mês.</strong> Esse é o argumento econômico do canal orgânico com bot.</p>
+<div class="callout callout--decisao" markdown="0"><div class="callout__head"><span class="callout__icon">→</span><span class="callout__label">Decisão</span></div>
+<div class="callout__body"><p><strong>Se você só pode fazer uma coisa esta semana:</strong> crie o bot do Telegram e o app da xAI. São 25 minutos, custam quase nada, e validam o fluxo completo (Grok escreve → você aprova → publica) sem tocar em nenhuma plataforma com política rígida. Todo o resto é extensão do mesmo padrão.</p></div></div>
+    </article>
+
+    <nav class="pager">
+      <a class="pager__link" href="c1.html"><span class="pager__label">← Anterior</span><span class="pager__title">Mapa dos canais</span></a>
+      <a class="pager__link" href="c3.html"><span class="pager__label">Próximo →</span><span class="pager__title">Custos &amp; ROI</span></a>
+    </nav>
+    <footer class="foot">
+      <p>grok-reddit-ops · dossiê operacional · 2026</p>
+      <p class="foot__warn">Nenhuma cifra aqui é promessa de resultado. Simulações estão rotuladas como simulações.</p>
+    </footer>
+  </main>
+
+  <aside class="toc-rail">
+    <span class="toc__label">Nesta página</span>
+    <div class="toc">
+<ul>
+<li><a href="#0-antes-de-comecar-a-arquitetura-de-tres-camadas">0. Antes de começar: a arquitetura de três camadas</a></li>
+<li><a href="#1-grok-bot-o-agente-que-executa-e-o-que-ele-substitui">1. Grok Bot: o agente que executa (e o que ele substitui)</a><ul>
+<li><a href="#11-setup-30-minutos">1.1 Setup (30 minutos)</a></li>
+<li><a href="#12-o-prompt-do-bot-de-vendas-cole-isto">1.2 O prompt do bot de vendas (cole isto)</a></li>
+</ul>
+</li>
+<li><a href="#2-telegram-o-teste-de-10-minutos">2. Telegram — o teste de 10 minutos</a><ul>
+<li><a href="#21-criar-o-bot">2.1 Criar o bot</a></li>
+<li><a href="#22-publicar-e-ler">2.2 Publicar e ler</a></li>
+<li><a href="#23-limites-que-voce-vai-encontrar">2.3 Limites que você vai encontrar</a></li>
+</ul>
+</li>
+<li><a href="#3-x-twitter-o-radar-de-intencao">3. X (Twitter) — o radar de intenção</a><ul>
+<li><a href="#31-rate-card-o-que-cada-acao-custa">3.1 Rate card (o que cada ação custa)</a></li>
+<li><a href="#32-criar-o-app-e-publicar">3.2 Criar o app e publicar</a></li>
+<li><a href="#33-o-radar-de-intencao-o-uso-que-da-dinheiro">3.3 O radar de intenção (o uso que dá dinheiro)</a></li>
+</ul>
+</li>
+<li><a href="#4-whatsapp-cloud-api-onde-a-venda-fecha-no-brasil">4. WhatsApp Cloud API — onde a venda fecha no Brasil</a><ul>
+<li><a href="#41-o-que-voce-precisa-antes">4.1 O que você precisa antes</a></li>
+<li><a href="#42-setup-1-hora-depois-de-aprovado">4.2 Setup (1 hora depois de aprovado)</a></li>
+<li><a href="#43-enviar-template-fora-da-janela-e-texto-livre-dentro">4.3 Enviar template (fora da janela) e texto livre (dentro)</a></li>
+<li><a href="#44-o-fluxo-de-qualificacao-imobiliaria-o-que-converte">4.4 O fluxo de qualificação imobiliária (o que converte)</a></li>
+</ul>
+</li>
+<li><a href="#5-instagram-facebook-page-a-conversa-que-vende">5. Instagram + Facebook Page — a conversa que vende</a><ul>
+<li><a href="#51-pre-requisitos">5.1 Pré-requisitos</a></li>
+<li><a href="#52-publicar-no-instagram-fluxo-de-3-passos">5.2 Publicar no Instagram (fluxo de 3 passos)</a></li>
+<li><a href="#53-responder-na-janela-de-24h-o-que-da-dinheiro">5.3 Responder na janela de 24h (o que dá dinheiro)</a></li>
+<li><a href="#54-responder-comentario-com-1-dm-privada">5.4 Responder comentário com 1 DM privada</a></li>
+</ul>
+</li>
+<li><a href="#6-tiktok-publicar-sem-virar-conta-fantasma">6. TikTok — publicar sem virar conta fantasma</a><ul>
+<li><a href="#61-o-passo-que-ninguem-faz-e-todo-mundo-precisa">6.1 O passo que ninguém faz e todo mundo precisa</a></li>
+<li><a href="#62-publicar">6.2 Publicar</a></li>
+<li><a href="#63-business-suite-sem-codigo-auto-mensagens">6.3 Business Suite (sem código) — auto-mensagens</a></li>
+</ul>
+</li>
+<li><a href="#7-youtube-autoridade-de-longo-prazo">7. YouTube — autoridade de longo prazo</a></li>
+<li><a href="#8-google-business-profile-a-vitrine-local">8. Google Business Profile — a vitrine local</a><ul>
+<li><a href="#81-setup">8.1 Setup</a></li>
+<li><a href="#82-publicar-post-local">8.2 Publicar post local</a></li>
+</ul>
+</li>
+<li><a href="#9-threads-e-bluesky-teste-em-20-minutos">9. Threads e Bluesky — teste em 20 minutos</a><ul>
+<li><a href="#91-threads-2-chamadas">9.1 Threads (2 chamadas)</a></li>
+<li><a href="#92-bluesky-at-protocol">9.2 Bluesky (AT Protocol)</a></li>
+</ul>
+</li>
+<li><a href="#10-orquestracao-n8n-ou-mcp">10. Orquestração: n8n ou MCP</a><ul>
+<li><a href="#101-n8n-o-fluxo-minimo">10.1 n8n — o fluxo mínimo</a></li>
+<li><a href="#102-mcp-o-padrao-que-funciona">10.2 MCP — o padrão que funciona</a></li>
+<li><a href="#103-a-camada-paga-se-quiser-velocidade">10.3 A camada paga (se quiser velocidade)</a></li>
+</ul>
+</li>
+<li><a href="#11-checklist-de-esta-tudo-setado">11. Checklist de "está tudo setado"</a></li>
+<li><a href="#12-erros-que-custam-caro-e-como-reconhecer">12. Erros que custam caro (e como reconhecer)</a></li>
+<li><a href="#13-quanto-custa-manter-tudo-ligado-mensal">13. Quanto custa manter tudo ligado (mensal)</a></li>
+</ul>
+</div>
+
+  </aside>
+</div>
+
+<div class="search-modal" id="searchModal" hidden>
+  <div class="search-box">
+    <input id="searchInput" type="search" placeholder="Buscar no dossiê… (ex: CPL, LGPD, janela 24h)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

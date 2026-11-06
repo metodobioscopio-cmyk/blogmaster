@@ -480,3 +480,20 @@ body {
   .doc { max-width: none; }
   .doc h2, .doc h3, .doc p, .doc li, .doc td { color: #111 !important; }
 }
+
+
+/* --- Fase 2: seções C1–C5 no menu (separador visual) --- */
+.nav__link[href^="c1.html"] {
+  margin-top: .55rem;
+  padding-top: .8rem;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.nav__link[href^="c1.html"]::before {
+  content: "Multicanal";
+  display: block;
+  font-size: .62rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  opacity: .5;
+  margin-bottom: .35rem;
+}
